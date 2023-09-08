@@ -1,13 +1,14 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
-import { PeopleDTO } from './people.dtos';
+import { Controller, Get, Post, Body, Param, Put } from '@nestjs/common';
+import { PeopleCreateDTO } from './peopleCreate.dtos';
 import { PeopleService } from './people.service';
+import { PeopleUpdateDTO } from './peopleUpdate.dtos copy';
 
 @Controller('people')
 export class PeopleController {
   constructor(private readonly peopleService: PeopleService) {}
 
   @Post('create')
-  async create(@Body() data: PeopleDTO) {
+  async create(@Body() data: PeopleCreateDTO) {
     return await this.peopleService.create(data);
   }
 
@@ -18,7 +19,11 @@ export class PeopleController {
 
   @Get(':id')
   async findById(@Param('id') id: string) {
-    const dataBigInt = BigInt(id);
-    return await this.peopleService.findById(dataBigInt);
+    return await this.peopleService.findById(id);
+  }
+
+  @Put('update/:id')
+  async update(@Param('id') id: string, @Body() data: PeopleUpdateDTO) {
+    return await this.peopleService.update(id, data);
   }
 }

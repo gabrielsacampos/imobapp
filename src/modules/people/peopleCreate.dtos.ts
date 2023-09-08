@@ -1,8 +1,8 @@
 import { IsEmail, IsNotEmpty } from 'class-validator';
 
-export class PeopleDTO {
+export class PeopleCreateDTO {
   @IsNotEmpty()
-  id: bigint;
+  id: string;
 
   @IsNotEmpty()
   cpf: string;
