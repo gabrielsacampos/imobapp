@@ -24,8 +24,8 @@ export class PeopleDTO {
   marital_status?: string;
   code_imobzi?: string;
   profession?: string;
-  children?: bigint;
-  pets?: bigint;
+  children?: number;
+  pets?: number;
   kind_of_pet?: string;
   anual_revenue?: number;
 }
