@@ -1,0 +1,272 @@
+
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL_MYSQL")
+}
+
+model Person {
+  id                            BigInt                         @id @default(autoincrement()) 
+  cpf                           String                         @db.VarChar(255) @unique
+  fullname                      String?
+  birthdate                     DateTime?
+  email                         String                         @db.VarChar(255) 
+  phone                         String                         @db.VarChar(255) 
+  alternative_address           String?
+  alternative_address_reference String?
+  gender                        String?
+  marital_status                String?
+  code_imobzi                   String?                       @unique
+  profession                    String?
+  children                      BigInt?
+  pets                          BigInt?
+  kind_of_pet                   String?
+  anual_revenue                 Float?
+  created_at                    DateTime                       @default(now())
+  updated_at                    DateTime                       @updatedAt
+
+  @@map("people")
+  organizations Organization[]
+  owners Owner[]
+  leasesGuarantor Lease[] @relation("personGrarantorToLease")
+  leasesTenant Lease[] @relation("personTenantToLease")
+  beneficiariesPerson Beneficiary[] @relation("personToBeneficiary")
+  tenants Tenant[] @relation("personToTenant")
+
+}
+
+model Organization {
+  id                 BigInt        @id @default(autoincrement())
+  
+  person_id_representative     BigInt
+  people             Person     @relation(fields: [person_id_representative], references: [id], onDelete: Cascade)
+  
+  name               String
+  cnpj               String     @unique
+  
+  representative_type String
+  phone              String
+  email              String
+  address            String?
+  created_at         DateTime   @default(now())
+  updated_at         DateTime   @updatedAt
+  
+  @@map("organizations")
+
+  beneficiariesOrganization Beneficiary[] @relation("organizationToBeneficiary")
+  leasesTenant Lease[] @relation("organizationTenantToLease")
+  owners Owner[]
+  tenants Tenant[]  @relation("organizationToTenant")
+}
+
+model Building {
+  id            BigInt   @id @unique
+  address       String
+  city          String
+  zipcode       String
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt 
+
+  @@map("buildings")
+  properties Property[]
+
+}
+
+model Property {
+  id            BigInt      @id @default(autoincrement())
+  type          String
+  active        Boolean
+  status        String
+  
+  building_id      BigInt
+  building         Building @relation(fields: [building_id], references: [id], onDelete: Cascade)
+
+  area          Float?
+  bedroom       BigInt?
+  suite         BigInt?
+  garage        BigInt?
+  rental_value  Float?
+  sale_value    Float?
+  alternative_code String?
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt 
+  
+  @@map("properties")
+  owners Owner[]
+  leasesProperty Lease[] @relation("propertyToLease")
+}
+
+
+model Owner {
+  id                  BigInt        @id @default(autoincrement())
+  
+  id_property         BigInt
+  property            Property   @relation(fields: [id_property], references: [id], onDelete: Cascade)
+  
+  id_owner_person     BigInt?
+  person              Person?    @relation(fields: [id_owner_person], references: [id], onDelete: Cascade)
+  
+  id_owner_organization BigInt?
+  owner_organization  Organization? @relation(fields: [id_owner_organization], references: [id], onDelete: Cascade)
+
+  share               Float
+  created_at          DateTime   @default(now())
+  updated_at          DateTime   @updatedAt
+  
+  @@map("owners")
+}
+
+
+model Lease {
+  id                   BigInt        @id @default(autoincrement())
+  status               String
+  code_imobzi          String?
+  start_at             DateTime
+  duration             BigInt
+ 
+  property_id          BigInt
+  property             Property   @relation("propertyToLease", fields: [property_id], references: [id], onDelete: Cascade)
+ 
+  master_tenant_person BigInt?
+  master_tenant        Person?    @relation("personTenantToLease", fields: [master_tenant_person], references: [id], onDelete: Cascade)
+
+  tenant_organization  BigInt?
+  tenant_org           Organization? @relation("organizationTenantToLease", fields: [tenant_organization], references: [id], onDelete: Cascade)
+  
+  main_guarantor       BigInt?
+  guarantor            Person?    @relation("personGrarantorToLease", fields: [main_guarantor], references: [id], onDelete: Cascade)
+    
+  fee                  Float
+  guarantee_type       String
+  guarantee_value      Float?
+  annual_readjustment  String?
+  irrf                 Boolean
+  include_in_dimob     Boolean
+  indeterminate        Boolean
+  lease_value          Float
+  created_at           DateTime   @default(now()) 
+  updated_at           DateTime   @updatedAt 
+
+  @@map("leases")
+  beneficiariesLease Beneficiary[] @relation("leaseToBeneficiary")
+  invoicesLease Invoice[] @relation("leaseToInvoice")
+  leasesItems LeaseItem[] @relation("leaseToLeaseItem")
+}
+
+model Tenant {
+  id  BigInt @id @default(autoincrement())
+  tenant_type String
+  
+  tenant_id_organization BigInt 
+  tenant_organization Organization? @relation("organizationToTenant", fields: [tenant_id_organization], references: [id], onDelete: Cascade)
+
+  tenant_id_person BigInt 
+  tenant_person Person? @relation("personToTenant", fields: [tenant_id_person], references: [id], onDelete: Cascade)
+
+  @@map("tenants")
+}
+
+model LeaseItem {
+  id BigInt @id @default(autoincrement())
+  due_date String
+  decription String
+  management_fee Boolean
+  recurrent Boolean
+  repeat_total BigInt?
+  value Float
+  until_due_date Boolean
+  behavior String
+  autopay_on_due_date Boolean
+  repeat_index BigInt
+  include_in_dimob Boolean
+  start_date String
+
+  lease_id BigInt
+  leases Lease @relation("leaseToLeaseItem", fields: [lease_id], references: [id], onDelete: Cascade)
+
+  created_at           DateTime   @default(now()) 
+  updated_at           DateTime   @updatedAt 
+
+  @@map("lease_items")
+}
+
+model Invoice {
+  id             String      @id
+  status         String
+  reference      DateTime?
+  due_date       DateTime
+  
+  lease_id       BigInt
+  lease          Lease       @relation("leaseToInvoice", fields: [lease_id], references: [id], onDelete: Cascade)
+  
+  management_fee Float
+  invoice_url    String
+  barcode        String?
+  bank_slip_url  String?
+  bank_slip_id   String?
+  total_value    Float
+  interest_value Float
+  paid_at        DateTime?
+  credit_at DateTime?
+  paid_manual    Boolean?
+  bank_fee_value Float?
+  account_credit String?
+  onlending_value Float?
+  created_at     DateTime   @default(now())
+  updated_at     DateTime   @updatedAt
+
+  @@map("invoices")
+
+  items Item[]
+}
+
+model Item {
+  id String @id
+
+  invoice_id  String
+  invoice     Invoice @relation(fields: [invoice_id], references: [id], onDelete: Cascade)
+
+  description String
+  behavior String
+  include_in_dimob Boolean
+  management_feee Boolean
+  value Float
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("invoices_items")
+}
+
+model Beneficiary {
+  id BigInt @id 
+  
+  id_lease  BigInt
+  lease     Lease @relation("leaseToBeneficiary", fields: [id_lease], references: [id], onDelete: Cascade)
+
+  id_beneficiary_person BigInt
+  beneficiary_person Person @relation("personToBeneficiary", fields: [id_beneficiary_person], references: [id], onDelete: Cascade)
+
+  id_beneficiary_organization BigInt
+  beneficiary_organization Organization @relation("organizationToBeneficiary", fields: [id_beneficiary_organization], references: [id], onDelete: Cascade)
+
+  share Float
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+@@map("beneficiaries")
+}
+
+model Update {
+  id Int @id @default(autoincrement())
+  updated_table String
+  details String?
+  created_at DateTime @default(now())
+
+  @@map("updated_tables")
+}
