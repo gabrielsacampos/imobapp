@@ -7,17 +7,22 @@ import { OrganizationsUpdateDTO } from './organizationsUpdate.dtos';
 export class OrganizationsController {
   constructor(private readonly organizationsService: OrganizationsService) {}
 
-  @Get('all')
+  @Get()
   async findAll() {
     return await this.organizationsService.findAll();
   }
 
-  @Post('create')
+  @Get(':id')
+  async findById(@Param('id') id: string) {
+    return await this.organizationsService.findById(id);
+  }
+
+  @Post()
   async create(@Body() data: OrganizationsCreateDTO) {
     return await this.organizationsService.create(data);
   }
 
-  @Put('update/:id')
+  @Put()
   async update(@Param('id') id: string, @Body() data: OrganizationsUpdateDTO) {
     return await this.organizationsService.update(id, data);
   }

@@ -50,9 +50,18 @@ export class OrganizationsService {
 
   async findById(id: string) {
     const idBigInt = BigInt(id);
-    return await this.prisma.organization.findUnique({
+    const found = await this.prisma.organization.findUnique({
       where: { id: idBigInt },
     });
+
+    if (!found) {
+      throw new NotFoundException(`ID: ${id} not found at organizations`);
+    }
+
+    delete found.id;
+    const personId = found.person_id_representative.toString();
+    delete found.person_id_representative;
+    return { ...found, person_id_representative: personId };
   }
 
   async findAll() {
