@@ -85,10 +85,10 @@ model Property {
   building_id BigInt
   building    Building @relation(fields: [building_id], references: [id], onDelete: Cascade)
 
-  area             Float?
-  bedroom          BigInt?
-  suite            BigInt?
-  garage           BigInt?
+  area             Decimal?
+  bedroom          Int?
+  suite            Int?
+  garage           Int?
   rental_value     Float?
   sale_value       Float?
   alternative_code String?
