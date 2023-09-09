@@ -9,16 +9,9 @@ export class PeopleService {
 
   async create(data: PeopleCreateDTO) {
     const idBigInt = BigInt(data.id);
-    const existsIdPerson = await this.prisma.person.findFirst({
-      where: {
-        id: idBigInt,
-      },
-    });
 
-    const existsCpfPerson = await this.prisma.person.findFirst({
-      where: {
-        cpf: data.cpf,
-      },
+    const existsIdPerson = await this.prisma.person.findFirst({
+      where: { id: idBigInt },
     });
 
     if (existsIdPerson) {
@@ -26,6 +19,12 @@ export class PeopleService {
         `ID: ${existsIdPerson.id} already registered to person: ${existsIdPerson.fullname}`,
       );
     }
+
+    const existsCpfPerson = await this.prisma.person.findFirst({
+      where: {
+        cpf: data.cpf,
+      },
+    });
 
     if (existsCpfPerson) {
       throw new NotFoundException(
@@ -40,17 +39,16 @@ export class PeopleService {
   async findAll() {
     const arrayPeople = await this.prisma.person.findMany();
     return arrayPeople.map((element) => {
+      const id = element.id.toString();
       delete element.id;
-      return element;
+      return { ...element, id };
     });
   }
 
   async findById(id: string) {
     const idBidInt = BigInt(id);
     const found = await this.prisma.person.findUnique({
-      where: {
-        id: idBidInt,
-      },
+      where: { id: idBidInt },
     });
 
     if (!found) {
@@ -58,7 +56,8 @@ export class PeopleService {
     }
 
     delete found.id;
-    return found;
+
+    return { ...found };
   }
 
   async update(id: string, data: PeopleUpdateDTO) {
