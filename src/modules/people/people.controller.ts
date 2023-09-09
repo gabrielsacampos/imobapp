@@ -7,12 +7,12 @@ import { PeopleUpdateDTO } from './peopleUpdate.dtos';
 export class PeopleController {
   constructor(private readonly peopleService: PeopleService) {}
 
-  @Post('create')
+  @Post()
   async create(@Body() data: PeopleCreateDTO) {
     return await this.peopleService.create(data);
   }
 
-  @Get('all')
+  @Get()
   async findAll() {
     return await this.peopleService.findAll();
   }
@@ -22,7 +22,7 @@ export class PeopleController {
     return await this.peopleService.findById(id);
   }
 
-  @Put('update/:id')
+  @Put(':id')
   async update(@Param('id') id: string, @Body() data: PeopleUpdateDTO) {
     return await this.peopleService.update(id, data);
   }
