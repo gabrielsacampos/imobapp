@@ -1,4 +1,4 @@
-# ImobManeger
+# ImobManager
 
 This application has the function of storing data provided by a third-party API, which currently manages property rental payments for a property management company. After the complete integration between this application and the third-party API, we will create new features based on the data persisted in our own database.
 
