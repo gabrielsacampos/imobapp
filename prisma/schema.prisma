@@ -125,7 +125,7 @@ model Lease {
   status      String
   code_imobzi String?
   start_at    DateTime
-  duration    BigInt
+  duration    Int
 
   property_id BigInt
   property    Property @relation("propertyToLease", fields: [property_id], references: [id], onDelete: Cascade)
@@ -139,14 +139,14 @@ model Lease {
   main_guarantor BigInt?
   guarantor      Person? @relation("personGrarantorToLease", fields: [main_guarantor], references: [id], onDelete: Cascade)
 
-  fee                 Float
+  fee                 Decimal
   guarantee_type      String
-  guarantee_value     Float?
+  guarantee_value     Decimal?
   annual_readjustment String?
   irrf                Boolean
   include_in_dimob    Boolean
   indeterminate       Boolean
-  lease_value         Float
+  lease_value         Decimal
   created_at          DateTime      @default(now())
   updated_at          DateTime      @updatedAt
   beneficiariesLease  Beneficiary[] @relation("leaseToBeneficiary")
