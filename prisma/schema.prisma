@@ -113,7 +113,7 @@ model Owner {
   id_owner_organization BigInt?
   owner_organization    Organization? @relation(fields: [id_owner_organization], references: [id], onDelete: Cascade)
 
-  share      Float
+  share      Decimal
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
