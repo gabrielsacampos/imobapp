@@ -78,6 +78,7 @@ model Building {
 
 model Property {
   id     BigInt  @id @default(autoincrement())
+  unit  String
   type   String
   active Boolean
   status String
