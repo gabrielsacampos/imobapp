@@ -124,7 +124,7 @@ model Lease {
   id          BigInt   @id @default(autoincrement())
   status      String
   code_imobzi String?
-  start_at    DateTime
+  start_at    String
   duration    Int
 
   property_id BigInt
