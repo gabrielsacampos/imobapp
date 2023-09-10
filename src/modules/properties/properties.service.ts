@@ -53,7 +53,7 @@ export class PropertiesService {
       const id = element.id.toString();
       delete element.building_id;
       delete element.id;
-      return { ...element, id };
+      return { id, ...element };
     });
   }
 
@@ -75,7 +75,7 @@ export class PropertiesService {
     delete found.building_id;
     delete found.id;
 
-    return { ...found };
+    return { id, ...found };
   }
 
   async update(id: string, data: PropertiesUpdateDTO) {

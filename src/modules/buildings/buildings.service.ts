@@ -57,7 +57,7 @@ export class BuildingsService {
 
     delete found.id;
 
-    return { ...found };
+    return { id, ...found };
   }
 
   async update(id: string, data: BuildingsUpdateDTO) {

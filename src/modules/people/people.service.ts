@@ -57,7 +57,7 @@ export class PeopleService {
 
     delete found.id;
 
-    return { ...found };
+    return { id, ...found };
   }
 
   async update(id: string, data: PeopleUpdateDTO) {

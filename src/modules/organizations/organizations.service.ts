@@ -61,7 +61,7 @@ export class OrganizationsService {
     delete found.id;
     const personId = found.person_id_representative.toString();
     delete found.person_id_representative;
-    return { ...found, person_id_representative: personId };
+    return { id, ...found, person_id_representative: personId };
   }
 
   async findAll() {
