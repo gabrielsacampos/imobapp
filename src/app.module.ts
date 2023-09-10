@@ -6,6 +6,7 @@ import { OrganizationsModule } from './modules/organizations/organizations.modul
 import { BuildingsModule } from './modules/buildings/buildings.module';
 import { PropertiesModule } from './modules/properties/properties.module';
 import { LeasesModule } from './modules/leases/leases.module';
+import { OwnersModule } from './modules/owners/owners.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { LeasesModule } from './modules/leases/leases.module';
     BuildingsModule,
     PropertiesModule,
     LeasesModule,
+    OwnersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

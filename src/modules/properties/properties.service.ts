@@ -22,7 +22,7 @@ export class PropertiesService {
 
     if (existsIdProperty) {
       throw new NotAcceptableException(
-        `ID: ${data.id} already registered to property: ${existsIdProperty}`,
+        `ID: ${data.id} already registered to property: ${existsIdProperty.unit} - ${existsIdProperty.building.name} `,
       );
     }
 
@@ -33,6 +33,9 @@ export class PropertiesService {
         ...data,
         id: idBigInt,
         building_id: buildingIdBigInt,
+        owners: {
+          create: data.owners,
+        },
       },
     });
 

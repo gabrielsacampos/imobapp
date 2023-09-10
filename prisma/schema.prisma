@@ -102,7 +102,7 @@ model Property {
 }
 
 model Owner {
-  id BigInt @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
   id_property BigInt
   property    Property @relation(fields: [id_property], references: [id], onDelete: Cascade)

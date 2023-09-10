@@ -1,4 +1,6 @@
-import { IsNotEmpty } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsNotEmpty, ValidateNested } from 'class-validator';
+import { OwnersCreateDTO } from '../owners/ownersCreate.dtos';
 
 export class PropertiesCreateDTO {
   @IsNotEmpty()
@@ -26,4 +28,8 @@ export class PropertiesCreateDTO {
   rental_value?: number;
   sale_value?: number;
   alternative_code?: string;
+
+  @ValidateNested()
+  @Type(() => OwnersCreateDTO)
+  owners!: OwnersCreateDTO;
 }
