@@ -89,9 +89,17 @@ export class PropertiesService {
 
     await this.prisma.property.update({
       where: { id: idBigInt },
-      data: { ...data, building_id: buildingBigIntId },
+      data: {
+        ...data,
+        building_id: buildingBigIntId,
+        owners: {
+          deleteMany: [{ id_property: idBigInt }],
+          createMany: {
+            data: data.owners,
+          },
+        },
+      },
     });
-
     return 'Property Updated';
   }
 }

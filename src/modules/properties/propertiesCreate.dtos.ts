@@ -1,5 +1,6 @@
+import { NotAcceptableException } from '@nestjs/common';
 import { Type } from 'class-transformer';
-import { IsNotEmpty, ValidateNested } from 'class-validator';
+import { IsNotEmpty, ValidateIf, ValidateNested } from 'class-validator';
 import { OwnersCreateDTO } from '../owners/ownersCreate.dtos';
 
 export class PropertiesCreateDTO {
@@ -29,6 +30,16 @@ export class PropertiesCreateDTO {
   sale_value?: number;
   alternative_code?: string;
 
+  @ValidateIf((o) => {
+    const sumShare = o.owners.reduce((acc: number, curr: OwnersCreateDTO) => {
+      acc += curr.share;
+      return acc;
+    }, 0);
+    if (sumShare !== 100) {
+      throw new NotAcceptableException(`Sum of shares must be equal to 100`);
+    }
+    return true;
+  })
   @ValidateNested()
   @Type(() => OwnersCreateDTO)
   owners!: OwnersCreateDTO;
