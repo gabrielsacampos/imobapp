@@ -26,9 +26,14 @@ export class LeasesService {
 
     delete data.id;
     await this.prisma.lease.create({
-      data: { ...data, id: idBigInt },
+      data: {
+        ...data,
+        id: idBigInt,
+        tenants: {
+          create: data.tenants,
+        },
+      },
     });
-
     return `lease created`;
   }
 
@@ -68,7 +73,16 @@ export class LeasesService {
 
     await this.prisma.lease.update({
       where: { id: idBigInt },
-      data: { ...data, property_id: propertyIdBigInt },
+      data: {
+        ...data,
+        property_id: propertyIdBigInt,
+        tenants: {
+          deleteMany: [{ lease_id: idBigInt }],
+          createMany: {
+            data: data.tenants,
+          },
+        },
+      },
     });
 
     return 'Lease Updated';

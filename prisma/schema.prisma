@@ -78,7 +78,7 @@ model Building {
 
 model Property {
   id     BigInt  @id @default(autoincrement())
-  unit  String
+  unit   String
   type   String
   active Boolean
   status String
@@ -121,7 +121,7 @@ model Owner {
 }
 
 model Lease {
-  id          BigInt   @id @default(autoincrement())
+  id          BigInt  @id @default(autoincrement())
   status      String
   code_imobzi String?
   start_at    String
@@ -147,24 +147,28 @@ model Lease {
   include_in_dimob    Boolean
   indeterminate       Boolean
   lease_value         Decimal
-  created_at          DateTime      @default(now())
-  updated_at          DateTime      @updatedAt
-  beneficiariesLease  Beneficiary[] @relation("leaseToBeneficiary")
-  invoicesLease       Invoice[]     @relation("leaseToInvoice")
-  leasesItems         LeaseItem[]   @relation("leaseToLeaseItem")
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+
+  beneficiariesLease Beneficiary[] @relation("leaseToBeneficiary")
+  invoicesLease      Invoice[]     @relation("leaseToInvoice")
+  leasesItems        LeaseItem[]   @relation("leaseToLeaseItem")
+  tenants            Tenant[]      @relation("leaseToTenants")
 
   @@map("leases")
 }
 
 model Tenant {
-  id          BigInt @id @default(autoincrement())
-  tenant_type String
+  id          Int @id @default(autoincrement())
 
-  tenant_id_organization BigInt
-  tenant_organization    Organization? @relation("organizationToTenant", fields: [tenant_id_organization], references: [id], onDelete: Cascade)
+  id_tenant_organization BigInt?
+  organization    Organization? @relation("organizationToTenant", fields: [id_tenant_organization], references: [id], onDelete: Cascade)
 
-  tenant_id_person BigInt
-  tenant_person    Person? @relation("personToTenant", fields: [tenant_id_person], references: [id], onDelete: Cascade)
+  id_tenant_person BigInt?
+  person    Person? @relation("personToTenant", fields: [id_tenant_person], references: [id], onDelete: Cascade)
+
+  lease_id BigInt?
+  Lease   Lease?  @relation("leaseToTenants", fields: [lease_id], references: [id])
 
   @@map("tenants")
 }

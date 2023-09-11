@@ -1,5 +1,6 @@
-import { IsNotEmpty } from 'class-validator';
-
+import { Type } from 'class-transformer';
+import { IsNotEmpty, ValidateNested } from 'class-validator';
+import { TenantsUpdateDTO } from '../tenants/tenantsUpdate.dtos';
 export class LeasesUpdateDTO {
   @IsNotEmpty()
   duration: number;
@@ -37,4 +38,8 @@ export class LeasesUpdateDTO {
   main_guarantor: bigint;
   master_tenant_person: bigint;
   tenant_organization: bigint;
+
+  @ValidateNested({ message: 'You need to set at least one tenant to lease' })
+  @Type(() => TenantsUpdateDTO)
+  tenants!: TenantsUpdateDTO;
 }
