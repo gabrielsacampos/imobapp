@@ -179,12 +179,12 @@ model LeaseItem {
   decription          String
   management_fee      Boolean
   recurrent           Boolean
-  repeat_total        BigInt?
+  repeat_total        Int?
   value               Float
   until_due_date      Boolean
   behavior            String
   autopay_on_due_date Boolean
-  repeat_index        BigInt
+  repeat_index        Int
   include_in_dimob    Boolean
   start_date          String
 
