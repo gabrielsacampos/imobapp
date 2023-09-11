@@ -6,8 +6,8 @@ import { OrganizationsModule } from './modules/organizations/organizations.modul
 import { BuildingsModule } from './modules/buildings/buildings.module';
 import { PropertiesModule } from './modules/properties/properties.module';
 import { LeasesModule } from './modules/leases/leases.module';
-import { OwnersModule } from './modules/owners/owners.module';
-import { TenantsModule } from './modules/tenants/tenants.module';
+// import { OwnersModule } from './modules/owners/owners.module';
+// import { TenantsModule } from './modules/tenants/tenants.module';
 
 @Module({
   imports: [
@@ -16,8 +16,8 @@ import { TenantsModule } from './modules/tenants/tenants.module';
     BuildingsModule,
     PropertiesModule,
     LeasesModule,
-    OwnersModule,
-    TenantsModule,
+    // OwnersModule,
+    // TenantsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

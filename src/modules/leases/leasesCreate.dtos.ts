@@ -1,6 +1,6 @@
 import { Type } from 'class-transformer';
 import { IsNotEmpty, ValidateNested } from 'class-validator';
-import { TenantsCreateDTO } from '../tenants/tenantsCreate.dtos';
+import { TenantsCreateDTO } from './tenants/tenantsCreate.dtos';
 
 export class LeasesCreateDTO {
   @IsNotEmpty()

@@ -1,7 +1,7 @@
 import { NotAcceptableException } from '@nestjs/common';
 import { Type } from 'class-transformer';
 import { IsNotEmpty, ValidateIf, ValidateNested } from 'class-validator';
-import { OwnersCreateDTO } from '../owners/ownersCreate.dtos';
+import { OwnersCreateDTO } from './owners/ownersCreate.dtos';
 
 export class PropertiesCreateDTO {
   @IsNotEmpty()

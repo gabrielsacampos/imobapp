@@ -1,6 +1,6 @@
 import { IsNotEmpty, ValidateIf, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
-import { OwnersUpdateDTO } from '../owners/ownersUpdate.dtos';
+import { OwnersUpdateDTO } from './owners/ownersUpdate.dtos';
 import { NotAcceptableException } from '@nestjs/common';
 
 export class PropertiesUpdateDTO {
