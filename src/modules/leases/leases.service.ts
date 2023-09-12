@@ -20,17 +20,20 @@ export class LeasesService {
       );
     }
 
+    const beneficiaries = data.beneficiaries;
+    delete data.beneficiaries;
     delete data.id;
+
     await this.prisma.lease.create({
       data: {
         ...data,
         id: idBigInt,
-        tenants: {
-          create: data.tenants,
+        beneficiariesLease: {
+          create: beneficiaries,
         },
       },
     });
-    return `lease created`;
+    return { message: `lease #${idBigInt} created` };
   }
 
   async findAll() {
@@ -38,9 +41,25 @@ export class LeasesService {
     return arrayLeases.map((element) => {
       const id = element.id.toString();
       const property_id = element.property_id.toString();
+      const id_tenant_person = element.id_tenant_person
+        ? element.id_tenant_person?.toString()
+        : null;
+      const id_tenant_organization = element.id_tenant_organization
+        ? element.id_tenant_organization?.toString()
+        : null;
+
+      delete element.id_tenant_organization;
+      delete element.id_tenant_person;
       delete element.id;
       delete element.property_id;
-      return { id, property_id, ...element };
+
+      return {
+        id,
+        property_id,
+        id_tenant_organization,
+        id_tenant_person,
+        ...element,
+      };
     });
   }
 
@@ -48,17 +67,48 @@ export class LeasesService {
     const idBigInt = BigInt(id);
     const found = await this.prisma.lease.findUnique({
       where: { id: idBigInt },
+      include: {
+        beneficiariesLease: true,
+      },
     });
 
     if (!found) {
       throw new NotAcceptableException(`ID: ${id} not found at leases`);
     }
 
+    const beneficiaries = found.beneficiariesLease.map((element) => {
+      const id_organization = element.id_beneficiary_organization
+        ? element.id_beneficiary_organization.toString()
+        : null;
+      const id_person = element.id_beneficiary_person
+        ? element.id_beneficiary_person.toString()
+        : null;
+
+      return { id_person, id_organization, share: element.share };
+    });
+
+    const id_tenant_person = found.id_tenant_person
+      ? found.id_tenant_person.toString()
+      : null;
+    const id_tenant_organization = found.id_tenant_organization
+      ? found.id_tenant_organization.toString()
+      : null;
+
     const property_id = found.property_id.toString();
-    delete found.property_id;
+
+    delete found.beneficiariesLease;
+    delete found.id_tenant_person;
+    delete found.id_tenant_organization;
     delete found.id;
 
-    return { id, property_id, ...found };
+    return {
+      id,
+      ...found,
+      property_id,
+      id_tenant_person,
+      id_tenant_organization,
+      beneficiaries,
+    };
   }
 
   async update(id: string, data: LeasesUpdateDTO) {
@@ -72,15 +122,15 @@ export class LeasesService {
       data: {
         ...data,
         property_id: propertyIdBigInt,
-        tenants: {
-          deleteMany: [{ lease_id: idBigInt }],
+        beneficiariesLease: {
+          deleteMany: [{ id_lease: idBigInt }],
           createMany: {
-            data: data.tenants,
+            data: data.beneficiaries,
           },
         },
       },
     });
 
-    return 'Lease Updated';
+    return { message: `lease ${idBigInt} updated` };
   }
 }

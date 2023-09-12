@@ -9,6 +9,7 @@ import { LeasesModule } from './modules/leases/leases.module';
 // import { OwnersModule } from './modules/owners/owners.module';
 // import { TenantsModule } from './modules/tenants/tenants.module';
 import { LeaseItemsModule } from './modules/leases/lease-items/lease-items.module';
+// import { BeneficiariesModule } from './modules/leases/beneficiaries/beneficiaries.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { LeaseItemsModule } from './modules/leases/lease-items/lease-items.modul
     PropertiesModule,
     LeasesModule,
     LeaseItemsModule,
+    // BeneficiariesModule,
     // OwnersModule,
     // TenantsModule,
   ],

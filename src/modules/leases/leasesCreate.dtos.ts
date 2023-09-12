@@ -1,6 +1,7 @@
+import { NotAcceptableException } from '@nestjs/common';
 import { Type } from 'class-transformer';
-import { IsNotEmpty, ValidateNested } from 'class-validator';
-import { TenantsCreateDTO } from './tenants/tenantsCreate.dtos';
+import { IsNotEmpty, ValidateIf, ValidateNested } from 'class-validator';
+import { BeneficiariesCreateDTO } from './beneficiaries/beneficiariesCreate.dtos';
 
 export class LeasesCreateDTO {
   @IsNotEmpty()
@@ -40,10 +41,43 @@ export class LeasesCreateDTO {
   code_imobzi: string;
   guarantee_value: number;
   main_guarantor?: bigint;
-  master_tenant_person?: bigint;
-  tenant_organization?: bigint;
 
-  @ValidateNested({ message: 'You need to set at least one tenant to lease' })
-  @Type(() => TenantsCreateDTO)
-  tenants!: TenantsCreateDTO;
+  @ValidateIf((o) => {
+    if (!o.id_tenant_person && !o.id_tenant_organization) {
+      throw new NotAcceptableException(
+        `lease must have only one type of tenant (organization or person)`,
+      );
+    } else if (o.id_tenant_person && o.id_tenant_organization) {
+      throw new NotAcceptableException(
+        `lease must have only one type of tenant (organization or person)`,
+      );
+    }
+
+    return true;
+  })
+  id_tenant_person?: bigint;
+  id_tenant_organization?: bigint;
+
+  @ValidateNested({
+    message: 'You need to set at least one beneficiary to lease',
+  })
+  @Type(() => BeneficiariesCreateDTO)
+  beneficiaries!: BeneficiariesCreateDTO;
+
+  @ValidateIf((o) => {
+    const shareSum = o.beneficiaries.reduce(
+      (acc: number, curr: BeneficiariesCreateDTO) => {
+        acc += curr.share;
+        return acc;
+      },
+      0,
+    );
+    if (shareSum !== 100) {
+      throw new NotAcceptableException(
+        'Sum of benficiaries share must be equal to 100',
+      );
+    }
+    return true;
+  })
+  share: number;
 }

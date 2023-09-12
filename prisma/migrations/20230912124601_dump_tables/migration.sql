@@ -44,6 +44,7 @@ CREATE TABLE `organizations` (
 -- CreateTable
 CREATE TABLE `buildings` (
     `id` BIGINT NOT NULL,
+    `name` VARCHAR(191) NOT NULL,
     `address` VARCHAR(191) NOT NULL,
     `city` VARCHAR(191) NOT NULL,
     `zipcode` VARCHAR(191) NOT NULL,
@@ -51,20 +52,22 @@ CREATE TABLE `buildings` (
     `updated_at` DATETIME(3) NOT NULL,
 
     UNIQUE INDEX `buildings_id_key`(`id`),
+    UNIQUE INDEX `buildings_name_key`(`name`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `properties` (
     `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `unit` VARCHAR(191) NOT NULL,
     `type` VARCHAR(191) NOT NULL,
     `active` BOOLEAN NOT NULL,
     `status` VARCHAR(191) NOT NULL,
     `building_id` BIGINT NOT NULL,
-    `area` DOUBLE NULL,
-    `bedroom` BIGINT NULL,
-    `suite` BIGINT NULL,
-    `garage` BIGINT NULL,
+    `area` DECIMAL(65, 30) NULL,
+    `bedroom` INTEGER NULL,
+    `suite` INTEGER NULL,
+    `garage` INTEGER NULL,
     `rental_value` DOUBLE NULL,
     `sale_value` DOUBLE NULL,
     `alternative_code` VARCHAR(191) NULL,
@@ -76,11 +79,11 @@ CREATE TABLE `properties` (
 
 -- CreateTable
 CREATE TABLE `owners` (
-    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
     `id_property` BIGINT NOT NULL,
     `id_owner_person` BIGINT NULL,
     `id_owner_organization` BIGINT NULL,
-    `share` DOUBLE NOT NULL,
+    `share` DECIMAL(65, 30) NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 
@@ -92,32 +95,24 @@ CREATE TABLE `leases` (
     `id` BIGINT NOT NULL AUTO_INCREMENT,
     `status` VARCHAR(191) NOT NULL,
     `code_imobzi` VARCHAR(191) NULL,
-    `start_at` DATETIME(3) NOT NULL,
-    `duration` BIGINT NOT NULL,
+    `start_at` VARCHAR(191) NOT NULL,
+    `duration` INTEGER NOT NULL,
     `property_id` BIGINT NOT NULL,
-    `master_tenant_person` BIGINT NULL,
-    `tenant_organization` BIGINT NULL,
+    `id_tenant_person` BIGINT NULL,
+    `id_tenant_organization` BIGINT NULL,
     `main_guarantor` BIGINT NULL,
-    `fee` DOUBLE NOT NULL,
+    `fee` DECIMAL(65, 30) NOT NULL,
     `guarantee_type` VARCHAR(191) NOT NULL,
-    `guarantee_value` DOUBLE NULL,
+    `guarantee_value` DECIMAL(65, 30) NULL,
     `annual_readjustment` VARCHAR(191) NULL,
     `irrf` BOOLEAN NOT NULL,
     `include_in_dimob` BOOLEAN NOT NULL,
     `indeterminate` BOOLEAN NOT NULL,
-    `lease_value` DOUBLE NOT NULL,
+    `lease_value` DECIMAL(65, 30) NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
-
-    PRIMARY KEY (`id`)
-) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-
--- CreateTable
-CREATE TABLE `tenants` (
-    `id` BIGINT NOT NULL AUTO_INCREMENT,
-    `tenant_type` VARCHAR(191) NOT NULL,
-    `tenant_id_organization` BIGINT NOT NULL,
-    `tenant_id_person` BIGINT NOT NULL,
+    `id_buildinng` BIGINT NULL,
+    `id_organization` BIGINT NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -129,12 +124,12 @@ CREATE TABLE `lease_items` (
     `decription` VARCHAR(191) NOT NULL,
     `management_fee` BOOLEAN NOT NULL,
     `recurrent` BOOLEAN NOT NULL,
-    `repeat_total` BIGINT NULL,
+    `repeat_total` INTEGER NULL,
     `value` DOUBLE NOT NULL,
     `until_due_date` BOOLEAN NOT NULL,
     `behavior` VARCHAR(191) NOT NULL,
     `autopay_on_due_date` BOOLEAN NOT NULL,
-    `repeat_index` BIGINT NOT NULL,
+    `repeat_index` INTEGER NOT NULL,
     `include_in_dimob` BOOLEAN NOT NULL,
     `start_date` VARCHAR(191) NOT NULL,
     `lease_id` BIGINT NOT NULL,
@@ -178,7 +173,7 @@ CREATE TABLE `invoices_items` (
     `behavior` VARCHAR(191) NOT NULL,
     `include_in_dimob` BOOLEAN NOT NULL,
     `management_feee` BOOLEAN NOT NULL,
-    `value` DOUBLE NOT NULL,
+    `value` DECIMAL(65, 30) NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 
@@ -187,11 +182,11 @@ CREATE TABLE `invoices_items` (
 
 -- CreateTable
 CREATE TABLE `beneficiaries` (
-    `id` BIGINT NOT NULL,
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
     `id_lease` BIGINT NOT NULL,
-    `id_beneficiary_person` BIGINT NOT NULL,
-    `id_beneficiary_organization` BIGINT NOT NULL,
-    `share` DOUBLE NOT NULL,
+    `id_beneficiary_person` BIGINT NULL,
+    `id_beneficiary_organization` BIGINT NULL,
+    `share` DECIMAL(65, 30) NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 
@@ -227,19 +222,19 @@ ALTER TABLE `owners` ADD CONSTRAINT `owners_id_owner_organization_fkey` FOREIGN 
 ALTER TABLE `leases` ADD CONSTRAINT `leases_property_id_fkey` FOREIGN KEY (`property_id`) REFERENCES `properties`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `leases` ADD CONSTRAINT `leases_master_tenant_person_fkey` FOREIGN KEY (`master_tenant_person`) REFERENCES `people`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `leases` ADD CONSTRAINT `leases_id_tenant_person_fkey` FOREIGN KEY (`id_tenant_person`) REFERENCES `people`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `leases` ADD CONSTRAINT `leases_tenant_organization_fkey` FOREIGN KEY (`tenant_organization`) REFERENCES `organizations`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `leases` ADD CONSTRAINT `leases_id_tenant_organization_fkey` FOREIGN KEY (`id_tenant_organization`) REFERENCES `organizations`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `leases` ADD CONSTRAINT `leases_main_guarantor_fkey` FOREIGN KEY (`main_guarantor`) REFERENCES `people`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `tenants` ADD CONSTRAINT `tenants_tenant_id_organization_fkey` FOREIGN KEY (`tenant_id_organization`) REFERENCES `organizations`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `leases` ADD CONSTRAINT `leases_id_buildinng_fkey` FOREIGN KEY (`id_buildinng`) REFERENCES `buildings`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `tenants` ADD CONSTRAINT `tenants_tenant_id_person_fkey` FOREIGN KEY (`tenant_id_person`) REFERENCES `people`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `leases` ADD CONSTRAINT `leases_id_organization_fkey` FOREIGN KEY (`id_organization`) REFERENCES `organizations`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `lease_items` ADD CONSTRAINT `lease_items_lease_id_fkey` FOREIGN KEY (`lease_id`) REFERENCES `leases`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

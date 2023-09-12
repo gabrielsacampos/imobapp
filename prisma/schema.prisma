@@ -11,30 +11,30 @@ datasource db {
 }
 
 model Person {
-  id                            BigInt         @id @default(autoincrement())
-  cpf                           String         @unique @db.VarChar(255)
+  id                            BigInt    @id @default(autoincrement())
+  cpf                           String    @unique @db.VarChar(255)
   fullname                      String?
   birthdate                     DateTime?
-  email                         String         @db.VarChar(255)
-  phone                         String         @db.VarChar(255)
+  email                         String    @db.VarChar(255)
+  phone                         String    @db.VarChar(255)
   alternative_address           String?
   alternative_address_reference String?
   gender                        String?
   marital_status                String?
-  code_imobzi                   String?        @unique
+  code_imobzi                   String?   @unique
   profession                    String?
-  children                      BigInt?
-  pets                          BigInt?
+  children                      Int?
+  pets                          Int?
   kind_of_pet                   String?
   anual_revenue                 Float?
-  created_at                    DateTime       @default(now())
-  updated_at                    DateTime       @updatedAt
-  organizations                 Organization[]
-  owners                        Owner[]
-  leasesGuarantor               Lease[]        @relation("personGrarantorToLease")
-  leasesTenant                  Lease[]        @relation("personTenantToLease")
-  beneficiariesPerson           Beneficiary[]  @relation("personToBeneficiary")
-  tenants                       Tenant[]       @relation("personToTenant")
+  created_at                    DateTime  @default(now())
+  updated_at                    DateTime  @updatedAt
+
+  organizations       Organization[]
+  owners              Owner[]
+  leasesGuarantor     Lease[]        @relation("personGrarantorToLease")
+  beneficiariesPerson Beneficiary[]  @relation("personToBeneficiary")
+  leaseTenant         Lease[]        @relation("personTenant")
 
   @@map("people")
 }
@@ -56,9 +56,8 @@ model Organization {
   updated_at          DateTime @updatedAt
 
   beneficiariesOrganization Beneficiary[] @relation("organizationToBeneficiary")
-  leasesTenant              Lease[]       @relation("organizationTenantToLease")
+  tenantLeaseOrganization   Lease[]       @relation("organizationTenant")
   owners                    Owner[]
-  tenants                   Tenant[]      @relation("organizationToTenant")
 
   @@map("organizations")
 }
@@ -72,6 +71,7 @@ model Building {
   created_at DateTime   @default(now())
   updated_at DateTime   @updatedAt
   properties Property[]
+
 
   @@map("buildings")
 }
@@ -130,11 +130,11 @@ model Lease {
   property_id BigInt
   property    Property @relation("propertyToLease", fields: [property_id], references: [id], onDelete: Cascade)
 
-  master_tenant_person BigInt?
-  master_tenant        Person? @relation("personTenantToLease", fields: [master_tenant_person], references: [id], onDelete: Cascade)
+  id_tenant_person BigInt?
+  tenant_person    Person? @relation("personTenant", fields: [id_tenant_person], references: [id], onDelete: Cascade)
 
-  tenant_organization BigInt?
-  tenant_org          Organization? @relation("organizationTenantToLease", fields: [tenant_organization], references: [id], onDelete: Cascade)
+  id_tenant_organization BigInt?
+  tenant_org             Organization? @relation("organizationTenant", fields: [id_tenant_organization], references: [id], onDelete: Cascade)
 
   main_guarantor BigInt?
   guarantor      Person? @relation("personGrarantorToLease", fields: [main_guarantor], references: [id], onDelete: Cascade)
@@ -153,24 +153,9 @@ model Lease {
   beneficiariesLease Beneficiary[] @relation("leaseToBeneficiary")
   invoicesLease      Invoice[]     @relation("leaseToInvoice")
   leasesItems        LeaseItem[]   @relation("leaseToLeaseItem")
-  tenants            Tenant[]      @relation("leaseToTenants")
+
 
   @@map("leases")
-}
-
-model Tenant {
-  id          Int @id @default(autoincrement())
-
-  id_tenant_organization BigInt?
-  organization    Organization? @relation("organizationToTenant", fields: [id_tenant_organization], references: [id], onDelete: Cascade)
-
-  id_tenant_person BigInt?
-  person    Person? @relation("personToTenant", fields: [id_tenant_person], references: [id], onDelete: Cascade)
-
-  lease_id BigInt?
-  Lease   Lease?  @relation("leaseToTenants", fields: [lease_id], references: [id])
-
-  @@map("tenants")
 }
 
 model LeaseItem {
@@ -237,7 +222,7 @@ model Item {
   behavior         String
   include_in_dimob Boolean
   management_feee  Boolean
-  value            Float
+  value            Decimal
   created_at       DateTime @default(now())
   updated_at       DateTime @updatedAt
 
@@ -245,18 +230,18 @@ model Item {
 }
 
 model Beneficiary {
-  id BigInt @id
+  id Int @id @default(autoincrement())
 
   id_lease BigInt
   lease    Lease  @relation("leaseToBeneficiary", fields: [id_lease], references: [id], onDelete: Cascade)
 
-  id_beneficiary_person BigInt
-  beneficiary_person    Person @relation("personToBeneficiary", fields: [id_beneficiary_person], references: [id], onDelete: Cascade)
+  id_beneficiary_person BigInt?
+  beneficiary_person    Person? @relation("personToBeneficiary", fields: [id_beneficiary_person], references: [id], onDelete: Cascade)
 
-  id_beneficiary_organization BigInt
-  beneficiary_organization    Organization @relation("organizationToBeneficiary", fields: [id_beneficiary_organization], references: [id], onDelete: Cascade)
+  id_beneficiary_organization BigInt?
+  beneficiary_organization    Organization? @relation("organizationToBeneficiary", fields: [id_beneficiary_organization], references: [id], onDelete: Cascade)
 
-  share      Float
+  share      Decimal
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 

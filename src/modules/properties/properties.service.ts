@@ -39,7 +39,7 @@ export class PropertiesService {
       },
     });
 
-    return 'Property created';
+    return { message: `Property #${idBigInt} created` };
   }
 
   async findAll() {
@@ -100,6 +100,6 @@ export class PropertiesService {
         },
       },
     });
-    return 'Property Updated';
+    return { message: `Property #${id} updated` };
   }
 }

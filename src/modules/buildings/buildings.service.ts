@@ -31,9 +31,11 @@ export class BuildingsService {
 
     delete data.id;
 
-    return await this.prisma.building.create({
+    await this.prisma.building.create({
       data: { ...data, id: idBigInt },
     });
+
+    return { message: `${data.name} property created` };
   }
 
   async findAll() {
