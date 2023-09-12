@@ -33,7 +33,9 @@ export class PeopleService {
     }
 
     delete data.id;
-    return this.prisma.person.create({ data: { ...data, id: idBigInt } });
+    await this.prisma.person.create({ data: { ...data, id: idBigInt } });
+
+    return `Person ${data.fullname} created`;
   }
 
   async findAll() {
