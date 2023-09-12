@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  NotAcceptableException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotAcceptableException } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
 import { LeasesCreateDTO } from './leasesCreate.dtos';
 import { LeasesUpdateDTO } from './leasesUpdate.dtos';
@@ -55,7 +51,7 @@ export class LeasesService {
     });
 
     if (!found) {
-      throw new NotFoundException(`ID: ${id} not found at leases`);
+      throw new NotAcceptableException(`ID: ${id} not found at leases`);
     }
 
     const property_id = found.property_id.toString();
