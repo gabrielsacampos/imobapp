@@ -8,6 +8,13 @@ $ git clone https://github.com/gabrielsacampos/imobManager-server-NestJs.git && 
 ```
 
 -----
+### Config Prisma: 
+We need to determinate **DATABASE_URL** for a MySQL database. You typically need to obtain this information from your hosting provider or your own server configuration. The **DATABASE_URL** is a connection string that contains the necessary information for connecting to the MySQL database. It typically follows this format:
+```mysql://username:password@hostname:port/database```
+
+set on file **.env**
+```DATABASE_URL_MYSQL="mysql://username:password@hostname:port/database?schema=public"```
+remember: `?schema=public` in the end.
 
 #### On terminal, to migrate PrismaSchema:
 ```
