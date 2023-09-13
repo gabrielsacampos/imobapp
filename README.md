@@ -4,8 +4,24 @@ This application has the function of storing data provided by a third-party API,
 
 ### To follow in your dependencies:
 ``` 
-$ git clone https://github.com/gabrielsacampos/imobManager-server-NestJs.git
+$ git clone https://github.com/gabrielsacampos/imobManager-server-NestJs.git && npm i
 ```
+
+-----
+
+#### On terminal, to migrate PrismaSchema:
+```
+ npx prisma migrate dev
+```
+*Seeds to dump into database come soon.*
+
+----------------
+
+#### On terminal, to start server:
+```
+npm run start:dev
+```
+
 
 > Our API: **http://localhost:3000/api**
 
@@ -16,6 +32,7 @@ note: _API documentation still in construction. For now, we can only see the end
 
 BackEnd structure: 
   - NestJs
+  - Prisma ORM
   - MySql
   - BullMQ
 
