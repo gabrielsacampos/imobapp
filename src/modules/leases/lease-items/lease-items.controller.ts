@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { LeaseItemsService } from './lease-items.service';
 import { LeaseItemsCreateDTO } from './leaseItemsCreate.dtos';
 
@@ -17,5 +17,13 @@ export class LeaseItemsController {
   @Get(':id')
   async findLeaseItemsById(@Param('id') id: string) {
     return await this.leaseItemsService.findLeaseItemsById(id);
+  }
+
+  @Put(':id')
+  async updateLeaseItems(
+    @Param('id') id: string,
+    @Body() data: LeaseItemsCreateDTO[],
+  ) {
+    return await this.leaseItemsService.updateLeaseItems(id, data);
   }
 }

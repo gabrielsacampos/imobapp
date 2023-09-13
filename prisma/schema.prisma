@@ -26,7 +26,7 @@ model Person {
   children                      Int?
   pets                          Int?
   kind_of_pet                   String?
-  anual_revenue                 Float?
+  anual_revenue                 Decimal?
   created_at                    DateTime  @default(now())
   updated_at                    DateTime  @updatedAt
 
@@ -90,8 +90,8 @@ model Property {
   bedroom          Int?
   suite            Int?
   garage           Int?
-  rental_value     Float?
-  sale_value       Float?
+  rental_value     Decimal?
+  sale_value       Decimal?
   alternative_code String?
   created_at       DateTime @default(now())
   updated_at       DateTime @updatedAt
@@ -159,13 +159,13 @@ model Lease {
 }
 
 model LeaseItem {
-  id                  BigInt  @id @default(autoincrement())
+  id                  Int  @id @default(autoincrement()) 
   due_date            String
-  decription          String
+  description          String
   management_fee      Boolean
   recurrent           Boolean
   repeat_total        Int?
-  value               Float
+  value               Decimal
   until_due_date      Boolean
   behavior            String
   autopay_on_due_date Boolean
@@ -185,34 +185,34 @@ model LeaseItem {
 model Invoice {
   id        String    @id
   status    String
-  reference DateTime?
-  due_date  DateTime
+  reference String?
+  due_date  String
 
   lease_id BigInt
   lease    Lease  @relation("leaseToInvoice", fields: [lease_id], references: [id], onDelete: Cascade)
 
-  management_fee  Float
+  management_fee  Decimal
   invoice_url     String
   barcode         String?
   bank_slip_url   String?
   bank_slip_id    String?
-  total_value     Float
-  interest_value  Float
-  paid_at         DateTime?
-  credit_at       DateTime?
+  total_value     Decimal
+  interest_value  Decimal
+  paid_at         String?
+  credit_at       String?
   paid_manual     Boolean?
-  bank_fee_value  Float?
+  bank_fee_value  Decimal?
   account_credit  String?
-  onlending_value Float?
+  onlending_value Decimal?
   created_at      DateTime  @default(now())
   updated_at      DateTime  @updatedAt
 
-  items Item[]
+  invoiceItems InvoiceItem[]
 
   @@map("invoices")
 }
 
-model Item {
+model InvoiceItem {
   id String @id
 
   invoice_id String
@@ -221,7 +221,7 @@ model Item {
   description      String
   behavior         String
   include_in_dimob Boolean
-  management_feee  Boolean
+  management_fee  Boolean
   value            Decimal
   created_at       DateTime @default(now())
   updated_at       DateTime @updatedAt

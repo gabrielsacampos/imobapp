@@ -1,4 +1,8 @@
-import { Injectable, NotAcceptableException } from '@nestjs/common';
+import {
+  Injectable,
+  NotAcceptableException,
+  NotFoundException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
 import { LeaseItemsCreateDTO } from './leaseItemsCreate.dtos';
 
@@ -52,5 +56,28 @@ export class LeaseItemsService {
       delete element.lease_id;
       return { id, lease_id, ...element };
     });
+  }
+
+  async updateLeaseItems(id: string, data: LeaseItemsCreateDTO[]) {
+    const leaseIdBigInt = BigInt(id);
+    const existsLease = await this.prisma.lease.findFirst({
+      where: { id: leaseIdBigInt },
+    });
+
+    if (!existsLease) {
+      throw new NotFoundException(`Lease ${id} dos not exist`);
+    }
+
+    await this.prisma.lease.update({
+      where: { id: leaseIdBigInt },
+      data: {
+        leasesItems: {
+          deleteMany: {},
+          createMany: { data },
+        },
+      },
+    });
+
+    return `LeaseItems updated to ${data.length}`;
   }
 }

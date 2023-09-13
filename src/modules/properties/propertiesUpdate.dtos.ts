@@ -37,6 +37,7 @@ export class PropertiesUpdateDTO {
     }
     return true;
   })
+  @IsNotEmpty()
   @ValidateNested()
   @Type(() => OwnersUpdateDTO)
   owners!: OwnersUpdateDTO;

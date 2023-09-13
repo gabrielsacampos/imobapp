@@ -1,0 +1,268 @@
+[
+	{
+	  "id": 121212122112121,
+	  "unit": "Unit 101",
+	  "type": "Apartment",
+	  "active": true,
+	  "status": "Available",
+	  "building_id": 9876543210,
+	  "area": 75.5,
+	  "bedroom": 2,
+	  "suite": 1,
+	  "garage": 1,
+	  "rental_value": 1500.0,
+	  "sale_value": 250000.0,
+	  "alternative_code": "U101",
+	  "owners": [
+		{
+			"share": 40,
+			"id_owner_person": 42382224444422200
+			
+		},
+		   {
+			"share": 60,
+			"id_owner_person": 42382224449222200
+			
+		}
+	   ]
+	},
+	{
+	  "id": 323232323232323,
+	  "unit": "Unit 102",
+	  "type": "Apartment",
+	  "active": true,
+	  "status": "Available",
+	  "building_id": 1234567890,
+	  "area": 80.0,
+	  "bedroom": 3,
+	  "suite": 2,
+	  "garage": 2,
+	  "rental_value": 1800.0,
+	  "sale_value": 280000.0,
+	  "alternative_code": "U102",
+	  "owners": [
+		{
+			"share": 30,
+			"id_owner_person": 42382224444422200
+			
+		},
+		   {
+			"share": 70,
+			"id_owner_person": 42384234789234720
+			
+		}
+	   ]
+	},
+	{
+	  "id": 31313131313131,
+	  "unit": "Unit 201",
+	  "type": "Condo",
+	  "active": 1,
+	  "status": "Occupied",
+	  "building_id": 1234567890,
+	  "area": 95.5,
+	  "bedroom": 2,
+	  "suite": 1,
+	  "garage": 1,
+	  "rental_value": 1600.0,
+	  "sale_value": 270000.0,
+	  "alternative_code": "U201",
+	  "owners": [
+		{
+			"share": 40,
+			"id_owner_person": 42382224444422200
+			
+		},
+		   {
+			"share": 60,
+			"id_owner_person": 42384234449222224
+			
+		}
+	   ]
+	},
+	{
+	  "id": 9090909111919191,
+	  "unit": "Unit 202",
+	  "type": "Condo",
+	  "active": 1,
+	  "status": "Available",
+	  "building_id": 1234567890,
+	  "area": 90.0,
+	  "bedroom": 2,
+	  "suite": 2,
+	  "garage": 1,
+	  "rental_value": 1700.0,
+	  "sale_value": 290000.0,
+	  "alternative_code": "U202",
+	  "owners": [
+		{
+			"share": 40,
+			"id_owner_organization": 9342343242424
+			
+		},
+		   {
+			"share": 60,
+			"id_owner_person": 42382224449222200
+			
+		}
+	   ]
+	},
+	{
+	  "id": 51121211121,
+	  "unit": "Unit 301",
+	  "type": "Apartment",
+	  "active": 1,
+	  "status": "Available",
+	  "building_id": 5432109876,
+	  "area": 100.0,
+	  "bedroom": 3,
+	  "suite": 2,
+	  "garage": 2,
+	  "rental_value": 1900.0,
+	  "sale_value": 310000.0,
+	  "alternative_code": "U301",
+	  "owners": [
+		{
+			"share": 100,
+			"id_owner_organization": 9342343242424
+			
+		}
+	   ]
+	},
+	{
+	  "id": 62221212111,
+	  "unit": "Unit 302",
+	  "type": "Apartment",
+	  "active": 1,
+	  "status": "Occupied",
+	  "building_id": 5432109876,
+	  "area": 105.0,
+	  "bedroom": 4,
+	  "suite": 3,
+	  "garage": 2,
+	  "rental_value": 2100.0,
+	  "sale_value": 330000.0,
+	  "alternative_code": "U302",
+	  "owners": [
+		{
+			"share": 40,
+			"id_owner_person": 42382224444422200
+			
+		},
+		   {
+			"share": 60,
+			"id_owner_person": 42382224449222200
+			
+		}
+	   ]
+	},
+	{
+	  "id": 73332111122,
+	  "unit": "Unit 401",
+	  "type": "House",
+	  "active": 1,
+	  "status": "Available",
+	  "building_id": 4,
+	  "area": 150.0,
+	  "bedroom": 4,
+	  "suite": 2,
+	  "garage": 2,
+	  "rental_value": 2500.0,
+	  "sale_value": 400000.0,
+	  "alternative_code": "U401",
+	  "owners": [
+		{
+			"share": 40,
+			"id_owner_person": 42382224444422200
+			
+		},
+		   {
+			"share": 60,
+			"id_owner_person": 42382224449222200
+			
+		}
+	   ]
+	},
+	{
+	  "id": 833322222111,
+	  "unit": "Unit 402",
+	  "type": "House",
+	  "active": 1,
+	  "status": "Available",
+	  "building_id": 2222222222,
+	  "area": 180.0,
+	  "bedroom": 5,
+	  "suite": 3,
+	  "garage": 3,
+	  "rental_value": 2800.0,
+	  "sale_value": 450000.0,
+	  "alternative_code": "U402",
+	  "owners": [
+		{
+			"share": 40,
+			"id_owner_person": 42382224444422200
+			
+		},
+		   {
+			"share": 60,
+			"id_owner_person": 42382224449222200
+			
+		}
+	   ]
+	},
+	{
+	  "id": 9222121111122,
+	  "unit": "Unit 501",
+	  "type": "Apartment",
+	  "active": 1,
+	  "status": "Occupied",
+	  "building_id": 1234567890,
+	  "area": 120.0,
+	  "bedroom": 3,
+	  "suite": 2,
+	  "garage": 1,
+	  "rental_value": 2000.0,
+	  "sale_value": 350000.0,
+	  "alternative_code": "U501",
+	  "owners": [
+		{
+			"share": 40,
+			"id_owner_person": 42382224444422200
+			
+		},
+		   {
+			"share": 60,
+			"id_owner_person": 42382224449222200
+			
+		}
+	   ]
+	},
+	{
+	  "id": 101111222223,
+	  "unit": "Unit 502",
+	  "type": "Apartment",
+	  "active": 1,
+	  "status": "Available",
+	  "building_id": 1010101010,
+	  "area": 110.0,
+	  "bedroom": 2,
+	  "suite": 1,
+	  "garage": 1,
+	  "rental_value": 1700.0,
+	  "sale_value": 280000.0,
+	  "alternative_code": "U502",
+	  "owners": [
+		{
+			"share": 40,
+			"id_owner_person": 42382224444422200
+			
+		},
+		   {
+			"share": 60,
+			"id_owner_person": 42382224449222200
+			
+		}
+	   ]
+	}
+  ]
+  

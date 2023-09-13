@@ -40,6 +40,14 @@ export class PropertiesCreateDTO {
     }
     return true;
   })
+  @ValidateIf((o) => {
+    if (!o.owners) {
+      throw new NotAcceptableException(`Missing owners array`);
+    } else if (o.owners.length === 0) {
+      throw new NotAcceptableException(`Property must have at least one owner`);
+    }
+    return true;
+  })
   @ValidateNested()
   @Type(() => OwnersCreateDTO)
   owners!: OwnersCreateDTO;

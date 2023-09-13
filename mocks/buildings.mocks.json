@@ -1,0 +1,37 @@
+[
+	{
+	  "id": 1234567890,
+	  "name": "Building A",
+	  "address": "123 Main Street",
+	  "city": "City A",
+	  "zipcode": "12345-678"
+	},
+	{
+	  "id": 9876543210,
+	  "name": "Building B",
+	  "address": "456 Secondary Avenue",
+	  "city": "City B",
+	  "zipcode": "98765-432"
+	},
+	{
+	  "id": 5432109876,
+	  "name": "Building C",
+	  "address": "789 Central Road",
+	  "city": "City C",
+	  "zipcode": "54321-876"
+	},
+	{
+	  "id": 1010101010,
+	  "name": "Building D",
+	  "address": "101 Elm Street",
+	  "city": "City D",
+	  "zipcode": "10101-010"
+	},
+	{
+	  "id": 2222222222,
+	  "name": "Building E",
+	  "address": "222 Oak Avenue",
+	  "city": "City E",
+	  "zipcode": "22222-222"
+	}
+  ]

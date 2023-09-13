@@ -23,7 +23,7 @@ export class BuildingsController {
   }
 
   @Put(':id')
-  async update(@Body('id') id: string, data: BuildingsUpdateDTO) {
+  async update(@Param('id') id: string, @Body() data: BuildingsUpdateDTO) {
     return await this.buildingsService.update(id, data);
   }
 }
