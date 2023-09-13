@@ -25,4 +25,15 @@ export class InvoiceItemsService {
 
     return `${data.length} items to invoice ${id} created`;
   }
+
+  async findByInvoiceId(id: string) {
+    const found = await this.prisma.invoice.findUnique({
+      where: { id },
+      include: {
+        invoiceItems: true,
+      },
+    });
+
+    return found.invoiceItems;
+  }
 }

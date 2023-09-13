@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { InvoiceItemsService } from './invoice-items.service';
 import { invoiceItemsCreateDTO } from './invoiceItemsCreate.dtos';
 
@@ -6,6 +6,10 @@ import { invoiceItemsCreateDTO } from './invoiceItemsCreate.dtos';
 export class InvoiceItemsController {
   constructor(private readonly invoiceItemsService: InvoiceItemsService) {}
 
+  @Get(':id')
+  async findByInvoiceId(@Param('id') id: string) {
+    return await this.invoiceItemsService.findByInvoiceId(id);
+  }
   @Post(':id')
   async create(@Param('id') id: string, @Body() data: invoiceItemsCreateDTO[]) {
     return this.invoiceItemsService.create(id, data);
