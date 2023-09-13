@@ -2,17 +2,22 @@
 
 This application has the function of storing data provided by a third-party API, which currently manages property rental payments for a property management company. After the complete integration between this application and the third-party API, we will create new features based on the data persisted in our own database.
 
-> Our API: http://localhost:3000/api
+### To follow in your dependencies:
+``` 
+$ git clone https://github.com/gabrielsacampos/imobManager-server-NestJs.git
+```
 
-note: _API documentation still in construction. For now, we can only see the endpoint and params. Body examples and schemas come soon._
+> Our API: **http://localhost:3000/api**
 
-> Third-Party API: **imobzi.com**
+note: _API documentation still in construction. For now, we can only see the endpoints and params. Body examples and schemas come soon._
+
+> Third-Party API: **https://developer.imobzi.com/#section/Introduction**
 
 
 BackEnd structure: 
   - NestJs
   - MySql
-  - BullMq
+  - BullMQ
 
 Our Entities: 
   - People :white_check_mark:
