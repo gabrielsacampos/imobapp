@@ -7,6 +7,11 @@ import { LeasesUpdateDTO } from './leasesUpdate.dtos';
 export class LeasesController {
   constructor(private readonly leasesService: LeasesService) {}
 
+  @Post()
+  async createLeaseItems(@Body() data: LeasesCreateDTO) {
+    return await this.leasesService.createLeaseItems(data);
+  }
+
   @Get()
   async findAll() {
     return await this.leasesService.findAll();
@@ -17,13 +22,11 @@ export class LeasesController {
     return await this.leasesService.findById(id);
   }
 
-  @Post()
-  async create(@Body() data: LeasesCreateDTO) {
-    return await this.leasesService.create(data);
-  }
-
   @Put(':id')
-  async update(@Param('id') id: string, @Body() data: LeasesUpdateDTO) {
-    return await this.leasesService.update(id, data);
+  async updateLeaseItems(
+    @Param('id') id: string,
+    @Body() data: LeasesUpdateDTO,
+  ) {
+    return await this.leasesService.updateLeaseItems(id, data);
   }
 }
