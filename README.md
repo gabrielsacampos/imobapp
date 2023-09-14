@@ -18,7 +18,7 @@ remember: `?schema=public` in the end.
 
 #### On terminal, to migrate PrismaSchema:
 ```
- npx prisma migrate dev
+ $ npx prisma migrate dev
 ```
 *Seeds to dump into database come soon.*
 
@@ -26,13 +26,13 @@ remember: `?schema=public` in the end.
 
 #### On terminal, to start server:
 ```
-npm run start:dev
+$ npm run start:dev
 ```
 
 
 > Our API: **http://localhost:3000/api**
 
-note: _API documentation still in construction. For now, we can only see the endpoints and params. Body examples and schemas come soon._
+note: _API's documentation still in construction. For now, we can only see the endpoints and params. Body examples and schemas come soon._
 
 > Third-Party API: **https://developer.imobzi.com/#section/Introduction**
 
