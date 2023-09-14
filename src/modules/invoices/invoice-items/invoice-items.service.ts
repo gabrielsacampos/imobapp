@@ -36,4 +36,25 @@ export class InvoiceItemsService {
 
     return found.invoiceItems;
   }
+
+  async updateInvoiceItems(id: string, data: invoiceItemsCreateDTO[]) {
+    const existsInvoice = await this.prisma.invoice.findFirst({
+      where: { id },
+    });
+
+    if (!existsInvoice) {
+      throw new NotFoundException(`Invoice ${id} not found`);
+    }
+
+    const updated = await this.prisma.invoice.update({
+      where: { id },
+      data: {
+        invoiceItems: {
+          deleteMany: [{ invoice_id: id }],
+          createMany: { data },
+        },
+      },
+    });
+    console.log(updated);
+  }
 }

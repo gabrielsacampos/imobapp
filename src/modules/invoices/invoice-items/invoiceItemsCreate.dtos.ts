@@ -5,9 +5,6 @@ export class invoiceItemsCreateDTO {
   id: string;
 
   @IsNotEmpty()
-  invoice_id: string;
-
-  @IsNotEmpty()
   description: string;
 
   @IsNotEmpty()

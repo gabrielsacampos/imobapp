@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { InvoiceItemsService } from './invoice-items.service';
 import { invoiceItemsCreateDTO } from './invoiceItemsCreate.dtos';
 
@@ -13,5 +13,13 @@ export class InvoiceItemsController {
   @Post(':id')
   async create(@Param('id') id: string, @Body() data: invoiceItemsCreateDTO[]) {
     return this.invoiceItemsService.create(id, data);
+  }
+
+  @Put(':id')
+  async updateInvoiceItems(
+    @Param('id') id: string,
+    @Body() data: invoiceItemsCreateDTO[],
+  ) {
+    return this.invoiceItemsService.updateInvoiceItems(id, data);
   }
 }
