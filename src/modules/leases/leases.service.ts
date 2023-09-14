@@ -7,7 +7,7 @@ import { LeasesUpdateDTO } from './leasesUpdate.dtos';
 export class LeasesService {
   constructor(private prisma: PrismaService) {}
 
-  async create(data: LeasesCreateDTO) {
+  async createLeaseItems(data: LeasesCreateDTO) {
     const idBigInt = BigInt(data.id);
 
     const existsIdLease = await this.prisma.lease.findFirst({
@@ -111,7 +111,7 @@ export class LeasesService {
     };
   }
 
-  async update(id: string, data: LeasesUpdateDTO) {
+  async updateLeaseItems(id: string, data: LeasesUpdateDTO) {
     const idBigInt = BigInt(id);
     const propertyIdBigInt = BigInt(data.property_id);
 
