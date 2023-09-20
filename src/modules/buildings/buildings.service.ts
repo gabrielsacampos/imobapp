@@ -14,9 +14,7 @@ export class BuildingsService {
     });
 
     if (existsBuildingId) {
-      throw new NotAcceptableException(
-        `ID ${data.id} already exists at building: ${data.name}`,
-      );
+      throw new NotAcceptableException(`ID ${data.id} already exists at building: ${data.name}`);
     }
 
     const existsBuildingName = await this.prisma.building.findFirst({
@@ -24,9 +22,7 @@ export class BuildingsService {
     });
 
     if (existsBuildingName) {
-      throw new NotAcceptableException(
-        `Building name ${data.name} already exists`,
-      );
+      throw new NotAcceptableException(`Building name ${data.name} already exists`);
     }
 
     delete data.id;
@@ -69,9 +65,7 @@ export class BuildingsService {
     });
 
     if (!buildingExists) {
-      throw new NotAcceptableException(
-        `ID: ${id} does not exists at buildings`,
-      );
+      throw new NotAcceptableException(`ID: ${id} does not exists at buildings`);
     }
 
     const updated = await this.prisma.building.update({
