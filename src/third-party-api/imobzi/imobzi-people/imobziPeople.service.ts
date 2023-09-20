@@ -1,15 +1,15 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
-import { ImobziParam, ImobziUrl } from '../imobzi.urls';
+import { ImobziParamService, ImobziUrlService } from '../imobzi-urls-params/imobziUrls.service';
 
 @Injectable()
 export class ImobziPeopleService {
   constructor(
     private readonly httpService: HttpService,
     private readonly prisma: PrismaService,
-    private readonly imobziUrl: ImobziUrl,
-    private readonly imobziParam: ImobziParam,
+    private readonly imobziUrl: ImobziUrlService,
+    private readonly imobziParam: ImobziParamService,
   ) {}
 
   async getPersonDataToDb(personId: bigint): Promise<any> {

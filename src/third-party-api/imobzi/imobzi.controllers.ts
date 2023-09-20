@@ -5,8 +5,13 @@ import { ImobziService } from './imobzi.service';
 export class ImobziController {
   constructor(private readonly imobziService: ImobziService) {}
 
-  @Get()
-  async get() {
+  @Get('contacts-to-update')
+  async getContactsToUpdate() {
     return await this.imobziService.getContactsToUpdate();
+  }
+
+  @Get('properties-to-update')
+  async getPropertiesToUpdate() {
+    return await this.imobziService.getPropertiesIdsToUpdate();
   }
 }
