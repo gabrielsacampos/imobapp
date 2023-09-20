@@ -13,8 +13,14 @@ export class ImobziPeopleService {
   ) {}
 
   async getPersonDataToDb(personId: bigint): Promise<any> {
-    const { data } = await this.httpService.axiosRef.get(this.imobziUrl.urlPersonDetails(personId), this.imobziParam);
-    const { db_id: id, fullname, email } = data;
-    return { id, fullname, email };
+    try {
+      const { data } = await this.httpService.axiosRef.get(this.imobziUrl.urlPersonDetails(personId), this.imobziParam);
+      const { db_id: id, fullname, email } = data;
+      return { id, fullname, email };
+    } catch (error) {
+      console.error('error on getPersonDataToDb function');
+      console.error('request with id', personId);
+      console.error(error.message);
+    }
   }
 }

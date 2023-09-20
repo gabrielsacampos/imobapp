@@ -7,6 +7,6 @@ export class ImobziController {
 
   @Get()
   async get() {
-    return this.imobziService.getContactsToUpdate();
+    return await this.imobziService.getContactsToUpdate();
   }
 }

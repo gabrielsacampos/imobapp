@@ -72,7 +72,7 @@ export class ImobziContactsService {
     return { people, organizations };
   }
 
-  async getContactsToUpdate(): Promise<object> {
+  async getContactsToUpdate(): Promise<any> {
     const { people, organizations } = await this.getContactsByType();
 
     const existsPeople = await this.prisma.person.findMany({
