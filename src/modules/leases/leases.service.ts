@@ -1,5 +1,5 @@
 import { Injectable, NotAcceptableException } from '@nestjs/common';
-import { PrismaService } from 'database/prisma.service';
+import { PrismaService } from 'src/database/prisma.service';
 import { LeasesCreateDTO } from './leasesCreate.dtos';
 import { LeasesUpdateDTO } from './leasesUpdate.dtos';
 

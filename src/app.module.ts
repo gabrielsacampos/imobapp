@@ -11,6 +11,7 @@ import { InvoicesModule } from './modules/invoices/invoices.module';
 import { InvoiceItemsModule } from './modules/invoices/invoice-items/invoice-items.module';
 import { ImobziModule } from './third-party-api/imobzi/imobzi.module';
 import { ConfigModule } from '@nestjs/config';
+import { PrismaService } from './database/prisma.service';
 
 @Module({
   imports: [
@@ -28,6 +29,6 @@ import { ConfigModule } from '@nestjs/config';
     ImobziModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, PrismaService],
 })
 export class AppModule {}

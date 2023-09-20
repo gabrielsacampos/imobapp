@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from 'database/prisma.service';
+import { PrismaService } from 'src/database/prisma.service';
 import { PeopleCreateDTO } from './peopleCreate.dtos';
 import { PeopleUpdateDTO } from './peopleUpdate.dtos';
 
@@ -15,9 +15,7 @@ export class PeopleService {
     });
 
     if (existsIdPerson) {
-      throw new NotFoundException(
-        `ID: ${existsIdPerson.id} already registered to person: ${existsIdPerson.fullname}`,
-      );
+      throw new NotFoundException(`ID: ${existsIdPerson.id} already registered to person: ${existsIdPerson.fullname}`);
     }
 
     const existsCpfPerson = await this.prisma.person.findFirst({

@@ -1,9 +1,5 @@
-import {
-  Injectable,
-  NotAcceptableException,
-  NotFoundException,
-} from '@nestjs/common';
-import { PrismaService } from 'database/prisma.service';
+import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
+import { PrismaService } from 'src/database/prisma.service';
 import { PropertiesCreateDTO } from './propertiesCreate.dtos';
 import { PropertiesUpdateDTO } from './propertiesUpdate.dtos';
 
