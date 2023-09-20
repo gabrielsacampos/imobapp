@@ -1,6 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaService } from 'database/prisma.service';
 import { ImobziParamService, ImobziUrlService } from '../imobzi-urls-params/imobziUrls.service';
 
 @Injectable()
