@@ -1,0 +1,26 @@
+export const prismaOrganizationsMocks = [
+  {
+    id: 5432109876,
+    person_id_representative: 3344556677,
+    name: 'Smith Enterprises',
+    cnpj: '12.345.678/0001-90',
+    representative_type: 'Legal',
+    phone: '+55 11 9876-5432',
+    email: 'contact@smithent.com',
+    address: 'Street A, 123',
+    created_at: '2020-09-28T14:30:00.000Z',
+    updated_at: '2023-09-19T11:15:00.000000',
+  },
+  {
+    id: 2,
+    person_id_representative: 2233445566,
+    name: 'Tech Innovators Inc.',
+    cnpj: '87.654.321/0001-34',
+    representative_type: 'Legal',
+    phone: '+55 21 9876-9876',
+    email: 'info@techinnovators.com',
+    address: 'Avenue B, 456',
+    created_at: '2020-09-27T12:45:00.000Z',
+    updated_at: '2023-09-18T13:20:00.000000',
+  },
+];
