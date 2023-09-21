@@ -58,12 +58,22 @@ describe('ImobziPropertiesService', () => {
         case `https://api.imobzi.app/v1/properties?smart_list=unavailable_properties&cursor=def`:
           return Promise.resolve({ data: imobziPropertiesMocks.unavailableProperties.page2 });
         default:
-          // Lidar com outras URLs, se necessário
-          return Promise.reject(new Error(`URL desconhecida: ${url}`));
+          return Promise.reject(new Error(`Error on Url: ${url}`));
       }
     });
 
     const result = await service.getPropertiesIdsToUpdate();
-    console.log(result);
+    expect(result).toEqual([
+      '1111111111111111',
+      '5146872054432864',
+      '51468720555532864',
+      '51468720550996864',
+      '5146872055332864',
+      '5146872055332864',
+      '5146872055332864',
+      '5146872054432864',
+      '51468720555532864',
+      '51468720550996864',
+    ]);
   });
 });

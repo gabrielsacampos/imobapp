@@ -14,7 +14,7 @@ export const prismaPropertiesMock = [
     sale_value: 350000.0,
     alternative_code: 'A101',
     created_at: '2023-09-20T10:00:00.000Z',
-    updated_at: '2023-09-20T10:00:00.000Z',
+    updated_at: '2020-09-20T10:00:00.000Z',
   },
   {
     id: 222222222222222,
