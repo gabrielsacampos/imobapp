@@ -3,7 +3,7 @@ export class ImobziUrlService {
     return `https://api.imobzi.app/v1/invoices?page=${page}&status=paid&start_at=2000-01-01&end_at=2100-01-01&contract_type=all&order_by=desc`;
   }
 
-  urlInvoiceDetail(invoiceId: bigint): string {
+  urlInvoiceDetail(invoiceId: number): string {
     return `https://api.imobzi.app/v1/invoice/${invoiceId}`;
   }
 
@@ -11,7 +11,7 @@ export class ImobziUrlService {
     return `https://api.imobzi.app/v1/properties?smart_list=${status}&cursor=${cursor}`;
   }
 
-  urlPropertyDetails(propertyId: bigint): string {
+  urlPropertyDetails(propertyId: number): string {
     return `https://api.imobzi.app/v1/property/${propertyId}`;
   }
 
@@ -19,11 +19,11 @@ export class ImobziUrlService {
     return `https://api.imobzi.app/v1/contacts?cursor=${cursor}`;
   }
 
-  urlPersonDetails(personId: bigint): string {
+  urlPersonDetails(personId: number): string {
     return `https://api.imobzi.app/v1/person/${personId}`;
   }
 
-  urlOrganizationDetails(organizationId: bigint): string {
+  urlOrganizationDetails(organizationId: number): string {
     return `https://api.imobzi.app/v1/organization/${organizationId}`;
   }
 }
