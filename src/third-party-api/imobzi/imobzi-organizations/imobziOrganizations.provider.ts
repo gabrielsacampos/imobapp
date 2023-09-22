@@ -43,7 +43,8 @@ export class ImobziOrganizationsProvider {
       const person_id_representative = data.persons[0].person_id; // third-party-api uses 'persons' instead of 'people'
       const representative_type = data.persons[0].associate_type;
       const phone = data.phone.number;
-      const { db_id: id, email, name } = data;
+      const id_imobzi = data.db_id.toString();
+      const { email, name } = data;
 
       return {
         address,
@@ -51,7 +52,7 @@ export class ImobziOrganizationsProvider {
         person_id_representative,
         representative_type,
         phone,
-        id,
+        id_imobzi,
         email,
         name,
       };

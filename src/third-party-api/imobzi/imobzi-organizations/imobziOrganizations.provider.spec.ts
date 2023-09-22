@@ -64,7 +64,7 @@ describe('ImobziOrganizationsProvider', () => {
       person_id_representative: 11111111111,
       representative_type: 'Legal',
       phone: '(11) 0000-0000',
-      id: 12345123451244,
+      id_imobzi: '12345123451244',
       email: 'thisCompany@mymail.com',
       name: 'This Company',
     });
