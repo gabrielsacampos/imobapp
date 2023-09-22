@@ -1,79 +1,73 @@
-import { HttpService } from '@nestjs/axios';
 import { Test, TestingModule } from '@nestjs/testing';
-import { PrismaModule } from 'src/database/prisma.module';
 import { PrismaService } from 'src/database/prisma.service';
-import { ImobziUrlParamModule } from '../imobzi-urls-params/imobziUrls.module';
+import { ImobziPropertiesProvider } from './imobziProperties.provider';
 import { ImobziPropertiesService } from './imobziProperties.service';
-import { imobziPropertiesMocks } from './imobzi-properties.mocks/imobziProperties.mocks';
-import { prismaPropertiesMock } from 'src/database/prisma.mocks/prisma-properties.mocks/prisma-properties.mocks';
+
+const propertiesFromImobziMock = {
+  availableProperties: [
+    { db_id: '111111111111', updated_at: '2022-01-01' },
+    { db_id: '222222222222', updated_at: '2022-01-01' },
+  ],
+  unavailableProperties: [
+    { db_id: '333333333333', updated_at: '2022-01-01' },
+    { db_id: '444444444444', updated_at: '2022-01-01' },
+  ],
+};
+
+const propertiesOnDbMock = [
+  { id_imobzi: '111111111111', updated_at: '2023-01-01' },
+  { id_imobzi: '222222222222', updated_at: '2021-01-01' },
+  { id_imobzi: '333333333333', updated_at: '2023-01-01' },
+];
 
 describe('ImobziPropertiesService', () => {
-  let service: ImobziPropertiesService;
-  let prismaServiceMock: { property: { findMany: jest.Mock } };
-  let httpServiceMock: { axiosRef: { get: jest.Mock } };
+  let imobziPropertiesService: ImobziPropertiesService;
+  let imobziPropertiesProviderMock: { getAllPropertiesFromImobzi: jest.Mock };
+  let prismaMock: {
+    property: {
+      findMany: jest.Mock;
+    };
+  };
 
   beforeEach(async () => {
-    httpServiceMock = {
-      axiosRef: {
-        get: jest.fn(),
-      },
-    };
-
-    prismaServiceMock = {
+    prismaMock = {
       property: {
         findMany: jest.fn(),
       },
     };
 
+    imobziPropertiesProviderMock = {
+      getAllPropertiesFromImobzi: jest.fn(),
+    };
+
     const moduleRef: TestingModule = await Test.createTestingModule({
-      imports: [PrismaModule, ImobziUrlParamModule],
       providers: [
         ImobziPropertiesService,
         {
-          provide: HttpService,
-          useValue: httpServiceMock,
+          provide: ImobziPropertiesProvider,
+          useValue: imobziPropertiesProviderMock,
         },
         {
           provide: PrismaService,
-          useValue: prismaServiceMock,
+          useValue: prismaMock,
         },
       ],
     }).compile();
 
-    service = moduleRef.get<ImobziPropertiesService>(ImobziPropertiesService);
+    imobziPropertiesService = moduleRef.get<ImobziPropertiesService>(ImobziPropertiesService);
+
+    prismaMock.property.findMany.mockResolvedValue(propertiesOnDbMock);
+    imobziPropertiesProviderMock.getAllPropertiesFromImobzi.mockResolvedValue(propertiesFromImobziMock);
   });
 
-  test('getPropertiesIdsToUpdate function should return an array of id properties to update on db', async () => {
-    prismaServiceMock.property.findMany.mockResolvedValue(prismaPropertiesMock);
+  test('getAllPropertiesFromDb', async () => {
+    const result = await imobziPropertiesService.getAllPropertiesFromDb();
+    expect(result).toEqual(propertiesOnDbMock);
+  });
 
-    // testing properties pagination (available and unavailable)
-    httpServiceMock.axiosRef.get.mockImplementation((url) => {
-      switch (url) {
-        case `https://api.imobzi.app/v1/properties?smart_list=all&cursor=`:
-          return Promise.resolve({ data: imobziPropertiesMocks.availableProperties.page1 });
-        case `https://api.imobzi.app/v1/properties?smart_list=all&cursor=abc`:
-          return Promise.resolve({ data: imobziPropertiesMocks.availableProperties.page2 });
-        case `https://api.imobzi.app/v1/properties?smart_list=unavailable_properties&cursor=`:
-          return Promise.resolve({ data: imobziPropertiesMocks.unavailableProperties.page1 });
-        case `https://api.imobzi.app/v1/properties?smart_list=unavailable_properties&cursor=def`:
-          return Promise.resolve({ data: imobziPropertiesMocks.unavailableProperties.page2 });
-        default:
-          return Promise.reject(new Error(`Error on Url: ${url}`));
-      }
-    });
-
-    const result = await service.getPropertiesIdsToUpdate();
-    expect(result).toEqual([
-      '1111111111111111',
-      '5146872054432864',
-      '51468720555532864',
-      '51468720550996864',
-      '5146872055332864',
-      '5146872055332864',
-      '5146872055332864',
-      '5146872054432864',
-      '51468720555532864',
-      '51468720550996864',
-    ]);
+  test('getAllPropertiesIdsToUpdate', async () => {
+    const result = await imobziPropertiesService.getPropertiesIdsToUpdate();
+    const expectedResult = ['222222222222', '444444444444'];
+    expect(result).toEqual(expect.arrayContaining(expectedResult));
   });
 });

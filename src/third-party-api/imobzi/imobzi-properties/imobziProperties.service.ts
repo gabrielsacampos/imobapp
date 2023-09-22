@@ -1,67 +1,13 @@
-import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
-import { ImobziUrlService, ImobziParamService } from '../imobzi-urls-params/imobziUrls.service';
-import { PropertyDTO } from './imobziProperties.dtos';
+import { ImobziPropertiesProvider } from './imobziProperties.provider';
 
 @Injectable()
 export class ImobziPropertiesService {
   constructor(
-    private readonly httpService: HttpService,
     private readonly prisma: PrismaService,
-    private readonly imobziUrl: ImobziUrlService,
-    private readonly imobziParam: ImobziParamService,
+    private readonly imobziPropertiesProvider: ImobziPropertiesProvider,
   ) {}
-
-  async getAvailablePropertiesFromApi(): Promise<any> {
-    try {
-      const availableProperties = [];
-
-      let cursor = '';
-      do {
-        const { data } = await this.httpService.axiosRef.get(
-          this.imobziUrl.urlProperties('all', cursor),
-          this.imobziParam,
-        );
-        availableProperties.push(...data.properties);
-        cursor = data.cursor;
-      } while (cursor);
-      return availableProperties;
-    } catch (error) {
-      console.error(error.message);
-    }
-  }
-
-  async getUnavailablePropertiesFromApi(): Promise<any> {
-    try {
-      const unavailableProperties = [];
-
-      let cursor = '';
-      do {
-        const { data } = await this.httpService.axiosRef.get(
-          this.imobziUrl.urlProperties('unavailable_properties', cursor),
-          this.imobziParam,
-        );
-        unavailableProperties.push(...data.properties);
-        cursor = data.cursor;
-      } while (cursor);
-
-      return unavailableProperties;
-    } catch (error) {
-      console.error(error.message);
-    }
-  }
-
-  async getAllPropertiesFromApi(): Promise<any> {
-    try {
-      const unavailableProperties = await this.getUnavailablePropertiesFromApi();
-      const availableProperties = await this.getAvailablePropertiesFromApi();
-
-      return { unavailableProperties, availableProperties };
-    } catch (error) {
-      console.error(error.message);
-    }
-  }
 
   async getAllPropertiesFromDb(): Promise<any> {
     try {
@@ -75,28 +21,35 @@ export class ImobziPropertiesService {
 
   async getPropertiesIdsToUpdate(): Promise<any> {
     try {
-      const propertiesToUpdateIds: any[] = [];
-
       const propertiesOnDb = await this.getAllPropertiesFromDb();
-      const { unavailableProperties, availableProperties } = await this.getAllPropertiesFromApi();
+      const { unavailableProperties, availableProperties } =
+        await this.imobziPropertiesProvider.getAllPropertiesFromImobzi();
 
-      const propertiesOnApi = [...unavailableProperties, ...availableProperties];
+      const propertiesFromApi = [...unavailableProperties, ...availableProperties];
 
-      propertiesOnApi.forEach((propertyOnApi: PropertyDTO) => {
-        const propertiesOnDbIds = propertiesOnDb.map((propertyOndDb) => propertyOndDb.id.toString());
-        const existisCurrentPropertyOnDb = propertiesOnDb.find((propertyOnDb) => {
-          return propertyOnDb.id.toString() === propertyOnApi.db_id;
-        });
+      const propertiesOnDbIds = propertiesOnDb.map((propertyOndDb: any) => propertyOndDb.id_imobzi);
+      const propertiesFromApiIds = propertiesFromApi.map((propertyOnApi: any) => propertyOnApi.db_id.toString());
 
-        if (existisCurrentPropertyOnDb) {
-          if (new Date(propertyOnApi.updated_at) > new Date(existisCurrentPropertyOnDb.updated_at)) {
-            propertiesToUpdateIds.push(propertyOnApi.db_id);
-          }
-        } else if (!propertiesOnDbIds.includes(propertyOnApi.db_id)) {
-          propertiesToUpdateIds.push(propertyOnApi.db_id);
+      const missingIdsOnDb: string[] = propertiesFromApiIds.filter((propertyFromApiId: string) => {
+        // if DB.properties does not include the current id from API
+        return !propertiesOnDbIds.includes(propertyFromApiId);
+      });
+
+      const idsToUpdate: string[] = propertiesFromApiIds.filter((propertyFromApiId: string) => {
+        // find property into DB and Api's data to compare updated_at value.
+        const currentPropertyOnDb = propertiesOnDb.find((propertyOnDb) => propertyOnDb.id_imobzi === propertyFromApiId);
+        const currentPropertyFromApi = propertiesFromApi.find(
+          (propertyFromApi) => propertyFromApi.db_id === propertyFromApiId,
+        );
+
+        // if DB.properties has current org from Api's data.
+        if (currentPropertyOnDb) {
+          // return if updated_at from api is newer than updated_at on DB.
+          return new Date(currentPropertyOnDb.updated_at) < new Date(currentPropertyFromApi.updated_at);
         }
       });
-      return propertiesToUpdateIds;
+
+      return [...idsToUpdate, ...missingIdsOnDb];
     } catch (error) {
       console.error('error on getPropertiesToUpdate function');
       console.error(error.message);
