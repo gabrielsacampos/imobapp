@@ -1,6 +1,7 @@
 -- CreateTable
 CREATE TABLE `people` (
-    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `id_imobzi` VARCHAR(191) NOT NULL,
     `cpf` VARCHAR(255) NOT NULL,
     `fullname` VARCHAR(191) NULL,
     `birthdate` DATETIME(3) NULL,
@@ -19,6 +20,7 @@ CREATE TABLE `people` (
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 
+    UNIQUE INDEX `people_id_imobzi_key`(`id_imobzi`),
     UNIQUE INDEX `people_cpf_key`(`cpf`),
     UNIQUE INDEX `people_code_imobzi_key`(`code_imobzi`),
     PRIMARY KEY (`id`)
@@ -26,8 +28,9 @@ CREATE TABLE `people` (
 
 -- CreateTable
 CREATE TABLE `organizations` (
-    `id` BIGINT NOT NULL AUTO_INCREMENT,
-    `person_id_representative` BIGINT NOT NULL,
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `id_imobzi` VARCHAR(191) NOT NULL,
+    `person_id_representative` INTEGER NOT NULL,
     `name` VARCHAR(191) NOT NULL,
     `cnpj` VARCHAR(191) NOT NULL,
     `representative_type` VARCHAR(191) NOT NULL,
@@ -37,13 +40,14 @@ CREATE TABLE `organizations` (
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 
+    UNIQUE INDEX `organizations_id_imobzi_key`(`id_imobzi`),
     UNIQUE INDEX `organizations_cnpj_key`(`cnpj`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `buildings` (
-    `id` BIGINT NOT NULL,
+    `id` INTEGER NOT NULL,
     `name` VARCHAR(191) NOT NULL,
     `address` VARCHAR(191) NOT NULL,
     `city` VARCHAR(191) NOT NULL,
@@ -58,12 +62,12 @@ CREATE TABLE `buildings` (
 
 -- CreateTable
 CREATE TABLE `properties` (
-    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
     `unit` VARCHAR(191) NOT NULL,
     `type` VARCHAR(191) NOT NULL,
     `active` BOOLEAN NOT NULL,
     `status` VARCHAR(191) NOT NULL,
-    `building_id` BIGINT NOT NULL,
+    `building_id` INTEGER NOT NULL,
     `area` DECIMAL(65, 30) NULL,
     `bedroom` INTEGER NULL,
     `suite` INTEGER NULL,
@@ -80,9 +84,9 @@ CREATE TABLE `properties` (
 -- CreateTable
 CREATE TABLE `owners` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `id_property` BIGINT NOT NULL,
-    `id_owner_person` BIGINT NULL,
-    `id_owner_organization` BIGINT NULL,
+    `id_property` INTEGER NOT NULL,
+    `id_owner_person` INTEGER NULL,
+    `id_owner_organization` INTEGER NULL,
     `share` DECIMAL(65, 30) NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
@@ -92,15 +96,16 @@ CREATE TABLE `owners` (
 
 -- CreateTable
 CREATE TABLE `leases` (
-    `id` BIGINT NOT NULL AUTO_INCREMENT,
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `id_imobzi` VARCHAR(191) NOT NULL,
     `status` VARCHAR(191) NOT NULL,
     `code_imobzi` VARCHAR(191) NULL,
     `start_at` VARCHAR(191) NOT NULL,
     `duration` INTEGER NOT NULL,
-    `property_id` BIGINT NOT NULL,
-    `id_tenant_person` BIGINT NULL,
-    `id_tenant_organization` BIGINT NULL,
-    `main_guarantor` BIGINT NULL,
+    `property_id` INTEGER NOT NULL,
+    `id_tenant_person` INTEGER NULL,
+    `id_tenant_organization` INTEGER NULL,
+    `main_guarantor` INTEGER NULL,
     `fee` DECIMAL(65, 30) NOT NULL,
     `guarantee_type` VARCHAR(191) NOT NULL,
     `guarantee_value` DECIMAL(65, 30) NULL,
@@ -112,6 +117,7 @@ CREATE TABLE `leases` (
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 
+    UNIQUE INDEX `leases_id_imobzi_key`(`id_imobzi`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -119,7 +125,7 @@ CREATE TABLE `leases` (
 CREATE TABLE `lease_items` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `due_date` VARCHAR(191) NOT NULL,
-    `decription` VARCHAR(191) NOT NULL,
+    `description` VARCHAR(191) NOT NULL,
     `management_fee` BOOLEAN NOT NULL,
     `recurrent` BOOLEAN NOT NULL,
     `repeat_total` INTEGER NULL,
@@ -130,7 +136,7 @@ CREATE TABLE `lease_items` (
     `repeat_index` INTEGER NOT NULL,
     `include_in_dimob` BOOLEAN NOT NULL,
     `start_date` VARCHAR(191) NOT NULL,
-    `lease_id` BIGINT NOT NULL,
+    `lease_id` INTEGER NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 
@@ -143,7 +149,7 @@ CREATE TABLE `invoices` (
     `status` VARCHAR(191) NOT NULL,
     `reference` VARCHAR(191) NULL,
     `due_date` VARCHAR(191) NOT NULL,
-    `lease_id` BIGINT NOT NULL,
+    `lease_id` INTEGER NOT NULL,
     `management_fee` DECIMAL(65, 30) NOT NULL,
     `invoice_url` VARCHAR(191) NOT NULL,
     `barcode` VARCHAR(191) NULL,
@@ -170,7 +176,7 @@ CREATE TABLE `invoices_items` (
     `description` VARCHAR(191) NOT NULL,
     `behavior` VARCHAR(191) NOT NULL,
     `include_in_dimob` BOOLEAN NOT NULL,
-    `management_feee` BOOLEAN NOT NULL,
+    `management_fee` BOOLEAN NOT NULL,
     `value` DECIMAL(65, 30) NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
@@ -181,9 +187,9 @@ CREATE TABLE `invoices_items` (
 -- CreateTable
 CREATE TABLE `beneficiaries` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `id_lease` BIGINT NOT NULL,
-    `id_beneficiary_person` BIGINT NULL,
-    `id_beneficiary_organization` BIGINT NULL,
+    `id_lease` INTEGER NOT NULL,
+    `id_beneficiary_person` INTEGER NULL,
+    `id_beneficiary_organization` INTEGER NULL,
     `share` DECIMAL(65, 30) NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,

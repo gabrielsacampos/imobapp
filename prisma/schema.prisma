@@ -11,7 +11,8 @@ datasource db {
 }
 
 model Person {
-  id                            BigInt    @id @default(autoincrement())
+  id                            Int       @id @default(autoincrement())
+  id_imobzi                     String    @unique
   cpf                           String    @unique @db.VarChar(255)
   fullname                      String?
   birthdate                     DateTime?
@@ -40,9 +41,10 @@ model Person {
 }
 
 model Organization {
-  id BigInt @id @default(autoincrement())
+  id Int @id @default(autoincrement())
+  id_imobzi                     String    @unique
 
-  person_id_representative BigInt
+  person_id_representative Int
   people                   Person @relation(fields: [person_id_representative], references: [id], onDelete: Cascade)
 
   name String
@@ -76,7 +78,7 @@ model Building {
 }
 
 model Property {
-  id     BigInt  @id @default(autoincrement())
+  id     Int     @id @default(autoincrement())
   unit   String
   type   String
   active Boolean
@@ -103,13 +105,13 @@ model Property {
 model Owner {
   id Int @id @default(autoincrement())
 
-  id_property BigInt
+  id_property Int
   property    Property @relation(fields: [id_property], references: [id], onDelete: Cascade)
 
-  id_owner_person BigInt?
+  id_owner_person Int?
   person          Person? @relation(fields: [id_owner_person], references: [id], onDelete: Cascade)
 
-  id_owner_organization BigInt?
+  id_owner_organization Int?
   owner_organization    Organization? @relation(fields: [id_owner_organization], references: [id], onDelete: Cascade)
 
   share      Decimal
@@ -120,22 +122,23 @@ model Owner {
 }
 
 model Lease {
-  id          BigInt  @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
+  id_imobzi                     String    @unique
   status      String
   code_imobzi String?
   start_at    String
   duration    Int
 
-  property_id BigInt
+  property_id Int
   property    Property @relation("propertyToLease", fields: [property_id], references: [id], onDelete: Cascade)
 
-  id_tenant_person BigInt?
+  id_tenant_person Int?
   tenant_person    Person? @relation("personTenant", fields: [id_tenant_person], references: [id], onDelete: Cascade)
 
-  id_tenant_organization BigInt?
+  id_tenant_organization Int?
   tenant_org             Organization? @relation("organizationTenant", fields: [id_tenant_organization], references: [id], onDelete: Cascade)
 
-  main_guarantor BigInt?
+  main_guarantor Int?
   guarantor      Person? @relation("personGrarantorToLease", fields: [main_guarantor], references: [id], onDelete: Cascade)
 
   fee                 Decimal
@@ -171,8 +174,8 @@ model LeaseItem {
   include_in_dimob    Boolean
   start_date          String
 
-  lease_id BigInt
-  leases   Lease  @relation("leaseToLeaseItem", fields: [lease_id], references: [id], onDelete: Cascade)
+  lease_id Int
+  leases   Lease @relation("leaseToLeaseItem", fields: [lease_id], references: [id], onDelete: Cascade)
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -186,8 +189,8 @@ model Invoice {
   reference String?
   due_date  String
 
-  lease_id BigInt
-  lease    Lease  @relation("leaseToInvoice", fields: [lease_id], references: [id], onDelete: Cascade)
+  lease_id Int
+  lease    Lease @relation("leaseToInvoice", fields: [lease_id], references: [id], onDelete: Cascade)
 
   management_fee  Decimal
   invoice_url     String
@@ -230,13 +233,13 @@ model InvoiceItem {
 model Beneficiary {
   id Int @id @default(autoincrement())
 
-  id_lease BigInt
-  lease    Lease  @relation("leaseToBeneficiary", fields: [id_lease], references: [id], onDelete: Cascade)
+  id_lease Int
+  lease    Lease @relation("leaseToBeneficiary", fields: [id_lease], references: [id], onDelete: Cascade)
 
-  id_beneficiary_person BigInt?
+  id_beneficiary_person Int?
   beneficiary_person    Person? @relation("personToBeneficiary", fields: [id_beneficiary_person], references: [id], onDelete: Cascade)
 
-  id_beneficiary_organization BigInt?
+  id_beneficiary_organization Int?
   beneficiary_organization    Organization? @relation("organizationToBeneficiary", fields: [id_beneficiary_organization], references: [id], onDelete: Cascade)
 
   share      Decimal
