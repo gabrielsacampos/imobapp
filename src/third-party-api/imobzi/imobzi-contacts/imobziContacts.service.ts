@@ -25,18 +25,20 @@ export class ImobziContactsService {
       },
     });
 
-    const peopleOnDbImobziIds = peopleOnDb.map((personOnDb) => personOnDb.id_imobzi);
+    const peopleOnDbIds = peopleOnDb.map((personOnDb) => personOnDb.id_imobzi);
     const peopleFromApiIds = peopleFromApi.map((personFromApi) => personFromApi.contact_id);
 
     const missingIndsOnDb: string[] = peopleFromApiIds.filter((id: string) => {
       // if DB.people does not include the current id from API
-      return !peopleOnDbImobziIds.includes(id);
+      return !peopleOnDbIds.includes(id);
     });
 
-    const idsToUpdate: string[] = peopleFromApiIds.filter((personIdFromApi: string) => {
+    const idsToUpdate: string[] = peopleFromApiIds.filter((personIdFromApiId: string) => {
       // find person into DB and Api's data to compare updated_at value.
-      const currentPersonOnDb = peopleOnDb.find((personOnDb) => personOnDb.id_imobzi === personIdFromApi);
-      const currentPersonFromApi = peopleFromApi.find((personFromApi) => personFromApi.contact_id === personIdFromApi);
+      const currentPersonOnDb = peopleOnDb.find((personOnDb) => personOnDb.id_imobzi === personIdFromApiId);
+      const currentPersonFromApi = peopleFromApi.find(
+        (personFromApi) => personFromApi.contact_id === personIdFromApiId,
+      );
 
       // if DB.people has current org from Api's data.
       if (currentPersonOnDb) {
