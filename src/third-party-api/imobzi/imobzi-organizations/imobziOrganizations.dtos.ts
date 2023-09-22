@@ -1,54 +1,54 @@
 export interface OrganizationDTO {
-  code: string;
-  landlord_account_id: any;
-  review_pending: boolean;
-  media_source: any;
-  private: boolean;
-  pix: any[];
-  manager: any;
-  managers_shared: any[];
-  bank_data: any[];
-  network_group_member_shared: boolean;
-  properties: any[];
-  location: string;
+  code?: string;
+  landlord_account_id?: any;
+  review_pending?: boolean;
+  media_source?: any;
+  private?: boolean;
+  pix?: any[];
+  manager?: any;
+  managers_shared?: any[];
+  bank_data?: any[];
+  network_group_member_shared?: boolean;
+  properties?: any[];
+  location?: string;
   email: string;
   db_id: number;
-  tags: string[];
-  profile_image_url: any;
-  social_network: any[];
+  tags?: string[];
+  profile_image_url?: any;
+  social_network?: any[];
   phone: Phone;
-  db_key: string;
-  active: boolean;
-  emails: string[];
-  cellphone: any;
+  db_key?: string;
+  active?: boolean;
+  emails?: string[];
+  cellphone?: any;
   name: string;
-  persons: Person[];
-  fields: Fields;
-  favorite: boolean;
+  persons?: Person[];
+  fields?: Fields;
+  favorite?: boolean;
 }
 
 export interface Phone {
-  type: string;
+  type?: string;
   number: string;
-  country_code: string;
-  alpha2Code: string;
+  country_code?: string;
+  alpha2Code?: string;
 }
 
 export interface Person {
-  code: string;
-  name: string;
-  profile_image_url: any;
+  code?: string;
+  name?: string;
+  profile_image_url?: any;
   person_id: number;
   associate_type: string;
-  action: string;
-  id: number;
+  action?: string;
+  id?: number;
 }
 
 export interface Fields {
-  group_contact: GroupContact[][];
-  social_network: SocialNetwork[][];
-  group_company_data: GroupCompanyDaum[][];
-  group_address: GroupAddress[][];
+  group_contact?: GroupContact[][];
+  social_network?: SocialNetwork[][];
+  group_company_data?: GroupCompanyDaum[][];
+  group_address?: GroupAddress[][];
 }
 
 export interface GroupContact {
@@ -96,16 +96,16 @@ export interface Configuration2 {
 }
 
 export interface GroupCompanyDaum {
-  default: boolean;
-  group_position: number;
-  required: boolean;
-  name: string;
-  active: boolean;
-  position: string;
-  configuration: Configuration3;
-  field_id: string;
+  default?: boolean;
+  group_position?: number;
+  required?: boolean;
+  name?: string;
+  active?: boolean;
+  position?: string;
+  configuration?: Configuration3;
+  field_id?: string;
   value?: string;
-  group_name: string;
+  group_name?: string;
 }
 
 export interface Configuration3 {
@@ -118,16 +118,16 @@ export interface Configuration3 {
 }
 
 export interface GroupAddress {
-  default: boolean;
-  group_position: number;
-  required: boolean;
-  name: string;
-  active: boolean;
-  position: string;
-  configuration: Configuration4;
-  field_id: string;
+  default?: boolean;
+  group_position?: number;
+  required?: boolean;
+  name?: string;
+  active?: boolean;
+  position?: string;
+  configuration?: Configuration4;
+  field_id?: string;
   value?: string;
-  group_name: string;
+  group_name?: string;
 }
 
 export interface Configuration4 {
