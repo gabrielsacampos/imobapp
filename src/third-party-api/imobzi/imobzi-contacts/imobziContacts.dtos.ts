@@ -6,25 +6,25 @@ export interface ImobziContactsDTO {
 }
 
 export interface ContactDTO {
-  created_at: string;
-  code: string;
-  name: string;
-  database: string;
-  media_source: string;
-  phones: Phone[];
-  age: any;
-  contact_type: string;
-  favorite: boolean;
-  updated_at: string;
-  contact_id: string;
-  emails: string[];
-  cnpj: string;
-  cpf: any;
-  profile_image_url: any;
-  active: boolean;
-  fullname: any;
-  email: string;
-  tags: string[];
+  created_at?: string;
+  code?: string;
+  name?: string;
+  database?: string;
+  media_source?: string;
+  phones?: Phone[];
+  age?: any;
+  contact_type?: string;
+  favorite?: boolean;
+  updated_at?: string;
+  contact_id?: string;
+  emails?: string[];
+  cnpj?: string;
+  cpf?: any;
+  profile_image_url?: any;
+  active?: boolean;
+  fullname?: any;
+  email?: string;
+  tags?: string[];
 }
 
 export interface GetContactReturn {

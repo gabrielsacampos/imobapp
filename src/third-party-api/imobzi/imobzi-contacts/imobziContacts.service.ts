@@ -1,97 +1,93 @@
-import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
-import { ImobziParamService, ImobziUrlService } from '../imobzi-urls-params/imobziUrls.service';
 import { ContactDTO } from './imobziContacts.dtos';
+import { ImobziContactsProvider } from './imobziContacts.provider';
 
 @Injectable()
 export class ImobziContactsService {
   constructor(
-    private readonly httpService: HttpService,
     private readonly prisma: PrismaService,
-    private readonly imobziUrl: ImobziUrlService,
-    private readonly imobziParam: ImobziParamService,
+    private readonly imobziContactsProvider: ImobziContactsProvider,
   ) {}
 
-  private getPeopleIdsToUpdate(peopleContacts: ContactDTO[], peopleFromDb: any[]): object {
-    const peopleIds = [];
+  getContactsByType(allContacts: ContactDTO[]): { organizations: any[]; people: any[] } {
+    const people = allContacts.filter((contact) => contact.contact_type === 'person');
+    const organizations = allContacts.filter((contact) => contact.contact_type === 'organization');
 
-    peopleContacts.forEach((personContact) => {
-      const peopleOnDbIds = peopleFromDb.map((personOnDb) => personOnDb.id.toString());
-      const existsCurrentPerson = peopleFromDb.find((personOnDb) => personOnDb.id === BigInt(personContact.contact_id));
-
-      if (existsCurrentPerson) {
-        if (new Date(personContact.updated_at) > new Date(existsCurrentPerson.updated_at)) {
-          peopleIds.push(personContact.contact_id);
-        }
-      } else if (!peopleOnDbIds.includes(personContact.contact_id)) {
-        peopleIds.push(personContact.contact_id);
-      }
-    });
-
-    return peopleIds;
+    return { organizations, people };
   }
 
-  private getOrgIdsToUpdate(orgsContacts: ContactDTO[], orgsFromDb: any[]): object {
-    const orgsIds = [];
-
-    orgsContacts.forEach((orgContact) => {
-      const orgsOnDbIds = orgsFromDb.map((orgOnDb) => orgOnDb.id.toString());
-      const existisCurrentOrg = orgsFromDb.find((orgOnDb) => orgOnDb.id === BigInt(orgContact.contact_id));
-
-      if (existisCurrentOrg) {
-        if (new Date(orgContact.updated_at) > new Date(existisCurrentOrg.updated_at)) {
-          orgsIds.push(orgContact.contact_id);
-        }
-      } else if (!orgsOnDbIds.includes(orgContact.contact_id)) {
-        orgsIds.push(orgContact.contact_id);
-      }
-    });
-
-    return orgsIds;
-  }
-
-  private async getContactsByType(): Promise<any> {
-    const people = [];
-    const organizations = [];
-
-    let cursor = '';
-    // do {
-    const { data } = await this.httpService.axiosRef.get(this.imobziUrl.urlContacts(cursor), this.imobziParam);
-    cursor = data.cursor;
-    data.contacts.forEach((contact: ContactDTO) => {
-      const { contact_id, updated_at } = contact;
-      if (contact.contact_type === 'organization') {
-        organizations.push({ contact_id, updated_at });
-      } else {
-        people.push({ contact_id, updated_at });
-      }
-    });
-    // } while (cursor);
-
-    return { people, organizations };
-  }
-
-  async getContactsToUpdate(): Promise<any> {
-    const { people, organizations } = await this.getContactsByType();
-
-    const existsPeople = await this.prisma.person.findMany({
+  async getPeopleImobziIdsToUpdate(peopleFromApi: ContactDTO[]): Promise<any[]> {
+    const peopleOnDb = await this.prisma.person.findMany({
       select: {
-        id: true,
+        id_imobzi: true,
         updated_at: true,
       },
     });
 
-    const existsOrganization = await this.prisma.organization.findMany({
+    const peopleOnDbImobziIds = peopleOnDb.map((personOnDb) => personOnDb.id_imobzi);
+    const peopleFromApiIds = peopleFromApi.map((personFromApi) => personFromApi.contact_id);
+
+    const missingIndsOnDb: string[] = peopleFromApiIds.filter((id: string) => {
+      // if DB.people does not include the current id from API
+      return !peopleOnDbImobziIds.includes(id);
+    });
+
+    const idsToUpdate: string[] = peopleFromApiIds.filter((personIdFromApi: string) => {
+      // find person into DB and Api's data to compare updated_at value.
+      const currentPersonOnDb = peopleOnDb.find((personOnDb) => personOnDb.id_imobzi === personIdFromApi);
+      const currentPersonFromApi = peopleFromApi.find((personFromApi) => personFromApi.contact_id === personIdFromApi);
+
+      // if DB.people has current org from Api's data.
+      if (currentPersonOnDb) {
+        // return if updated_at from api is newer than updated_at on DB.
+        return new Date(currentPersonOnDb.updated_at) < new Date(currentPersonFromApi.updated_at);
+      }
+    });
+
+    return [...idsToUpdate, ...missingIndsOnDb];
+  }
+
+  async getOrgsImobziIdsToUpdate(orgsFromApi: ContactDTO[]): Promise<any[]> {
+    const orgsOnDb = await this.prisma.organization.findMany({
       select: {
-        id: true,
+        id_imobzi: true,
         updated_at: true,
       },
     });
+    const orgsOnDbImobziIds: string[] = orgsOnDb.map((orgOnDb) => orgOnDb.id_imobzi);
+    const orgsFromApiIds: string[] = orgsFromApi.map((orgFromApi) => orgFromApi.contact_id);
 
-    const peopleIds = this.getPeopleIdsToUpdate(people, existsPeople);
-    const orgsIds = this.getOrgIdsToUpdate(organizations, existsOrganization);
+    const missingIndsOnDb: string[] = orgsFromApiIds.filter((id: string) => {
+      // if DB.organization does not include the current id from API
+      return !orgsOnDbImobziIds.includes(id);
+    });
 
-    return { peopleIds, orgsIds };
+    const idsToUpdate = orgsFromApiIds.filter((orgIdFromApi: string) => {
+      // find organization into DB and Api's data to compare updated_at value.
+      const currentOrgOnDb = orgsOnDb.find((orgOnDb) => orgOnDb.id_imobzi === orgIdFromApi);
+      const currentOrgFromApi = orgsFromApi.find((orgFromApi) => orgFromApi.contact_id === orgIdFromApi);
+
+      // if DB.organizations has current org from Api's data.
+      if (currentOrgOnDb) {
+        // return if updated_at from api is newer than updated_at on DB.
+        return new Date(currentOrgOnDb.updated_at) < new Date(currentOrgFromApi.updated_at);
+      }
+    });
+
+    return [...missingIndsOnDb, ...idsToUpdate];
+  }
+
+  async getContactsImobziIdsToUpdate(): Promise<object> {
+    const allContacts = await this.imobziContactsProvider.getAllContacts();
+    const { organizations, people } = this.getContactsByType(allContacts);
+
+    const peopleImobziIdsToUpdate = await this.getPeopleImobziIdsToUpdate(people);
+    const organizationsImobziIdsToUpdate = await this.getOrgsImobziIdsToUpdate(organizations);
+
+    return {
+      peopleToUpdate: peopleImobziIdsToUpdate,
+      orgsToUpdate: organizationsImobziIdsToUpdate,
+    };
   }
 }
