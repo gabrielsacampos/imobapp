@@ -1,4 +1,4 @@
-export interface Person {
+export interface PersonDTO {
   code: string;
   landlord_account_id: any;
   review_pending: boolean;
@@ -56,10 +56,10 @@ export interface Phone {
 }
 
 export interface Fields {
-  group_contact: GroupContact[][];
-  social_network: SocialNetwork[][];
-  group_personal: GroupPersonal[][];
-  group_address: GroupAddress[][];
+  group_contact?: GroupContact[][];
+  social_network?: SocialNetwork[][];
+  group_personal?: GroupPersonal[][];
+  group_address?: GroupAddress[][];
 }
 
 export interface GroupContact {
@@ -109,16 +109,16 @@ export interface Configuration2 {
 }
 
 export interface GroupPersonal {
-  default: boolean;
-  group_position: number;
-  required: boolean;
-  name: string;
-  active: boolean;
-  position: string;
-  configuration: Configuration3;
-  field_id: string;
+  default?: boolean;
+  group_position?: number;
+  required?: boolean;
+  name?: string;
+  active?: boolean;
+  position?: string;
+  configuration?: Configuration3;
+  field_id?: string;
   value?: string;
-  group_name: string;
+  group_name?: string;
 }
 
 export interface Configuration3 {
