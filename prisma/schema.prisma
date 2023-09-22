@@ -79,6 +79,7 @@ model Building {
 
 model Property {
   id     Int     @id @default(autoincrement())
+  id_imobzi String @unique
   unit   String
   type   String
   active Boolean
