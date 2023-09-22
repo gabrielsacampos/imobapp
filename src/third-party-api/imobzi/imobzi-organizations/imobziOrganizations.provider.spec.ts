@@ -9,8 +9,8 @@ const organizationMock: OrganizationDTO = {
   email: 'thisCompany@mymail.com',
   name: 'This Company', //sometimes API returns as BigInt > we need to convert it to string;
   fields: {
-    group_company_data: [[{}, {}, {}, {}, { value: '11.111.111/0001-11' }]],
-    group_address: [[{ value: 'some address' }]],
+    group_company_data: [[{}, {}, {}, {}, { field_id: 'cnpj', value: '11.111.111/0001-11' }]],
+    group_address: [[{ field_id: 'address', value: 'some address' }]],
   },
   persons: [
     // third-party-api uses 'persons' instead of 'people'
