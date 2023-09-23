@@ -111,8 +111,8 @@ describe('ImobziContactsService', () => {
   test('getContactsImobziIdsToUpdate returns array of orgs an people imobzi ids with updates needed', async () => {
     const result = await imobziContactsService.getContactsImobziIdsToUpdate();
     expect(result).toEqual({
-      peopleToUpdate: ['222222222222222'],
-      orgsToUpdate: ['444444444444444', '111111111111111'],
+      peopleImobziIdsToUpdate: ['222222222222222'],
+      orgsImobziIdsToUpdate: ['444444444444444', '111111111111111'],
     });
   });
 });
