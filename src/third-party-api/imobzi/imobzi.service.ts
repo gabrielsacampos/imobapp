@@ -14,17 +14,18 @@ export class ImobziService {
   ) {}
 
   async getContactsToUpdate(): Promise<any> {
-    const { peopleIds, orgsIds } = await this.imobziContactsService.getContactsToUpdate();
+    const { peopleImobziIdsToUpdate, organizationsImobziIdsToUpdate } =
+      await this.imobziContactsService.getContactsImobziIdsToUpdate();
 
     const peopleMainData = await Promise.all(
-      peopleIds.map((personId: bigint) => {
-        return this.imobziPeopleService.getPersonDataToDb(personId);
+      peopleImobziIdsToUpdate.map((id_person_imobzi: string) => {
+        return this.imobziPeopleService.getPersonDataToDb(id_person_imobzi);
       }),
     );
 
     const orgsMainData = await Promise.all(
-      orgsIds.map((orgIds: bigint) => {
-        return this.imobziOrganizationsService.getOrgDataToDb(orgIds);
+      organizationsImobziIdsToUpdate.map((id_org_imobzi: string) => {
+        return this.imobziOrganizationsService.getOrgDataToDb(id_org_imobzi);
       }),
     );
     return { peopleMainData, orgsMainData };

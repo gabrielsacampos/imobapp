@@ -6,6 +6,7 @@ import { PrismaModule } from 'src/database/prisma.module';
 import { ImobziParamService, ImobziUrlService } from '../imobzi-urls-params/imobziUrls.service';
 import { ImobziPropertiesService } from './imobziProperties.service';
 import { ImobziUrlParamModule } from '../imobzi-urls-params/imobziUrls.module';
+import { ImobziPropertiesProvider } from './imobziProperties.provider';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { ImobziUrlParamModule } from '../imobzi-urls-params/imobziUrls.module';
       maxRedirects: 5,
     }),
   ],
-  providers: [ImobziPropertiesService, PrismaService, ImobziParamService, ImobziUrlService],
+  providers: [ImobziPropertiesProvider, ImobziPropertiesService, PrismaService, ImobziParamService, ImobziUrlService],
   exports: [ImobziPropertiesService],
 })
 export class ImobziPropertiesModule {}

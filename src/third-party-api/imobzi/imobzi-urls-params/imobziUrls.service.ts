@@ -3,7 +3,7 @@ export class ImobziUrlService {
     return `https://api.imobzi.app/v1/invoices?page=${page}&status=paid&start_at=2000-01-01&end_at=2100-01-01&contract_type=all&order_by=desc`;
   }
 
-  urlInvoiceDetail(invoiceId: number): string {
+  urlInvoiceDetail(invoiceId: number | string): string {
     return `https://api.imobzi.app/v1/invoice/${invoiceId}`;
   }
 
@@ -11,7 +11,7 @@ export class ImobziUrlService {
     return `https://api.imobzi.app/v1/properties?smart_list=${status}&cursor=${cursor}`;
   }
 
-  urlPropertyDetails(propertyId: number): string {
+  urlPropertyDetails(propertyId: number | string): string {
     return `https://api.imobzi.app/v1/property/${propertyId}`;
   }
 
@@ -19,12 +19,20 @@ export class ImobziUrlService {
     return `https://api.imobzi.app/v1/contacts?cursor=${cursor}`;
   }
 
-  urlPersonDetails(personId: number): string {
+  urlPersonDetails(personId: number | string | string): string {
     return `https://api.imobzi.app/v1/person/${personId}`;
   }
 
-  urlOrganizationDetails(organizationId: number): string {
+  urlOrganizationDetails(organizationId: number | string): string {
     return `https://api.imobzi.app/v1/organization/${organizationId}`;
+  }
+
+  urlLeaseDetails(leaseId: number | string): string {
+    return `https://api.imobzi.app/v1/lease/${leaseId}`;
+  }
+
+  urlAllLeases(cursor: string = ''): string {
+    return `https://api.imobzi.app/v1/leases?cursor=${cursor}`;
   }
 }
 

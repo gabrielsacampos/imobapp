@@ -5,7 +5,7 @@ import { ImobziOrganizationsProvider } from './imobziOrganizations.provider';
 export class ImobziOrganizationsService {
   constructor(private readonly imobziOrganizationsProvider: ImobziOrganizationsProvider) {}
 
-  getOrgDataToDb(orgId: number): Promise<any> {
-    return this.imobziOrganizationsProvider.getOrgMainDataFromImobzi(orgId);
+  getOrgDataToDb(id_org_imobzi: number | string): Promise<any> {
+    return this.imobziOrganizationsProvider.getOrgMainDataFromImobzi(id_org_imobzi);
   }
 }

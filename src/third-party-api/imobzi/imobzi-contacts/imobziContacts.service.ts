@@ -80,16 +80,16 @@ export class ImobziContactsService {
     return [...missingIndsOnDb, ...idsToUpdate];
   }
 
-  async getContactsImobziIdsToUpdate(): Promise<object> {
+  async getContactsImobziIdsToUpdate(): Promise<any> {
     const allContacts = await this.imobziContactsProvider.getAllContacts();
     const { organizations, people } = this.getContactsByType(allContacts);
 
     const peopleImobziIdsToUpdate = await this.getPeopleImobziIdsToUpdate(people);
-    const organizationsImobziIdsToUpdate = await this.getOrgsImobziIdsToUpdate(organizations);
+    const orgsImobziIdsToUpdate = await this.getOrgsImobziIdsToUpdate(organizations);
 
     return {
-      peopleToUpdate: peopleImobziIdsToUpdate,
-      orgsToUpdate: organizationsImobziIdsToUpdate,
+      peopleImobziIdsToUpdate,
+      orgsImobziIdsToUpdate,
     };
   }
 }

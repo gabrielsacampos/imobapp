@@ -8,38 +8,31 @@ export class PropertiesService {
   constructor(private prisma: PrismaService) {}
 
   async create(data: PropertiesCreateDTO) {
-    const idBigInt = BigInt(data.id);
-    const buildingIdBigInt = BigInt(data.building_id);
-
     const existsIdProperty = await this.prisma.property.findFirst({
-      where: { id: idBigInt },
+      where: { id_imobzi: data.id_imobzi },
       include: { building: true },
     });
 
     if (existsIdProperty) {
       throw new NotAcceptableException(
-        `ID: ${data.id} already registered to property: ${existsIdProperty.unit} - ${existsIdProperty.building.name} `,
+        `ID: ${data.id_imobzi} already registered to property: ${existsIdProperty.unit} - ${existsIdProperty.building.name} `,
       );
     }
 
-    delete data.id;
-    delete data.building_id;
     await this.prisma.property.create({
       data: {
         ...data,
-        id: idBigInt,
-        building_id: buildingIdBigInt,
         owners: {
           create: data.owners,
         },
       },
     });
 
-    return { message: `Property #${idBigInt} created` };
+    return { message: `Property #${data.id_imobzi} created` };
   }
 
   async findAll() {
-    const arrayProperties = await this.prisma.property.findMany({
+    return await this.prisma.property.findMany({
       include: {
         building: {
           select: {
@@ -48,54 +41,37 @@ export class PropertiesService {
         },
       },
     });
-    return arrayProperties.map((element) => {
-      const id = element.id.toString();
-      delete element.building_id;
-      delete element.id;
-      return { id, ...element };
-    });
   }
 
-  async findById(id: string) {
-    const idBigInt = BigInt(id);
+  async findById(id_imobzi: string) {
     const found = await this.prisma.property.findUnique({
-      where: { id: idBigInt },
+      where: { id_imobzi },
       include: {
         building: {
           select: { name: true },
         },
       },
     });
-
     if (!found) {
-      throw new NotFoundException(`ID: ${id} not found at properties`);
+      throw new NotFoundException(`ID: ${id_imobzi} not found at properties`);
     }
-
-    delete found.building_id;
-    delete found.id;
-
-    return { id, ...found };
+    return found;
   }
 
-  async update(id: string, data: PropertiesUpdateDTO) {
-    const idBigInt = BigInt(id);
-    const buildingBigIntId = BigInt(data.building_id);
-
-    delete data.building_id;
-
+  async update(id_imobzi: string, data: PropertiesUpdateDTO) {
     await this.prisma.property.update({
-      where: { id: idBigInt },
+      where: { id_imobzi },
       data: {
         ...data,
-        building_id: buildingBigIntId,
+        id_building_imobzi: data.id_building_imobzi,
         owners: {
-          deleteMany: [{ id_property: idBigInt }],
+          deleteMany: [{ id_property_imobzi: id_imobzi }],
           createMany: {
             data: data.owners,
           },
         },
       },
     });
-    return { message: `Property #${id} updated` };
+    return { message: `Property #${id_imobzi} updated` };
   }
 }

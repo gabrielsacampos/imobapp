@@ -11,10 +11,10 @@ export class ImobziOrganizationsProvider {
     private readonly imobziParam: ImobziParamService,
   ) {}
 
-  async getOrgMainDataFromImobzi(orgId: number): Promise<any> {
+  async getOrgMainDataFromImobzi(id_org_imobzi: number | string): Promise<any> {
     try {
       const { data } = await this.httpService.axiosRef.get(
-        this.imobziUrl.urlOrganizationDetails(orgId),
+        this.imobziUrl.urlOrganizationDetails(id_org_imobzi),
         this.imobziParam,
       );
 
@@ -58,7 +58,7 @@ export class ImobziOrganizationsProvider {
       };
     } catch (error) {
       console.error('error on getOrgDataToDb function');
-      console.error('request with id', orgId);
+      console.error('request with id', id_org_imobzi);
       console.error(error.message);
     }
   }

@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  NotAcceptableException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
 import { InvoiceDTO } from './invoices.dtos';
 
@@ -10,6 +6,7 @@ import { InvoiceDTO } from './invoices.dtos';
 export class InvoicesService {
   constructor(private prisma: PrismaService) {}
 
+  // it can create properties from imobzi or not
   async create(data: InvoiceDTO) {
     const existsInvoice = await this.prisma.invoice.findFirst({
       where: { id: data.id },
@@ -23,12 +20,7 @@ export class InvoicesService {
   }
 
   async findAll() {
-    const found = await this.prisma.invoice.findMany();
-    return found.map((element) => {
-      const lease_id = element.lease_id.toString();
-      delete element.lease_id;
-      return { ...element, lease_id };
-    });
+    return await this.prisma.invoice.findMany();
   }
 
   async findById(id: string) {
@@ -40,12 +32,10 @@ export class InvoicesService {
       throw new NotFoundException(`Invoice ${id} not found`);
     }
 
-    const lease_id = found.lease_id.toString();
-    delete found.lease_id;
-
-    return { lease_id, ...found };
+    return found;
   }
 
+  // update using db id.
   async update(id: string, data: InvoiceDTO) {
     const existsInvoice = await this.prisma.invoice.findFirst({
       where: { id },

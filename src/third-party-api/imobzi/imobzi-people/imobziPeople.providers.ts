@@ -11,10 +11,10 @@ export class ImobziPeopleProvider {
     private readonly imobziParam: ImobziParamService,
   ) {}
 
-  async getPersonMainDataFromImobzi(personId: number): Promise<any> {
+  async getPersonMainDataFromImobzi(id_person_imobzi: number | string): Promise<any> {
     try {
       const { data } = await this.httpService.axiosRef.get<PersonDTO>(
-        this.imobziUrl.urlPersonDetails(personId),
+        this.imobziUrl.urlPersonDetails(id_person_imobzi),
         this.imobziParam,
       );
 
@@ -58,7 +58,7 @@ export class ImobziPeopleProvider {
       return { id_imobzi, fullname, email, code_imobzi, maritalStatus, gender, profession };
     } catch (error) {
       console.error('error on getPersonDataToDb function');
-      console.error('request with id', personId);
+      console.error('request with id', id_person_imobzi);
       console.error(error.message);
     }
   }

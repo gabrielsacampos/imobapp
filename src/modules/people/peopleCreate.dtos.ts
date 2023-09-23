@@ -2,7 +2,7 @@ import { IsEmail, IsNotEmpty } from 'class-validator';
 
 export class PeopleCreateDTO {
   @IsNotEmpty()
-  id: string;
+  id_imobzi: string;
 
   @IsNotEmpty()
   cpf: string;

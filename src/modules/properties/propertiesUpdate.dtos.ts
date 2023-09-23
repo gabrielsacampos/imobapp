@@ -8,7 +8,7 @@ export class PropertiesUpdateDTO {
   unit: string;
 
   @IsNotEmpty()
-  building_id: bigint;
+  id_building_imobzi: string;
 
   @IsNotEmpty()
   active: boolean;

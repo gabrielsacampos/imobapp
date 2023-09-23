@@ -5,13 +5,13 @@ import { OwnersCreateDTO } from './owners/ownersCreate.dtos';
 
 export class PropertiesCreateDTO {
   @IsNotEmpty()
-  id: bigint;
+  id_imobzi: string;
 
   @IsNotEmpty()
   unit: string;
 
   @IsNotEmpty()
-  building_id: bigint;
+  id_building_imobzi: string;
 
   @IsNotEmpty()
   active: boolean;

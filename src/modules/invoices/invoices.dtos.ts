@@ -56,7 +56,7 @@ export class InvoiceDTO {
     example: 81728374782,
   })
   @IsNotEmpty()
-  lease_id: bigint;
+  id_lease_imobzi: string;
 
   @ApiProperty({
     description: 'barcode to bank slip payment',

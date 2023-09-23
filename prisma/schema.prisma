@@ -27,7 +27,7 @@ model Person {
   children                      Int?
   pets                          Int?
   kind_of_pet                   String?
-  anual_revenue                 Decimal?
+  anual_revenue                 Float?
   created_at                    DateTime  @default(now())
   updated_at                    DateTime  @updatedAt
 
@@ -41,11 +41,11 @@ model Person {
 }
 
 model Organization {
-  id Int @id @default(autoincrement())
-  id_imobzi                     String    @unique
+  id        Int    @id @default(autoincrement())
+  id_imobzi String @unique
 
-  person_id_representative Int
-  people                   Person @relation(fields: [person_id_representative], references: [id], onDelete: Cascade)
+  id_person_representative String
+  people                   Person @relation(fields: [id_person_representative], references: [id_imobzi], onDelete: Cascade)
 
   name String
   cnpj String @unique
@@ -65,7 +65,8 @@ model Organization {
 }
 
 model Building {
-  id         Int        @id @unique
+  id         Int        @id @default(autoincrement())
+  id_imobzi  String     @unique
   name       String     @unique
   address    String
   city       String
@@ -78,22 +79,22 @@ model Building {
 }
 
 model Property {
-  id     Int     @id @default(autoincrement())
-  id_imobzi String @unique
-  unit   String
-  type   String
-  active Boolean
-  status String
+  id        Int     @id @default(autoincrement())
+  id_imobzi String  @unique
+  unit      String
+  type      String
+  active    Boolean
+  status    String
 
-  building_id Int
-  building    Building @relation(fields: [building_id], references: [id], onDelete: Cascade)
+  id_building_imobzi String
+  building    Building @relation(fields: [id_building_imobzi], references: [id_imobzi], onDelete: Cascade)
 
-  area             Decimal?
+  area             Float?
   bedroom          Int?
   suite            Int?
   garage           Int?
-  rental_value     Decimal?
-  sale_value       Decimal?
+  rental_value     Float?
+  sale_value       Float?
   alternative_code String?
   created_at       DateTime @default(now())
   updated_at       DateTime @updatedAt
@@ -106,16 +107,16 @@ model Property {
 model Owner {
   id Int @id @default(autoincrement())
 
-  id_property Int
-  property    Property @relation(fields: [id_property], references: [id], onDelete: Cascade)
+  id_property_imobzi String
+  property           Property @relation(fields: [id_property_imobzi], references: [id_imobzi], onDelete: Cascade)
 
-  id_owner_person Int?
-  person          Person? @relation(fields: [id_owner_person], references: [id], onDelete: Cascade)
+  id_owner_person_imobzi String?
+  person                 Person? @relation(fields: [id_owner_person_imobzi], references: [id_imobzi], onDelete: Cascade)
 
-  id_owner_organization Int?
-  owner_organization    Organization? @relation(fields: [id_owner_organization], references: [id], onDelete: Cascade)
+  id_owner_organization_imobzi String?
+  owner_organization           Organization? @relation(fields: [id_owner_organization_imobzi], references: [id_imobzi], onDelete: Cascade)
 
-  share      Decimal
+  share      Float
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
@@ -124,32 +125,32 @@ model Owner {
 
 model Lease {
   id          Int     @id @default(autoincrement())
-  id_imobzi                     String    @unique
+  id_imobzi   String  @unique
   status      String
   code_imobzi String?
   start_at    String
   duration    Int
 
-  property_id Int
-  property    Property @relation("propertyToLease", fields: [property_id], references: [id], onDelete: Cascade)
+  id_property_imobzi String
+  property           Property @relation("propertyToLease", fields: [id_property_imobzi], references: [id_imobzi], onDelete: Cascade)
 
-  id_tenant_person Int?
-  tenant_person    Person? @relation("personTenant", fields: [id_tenant_person], references: [id], onDelete: Cascade)
+  id_tenant_person_imobzi String?
+  tenant_person           Person? @relation("personTenant", fields: [id_tenant_person_imobzi], references: [id_imobzi], onDelete: Cascade)
 
-  id_tenant_organization Int?
-  tenant_org             Organization? @relation("organizationTenant", fields: [id_tenant_organization], references: [id], onDelete: Cascade)
+  id_tenant_organization_imobzi String?
+  tenant_org                    Organization? @relation("organizationTenant", fields: [id_tenant_organization_imobzi], references: [id_imobzi], onDelete: Cascade)
 
-  main_guarantor Int?
-  guarantor      Person? @relation("personGrarantorToLease", fields: [main_guarantor], references: [id], onDelete: Cascade)
+  id_main_guarantor_imobzi String?
+  guarantor                Person? @relation("personGrarantorToLease", fields: [id_main_guarantor_imobzi], references: [id_imobzi], onDelete: Cascade)
 
-  fee                 Decimal
+  fee                 Float
   guarantee_type      String
-  guarantee_value     Decimal?
+  guarantee_value     Float?
   annual_readjustment String?
   irrf                Boolean
   include_in_dimob    Boolean
   indeterminate       Boolean
-  lease_value         Decimal
+  lease_value         Float
   created_at          DateTime @default(now())
   updated_at          DateTime @updatedAt
 
@@ -167,7 +168,7 @@ model LeaseItem {
   management_fee      Boolean
   recurrent           Boolean
   repeat_total        Int?
-  value               Decimal
+  value               Float
   until_due_date      Boolean
   behavior            String
   autopay_on_due_date Boolean
@@ -175,8 +176,8 @@ model LeaseItem {
   include_in_dimob    Boolean
   start_date          String
 
-  lease_id Int
-  leases   Lease @relation("leaseToLeaseItem", fields: [lease_id], references: [id], onDelete: Cascade)
+  id_lease_imobzi String
+  leases          Lease  @relation("leaseToLeaseItem", fields: [id_lease_imobzi], references: [id_imobzi], onDelete: Cascade)
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -190,22 +191,22 @@ model Invoice {
   reference String?
   due_date  String
 
-  lease_id Int
-  lease    Lease @relation("leaseToInvoice", fields: [lease_id], references: [id], onDelete: Cascade)
+  id_lease_imobzi String
+  lease           Lease  @relation("leaseToInvoice", fields: [id_lease_imobzi], references: [id_imobzi], onDelete: Cascade)
 
-  management_fee  Decimal
+  management_fee  Float
   invoice_url     String
   barcode         String?
   bank_slip_url   String?
   bank_slip_id    String?
-  total_value     Decimal
-  interest_value  Decimal
+  total_value     Float
+  interest_value  Float
   paid_at         String?
   credit_at       String?
   paid_manual     Boolean?
-  bank_fee_value  Decimal?
+  bank_fee_value  Float?
   account_credit  String?
-  onlending_value Decimal?
+  onlending_value Float?
   created_at      DateTime @default(now())
   updated_at      DateTime @updatedAt
 
@@ -224,7 +225,7 @@ model InvoiceItem {
   behavior         String
   include_in_dimob Boolean
   management_fee   Boolean
-  value            Decimal
+  value            Float
   created_at       DateTime @default(now())
   updated_at       DateTime @updatedAt
 
@@ -234,16 +235,16 @@ model InvoiceItem {
 model Beneficiary {
   id Int @id @default(autoincrement())
 
-  id_lease Int
-  lease    Lease @relation("leaseToBeneficiary", fields: [id_lease], references: [id], onDelete: Cascade)
+  id_lease_imobzi String
+  lease           Lease  @relation("leaseToBeneficiary", fields: [id_lease_imobzi], references: [id_imobzi], onDelete: Cascade)
 
-  id_beneficiary_person Int?
-  beneficiary_person    Person? @relation("personToBeneficiary", fields: [id_beneficiary_person], references: [id], onDelete: Cascade)
+  id_beneficiary_person_imobzi String?
+  beneficiary_person_imobzi    Person? @relation("personToBeneficiary", fields: [id_beneficiary_person_imobzi], references: [id_imobzi], onDelete: Cascade)
 
-  id_beneficiary_organization Int?
-  beneficiary_organization    Organization? @relation("organizationToBeneficiary", fields: [id_beneficiary_organization], references: [id], onDelete: Cascade)
+  id_beneficiary_organization_imobzi String?
+  beneficiary_organization_imobzi    Organization? @relation("organizationToBeneficiary", fields: [id_beneficiary_organization_imobzi], references: [id_imobzi], onDelete: Cascade)
 
-  share      Decimal
+  share      Float
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 

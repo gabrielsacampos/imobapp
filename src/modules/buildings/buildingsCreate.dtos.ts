@@ -7,7 +7,7 @@ export class BuildingsCreateDTO {
     example: 34122412324324,
   })
   @IsNotEmpty()
-  id: number;
+  id_imobzi: string;
 
   @ApiProperty({
     description: "the building's name",

@@ -16,7 +16,7 @@ CREATE TABLE `people` (
     `children` INTEGER NULL,
     `pets` INTEGER NULL,
     `kind_of_pet` VARCHAR(191) NULL,
-    `anual_revenue` DECIMAL(65, 30) NULL,
+    `anual_revenue` DOUBLE NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 
@@ -47,7 +47,8 @@ CREATE TABLE `organizations` (
 
 -- CreateTable
 CREATE TABLE `buildings` (
-    `id` INTEGER NOT NULL,
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `id_imobzi` VARCHAR(191) NOT NULL,
     `name` VARCHAR(191) NOT NULL,
     `address` VARCHAR(191) NOT NULL,
     `city` VARCHAR(191) NOT NULL,
@@ -55,7 +56,7 @@ CREATE TABLE `buildings` (
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 
-    UNIQUE INDEX `buildings_id_key`(`id`),
+    UNIQUE INDEX `buildings_id_imobzi_key`(`id_imobzi`),
     UNIQUE INDEX `buildings_name_key`(`name`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -63,31 +64,33 @@ CREATE TABLE `buildings` (
 -- CreateTable
 CREATE TABLE `properties` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `id_imobzi` VARCHAR(191) NOT NULL,
     `unit` VARCHAR(191) NOT NULL,
     `type` VARCHAR(191) NOT NULL,
     `active` BOOLEAN NOT NULL,
     `status` VARCHAR(191) NOT NULL,
     `building_id` INTEGER NOT NULL,
-    `area` DECIMAL(65, 30) NULL,
+    `area` DOUBLE NULL,
     `bedroom` INTEGER NULL,
     `suite` INTEGER NULL,
     `garage` INTEGER NULL,
-    `rental_value` DECIMAL(65, 30) NULL,
-    `sale_value` DECIMAL(65, 30) NULL,
+    `rental_value` DOUBLE NULL,
+    `sale_value` DOUBLE NULL,
     `alternative_code` VARCHAR(191) NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 
+    UNIQUE INDEX `properties_id_imobzi_key`(`id_imobzi`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
 CREATE TABLE `owners` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `id_property` INTEGER NOT NULL,
-    `id_owner_person` INTEGER NULL,
-    `id_owner_organization` INTEGER NULL,
-    `share` DECIMAL(65, 30) NOT NULL,
+    `id_property_imobzi` VARCHAR(191) NOT NULL,
+    `id_owner_person_imobzi` VARCHAR(191) NULL,
+    `id_owner_organization_imobzi` VARCHAR(191) NULL,
+    `share` DOUBLE NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 
@@ -102,18 +105,18 @@ CREATE TABLE `leases` (
     `code_imobzi` VARCHAR(191) NULL,
     `start_at` VARCHAR(191) NOT NULL,
     `duration` INTEGER NOT NULL,
-    `property_id` INTEGER NOT NULL,
-    `id_tenant_person` INTEGER NULL,
-    `id_tenant_organization` INTEGER NULL,
-    `main_guarantor` INTEGER NULL,
-    `fee` DECIMAL(65, 30) NOT NULL,
+    `id_property_imobzi` VARCHAR(191) NOT NULL,
+    `id_tenant_person_imobzi` VARCHAR(191) NULL,
+    `id_tenant_organization_imobzi` VARCHAR(191) NULL,
+    `id_main_guarantor_imobzi` VARCHAR(191) NULL,
+    `fee` DOUBLE NOT NULL,
     `guarantee_type` VARCHAR(191) NOT NULL,
-    `guarantee_value` DECIMAL(65, 30) NULL,
+    `guarantee_value` DOUBLE NULL,
     `annual_readjustment` VARCHAR(191) NULL,
     `irrf` BOOLEAN NOT NULL,
     `include_in_dimob` BOOLEAN NOT NULL,
     `indeterminate` BOOLEAN NOT NULL,
-    `lease_value` DECIMAL(65, 30) NOT NULL,
+    `lease_value` DOUBLE NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 
@@ -129,7 +132,7 @@ CREATE TABLE `lease_items` (
     `management_fee` BOOLEAN NOT NULL,
     `recurrent` BOOLEAN NOT NULL,
     `repeat_total` INTEGER NULL,
-    `value` DECIMAL(65, 30) NOT NULL,
+    `value` DOUBLE NOT NULL,
     `until_due_date` BOOLEAN NOT NULL,
     `behavior` VARCHAR(191) NOT NULL,
     `autopay_on_due_date` BOOLEAN NOT NULL,
@@ -149,20 +152,20 @@ CREATE TABLE `invoices` (
     `status` VARCHAR(191) NOT NULL,
     `reference` VARCHAR(191) NULL,
     `due_date` VARCHAR(191) NOT NULL,
-    `lease_id` INTEGER NOT NULL,
-    `management_fee` DECIMAL(65, 30) NOT NULL,
+    `id_lease_imobzi` VARCHAR(191) NOT NULL,
+    `management_fee` DOUBLE NOT NULL,
     `invoice_url` VARCHAR(191) NOT NULL,
     `barcode` VARCHAR(191) NULL,
     `bank_slip_url` VARCHAR(191) NULL,
     `bank_slip_id` VARCHAR(191) NULL,
-    `total_value` DECIMAL(65, 30) NOT NULL,
-    `interest_value` DECIMAL(65, 30) NOT NULL,
+    `total_value` DOUBLE NOT NULL,
+    `interest_value` DOUBLE NOT NULL,
     `paid_at` VARCHAR(191) NULL,
     `credit_at` VARCHAR(191) NULL,
     `paid_manual` BOOLEAN NULL,
-    `bank_fee_value` DECIMAL(65, 30) NULL,
+    `bank_fee_value` DOUBLE NULL,
     `account_credit` VARCHAR(191) NULL,
-    `onlending_value` DECIMAL(65, 30) NULL,
+    `onlending_value` DOUBLE NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 
@@ -177,7 +180,7 @@ CREATE TABLE `invoices_items` (
     `behavior` VARCHAR(191) NOT NULL,
     `include_in_dimob` BOOLEAN NOT NULL,
     `management_fee` BOOLEAN NOT NULL,
-    `value` DECIMAL(65, 30) NOT NULL,
+    `value` DOUBLE NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 
@@ -187,10 +190,10 @@ CREATE TABLE `invoices_items` (
 -- CreateTable
 CREATE TABLE `beneficiaries` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
-    `id_lease` INTEGER NOT NULL,
-    `id_beneficiary_person` INTEGER NULL,
-    `id_beneficiary_organization` INTEGER NULL,
-    `share` DECIMAL(65, 30) NOT NULL,
+    `id_lease_imobzi` VARCHAR(191) NOT NULL,
+    `id_beneficiary_person_imobzi` VARCHAR(191) NULL,
+    `id_beneficiary_organization_imobzi` VARCHAR(191) NULL,
+    `share` DOUBLE NOT NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
 
@@ -214,40 +217,40 @@ ALTER TABLE `organizations` ADD CONSTRAINT `organizations_person_id_representati
 ALTER TABLE `properties` ADD CONSTRAINT `properties_building_id_fkey` FOREIGN KEY (`building_id`) REFERENCES `buildings`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `owners` ADD CONSTRAINT `owners_id_property_fkey` FOREIGN KEY (`id_property`) REFERENCES `properties`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `owners` ADD CONSTRAINT `owners_id_property_imobzi_fkey` FOREIGN KEY (`id_property_imobzi`) REFERENCES `properties`(`id_imobzi`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `owners` ADD CONSTRAINT `owners_id_owner_person_fkey` FOREIGN KEY (`id_owner_person`) REFERENCES `people`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `owners` ADD CONSTRAINT `owners_id_owner_person_imobzi_fkey` FOREIGN KEY (`id_owner_person_imobzi`) REFERENCES `people`(`id_imobzi`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `owners` ADD CONSTRAINT `owners_id_owner_organization_fkey` FOREIGN KEY (`id_owner_organization`) REFERENCES `organizations`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `owners` ADD CONSTRAINT `owners_id_owner_organization_imobzi_fkey` FOREIGN KEY (`id_owner_organization_imobzi`) REFERENCES `organizations`(`id_imobzi`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `leases` ADD CONSTRAINT `leases_property_id_fkey` FOREIGN KEY (`property_id`) REFERENCES `properties`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `leases` ADD CONSTRAINT `leases_id_property_imobzi_fkey` FOREIGN KEY (`id_property_imobzi`) REFERENCES `properties`(`id_imobzi`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `leases` ADD CONSTRAINT `leases_id_tenant_person_fkey` FOREIGN KEY (`id_tenant_person`) REFERENCES `people`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `leases` ADD CONSTRAINT `leases_id_tenant_person_imobzi_fkey` FOREIGN KEY (`id_tenant_person_imobzi`) REFERENCES `people`(`id_imobzi`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `leases` ADD CONSTRAINT `leases_id_tenant_organization_fkey` FOREIGN KEY (`id_tenant_organization`) REFERENCES `organizations`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `leases` ADD CONSTRAINT `leases_id_tenant_organization_imobzi_fkey` FOREIGN KEY (`id_tenant_organization_imobzi`) REFERENCES `organizations`(`id_imobzi`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `leases` ADD CONSTRAINT `leases_main_guarantor_fkey` FOREIGN KEY (`main_guarantor`) REFERENCES `people`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `leases` ADD CONSTRAINT `leases_id_main_guarantor_imobzi_fkey` FOREIGN KEY (`id_main_guarantor_imobzi`) REFERENCES `people`(`id_imobzi`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `lease_items` ADD CONSTRAINT `lease_items_lease_id_fkey` FOREIGN KEY (`lease_id`) REFERENCES `leases`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `invoices` ADD CONSTRAINT `invoices_lease_id_fkey` FOREIGN KEY (`lease_id`) REFERENCES `leases`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `invoices` ADD CONSTRAINT `invoices_id_lease_imobzi_fkey` FOREIGN KEY (`id_lease_imobzi`) REFERENCES `leases`(`id_imobzi`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `invoices_items` ADD CONSTRAINT `invoices_items_invoice_id_fkey` FOREIGN KEY (`invoice_id`) REFERENCES `invoices`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `beneficiaries` ADD CONSTRAINT `beneficiaries_id_lease_fkey` FOREIGN KEY (`id_lease`) REFERENCES `leases`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `beneficiaries` ADD CONSTRAINT `beneficiaries_id_lease_imobzi_fkey` FOREIGN KEY (`id_lease_imobzi`) REFERENCES `leases`(`id_imobzi`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `beneficiaries` ADD CONSTRAINT `beneficiaries_id_beneficiary_person_fkey` FOREIGN KEY (`id_beneficiary_person`) REFERENCES `people`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `beneficiaries` ADD CONSTRAINT `beneficiaries_id_beneficiary_person_imobzi_fkey` FOREIGN KEY (`id_beneficiary_person_imobzi`) REFERENCES `people`(`id_imobzi`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `beneficiaries` ADD CONSTRAINT `beneficiaries_id_beneficiary_organization_fkey` FOREIGN KEY (`id_beneficiary_organization`) REFERENCES `organizations`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `beneficiaries` ADD CONSTRAINT `beneficiaries_id_beneficiary_organization_imobzi_fkey` FOREIGN KEY (`id_beneficiary_organization_imobzi`) REFERENCES `organizations`(`id_imobzi`) ON DELETE CASCADE ON UPDATE CASCADE;

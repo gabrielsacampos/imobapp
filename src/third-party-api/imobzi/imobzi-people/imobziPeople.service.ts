@@ -5,7 +5,7 @@ import { ImobziPeopleProvider } from './imobziPeople.providers';
 export class ImobziPeopleService {
   constructor(private readonly imobziPeopleProvider: ImobziPeopleProvider) {}
 
-  async getPersonDataToDb(personId: number): Promise<any> {
-    return await this.imobziPeopleProvider.getPersonMainDataFromImobzi(personId);
+  async getPersonDataToDb(id_person_imobzi: number | string): Promise<any> {
+    return await this.imobziPeopleProvider.getPersonMainDataFromImobzi(id_person_imobzi);
   }
 }

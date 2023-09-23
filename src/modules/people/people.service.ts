@@ -8,10 +8,8 @@ export class PeopleService {
   constructor(private prisma: PrismaService) {}
 
   async create(data: PeopleCreateDTO) {
-    const idBigInt = BigInt(data.id);
-
     const existsIdPerson = await this.prisma.person.findFirst({
-      where: { id: idBigInt },
+      where: { id_imobzi: data.id_imobzi },
     });
 
     if (existsIdPerson) {
@@ -30,10 +28,7 @@ export class PeopleService {
       );
     }
 
-    delete data.id;
-    await this.prisma.person.create({ data: { ...data, id: idBigInt } });
-
-    return { message: `Person ${data.fullname} created` };
+    return this.prisma.person.create({ data });
   }
 
   async findAll() {
@@ -45,40 +40,26 @@ export class PeopleService {
     });
   }
 
-  async findById(id: string) {
-    const idBidInt = BigInt(id);
+  async findById(id_imobzi: string) {
     const found = await this.prisma.person.findUnique({
-      where: { id: idBidInt },
+      where: { id_imobzi },
     });
 
     if (!found) {
-      throw new NotFoundException(`ID: ${id} not found at people`);
+      throw new NotFoundException(`ID: ${id_imobzi} not found at people`);
     }
-
-    delete found.id;
-
-    return { id, ...found };
+    return found;
   }
 
-  async update(id: string, data: PeopleUpdateDTO) {
-    const idBigInt = BigInt(id);
-
+  async update(id_imobzi: string, data: PeopleUpdateDTO) {
     const personExists = await this.prisma.person.findFirst({
-      where: { id: idBigInt },
+      where: { id_imobzi },
     });
 
     if (!personExists) {
-      throw new NotFoundException(`ID: ${id} does not exists at People`);
+      throw new NotFoundException(`ID: ${id_imobzi} does not exists at People`);
     }
 
-    const updated = await this.prisma.person.update({
-      where: {
-        id: idBigInt,
-      },
-      data,
-    });
-
-    delete updated.id;
-    return updated;
+    return await this.prisma.person.update({ where: { id_imobzi }, data });
   }
 }

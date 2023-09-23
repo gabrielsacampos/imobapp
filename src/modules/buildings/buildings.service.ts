@@ -7,14 +7,14 @@ import { BuildingsUpdateDTO } from './buildingsUpdate.dtos';
 export class BuildingsService {
   constructor(private prisma: PrismaService) {}
 
+  // it can create properties from imobzi or not
   async create(data: BuildingsCreateDTO) {
-    const idBigInt = BigInt(data.id);
     const existsBuildingId = await this.prisma.building.findFirst({
-      where: { id: idBigInt },
+      where: { id_imobzi: data.id_imobzi },
     });
 
     if (existsBuildingId) {
-      throw new NotAcceptableException(`ID ${data.id} already exists at building: ${data.name}`);
+      throw new NotAcceptableException(`ID ${data.id_imobzi} already exists at building: ${data.name}`);
     }
 
     const existsBuildingName = await this.prisma.building.findFirst({
@@ -25,11 +25,7 @@ export class BuildingsService {
       throw new NotAcceptableException(`Building name ${data.name} already exists`);
     }
 
-    delete data.id;
-
-    await this.prisma.building.create({
-      data: { ...data, id: idBigInt },
-    });
+    await this.prisma.building.create({ data });
 
     return { message: `${data.name} property created` };
   }
@@ -44,24 +40,20 @@ export class BuildingsService {
   }
 
   async findById(id: string) {
-    const idBigInt = BigInt(id);
     const found = await this.prisma.building.findUnique({
-      where: { id: idBigInt },
+      where: { id: Number(id) },
     });
 
     if (!found) {
       throw new NotAcceptableException(`ID: ${id} not found at buildings`);
     }
-
-    delete found.id;
-
-    return { id, ...found };
+    return { found };
   }
 
+  // update using db id.
   async update(id: string, data: BuildingsUpdateDTO) {
-    const idBigInt = BigInt(id);
     const buildingExists = await this.prisma.building.findMany({
-      where: { id: idBigInt },
+      where: { id: Number(id) },
     });
 
     if (!buildingExists) {
@@ -70,12 +62,10 @@ export class BuildingsService {
 
     const updated = await this.prisma.building.update({
       where: {
-        id: idBigInt,
+        id: Number(id),
       },
       data,
     });
-
-    delete updated.id;
     return updated;
   }
 }
