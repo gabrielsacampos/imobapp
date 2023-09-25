@@ -9,14 +9,14 @@ export class InvoicesService {
   // it can create properties from imobzi or not
   async create(data: InvoiceDTO) {
     const existsInvoice = await this.prisma.invoice.findFirst({
-      where: { id: data.id },
+      where: { id: data.id_imobzi },
     });
 
     if (existsInvoice) {
-      throw new NotAcceptableException(`Invoice ${data.id} already exists`);
+      throw new NotAcceptableException(`Invoice ${data.id_imobzi} already exists`);
     }
     await this.prisma.invoice.create({ data });
-    return { message: `invoice ${data.id} created.` };
+    return { message: `invoice ${data.id_imobzi} created.` };
   }
 
   async findAll() {

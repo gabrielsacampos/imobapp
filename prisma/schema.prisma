@@ -188,11 +188,13 @@ model LeaseItem {
 model Invoice {
   id        String  @id
   status    String
-  reference String?
+  reference_start_at String?
+  reference_end_at String?
   due_date  String
 
-  id_lease_imobzi String
-  lease           Lease  @relation("leaseToInvoice", fields: [id_lease_imobzi], references: [id_imobzi], onDelete: Cascade)
+  id_imobzi String @unique
+  id_lease_imobzi   String
+  lease             Lease  @relation("leaseToInvoice", fields: [id_lease_imobzi], references: [id_imobzi], onDelete: Cascade)
 
   management_fee  Float
   invoice_url     String
@@ -218,8 +220,8 @@ model Invoice {
 model InvoiceItem {
   id String @id
 
-  invoice_id String
-  invoice    Invoice @relation(fields: [invoice_id], references: [id], onDelete: Cascade)
+  id_invoice_imobzi String
+  invoice    Invoice @relation(fields: [id_invoice_imobzi], references: [id_imobzi], onDelete: Cascade)
 
   description      String
   behavior         String

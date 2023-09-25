@@ -50,7 +50,7 @@ export class InvoiceItemsService {
       where: { id },
       data: {
         invoiceItems: {
-          deleteMany: [{ invoice_id: id }],
+          deleteMany: [{ id_invoice_imobzi: id }],
           createMany: { data },
         },
       },

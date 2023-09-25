@@ -3,11 +3,11 @@ import { IsNotEmpty } from 'class-validator';
 
 export class InvoiceDTO {
   @ApiProperty({
-    description: 'invoice id',
+    description: 'invoice id from imobzi',
     example: '12huh8377dbgs81734cgd',
   })
   @IsNotEmpty()
-  id: string;
+  id_imobzi: string;
 
   @ApiProperty({
     description: 'invoice status',
@@ -52,7 +52,7 @@ export class InvoiceDTO {
   interest_value: number;
 
   @ApiProperty({
-    description: 'lease id reference',
+    description: 'lease id from imobzi reference',
     example: 81728374782,
   })
   @IsNotEmpty()
@@ -76,7 +76,6 @@ export class InvoiceDTO {
   })
   bank_slip_id?: string;
 
-  
   paid_at?: string;
   credit_at?: string;
   paid_manual?: boolean;
