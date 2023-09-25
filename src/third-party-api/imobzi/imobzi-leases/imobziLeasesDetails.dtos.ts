@@ -59,53 +59,53 @@ export interface ImobziLeaseDetailsDTO {
 }
 
 export interface ImobziLeaseBeneficiary {
-  code: string;
-  neighborhood: string;
-  landlord_account_id: string;
-  review_pending: boolean;
-  media_source: any;
-  integrations: any[];
-  private: boolean;
-  pix: Pix[];
-  opening_date: any;
-  crisp_people_id: any;
-  onlending_value: number;
-  profile_image_key: any;
-  city: string;
-  bank_data_key: any;
-  network_group_member_shared: boolean;
-  percent: number;
-  zipcode: string;
-  state_registration: any;
-  state: string;
-  company_name: any;
-  latitude: number;
-  type: string;
-  email: string;
-  cnpj: string;
-  db_id: number;
-  tags: string[];
-  municipal_registration: string;
-  split_pix: any;
-  profile_image_url: any;
-  updated_at: string;
-  social_network: any[];
-  phone: Phone[];
-  address: string;
-  active: boolean;
-  onlending_date: any;
-  password: any;
-  has_deal: boolean;
-  address_complement: string;
-  emails: string[];
-  name: string;
-  country: string;
-  created_at: string;
-  favorite: boolean;
-  longitude: number;
-  '5671792128557056': string;
-  site: any;
-  trading_name: string;
+  code?: string;
+  neighborhood?: string;
+  landlord_account_id?: string;
+  review_pending?: boolean;
+  media_source?: any;
+  integrations?: any[];
+  private?: boolean;
+  pix?: Pix[];
+  opening_date?: any;
+  crisp_people_id?: any;
+  onlending_value?: number;
+  profile_image_key?: any;
+  city?: string;
+  bank_data_key?: any;
+  network_group_member_shared?: boolean;
+  percent?: number;
+  zipcode?: string;
+  state_registration?: any;
+  state?: string;
+  company_name?: any;
+  latitude?: number;
+  type?: string;
+  email?: string;
+  cnpj?: string;
+  db_id?: number;
+  tags?: string[];
+  municipal_registration?: string;
+  split_pix?: any;
+  profile_image_url?: any;
+  updated_at?: string;
+  social_network?: any[];
+  phone?: Phone[];
+  address?: string;
+  active?: boolean;
+  onlending_date?: any;
+  password?: any;
+  has_deal?: boolean;
+  address_complement?: string;
+  emails?: string[];
+  name?: string;
+  country?: string;
+  created_at?: string;
+  favorite?: boolean;
+  longitude?: number;
+  '5671792128557056'?: string;
+  site?: any;
+  trading_name?: string;
 }
 
 export interface Pix {
@@ -122,21 +122,21 @@ export interface Phone {
 }
 
 export interface ManagementFee {
-  first_rent_percent: number;
-  management_type: string;
-  percent: number;
-  value: number;
-  first_rent_value: number;
+  first_rent_percent?: number;
+  management_type?: string;
+  percent?: number;
+  value?: number;
+  first_rent_value?: number;
 }
 
 export interface Guarantee {
-  start_at: string;
-  guarantee_type: string;
-  sponsors: Sponsor[];
-  end_at: string;
-  sponsor: Sponsor2;
-  sponsor_key: any;
-  details: Details;
+  start_at?: string;
+  guarantee_type?: string;
+  sponsors?: Sponsor[];
+  end_at?: string;
+  sponsor?: Sponsor2;
+  sponsor_key?: any;
+  details?: Details;
 }
 
 export interface Sponsor {
@@ -193,49 +193,49 @@ export interface Phone2 {
 }
 
 export interface Sponsor2 {
-  code: string;
-  neighborhood: string;
-  review_pending: boolean;
-  media_source: any;
-  profession: any;
-  integrations: any[];
-  private: boolean;
-  pix: any[];
-  longitude: number;
-  crisp_people_id: any;
-  profile_image_key: any;
-  city: string;
-  network_group_member_shared: boolean;
-  zipcode: string;
-  emails: string[];
-  user_db_id: any;
-  state: string;
-  rg: any;
-  latitude: number;
-  type: string;
-  email: string;
-  db_id: number;
-  firstname: string;
-  tags: string[];
-  lastname: string;
-  profile_image_url: any;
-  updated_at: string;
-  social_network: any[];
-  phone: Phone3[];
-  birthday: any;
-  address: string;
-  active: boolean;
-  nationality: any;
-  password: any;
-  has_deal: boolean;
-  address_complement: string;
-  country: any;
-  created_at: string;
-  marital_status: any;
-  favorite: boolean;
-  cpf: string;
-  gender: string;
-  fullname: string;
+  code?: string;
+  neighborhood?: string;
+  review_pending?: boolean;
+  media_source?: any;
+  profession?: any;
+  integrations?: any[];
+  private?: boolean;
+  pix?: any[];
+  longitude?: number;
+  crisp_people_id?: any;
+  profile_image_key?: any;
+  city?: string;
+  network_group_member_shared?: boolean;
+  zipcode?: string;
+  emails?: string[];
+  user_db_id?: any;
+  state?: string;
+  rg?: any;
+  latitude?: number;
+  type?: string;
+  email?: string;
+  db_id?: number;
+  firstname?: string;
+  tags?: string[];
+  lastname?: string;
+  profile_image_url?: any;
+  updated_at?: string;
+  social_network?: any[];
+  phone?: Phone3[];
+  birthday?: any;
+  address?: string;
+  active?: boolean;
+  nationality?: any;
+  password?: any;
+  has_deal?: boolean;
+  address_complement?: string;
+  country?: any;
+  created_at?: string;
+  marital_status?: any;
+  favorite?: boolean;
+  cpf?: string;
+  gender?: string;
+  fullname?: string;
 }
 
 export interface Phone3 {
@@ -246,9 +246,9 @@ export interface Phone3 {
 }
 
 export interface Details {
-  bail_type: string;
-  value: number;
-  description: string;
+  bail_type?: string;
+  value?: number;
+  description?: string;
 }
 
 export interface Notification {
@@ -265,50 +265,50 @@ export interface Notification {
 }
 
 export interface Tenant {
-  code: string;
-  neighborhood: string;
-  review_pending: boolean;
-  media_source: any;
-  profession: any;
-  integrations: any[];
-  private: boolean;
-  pix: any[];
-  cpf: string;
-  crisp_people_id: any;
-  profile_image_key: any;
-  city: string;
-  network_group_member_shared: boolean;
-  zipcode: string;
-  has_deal: boolean;
-  user_db_id: any;
-  state: string;
-  rg: any;
-  latitude: number;
-  type: string;
-  email: string;
-  db_id: number;
-  firstname: string;
-  tags: string[];
-  lastname: string;
-  profile_image_url: any;
-  updated_at: string;
-  social_network: any[];
-  phone: Phone4[];
-  birthday: any;
-  address: string;
-  active: boolean;
-  nationality: any;
-  password: any;
-  emails: string[];
-  address_complement: string;
-  payer: boolean;
-  country: any;
-  created_at: string;
-  marital_status: any;
-  favorite: boolean;
-  longitude: number;
-  gender: string;
-  fullname: string;
+  code?: string;
+  neighborhood?: string;
+  review_pending?: boolean;
+  media_source?: any;
+  profession?: any;
+  integrations?: any[];
+  private?: boolean;
+  pix?: any[];
+  cpf?: string;
+  crisp_people_id?: any;
+  profile_image_key?: any;
+  city?: string;
+  network_group_member_shared?: boolean;
+  zipcode?: string;
+  has_deal?: boolean;
+  user_db_id?: any;
+  state?: string;
+  rg?: any;
+  latitude?: number;
+  type?: string;
+  email?: string;
+  db_id?: number;
+  firstname?: string;
+  tags?: string[];
+  lastname?: string;
+  profile_image_url?: any;
+  updated_at?: string;
+  social_network?: any[];
+  phone?: Phone4[];
+  birthday?: any;
+  address?: string;
+  active?: boolean;
+  nationality?: any;
+  password?: any;
+  emails?: string[];
+  address_complement?: string;
+  payer?: boolean;
+  country?: any;
+  created_at?: string;
+  marital_status?: any;
+  favorite?: boolean;
+  longitude?: number;
+  gender?: string;
+  fullname?: string;
 }
 
 export interface Phone4 {
@@ -380,18 +380,18 @@ export interface AnnualReadjustment {
 }
 
 export interface Property {
-  city: string;
-  owners: Owner[];
-  code: string;
-  neighborhood: string;
-  address_complement: string;
-  fields: Fields;
-  cover_photo: CoverPhoto;
-  zipcode: string;
-  state: string;
-  db_id: number;
-  address: string;
-  property_type: string;
+  city?: string;
+  owners?: Owner[];
+  code?: string;
+  neighborhood?: string;
+  address_complement?: string;
+  fields?: Fields;
+  cover_photo?: CoverPhoto;
+  zipcode?: string;
+  state?: string;
+  db_id?: number;
+  address?: string;
+  property_type?: string;
 }
 
 export interface Owner {

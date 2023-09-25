@@ -33,7 +33,7 @@ export class LeasesUpdateDTO {
   @IsNotEmpty()
   status: string;
 
-  annual_readjustment: string;
+  id_annual_readjustment_imobzi: string;
   code_imobzi: string;
   guarantee_value: number;
   main_guarantor: bigint;

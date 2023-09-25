@@ -87,7 +87,7 @@ model Property {
   status    String
 
   id_building_imobzi String
-  building    Building @relation(fields: [id_building_imobzi], references: [id_imobzi], onDelete: Cascade)
+  building           Building @relation(fields: [id_building_imobzi], references: [id_imobzi], onDelete: Cascade)
 
   area             Float?
   bedroom          Int?
@@ -143,16 +143,16 @@ model Lease {
   id_main_guarantor_imobzi String?
   guarantor                Person? @relation("personGrarantorToLease", fields: [id_main_guarantor_imobzi], references: [id_imobzi], onDelete: Cascade)
 
-  fee                 Float
-  guarantee_type      String
-  guarantee_value     Float?
-  annual_readjustment String?
-  irrf                Boolean
-  include_in_dimob    Boolean
-  indeterminate       Boolean
-  lease_value         Float
-  created_at          DateTime @default(now())
-  updated_at          DateTime @updatedAt
+  fee                           Float
+  guarantee_type                String
+  guarantee_value               Float?
+  id_annual_readjustment_imobzi String?
+  irrf                          Boolean
+  include_in_dimob              Boolean
+  indeterminate                 Boolean
+  lease_value                   Float
+  created_at                    DateTime @default(now())
+  updated_at                    DateTime @updatedAt
 
   beneficiariesLease Beneficiary[] @relation("leaseToBeneficiary")
   invoicesLease      Invoice[]     @relation("leaseToInvoice")
@@ -249,6 +249,12 @@ model Beneficiary {
   updated_at DateTime @updatedAt
 
   @@map("beneficiaries")
+}
+
+model ReadjustmentIndex {
+  id                           Int    @id @default(autoincrement())
+  id_index_readjustment_imobzi String
+  name                         String
 }
 
 model Update {
