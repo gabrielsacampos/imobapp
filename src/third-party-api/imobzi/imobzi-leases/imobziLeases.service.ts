@@ -30,6 +30,36 @@ export class ImobziLeasesService {
     const guarantee_type = leaseFullDataFromImobzi.guarantee?.guarantee_type;
     const guarantee_value = leaseFullDataFromImobzi.guarantee?.details?.value;
 
+    const leaseItems = leaseFullDataFromImobzi.items.map((item) => {
+      const {
+        due_date,
+        repeat_total,
+        repeat_index,
+        description,
+        charge_management_fee,
+        recurrent,
+        value,
+        until_due_date,
+        behavior,
+        include_in_dimob,
+        start_date,
+      } = item;
+
+      return {
+        due_date,
+        repeat_total,
+        repeat_index,
+        description,
+        charge_management_fee,
+        recurrent,
+        value,
+        until_due_date,
+        behavior,
+        include_in_dimob,
+        start_date,
+      };
+    });
+
     const id_main_guarantor_imobzi =
       leaseFullDataFromImobzi.guarantee?.guarantee_type === 'guarantor'
         ? leaseFullDataFromImobzi.guarantee.sponsor.db_id.toString()
@@ -84,6 +114,7 @@ export class ImobziLeasesService {
       id_property_imobzi,
       start_at,
       status,
+      leaseItems,
     };
   }
 
