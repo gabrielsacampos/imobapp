@@ -2,13 +2,13 @@ export interface ImobziInvoicesDTO {
   count: number;
   next_page: number;
   total_pending: number;
-  invoices: Invoice[];
+  invoices: ImobziInvoiceDTO[];
   total_paid: number;
   total_overdue: number;
   total: number;
 }
 
-export interface Invoice {
+export interface ImobziInvoiceDTO {
   status: string;
   due_date: string;
   interest_value: number;

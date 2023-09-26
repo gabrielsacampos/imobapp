@@ -13,24 +13,36 @@ export class ImobziInvoicesService {
     private readonly myFunctionsService: MyFunctionsService,
   ) {}
 
-  async getInvoicesMissingIdsFromImobzi() {
-    const invoicesOnDb = await this.prisma.invoice.findMany();
-    const invoicesFromAPi = await this.imobziInvoicesProvider.getAllInvoicesFromImobzi();
-
-    const invoicesOnDbIds = invoicesOnDb.map((invoiceOnDb) => {
-      return invoiceOnDb.id_imobzi;
+  async getInvoicesImobziIdsToUpdate() {
+    const invoicesOnDb = await this.prisma.invoice.findMany({
+      where: {
+        NOT: {
+          status: {
+            in: ['deleted', 'expired', 'canceled'],
+          },
+          AND: {
+            paid_manual: false,
+          },
+        },
+      },
     });
 
-    const invoicesFromApiIds = invoicesFromAPi.map((invoiceFromApi) => {
-      return invoiceFromApi.invoice_id;
+    const invoicesFromApi = await this.imobziInvoicesProvider.getAllInvoicesFromImobzi();
+    const invoicesFromApiIds = invoicesFromApi.map((invoiceFromApi) => invoiceFromApi.invoice_id);
+
+    const idsToUpdate = invoicesFromApiIds.filter((invoiceFromApiId) => {
+      const currentInvoiceOnDb = invoicesOnDb.find((invoiceOnDb) => invoiceOnDb.id_imobzi === invoiceFromApiId);
+      const currentInvoiceFromApi = invoicesFromApi.find(
+        (invoiceFromApi) => invoiceFromApi.invoice_id === invoiceFromApiId,
+      );
+      if (currentInvoiceOnDb) {
+        return currentInvoiceFromApi.status !== currentInvoiceOnDb.status;
+      } else {
+        return true;
+      }
     });
 
-    const missingIdsOnDb: string[] = invoicesFromApiIds.filter((leaseFromApiId) => {
-      // if DB.invoice does not include the current id from API
-      return !invoicesOnDbIds.includes(leaseFromApiId);
-    });
-
-    return missingIdsOnDb;
+    return idsToUpdate;
   }
 
   async getInvoiceMainDataFromImobzi(id_invoice_imobzi: string): Promise<InvoiceCreateDTO> {
@@ -107,31 +119,5 @@ export class ImobziInvoicesService {
       id_lease_imobzi,
       items,
     };
-  }
-
-  async getInvoicesToUpdateDb(): Promise<ImobziInvoiceDetailsDTO[]> {
-    //note: Invoices can only have updates to pending and paid(paid_manual) status.
-    const allInvoicesOnDb = await this.prisma.invoice.findMany({
-      where: {
-        NOT: {
-          status: {
-            in: ['deleted', 'expired', 'canceled'],
-          },
-          AND: {
-            paid_manual: false,
-          },
-        },
-      },
-    });
-
-    const invoiceIdToUpdate = [];
-    for (const invoiceOnDb of allInvoicesOnDb) {
-      const invoiceFromApi = await this.imobziInvoicesProvider.getInvoiceFullDataFromImobzi(invoiceOnDb.id_imobzi);
-      if (invoiceFromApi.status !== invoiceOnDb.status) {
-        invoiceIdToUpdate.push(invoiceOnDb);
-      }
-    }
-
-    return invoiceIdToUpdate;
   }
 }

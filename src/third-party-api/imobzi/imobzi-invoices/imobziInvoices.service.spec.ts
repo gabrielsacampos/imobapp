@@ -7,8 +7,17 @@ import { ImobziInvoicesService } from './imobziInvoices.service';
 // for invoices, we need a big mock of data do test it.
 import { getInvoiceFullDataFromImobziMock, getInvoiceMainDataFromImobziMock } from './imobziInvoices.mocks';
 
-const invoicesOnDbMock = [{ id_imobzi: 'abc' }, { id_imobzi: 'def' }];
-const getAllInvoicesFromImobziMock = [{ invoice_id: 'abc' }, { invoice_id: 'def' }, { invoice_id: 'ghi' }];
+const invoicesOnDbMock = [
+  { id_imobzi: 'abc', status: 'pending', paid_manual: true },
+  { id_imobzi: 'def', status: 'paid', paid_manual: false },
+  { id_imobzi: 'ghi', status: 'canceled', paid_manual: true },
+  { id_imobzi: 'jkl', status: 'expired', paid_manual: true },
+];
+const getAllInvoicesFromImobziMock = [
+  { invoice_id: 'abc', status: 'paid' },
+  { invoice_id: 'def', status: 'paid' },
+  { invoice_id: 'zyw', status: 'paid' },
+];
 
 describe('ImobziInvoicesService', () => {
   let imobziInvoicesService: ImobziInvoicesService;
@@ -48,12 +57,12 @@ describe('ImobziInvoicesService', () => {
     prismaServiceMock.invoice.findMany.mockResolvedValue(invoicesOnDbMock);
   });
 
-  test('getInvoicesMissingIdsFromImobzi', async () => {
-    const result = await imobziInvoicesService.getInvoicesMissingIdsFromImobzi();
-    expect(result).toEqual([getAllInvoicesFromImobziMock[2].invoice_id]);
+  test('getInvoicesImobziIdsToUpdate', async () => {
+    const result = await imobziInvoicesService.getInvoicesImobziIdsToUpdate();
+    expect(result).toEqual([getAllInvoicesFromImobziMock[0].invoice_id, getAllInvoicesFromImobziMock[2].invoice_id]);
   });
 
-  test('getInvoiceFullDataFromImobzi', async () => {
+  test('getInvoiceMainDataFromImobzi', async () => {
     const result = await imobziInvoicesService.getInvoiceMainDataFromImobzi('abc');
     expect(result).toEqual(getInvoiceMainDataFromImobziMock);
   });

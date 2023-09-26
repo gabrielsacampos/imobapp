@@ -2,7 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { ImobziParamService, ImobziUrlService } from '../imobzi-urls-params/imobziUrls.service';
 import { ImobziInvoiceDetailsDTO } from './imobziInvoiceDetails.dtos';
-import { ImobziInvoicesDTO, Invoice } from './imobziInvoices.dtos';
+import { ImobziInvoiceDTO, ImobziInvoicesDTO } from './imobziInvoices.dtos';
 
 @Injectable()
 export class ImobziInvoicesProvider {
@@ -12,7 +12,7 @@ export class ImobziInvoicesProvider {
     private readonly imobziParamService: ImobziParamService,
   ) {}
 
-  async getAllInvoicesFromImobzi(): Promise<Invoice[]> {
+  async getAllInvoicesFromImobzi(): Promise<ImobziInvoiceDTO[]> {
     let page = 1;
     const allInvoices = [];
 
