@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsNotEmpty, ValidateNested } from 'class-validator';
+import { ItemsInvoiceDTO } from './invoice-items/invoice-items.dtos';
 
 export class InvoiceCreateDTO {
   @ApiProperty({
@@ -120,33 +121,4 @@ export class InvoiceCreateDTO {
   onlending_value?: number;
   reference_start_at?: string;
   reference_end_at?: string;
-}
-
-export class ItemsInvoiceDTO {
-  @IsNotEmpty()
-  id_imobzi: string;
-
-  @IsNotEmpty()
-  until_due_date: boolean;
-
-  @IsNotEmpty()
-  id_invoice_imobzi: string;
-
-  @IsNotEmpty()
-  description: string;
-
-  @IsNotEmpty()
-  behavior: string;
-
-  @IsNotEmpty()
-  include_in_dimob: boolean;
-
-  @IsNotEmpty()
-  management_fee: boolean;
-
-  @IsNotEmpty()
-  value: number;
-
-  item_type?: string;
-  due_date: string;
 }

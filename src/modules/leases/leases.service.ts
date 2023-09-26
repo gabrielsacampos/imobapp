@@ -26,6 +26,9 @@ export class LeasesService {
         beneficiariesLease: {
           create: beneficiaries,
         },
+        leasesItems: {
+          create: data.lease_items,
+        },
       },
     });
     return { message: `lease #${data.id_imobzi} created` };
@@ -66,6 +69,12 @@ export class LeasesService {
           deleteMany: [{ id_lease_imobzi: id_imobzi }],
           createMany: {
             data: data.beneficiaries,
+          },
+        },
+        leasesItems: {
+          deleteMany: [{ id_lease_imobzi: id_imobzi }],
+          createMany: {
+            data: data.lease_items,
           },
         },
       },

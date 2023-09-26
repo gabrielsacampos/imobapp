@@ -1,6 +1,7 @@
 import { Type } from 'class-transformer';
 import { IsNotEmpty, ValidateNested } from 'class-validator';
-import { BeneficiariesUpdateDTO } from './beneficiaries/beneficiariesUpdate.dtos';
+import { BeneficiariesCreateDTO } from './lease-beneficiaries/lease-beneficiaries.dtos';
+import { LeaseItemsCreateDTO } from './lease-items/leaseItemsCreate.dtos';
 
 export class LeasesUpdateDTO {
   @IsNotEmpty()
@@ -43,6 +44,9 @@ export class LeasesUpdateDTO {
   @ValidateNested({
     message: 'You need to set at least one beneficiary to lease',
   })
-  @Type(() => BeneficiariesUpdateDTO)
-  beneficiaries!: BeneficiariesUpdateDTO;
+  @Type(() => BeneficiariesCreateDTO)
+  beneficiaries!: BeneficiariesCreateDTO;
+
+  @Type(() => LeaseItemsCreateDTO)
+  lease_items!: LeaseItemsCreateDTO[];
 }

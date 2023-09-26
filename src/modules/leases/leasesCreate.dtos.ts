@@ -1,7 +1,8 @@
 import { NotAcceptableException } from '@nestjs/common';
 import { Type } from 'class-transformer';
 import { IsNotEmpty, ValidateIf, ValidateNested } from 'class-validator';
-import { BeneficiariesCreateDTO } from './beneficiaries/beneficiariesCreate.dtos';
+import { BeneficiariesCreateDTO } from './lease-beneficiaries/lease-beneficiaries.dtos';
+import { LeaseItemsCreateDTO } from './lease-items/leaseItemsCreate.dtos';
 
 export class LeasesCreateDTO {
   @IsNotEmpty()
@@ -57,7 +58,7 @@ export class LeasesCreateDTO {
     message: 'You need to set at least one beneficiary to lease',
   })
   @Type(() => BeneficiariesCreateDTO)
-  beneficiaries!: BeneficiariesCreateDTO;
+  beneficiaries!: BeneficiariesCreateDTO[];
 
   @ValidateIf((o) => {
     const shareSum = o.beneficiaries.reduce((acc: number, curr: BeneficiariesCreateDTO) => {
@@ -70,6 +71,12 @@ export class LeasesCreateDTO {
     return true;
   })
   share: number;
+
+  @ValidateNested({
+    message: 'You need to set at least one beneficiary to lease',
+  })
+  @Type(() => LeaseItemsCreateDTO)
+  lease_items!: LeaseItemsCreateDTO[];
 
   id_main_guarantor_imobzi?: string;
   updated_at?: Date;
