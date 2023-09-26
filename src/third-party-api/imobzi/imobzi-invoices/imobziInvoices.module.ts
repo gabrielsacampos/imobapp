@@ -2,6 +2,7 @@ import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaService } from 'src/database/prisma.service';
+import { MyFunctionsService } from 'src/my-usefull-functions/myFunctions.service';
 import { ImobziParamService, ImobziUrlService } from '../imobzi-urls-params/imobziUrls.service';
 import { ImobziInvoicesProvider } from './imobziInvoices.provider';
 import { ImobziInvoicesService } from './imobziInvoices.service';
@@ -14,7 +15,14 @@ import { ImobziInvoicesService } from './imobziInvoices.service';
       maxRedirects: 5,
     }),
   ],
-  providers: [ImobziInvoicesProvider, ImobziInvoicesService, PrismaService, ImobziUrlService, ImobziParamService],
-  exports: [ImobziInvoicesModule],
+  providers: [
+    MyFunctionsService,
+    ImobziInvoicesProvider,
+    ImobziInvoicesService,
+    PrismaService,
+    ImobziUrlService,
+    ImobziParamService,
+  ],
+  exports: [ImobziInvoicesService],
 })
 export class ImobziInvoicesModule {}
