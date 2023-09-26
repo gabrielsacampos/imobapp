@@ -109,10 +109,12 @@ describe('ImobziContactsService', () => {
   });
 
   test('getContactsImobziIdsToUpdate returns array of orgs an people imobzi ids with updates needed', async () => {
-    const result = await imobziContactsService.getContactsImobziIdsToUpdate();
-    expect(result).toEqual({
-      peopleImobziIdsToUpdate: ['222222222222222'],
-      orgsImobziIdsToUpdate: ['444444444444444', '111111111111111'],
-    });
+    const { peopleImobziIdsToUpdate, orgsImobziIdsToUpdate } =
+      await imobziContactsService.getContactsImobziIdsToUpdate();
+
+    expect(peopleImobziIdsToUpdate).toEqual(expect.arrayContaining([allContactsMock[2].contact_id]));
+    expect(orgsImobziIdsToUpdate).toEqual(
+      expect.arrayContaining([allContactsMock[0].contact_id, allContactsMock[1].contact_id]),
+    );
   });
 });

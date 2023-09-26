@@ -25,13 +25,7 @@ export class ImobziContactsService {
       },
     });
 
-    const peopleOnDbIds = peopleOnDb.map((personOnDb) => personOnDb.id_imobzi);
     const peopleFromApiIds = peopleFromApi.map((personFromApi) => personFromApi.contact_id);
-
-    const missingIndsOnDb: string[] = peopleFromApiIds.filter((id: string) => {
-      // if DB.people does not include the current id from API
-      return !peopleOnDbIds.includes(id);
-    });
 
     const idsToUpdate: string[] = peopleFromApiIds.filter((personIdFromApiId: string) => {
       // find person into DB and Api's data to compare updated_at value.
@@ -44,10 +38,12 @@ export class ImobziContactsService {
       if (currentPersonOnDb) {
         // return if updated_at from api is newer than updated_at on DB.
         return new Date(currentPersonOnDb.updated_at) < new Date(currentPersonFromApi.updated_at);
+      } else {
+        return true;
       }
     });
 
-    return [...idsToUpdate, ...missingIndsOnDb];
+    return idsToUpdate;
   }
 
   async getOrgsImobziIdsToUpdate(orgsFromApi: ContactDTO[]): Promise<any[]> {
@@ -57,13 +53,8 @@ export class ImobziContactsService {
         updated_at: true,
       },
     });
-    const orgsOnDbImobziIds: string[] = orgsOnDb.map((orgOnDb) => orgOnDb.id_imobzi);
-    const orgsFromApiIds: string[] = orgsFromApi.map((orgFromApi) => orgFromApi.contact_id);
 
-    const missingIndsOnDb: string[] = orgsFromApiIds.filter((id: string) => {
-      // if DB.organization does not include the current id from API
-      return !orgsOnDbImobziIds.includes(id);
-    });
+    const orgsFromApiIds: string[] = orgsFromApi.map((orgFromApi) => orgFromApi.contact_id);
 
     const idsToUpdate = orgsFromApiIds.filter((orgIdFromApi: string) => {
       // find organization into DB and Api's data to compare updated_at value.
@@ -74,10 +65,12 @@ export class ImobziContactsService {
       if (currentOrgOnDb) {
         // return if updated_at from api is newer than updated_at on DB.
         return new Date(currentOrgOnDb.updated_at) < new Date(currentOrgFromApi.updated_at);
+      } else {
+        return true;
       }
     });
 
-    return [...missingIndsOnDb, ...idsToUpdate];
+    return idsToUpdate;
   }
 
   async getContactsImobziIdsToUpdate(): Promise<any> {
