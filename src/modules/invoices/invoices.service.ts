@@ -1,13 +1,13 @@
 import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
-import { InvoiceDTO } from './invoicesCreate.dtos';
+import { InvoiceCreateDTO } from './invoicesCreate.dtos';
 
 @Injectable()
 export class InvoicesService {
   constructor(private prisma: PrismaService) {}
 
   // it can create properties from imobzi or not
-  async create(data: InvoiceDTO) {
+  async create(data: InvoiceCreateDTO) {
     const existsInvoice = await this.prisma.invoice.findFirst({
       where: { id_imobzi: data.id_imobzi },
     });
@@ -45,7 +45,7 @@ export class InvoicesService {
     return found;
   }
 
-  async update(id_imobzi: string, data: InvoiceDTO) {
+  async update(id_imobzi: string, data: InvoiceCreateDTO) {
     const existsInvoice = await this.prisma.invoice.findFirst({
       where: { id_imobzi },
     });
@@ -58,11 +58,8 @@ export class InvoicesService {
       where: { id_imobzi },
       data: {
         ...data,
-        invoiceItems: {
-          deleteMany: [{ id_invoice_imobzi: id_imobzi }],
-          createMany: { data: data.items },
-        },
       },
+      include: { invoiceItems: true },
     });
 
     return { message: `invoice ${id_imobzi} updated` };

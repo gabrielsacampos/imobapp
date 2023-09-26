@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
 import { InvoiceCreateDTO, ItemsInvoiceDTO } from 'src/modules/invoices/invoicesCreate.dtos';
 import { MyFunctionsService } from 'src/my-usefull-functions/myFunctions.service';
-import { ImobziInvoiceDetailsDTO } from './imobziInvoiceDetails.dtos';
 import { ImobziInvoicesProvider } from './imobziInvoices.provider';
 
 @Injectable()
