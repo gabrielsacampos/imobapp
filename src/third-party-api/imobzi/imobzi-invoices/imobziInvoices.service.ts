@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
-import { InvoiceDTO } from 'src/modules/invoices/invoices.dtos';
+import { InvoiceCreateDTO, ItemsInvoiceDTO } from 'src/modules/invoices/invoicesCreate.dtos';
 import { MyFunctionsService } from 'src/my-usefull-functions/myFunctions.service';
-import { Invoice } from './imobziInvoices.dtos';
+import { ImobziInvoiceDetailsDTO } from './imobziInvoiceDetails.dtos';
 import { ImobziInvoicesProvider } from './imobziInvoices.provider';
 
 @Injectable()
@@ -14,8 +14,8 @@ export class ImobziInvoicesService {
   ) {}
 
   async getInvoicesMissingIdsFromImobzi() {
-    const invoicesOnDb: InvoiceDTO[] = await this.prisma.invoice.findMany();
-    const invoicesFromAPi: Invoice[] = await this.imobziInvoicesProvider.getAllInvoicesFromImobzi();
+    const invoicesOnDb = await this.prisma.invoice.findMany();
+    const invoicesFromAPi = await this.imobziInvoicesProvider.getAllInvoicesFromImobzi();
 
     const invoicesOnDbIds = invoicesOnDb.map((invoiceOnDb) => {
       return invoiceOnDb.id_imobzi;
@@ -33,7 +33,7 @@ export class ImobziInvoicesService {
     return missingIdsOnDb;
   }
 
-  async getInvoiceFullDataFromImobzi(id_invoice_imobzi: string): Promise<any> {
+  async getInvoiceMainDataFromImobzi(id_invoice_imobzi: string): Promise<InvoiceCreateDTO> {
     const invoiceFullData = await this.imobziInvoicesProvider.getInvoiceFullDataFromImobzi(id_invoice_imobzi);
     const id_lease_imobzi = invoiceFullData.lease.db_id.toString();
     const management_fee = invoiceFullData.onlendings_and_fees.management_fee_value;
@@ -41,6 +41,33 @@ export class ImobziInvoicesService {
     const onlending_value = invoiceFullData.onlendings_and_fees.predicted_onlending_value;
     const { paid_at } = invoiceFullData;
     const credit_at = this.myFunctionsService.defineCreditDate(paid_at);
+
+    const items: ItemsInvoiceDTO[] = invoiceFullData.items.map((item) => {
+      const {
+        until_due_date,
+        item_type,
+        invoice_item_id: id_imobzi,
+        description,
+        behavior,
+        include_in_dimob,
+        charge_management_fee: management_fee,
+        value,
+        due_date,
+      } = item;
+
+      return {
+        until_due_date,
+        item_type,
+        id_imobzi,
+        id_invoice_imobzi,
+        description,
+        behavior,
+        include_in_dimob,
+        management_fee,
+        value,
+        due_date,
+      };
+    });
 
     const {
       invoice_id: id_imobzi,
@@ -78,6 +105,33 @@ export class ImobziInvoicesService {
       onlending_value,
       management_fee,
       id_lease_imobzi,
+      items,
     };
+  }
+
+  async getInvoicesToUpdateDb(): Promise<ImobziInvoiceDetailsDTO[]> {
+    //note: Invoices can only have updates to pending and paid(paid_manual) status.
+    const allInvoicesOnDb = await this.prisma.invoice.findMany({
+      where: {
+        NOT: {
+          status: {
+            in: ['deleted', 'expired', 'canceled'],
+          },
+          AND: {
+            paid_manual: false,
+          },
+        },
+      },
+    });
+
+    const invoiceIdToUpdate = [];
+    for (const invoiceOnDb of allInvoicesOnDb) {
+      const invoiceFromApi = await this.imobziInvoicesProvider.getInvoiceFullDataFromImobzi(invoiceOnDb.id_imobzi);
+      if (invoiceFromApi.status !== invoiceOnDb.status) {
+        invoiceIdToUpdate.push(invoiceOnDb);
+      }
+    }
+
+    return invoiceIdToUpdate;
   }
 }

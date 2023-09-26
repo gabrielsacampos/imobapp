@@ -1,4 +1,4 @@
-export interface InvoiceDetailsDTO {
+export interface ImobziInvoiceDetailsDTO {
   lease: Lease;
   invoice_url: string;
   subcategory: string;
@@ -27,7 +27,7 @@ export interface InvoiceDetailsDTO {
   value: number;
   bank_type: any;
   contact: Contact2;
-  items: Item[];
+  items: ImobziInvoiceItem[];
   onlending_split: boolean;
   reference_end_at: string;
   created_manually: any;
@@ -140,7 +140,7 @@ export interface Contact2 {
   email: string[];
 }
 
-export interface Item {
+export interface ImobziInvoiceItem {
   until_due_date: boolean;
   item_type?: string;
   contact: any;

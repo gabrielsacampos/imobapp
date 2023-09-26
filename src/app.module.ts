@@ -8,7 +8,6 @@ import { PropertiesModule } from './modules/properties/properties.module';
 import { LeasesModule } from './modules/leases/leases.module';
 import { LeaseItemsModule } from './modules/leases/lease-items/lease-items.module';
 import { InvoicesModule } from './modules/invoices/invoices.module';
-import { InvoiceItemsModule } from './modules/invoices/invoice-items/invoice-items.module';
 import { ImobziModule } from './third-party-api/imobzi/imobzi.module';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaService } from './database/prisma.service';
@@ -25,7 +24,6 @@ import { PrismaService } from './database/prisma.service';
     LeasesModule,
     LeaseItemsModule,
     InvoicesModule,
-    InvoiceItemsModule,
     ImobziModule,
   ],
   controllers: [AppController],

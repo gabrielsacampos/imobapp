@@ -23,7 +23,6 @@ export class LeasesService {
     await this.prisma.lease.create({
       data: {
         ...data,
-        id_imobzi: data.id_imobzi,
         beneficiariesLease: {
           create: beneficiaries,
         },
