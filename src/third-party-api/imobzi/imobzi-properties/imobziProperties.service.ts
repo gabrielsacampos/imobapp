@@ -9,31 +9,46 @@ export class ImobziPropertiesService {
     private readonly imobziPropertiesProvider: ImobziPropertiesProvider,
   ) {}
 
-  async getAllPropertiesFromDb(): Promise<any> {
-    try {
-      return await this.prisma.property.findMany();
-    } catch (error) {
-      console.error('error on getPropertiesToUpdate function');
-      console.error(error.message);
-      console.trace(error);
-    }
+  async formatPropertyDataToDb(id_imobzi: string | number) {
+    const propertyFullData = await this.imobziPropertiesProvider.getPropertyFullDataFromImobzi(id_imobzi);
+    const {
+      alternative_code,
+      area,
+      building_id,
+      sale_value,
+      rental_value,
+      status,
+      property_type: type,
+      garage,
+      suite,
+      bedroom,
+      active,
+    } = propertyFullData;
+
+    return {
+      id_imobzi,
+      alternative_code,
+      area,
+      building_id,
+      sale_value,
+      rental_value,
+      status,
+      type,
+      garage,
+      suite,
+      bedroom,
+      active,
+    };
   }
 
   async getPropertiesIdsToUpdate(): Promise<any> {
     try {
-      const propertiesOnDb = await this.getAllPropertiesFromDb();
+      const propertiesOnDb = await this.prisma.property.findMany();
       const { unavailableProperties, availableProperties } =
         await this.imobziPropertiesProvider.getAllPropertiesFromImobzi();
 
       const propertiesFromApi = [...unavailableProperties, ...availableProperties];
-
-      const propertiesOnDbIds = propertiesOnDb.map((propertyOndDb: any) => propertyOndDb.id_imobzi);
       const propertiesFromApiIds = propertiesFromApi.map((propertyOnApi: any) => propertyOnApi.db_id.toString());
-
-      const missingIdsOnDb: string[] = propertiesFromApiIds.filter((propertyFromApiId: string) => {
-        // if DB.properties does not include the current id from API
-        return !propertiesOnDbIds.includes(propertyFromApiId);
-      });
 
       const idsToUpdate: string[] = propertiesFromApiIds.filter((propertyFromApiId: string) => {
         // find property into DB and Api's data to compare updated_at value.
@@ -46,10 +61,12 @@ export class ImobziPropertiesService {
         if (currentPropertyOnDb) {
           // return if updated_at from api is newer than updated_at on DB.
           return new Date(currentPropertyOnDb.updated_at) < new Date(currentPropertyFromApi.updated_at);
+        } else {
+          return true;
         }
       });
 
-      return [...idsToUpdate, ...missingIdsOnDb];
+      return idsToUpdate;
     } catch (error) {
       console.error('error on getPropertiesToUpdate function');
       console.error(error.message);

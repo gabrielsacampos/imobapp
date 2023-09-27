@@ -1,4 +1,4 @@
-export interface PersonDTO {
+export interface ImobziPersonDTO {
   code: string;
   landlord_account_id: any;
   review_pending: boolean;

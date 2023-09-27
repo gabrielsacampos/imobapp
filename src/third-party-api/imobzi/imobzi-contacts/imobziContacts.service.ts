@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
+import { ImobziOrganizationsService } from '../imobzi-organizations/imobziOrganizations.service';
+import { ImobziPeopleService } from '../imobzi-people/imobziPeople.service';
 import { ContactDTO } from './imobziContacts.dtos';
 import { ImobziContactsProvider } from './imobziContacts.provider';
 
@@ -8,6 +10,8 @@ export class ImobziContactsService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly imobziContactsProvider: ImobziContactsProvider,
+    private readonly imobziOrganizationsService: ImobziOrganizationsService,
+    private readonly imobziPeopleService: ImobziPeopleService,
   ) {}
 
   getContactsByType(allContacts: ContactDTO[]): { organizations: any[]; people: any[] } {
@@ -73,16 +77,25 @@ export class ImobziContactsService {
     return idsToUpdate;
   }
 
-  async getContactsImobziIdsToUpdate(): Promise<any> {
+  async getContactsToStoreIntoDb(): Promise<any> {
     const allContacts = await this.imobziContactsProvider.getAllContacts();
     const { organizations, people } = this.getContactsByType(allContacts);
 
     const peopleImobziIdsToUpdate = await this.getPeopleImobziIdsToUpdate(people);
     const orgsImobziIdsToUpdate = await this.getOrgsImobziIdsToUpdate(organizations);
 
-    return {
-      peopleImobziIdsToUpdate,
-      orgsImobziIdsToUpdate,
-    };
+    const peopleToUpdate = [];
+    for (const personId of peopleImobziIdsToUpdate) {
+      const personFormatedData = await this.imobziPeopleService.formatPersonDataToDb(personId);
+      peopleToUpdate.push(personFormatedData);
+    }
+
+    const orgsToUpdate = [];
+    for (const orgId of orgsImobziIdsToUpdate) {
+      const orgFormatedData = await this.imobziOrganizationsService.formatOrgDataToDb(orgId);
+      orgsToUpdate.push(orgFormatedData);
+    }
+
+    return { peopleToUpdate, orgsToUpdate };
   }
 }

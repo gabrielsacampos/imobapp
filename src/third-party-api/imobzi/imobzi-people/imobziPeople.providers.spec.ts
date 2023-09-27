@@ -1,27 +1,10 @@
 import { HttpService } from '@nestjs/axios';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ImobziParamService, ImobziUrlService } from '../imobzi-urls-params/imobziUrls.service';
-
-import { PersonDTO } from './imobziPeople.dtos';
 import { ImobziPeopleProvider } from './imobziPeople.providers';
 
-const personMock: Partial<PersonDTO> = {
+const personMock = {
   db_id: 123412421234,
-  fullname: 'john doe sauro',
-  email: 'john@example.com',
-  code: '23',
-  fields: {
-    group_personal: [
-      [],
-      [],
-      [],
-      [],
-      [{ field_id: 'marital_status', value: 'single' }],
-      [],
-      [{ field_id: 'profession', value: 'Developer' }],
-      [{ field_id: 'gender', value: 'Male' }],
-    ],
-  },
 };
 
 describe('ImobziPeopleProvider', () => {
@@ -57,15 +40,7 @@ describe('ImobziPeopleProvider', () => {
   });
 
   test('getPersonMainDataFromImobzi', async () => {
-    const result = await imobziPeopleProvider.getPersonMainDataFromImobzi(personMock.db_id);
-    expect(result).toEqual({
-      id_imobzi: '123412421234',
-      fullname: 'john doe sauro',
-      email: 'john@example.com',
-      code_imobzi: '23',
-      maritalStatus: 'single',
-      gender: 'Male',
-      profession: 'Developer',
-    });
+    const result = await imobziPeopleProvider.getPersonFullDataFromImobzi(personMock.db_id);
+    expect(result).toEqual(personMock);
   });
 });

@@ -1,15 +1,33 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { ImobziPersonDTO } from './imobziPeople.dtos';
 import { ImobziPeopleProvider } from './imobziPeople.providers';
 import { ImobziPeopleService } from './imobziPeople.service';
 
-const getPersonMainDataFromImobziMock = [''];
+const personFullDataFromImobziMock: Partial<ImobziPersonDTO> = {
+  db_id: 123412421234,
+  fullname: 'john doe sauro',
+  email: 'john@example.com',
+  code: '23',
+  fields: {
+    group_personal: [
+      [],
+      [],
+      [],
+      [],
+      [{ field_id: 'marital_status', value: 'single' }],
+      [],
+      [{ field_id: 'profession', value: 'Developer' }],
+      [{ field_id: 'gender', value: 'Male' }],
+    ],
+  },
+};
 
 describe('ImobziPeopleService', () => {
   let imobziPeopleService: ImobziPeopleService;
-  let imobziPeopleProviderMock: { getPersonMainDataFromImobzi: jest.Mock };
+  let imobziPeopleProviderMock: { getPersonFullDataFromImobzi: jest.Mock };
 
   beforeEach(async () => {
-    imobziPeopleProviderMock = { getPersonMainDataFromImobzi: jest.fn() };
+    imobziPeopleProviderMock = { getPersonFullDataFromImobzi: jest.fn() };
 
     const moduleRef: TestingModule = await Test.createTestingModule({
       providers: [
@@ -21,12 +39,20 @@ describe('ImobziPeopleService', () => {
       ],
     }).compile();
 
-    imobziPeopleProviderMock.getPersonMainDataFromImobzi.mockResolvedValue(getPersonMainDataFromImobziMock);
+    imobziPeopleProviderMock.getPersonFullDataFromImobzi.mockResolvedValue(personFullDataFromImobziMock);
     imobziPeopleService = moduleRef.get<ImobziPeopleService>(ImobziPeopleService);
   });
 
   test('getPersonDataToDb', async () => {
-    const result = await imobziPeopleService.getPersonDataToDb(12345);
-    expect(result).toBe(getPersonMainDataFromImobziMock);
+    const result = await imobziPeopleService.formatPersonDataToDb(12345);
+    expect(result).toEqual({
+      id_imobzi: '123412421234',
+      fullname: 'john doe sauro',
+      email: 'john@example.com',
+      code_imobzi: '23',
+      maritalStatus: 'single',
+      gender: 'Male',
+      profession: 'Developer',
+    });
   });
 });

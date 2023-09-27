@@ -1,4 +1,4 @@
-export interface OrganizationDTO {
+export interface ImobziOrganizationDTO {
   code?: string;
   landlord_account_id?: any;
   review_pending?: boolean;

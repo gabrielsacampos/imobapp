@@ -62,41 +62,13 @@ export class ImobziPropertiesProvider {
     }
   }
 
-  async getPropertyMainDataFromImobzi(propertyId: number): Promise<any> {
+  async getPropertyFullDataFromImobzi(id_imobzi: number | string): Promise<any> {
     try {
       const { data } = await this.httpService.axiosRef.get<PropertyDetailsDTO>(
-        this.imobziUrl.urlPropertyDetails(propertyId),
+        this.imobziUrl.urlPropertyDetails(id_imobzi),
         this.imobziParam,
       );
-      const {
-        db_id: id_imobzi, // property returns id as string xD
-        alternative_code,
-        area,
-        building_id,
-        sale_value,
-        rental_value,
-        status,
-        property_type: type,
-        garage,
-        suite,
-        bedroom,
-        active,
-      } = data;
-
-      return {
-        id_imobzi,
-        alternative_code,
-        area,
-        building_id,
-        sale_value,
-        rental_value,
-        status,
-        type,
-        garage,
-        suite,
-        bedroom,
-        active,
-      };
+      return data;
     } catch (error) {
       console.error(error.message);
     }

@@ -1,6 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { isArray } from 'class-validator';
 import { PrismaModule } from 'src/database/prisma.module';
 import { PrismaService } from 'src/database/prisma.service';
+import { ImobziOrganizationsService } from '../imobzi-organizations/imobziOrganizations.service';
+import { ImobziPeopleService } from '../imobzi-people/imobziPeople.service';
 import { ImobziContactsProvider } from './imobziContacts.provider';
 // import { ImobziContactsProvider } from './imobziContacts.provider';
 import { ImobziContactsService } from './ImobziContacts.service';
@@ -42,6 +45,9 @@ describe('ImobziContactsService', () => {
 
   // type mocks
   let imobziContactsProviderMock: { getAllContacts: jest.Mock };
+  let imobziOrganizationsServiceMock: { formatOrgDataToDb: jest.Mock };
+  let imobziPeopleServiceMock: { formatPersonDataToDb: jest.Mock };
+
   let prismaServiceMock: {
     organization: { findMany: jest.Mock };
     person: { findMany: jest.Mock };
@@ -61,6 +67,14 @@ describe('ImobziContactsService', () => {
       getAllContacts: jest.fn(),
     };
 
+    imobziOrganizationsServiceMock = {
+      formatOrgDataToDb: jest.fn(),
+    };
+
+    imobziPeopleServiceMock = {
+      formatPersonDataToDb: jest.fn(),
+    };
+
     const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [PrismaModule],
       providers: [
@@ -72,6 +86,14 @@ describe('ImobziContactsService', () => {
         {
           provide: ImobziContactsProvider,
           useValue: imobziContactsProviderMock,
+        },
+        {
+          provide: ImobziPeopleService,
+          useValue: imobziPeopleServiceMock,
+        },
+        {
+          provide: ImobziOrganizationsService,
+          useValue: imobziOrganizationsServiceMock,
         },
       ],
     }).compile();
@@ -109,12 +131,10 @@ describe('ImobziContactsService', () => {
   });
 
   test('getContactsImobziIdsToUpdate returns array of orgs an people imobzi ids with updates needed', async () => {
-    const { peopleImobziIdsToUpdate, orgsImobziIdsToUpdate } =
-      await imobziContactsService.getContactsImobziIdsToUpdate();
-
-    expect(peopleImobziIdsToUpdate).toEqual(expect.arrayContaining([allContactsMock[2].contact_id]));
-    expect(orgsImobziIdsToUpdate).toEqual(
-      expect.arrayContaining([allContactsMock[0].contact_id, allContactsMock[1].contact_id]),
-    );
+    const { peopleToUpdate, orgsToUpdate } = await imobziContactsService.getContactsToStoreIntoDb();
+    expect(imobziPeopleServiceMock.formatPersonDataToDb).toHaveBeenCalled();
+    expect(imobziOrganizationsServiceMock.formatOrgDataToDb).toHaveBeenCalled();
+    expect(isArray(peopleToUpdate)).toBe(true);
+    expect(isArray(orgsToUpdate)).toBe(true);
   });
 });
