@@ -4,7 +4,7 @@ import { Queue } from 'bull';
 import { ImobziContactsService } from './imobzi-contacts/ImobziContacts.service';
 import { ImobziInvoicesService } from './imobzi-invoices/imobziInvoices.service';
 import { ImobziLeasesService } from './imobzi-leases/imobziLeases.service';
-import { ImobziPropertiesService } from './imobzi-properties/imobziProperties.provider';
+import { ImobziPropertiesService } from './imobzi-properties/imobziProperties.service';
 
 @Injectable()
 export class ImobziQueueProducer {

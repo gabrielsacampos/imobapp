@@ -7,7 +7,7 @@ import { LeaseDTO } from './imobzi-leases/imobziLeases.dtos';
 import { ImobziOrganizationsService } from './imobzi-organizations/imobziOrganizations.service';
 import { ImobziPeopleService } from './imobzi-people/imobziPeople.service';
 import { PropertyDTO } from './imobzi-properties/imobziProperties.dtos';
-import { ImobziPropertiesService } from './imobzi-properties/imobziProperties.provider';
+import { ImobziPropertiesService } from './imobzi-properties/imobziProperties.service';
 
 import { ImobziService } from './imobzi.service';
 

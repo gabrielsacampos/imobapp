@@ -9,7 +9,7 @@ import { ImobziLeasesService } from './imobzi-leases/imobziLeases.service';
 import { ImobziOrganizationsService } from './imobzi-organizations/imobziOrganizations.service';
 import { ImobziPeopleService } from './imobzi-people/imobziPeople.service';
 import { PropertyDTO } from './imobzi-properties/imobziProperties.dtos';
-import { ImobziPropertiesService } from './imobzi-properties/imobziProperties.provider';
+import { ImobziPropertiesService } from './imobzi-properties/imobziProperties.service';
 
 @Injectable()
 export class ImobziService {

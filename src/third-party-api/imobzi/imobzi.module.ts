@@ -16,7 +16,7 @@ import { ImobziContactsService } from './imobzi-contacts/ImobziContacts.service'
 import { ImobziBuildingsModule } from './imobzi-buildings/imobziBuildings.module';
 import { ImobziBuildingsService } from './imobzi-buildings/imobziBuildings.service';
 import { ImobziOrganizationsModule } from './imobzi-organizations/imobziOrganizations.module';
-import { ImobziPropertiesService } from './imobzi-properties/imobziProperties.provider';
+import { ImobziPropertiesService } from './imobzi-properties/imobziProperties.service';
 import { HttpModule } from '@nestjs/axios';
 import { ImobziParamService, ImobziUrlService } from './imobzi-urls-params/imobziUrls.service';
 

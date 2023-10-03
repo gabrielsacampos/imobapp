@@ -3,7 +3,7 @@ import { PrismaService } from 'src/database/prisma.service';
 import { ImobziContactsService } from './imobzi-contacts/ImobziContacts.service';
 import { ImobziInvoicesService } from './imobzi-invoices/imobziInvoices.service';
 import { ImobziLeasesService } from './imobzi-leases/imobziLeases.service';
-import { ImobziPropertiesService } from './imobzi-properties/imobziProperties.provider';
+import { ImobziPropertiesService } from './imobzi-properties/imobziProperties.service';
 import { ImobziService } from './imobzi.service';
 
 describe('ImobziService', () => {

@@ -2,7 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Test, TestingModule } from '@nestjs/testing';
 import { ImobziParamService, ImobziUrlService } from '../imobzi-urls-params/imobziUrls.service';
 import { imobziPropertiesMock, imobziPropertyMock } from './imobziProperties.mocks';
-import { ImobziPropertiesService } from './imobziProperties.provider';
+import { ImobziPropertiesService } from './imobziProperties.service';
 
 describe('ImobziPropertiesService', () => {
   let imobziPropertiesService: ImobziPropertiesService;

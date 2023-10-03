@@ -5,7 +5,7 @@ import { PrismaService } from 'src/database/prisma.service';
 import { PrismaModule } from 'src/database/prisma.module';
 import { ImobziParamService, ImobziUrlService } from '../imobzi-urls-params/imobziUrls.service';
 import { ImobziUrlParamModule } from '../imobzi-urls-params/imobziUrls.module';
-import { ImobziPropertiesService } from './imobziProperties.provider';
+import { ImobziPropertiesService } from './imobziProperties.service';
 
 @Module({
   imports: [
