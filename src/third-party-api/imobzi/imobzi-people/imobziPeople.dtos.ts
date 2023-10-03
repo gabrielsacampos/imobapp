@@ -49,10 +49,10 @@ export interface User {
 }
 
 export interface Phone {
-  type: string;
+  type?: string;
   number: string;
-  country_code: string;
-  alpha2Code: string;
+  country_code?: string;
+  alpha2Code?: string;
 }
 
 export interface Fields {

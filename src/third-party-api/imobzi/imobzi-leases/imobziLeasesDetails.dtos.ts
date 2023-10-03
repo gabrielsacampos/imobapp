@@ -7,7 +7,7 @@ export interface ImobziLeaseDetailsDTO {
   last_annual_readjustment_at: string;
   next_invoice_due_date: string;
   updated_at: string;
-  beneficiaries: ImobziLeaseBeneficiary[];
+  beneficiaries: ImobziLeaseBeneficiaryDTO[];
   lease_type: string;
   value: number;
   duration: number;
@@ -46,7 +46,7 @@ export interface ImobziLeaseDetailsDTO {
   next_invoice_generate_in: string;
   include_in_dimob: boolean;
   fine_percent_late_payment: number;
-  items: Item[];
+  items: ImobziLeaseItemDTO[];
   created_at: string;
   end_at: string;
   guarantee_amount_months: number;
@@ -58,7 +58,7 @@ export interface ImobziLeaseDetailsDTO {
   due_day: string;
 }
 
-export interface ImobziLeaseBeneficiary {
+export interface ImobziLeaseBeneficiaryDTO {
   code?: string;
   neighborhood?: string;
   landlord_account_id?: string;
@@ -355,7 +355,7 @@ export interface Checklist {
   order: number;
 }
 
-export interface Item {
+export interface ImobziLeaseItemDTO {
   landlords: any[];
   due_date: string;
   repeat_total: number;

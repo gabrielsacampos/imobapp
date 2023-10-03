@@ -1,17 +1,17 @@
 import { NotAcceptableException } from '@nestjs/common';
 import { Type } from 'class-transformer';
 import { IsNotEmpty, ValidateIf, ValidateNested } from 'class-validator';
-import { OwnersCreateDTO } from './owners/ownersCreate.dtos';
+import { OwnersCreateDTO } from './owners/OwnerCreate.dtos';
 
-export class PropertiesCreateDTO {
+export class PropertyCreateDTO {
   @IsNotEmpty()
   id_imobzi: string;
 
   @IsNotEmpty()
-  unit: string;
+  id_building_imobzi: string;
 
   @IsNotEmpty()
-  id_building_imobzi: string;
+  unit: string;
 
   @IsNotEmpty()
   active: boolean;
@@ -50,5 +50,5 @@ export class PropertiesCreateDTO {
   })
   @ValidateNested()
   @Type(() => OwnersCreateDTO)
-  owners!: OwnersCreateDTO;
+  owners: OwnersCreateDTO[];
 }

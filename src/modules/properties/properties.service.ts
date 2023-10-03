@@ -1,40 +1,33 @@
 import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/database/prisma.service';
-import { PropertiesCreateDTO } from './propertiesCreate.dtos';
+import { PropertyCreateDTO } from './propertiesCreate.dtos';
+
 import { PropertiesUpdateDTO } from './propertiesUpdate.dtos';
 
 @Injectable()
 export class PropertiesService {
   constructor(private prisma: PrismaService) {}
 
-  async create(data: PropertiesCreateDTO) {
-    const existsIdProperty = await this.prisma.property.findFirst({
+  async create(data: PropertyCreateDTO) {
+    const existsIdProperty = await this.prisma.property.findUnique({
       where: { id_imobzi: data.id_imobzi },
-      include: { building: true },
+      include: { buildings: { select: { name: true } } },
     });
 
     if (existsIdProperty) {
       throw new NotAcceptableException(
-        `ID: ${data.id_imobzi} already registered to property: ${existsIdProperty.unit} - ${existsIdProperty.building.name} `,
+        `ID: ${data.id_imobzi} already registered to property: ${existsIdProperty.unit} - ${existsIdProperty.buildings.name} `,
       );
     }
 
-    await this.prisma.property.create({
-      data: {
-        ...data,
-        owners: {
-          create: data.owners,
-        },
-      },
-    });
-
+    await this.prisma.property.create({ data: { ...data, owners: { createMany: { data: data.owners } } } });
     return { message: `Property #${data.id_imobzi} created` };
   }
 
   async findAll() {
     return await this.prisma.property.findMany({
       include: {
-        building: {
+        buildings: {
           select: {
             name: true,
           },
@@ -47,7 +40,7 @@ export class PropertiesService {
     const found = await this.prisma.property.findUnique({
       where: { id_imobzi },
       include: {
-        building: {
+        buildings: {
           select: { name: true },
         },
       },
@@ -63,12 +56,9 @@ export class PropertiesService {
       where: { id_imobzi },
       data: {
         ...data,
-        id_building_imobzi: data.id_building_imobzi,
         owners: {
           deleteMany: [{ id_property_imobzi: id_imobzi }],
-          createMany: {
-            data: data.owners,
-          },
+          createMany: { data: data.owners },
         },
       },
     });

@@ -1,57 +1,53 @@
+import { HttpService } from '@nestjs/axios';
 import { Test, TestingModule } from '@nestjs/testing';
-import { ImobziOrganizationDTO } from './imobziOrganizations.dtos';
-import { ImobziOrganizationsProvider } from './imobziOrganizations.provider';
+import { ImobziParamService, ImobziUrlService } from '../imobzi-urls-params/imobziUrls.service';
+import { imobziOrganizationMock } from './imobziOrganizations.mock';
 import { ImobziOrganizationsService } from './imobziOrganizations.service';
-
-const orgFullDataFromImobziMock: ImobziOrganizationDTO = {
-  db_id: 12345123451244,
-  email: 'thisCompany@mymail.com',
-  name: 'This Company', //sometimes API returns as BigInt > we need to convert it to string;
-  fields: {
-    group_company_data: [[{}, {}, {}, {}, { field_id: 'cnpj', value: '11.111.111/0001-11' }]],
-    group_address: [[{ field_id: 'address', value: 'some address' }]],
-  },
-  persons: [
-    // third-party-api uses 'persons' instead of 'people'
-    {
-      associate_type: 'Legal',
-      person_id: 11111111111,
-    },
-  ], //here is bigInt again
-
-  phone: { number: '(11) 0000-0000' },
-};
 
 describe('ImobziOrganizationsService', () => {
   let imobziOrganizationsService: ImobziOrganizationsService;
-  let imobziOrganizationsProviderMock: { getOrgFullDataFromImobzi: jest.Mock };
+  let httpServiceMock: { axiosRef: { get: jest.Mock } };
 
   beforeEach(async () => {
-    imobziOrganizationsProviderMock = { getOrgFullDataFromImobzi: jest.fn() };
+    httpServiceMock = {
+      axiosRef: { get: jest.fn() },
+    };
 
     const moduleRef: TestingModule = await Test.createTestingModule({
       providers: [
+        ImobziParamService,
+        ImobziUrlService,
         ImobziOrganizationsService,
-        { provide: ImobziOrganizationsProvider, useValue: imobziOrganizationsProviderMock },
+        {
+          provide: HttpService,
+          useValue: httpServiceMock,
+        },
       ],
     }).compile();
 
     imobziOrganizationsService = moduleRef.get<ImobziOrganizationsService>(ImobziOrganizationsService);
 
-    imobziOrganizationsProviderMock.getOrgFullDataFromImobzi.mockResolvedValue(orgFullDataFromImobziMock);
+    httpServiceMock.axiosRef.get.mockImplementation((url) => {
+      const id = url.split('/').pop();
+      if (id === imobziOrganizationMock.db_id.toString()) {
+        return Promise.resolve({ data: imobziOrganizationMock });
+      } else {
+        return Promise.reject(`id ${id} not found at organiations`);
+      }
+    });
   });
 
-  test('getOrgDataToDb', async () => {
-    const result = await imobziOrganizationsService.formatOrgDataToDb(1234);
+  test('getRequiredOrganizationDataToDb', async () => {
+    const result = await imobziOrganizationsService.getRequiredOrganizationDataToDb('99999999999999');
     expect(result).toEqual({
-      address: 'some address',
-      cnpj: '11.111.111/0001-11',
-      person_id_representative: 11111111111,
-      representative_type: 'Legal',
-      phone: '(11) 0000-0000',
-      id_imobzi: '12345123451244',
-      email: 'thisCompany@mymail.com',
-      name: 'This Company',
+      address: 'The Big Avenue, 999',
+      cnpj: '99.999.999/0009-99',
+      id_person_representative: '1111111111111',
+      representative_type: 'Boss',
+      phone: '(81) 99361-2341',
+      id_imobzi: '99999999999999',
+      email: 'thecompanymail@email.com',
+      name: 'The Company Inc',
     });
   });
 });

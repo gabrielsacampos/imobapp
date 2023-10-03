@@ -1,42 +1,58 @@
+import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/database/prisma.service';
-import { ImobziLeasesProvider } from './imobziLeases.provider';
-import { ImobziLeaseBeneficiary, ImobziLeaseDetailsDTO } from './imobziLeasesDetails.dtos';
+import { BeneficiariesCreateDTO } from 'src/modules/leases/lease-beneficiaries/lease-beneficiaries.dtos';
+import { LeaseItemsCreateDTO } from 'src/modules/leases/lease-items/leaseItemsCreate.dtos';
+import { LeasesCreateDTO } from 'src/modules/leases/leasesCreate.dtos';
+import { ImobziParamService, ImobziUrlService } from '../imobzi-urls-params/imobziUrls.service';
+import { ImobziLeasesDTO, LeaseDTO } from './imobziLeases.dtos';
+import { ImobziLeaseBeneficiaryDTO, ImobziLeaseDetailsDTO, ImobziLeaseItemDTO } from './imobziLeasesDetails.dtos';
 
 @Injectable()
 export class ImobziLeasesService {
   constructor(
-    private readonly imobziLeasesProvider: ImobziLeasesProvider,
-    private readonly prisma: PrismaService,
+    private readonly httpService: HttpService,
+    private readonly imobziUrlService: ImobziUrlService,
+    private readonly imobziParaService: ImobziParamService,
   ) {}
 
-  async getLeasesMissingIdsFromImobzi(leasesOnDb: any[]): Promise<any> {
-    const leasesFromApi = await this.imobziLeasesProvider.getAllLeasesFromImobzi();
+  async getAllLeasesFromImobzi(): Promise<LeaseDTO[]> {
+    try {
+      const allLeases = [];
+      let cursor = '';
 
-    const leasesOnDbIds = leasesOnDb.map((leaseOnDb) => leaseOnDb.id_imobzi);
-    const leasesFromApiIds = leasesFromApi.map((leaseFromApi) => leaseFromApi.db_id.toString());
+      do {
+        const { data } = await this.httpService.axiosRef.get<ImobziLeasesDTO>(
+          this.imobziUrlService.urlAllLeases(cursor),
+          this.imobziParaService,
+        );
+        allLeases.push(...data.leases);
+        cursor = data.cursor;
+      } while (cursor);
 
-    const missingIdsOnDb: string[] = leasesFromApiIds.filter((leaseFromApiId: string) => {
-      // if DB.leases does not include the current id from API
-      return !leasesOnDbIds.includes(leaseFromApiId);
-    });
-
-    return missingIdsOnDb;
+      return allLeases;
+    } catch (error) {
+      console.error(error.message);
+    }
   }
 
-  filterLeaseMainDataToDb(leaseFullDataFromImobzi: Partial<ImobziLeaseDetailsDTO>): object {
-    const id_annual_readjustment_imobzi = leaseFullDataFromImobzi.annual_readjustment.db_id.toString();
-    const id_property_imobzi = leaseFullDataFromImobzi.property.db_id.toString();
-    const guarantee_type = leaseFullDataFromImobzi.guarantee?.guarantee_type;
-    const guarantee_value = leaseFullDataFromImobzi.guarantee?.details?.value;
+  getRequiredLeaseBeneficiariesDataToDb(leaseBeneficiaries: ImobziLeaseBeneficiaryDTO[]): BeneficiariesCreateDTO[] {
+    return leaseBeneficiaries.map((beneficiary) => {
+      const id_beneficiary_organization_imobzi =
+        beneficiary.type === 'organization' ? beneficiary.db_id.toString() : null;
+      const id_beneficiary_person_imobzi = beneficiary.type === 'person' ? beneficiary.db_id.toString() : null;
+      const share = beneficiary.percent;
+      return { id_beneficiary_organization_imobzi, id_beneficiary_person_imobzi, share };
+    });
+  }
 
-    const leaseItems = leaseFullDataFromImobzi.items.map((item) => {
+  getRequiredLeaseItemsDataToDb(leaseItems: ImobziLeaseItemDTO[]): LeaseItemsCreateDTO[] {
+    return leaseItems.map((item) => {
       const {
         due_date,
         repeat_total,
         repeat_index,
         description,
-        charge_management_fee,
+        charge_management_fee: management_fee,
         recurrent,
         value,
         until_due_date,
@@ -50,7 +66,7 @@ export class ImobziLeasesService {
         repeat_total,
         repeat_index,
         description,
-        charge_management_fee,
+        management_fee,
         recurrent,
         value,
         until_due_date,
@@ -59,22 +75,26 @@ export class ImobziLeasesService {
         start_date,
       };
     });
+  }
 
+  async getRequiredLeaseDataToDb(leaseId: string): Promise<LeasesCreateDTO> {
+    const { data } = await this.httpService.axiosRef.get<ImobziLeaseDetailsDTO>(
+      this.imobziUrlService.urlLeaseDetails(leaseId),
+      this.imobziParaService,
+    );
+
+    const id_annual_readjustment_imobzi = data.annual_readjustment?.db_id.toString();
+    const id_property_imobzi = data.property.db_id.toString();
+    const guarantee_type = data.guarantee?.guarantee_type;
+    const guarantee_value = data.guarantee?.details?.value;
     const id_main_guarantor_imobzi =
-      leaseFullDataFromImobzi.guarantee?.guarantee_type === 'guarantor'
-        ? leaseFullDataFromImobzi.guarantee.sponsor.db_id.toString()
-        : null;
-
+      data.guarantee?.guarantee_type === 'guarantor' ? data.guarantee.sponsor.db_id.toString() : null;
     const id_tenant_organization_imobzi =
-      leaseFullDataFromImobzi.tenants[0].type === 'organization'
-        ? leaseFullDataFromImobzi.tenants[0].db_id.toString()
-        : null;
-    const id_tenant_person_imobzi =
-      leaseFullDataFromImobzi.tenants[0].type === 'person' ? leaseFullDataFromImobzi.tenants[0].db_id.toString() : null;
-
-    const fee = leaseFullDataFromImobzi.management_fee.percent;
-    const id_imobzi = leaseFullDataFromImobzi.db_id.toString();
-    const updated_at = new Date(leaseFullDataFromImobzi.updated_at);
+      data.tenants[0].type === 'organization' ? data.tenants[0].db_id.toString() : null;
+    const id_tenant_person_imobzi = data.tenants[0].type === 'person' ? data.tenants[0].db_id.toString() : null;
+    const fee = data.management_fee.percent;
+    const id_imobzi = data.db_id.toString();
+    const updated_at = new Date(data.updated_at);
     const {
       status,
       value: lease_value,
@@ -84,16 +104,10 @@ export class ImobziLeasesService {
       start_at,
       code: code_imobzi,
       include_in_dimob,
-    } = leaseFullDataFromImobzi;
+    } = data;
 
-    const beneficiaries = leaseFullDataFromImobzi.beneficiaries.map((beneficiary: ImobziLeaseBeneficiary) => {
-      const id_lease_imobzi = leaseFullDataFromImobzi.db_id.toString();
-      const id_beneficiary_organization = beneficiary.type === 'organization' ? beneficiary.db_id.toString() : null;
-      const id_beneficiary_person = beneficiary.type === 'person' ? beneficiary.db_id.toString() : null;
-      const share = beneficiary.percent;
-      return { id_lease_imobzi, id_beneficiary_organization, id_beneficiary_person, share };
-    });
-
+    const beneficiaries = this.getRequiredLeaseBeneficiariesDataToDb(data.beneficiaries);
+    const lease_items = this.getRequiredLeaseItemsDataToDb(data.items);
     return {
       beneficiaries,
       updated_at,
@@ -114,35 +128,7 @@ export class ImobziLeasesService {
       id_property_imobzi,
       start_at,
       status,
-      leaseItems,
+      lease_items,
     };
-  }
-
-  // Imobzi's API does not return property 'updated_at' at leases pagination. We need to check lease by lease to get main details from them, including 'updated_at'
-  async getLeasesToUpdateDb(): Promise<any[]> {
-    const leasesOnDb = await this.prisma.lease.findMany();
-    const missingLeasesIdsFromImobzi = await this.getLeasesMissingIdsFromImobzi(leasesOnDb);
-
-    const leasesFullDataToUpdate: ImobziLeaseDetailsDTO[] = [];
-
-    // for existing lease on db, verify last updated and set on leaseFullData to restore data
-    for (const leaseOnDb of leasesOnDb) {
-      const leaseFromApi = await this.imobziLeasesProvider.getLeaseFullDataFromImobzi(leaseOnDb.id_imobzi);
-
-      if (new Date(leaseOnDb.updated_at) <= new Date(leaseFromApi.updated_at)) {
-        leasesFullDataToUpdate.push(leaseFromApi);
-      }
-    }
-
-    // for missing id on db, get data from Api to store into db
-    for (const id of missingLeasesIdsFromImobzi) {
-      const leaseFromApi = await this.imobziLeasesProvider.getLeaseFullDataFromImobzi(id);
-      leasesFullDataToUpdate.push(leaseFromApi);
-    }
-
-    // treating data from API to store into db.
-    return leasesFullDataToUpdate.map((leaseFullData) => {
-      return this.filterLeaseMainDataToDb(leaseFullData);
-    });
   }
 }

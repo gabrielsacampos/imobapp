@@ -20,7 +20,7 @@ export class BuildingsCreateDTO {
     description: 'Buildin`s address',
     example: 'Great Street, 480',
   })
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'emptiiii' })
   address: string;
 
   @ApiProperty({

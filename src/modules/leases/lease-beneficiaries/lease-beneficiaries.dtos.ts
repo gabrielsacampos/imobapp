@@ -10,9 +10,8 @@ export class BeneficiariesCreateDTO {
     }
     return true;
   })
-  id_beneficiary_organization?: bigint;
-  id_beneficiary_person?: bigint;
-  id_lease: bigint;
+  id_beneficiary_organization_imobzi?: string;
+  id_beneficiary_person_imobzi?: string;
 
   @IsNotEmpty()
   share: number;

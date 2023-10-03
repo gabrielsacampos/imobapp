@@ -1,50 +1,65 @@
+import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
+import { OrganizationsCreateDTO } from 'src/modules/organizations/organizationsCreate.dtos';
+import { ImobziParamService, ImobziUrlService } from '../imobzi-urls-params/imobziUrls.service';
 import { GroupAddress, GroupCompanyDaum } from './imobziOrganizations.dtos';
-import { ImobziOrganizationsProvider } from './imobziOrganizations.provider';
 
 @Injectable()
 export class ImobziOrganizationsService {
-  constructor(private readonly imobziOrganizationsProvider: ImobziOrganizationsProvider) {}
+  constructor(
+    private readonly httpService: HttpService,
+    private readonly imobziUrl: ImobziUrlService,
+    private readonly imobziParam: ImobziParamService,
+  ) {}
 
-  async formatOrgDataToDb(id_org_imobzi: number | string): Promise<any> {
-    const organizationFullData = await this.imobziOrganizationsProvider.getOrgFullDataFromImobzi(id_org_imobzi);
-    let address: any;
-    let cnpj: any;
+  async getRequiredOrganizationDataToDb(id_imobzi: string): Promise<OrganizationsCreateDTO> {
+    try {
+      const { data } = await this.httpService.axiosRef.get(
+        this.imobziUrl.urlOrganizationDetails(id_imobzi),
+        this.imobziParam,
+      );
 
-    for (const item of organizationFullData.fields.group_address) {
-      address = item.find((item: GroupAddress) => {
-        return item.field_id === 'address';
-      });
-      if (address) {
-        address = address.value;
-        break;
+      let address: any;
+      let cnpj: any;
+
+      for (const item of data.fields.group_address) {
+        address = item.find((item: GroupAddress) => {
+          return item.field_id === 'address';
+        });
+        if (address) {
+          address = address.value;
+          break;
+        }
       }
-    }
-    for (const item of organizationFullData.fields.group_company_data) {
-      cnpj = item.find((item: GroupCompanyDaum) => {
-        return item.field_id === 'cnpj';
-      });
-      if (cnpj) {
-        cnpj = cnpj.value;
-        break;
+      for (const item of data.fields.group_company_data) {
+        cnpj = item.find((item: GroupCompanyDaum) => {
+          return item.field_id === 'cnpj';
+        });
+        if (cnpj) {
+          cnpj = cnpj.value;
+          break;
+        }
       }
+
+      const id_person_representative = data.persons[0]?.person_id.toString(); // third-party-api uses 'persons' instead of 'people'
+      const representative_type = data.persons[0]?.associate_type;
+      const phone = data.phone?.number;
+      const { email, name } = data;
+
+      return {
+        address,
+        cnpj,
+        id_person_representative,
+        representative_type,
+        phone,
+        id_imobzi,
+        email,
+        name,
+      };
+    } catch (error) {
+      console.error('error on getOrgDataToDb function');
+      console.error('request with id', id_imobzi);
+      console.error(error.message);
     }
-
-    const person_id_representative = organizationFullData.persons[0].person_id; // third-party-api uses 'persons' instead of 'people'
-    const representative_type = organizationFullData.persons[0].associate_type;
-    const phone = organizationFullData.phone.number;
-    const id_imobzi = organizationFullData.db_id.toString();
-    const { email, name } = organizationFullData;
-
-    return {
-      address,
-      cnpj,
-      person_id_representative,
-      representative_type,
-      phone,
-      id_imobzi,
-      email,
-      name,
-    };
   }
 }

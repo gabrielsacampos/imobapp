@@ -1,4 +1,4 @@
-export const getInvoiceFullDataFromImobziMock = {
+export const imobziInvoiceMock = {
   lease: { db_id: 33333333 },
   invoice_id: 'abc',
   status: 'paid',
@@ -44,50 +44,19 @@ export const getInvoiceFullDataFromImobziMock = {
   ],
 };
 
-export const getInvoiceMainDataFromImobziMock = {
-  id_imobzi: 'abc',
-  status: 'paid',
-  reference_start_at: '2023-01-01',
-  reference_end_at: '2023-01-31',
-  due_date: '2023-01-31',
-  invoice_url: 'www.site.com',
-  barcode: '4444444 44444444 444444 4444',
-  bank_slip_id: '123456',
-  bank_slip_url: undefined,
-  total_value: 1500,
-  interest_value: 0,
-  paid_at: '2023-01-31',
-  credit_at: '2023-02-02',
-  paid_manual: false,
-  bank_fee_value: 3.2,
-  account_credit: 'inter',
-  onlending_value: 1350,
-  management_fee: 150,
-  id_lease_imobzi: '33333333',
-  items: [
-    {
-      until_due_date: false,
-      item_type: 'lease_value',
-      id_imobzi: '6547366854ab11ed8c9a13cb5bf0c9b6',
-      id_invoice_imobzi: 'abc',
-      description: 'Aluguel ref. 2023-01-01 a 2023-01-31',
-      behavior: 'charge_tenant_and_onlend',
-      include_in_dimob: true,
-      management_fee: true,
-      value: 1000,
-      due_date: undefined,
-    },
-    {
-      until_due_date: false,
-      item_type: null,
-      id_imobzi: '6547417554ab11ed97a313cb5bf0c9b6',
-      id_invoice_imobzi: 'abc',
-      description: 'Iptu',
-      behavior: 'charge_tenant',
-      include_in_dimob: false,
-      management_fee: false,
-      value: 500,
-      due_date: '2022-10-25',
-    },
-  ],
+export const imobziInvoicesMock = {
+  page1: {
+    next_page: 2,
+    invoices: [
+      { invoice_id: 'abc123', status: 'paid' },
+      { invoice_id: 'def456', status: 'pending' },
+    ],
+  },
+  page2: {
+    next_page: null,
+    invoices: [
+      { invoice_id: 'ghi123', status: 'paid' },
+      { invoice_id: 'jkl456', status: 'pending' },
+    ],
+  },
 };

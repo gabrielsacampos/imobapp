@@ -8,9 +8,6 @@ export class ItemsInvoiceDTO {
   until_due_date: boolean;
 
   @IsNotEmpty()
-  id_invoice_imobzi: string;
-
-  @IsNotEmpty()
   description: string;
 
   @IsNotEmpty()

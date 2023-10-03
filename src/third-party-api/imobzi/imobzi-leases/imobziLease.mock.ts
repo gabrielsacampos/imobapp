@@ -1,4 +1,4 @@
-export const getLeaseFullDataFromImobziMock = {
+export const imobziLeaseMock = {
   updated_at: '2023-01-01T00:00:00.000Z',
   duration: 30,
   start_at: '2023-01-01',
@@ -73,7 +73,7 @@ export const getLeaseFullDataFromImobziMock = {
         {
           default: true,
           pix_key_type: 'cpf_cnpj',
-          pix_key: '001.867.244-20',
+          pix_key: '002.002.002/0002-00',
         },
       ],
 
@@ -85,65 +85,19 @@ export const getLeaseFullDataFromImobziMock = {
   ],
 };
 
-export const filterLeasesMainDataToDbMock = {
-  beneficiaries: [
-    {
-      id_lease_imobzi: '11111111',
-      id_beneficiary_organization: null,
-      id_beneficiary_person: '11111111111',
-      share: 50,
-    },
-    {
-      id_lease_imobzi: '11111111',
-      id_beneficiary_organization: '22222222222',
-      id_beneficiary_person: null,
-      share: 50,
-    },
-  ],
-  updated_at: new Date('2023-01-01T00:00:00.000Z'),
-  id_annual_readjustment_imobzi: '999999999',
-  code_imobzi: '44',
-  duration: 30,
-  fee: 15,
-  guarantee_type: 'guarantor',
-  guarantee_value: 3000,
-  id_imobzi: '11111111',
-  id_tenant_organization_imobzi: null,
-  id_main_guarantor_imobzi: '4444444',
-  id_tenant_person_imobzi: '555555',
-  include_in_dimob: true,
-  indeterminate: true,
-  irrf: true,
-  lease_value: undefined,
-  id_property_imobzi: '3333333',
-  start_at: '2023-01-01',
-  status: 'active',
-  leaseItems: [
-    {
-      due_date: '2023-08-27',
-      repeat_total: 11,
-      description: 'Seguro Incêndio',
-      charge_management_fee: false,
-      recurrent: true,
-      value: 11.63,
-      until_due_date: false,
-      behavior: 'charge_tenant',
-      repeat_index: 2,
-      include_in_dimob: false,
-      start_date: '',
-    },
-    {
-      due_date: '2023-08-27',
-      repeat_total: 10,
-      description: 'IPTU',
-      charge_management_fee: false,
-      recurrent: true,
-      value: 85.69,
-      until_due_date: false,
-      behavior: 'charge_tenant_and_onlend',
-      repeat_index: 9,
-      include_in_dimob: false,
-      start_date: '',
-    },
-  ],
+export const imobziLeasesMock = {
+  page1: {
+    cursor: 'abc',
+    leases: [
+      { db_id: 111111111, status: 'active' },
+      { db_id: 222222222, status: 'active' },
+    ],
+  },
+  page2: {
+    cursor: null,
+    leases: [
+      { db_id: 333333333, status: 'active' },
+      { db_id: 444444444, status: 'active' },
+    ],
+  },
 };

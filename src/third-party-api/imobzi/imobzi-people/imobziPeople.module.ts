@@ -3,7 +3,6 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaService } from 'src/database/prisma.service';
 import { ImobziParamService, ImobziUrlService } from '../imobzi-urls-params/imobziUrls.service';
-import { ImobziPeopleProvider } from './imobziPeople.providers';
 import { ImobziPeopleService } from './imobziPeople.service';
 
 @Module({
@@ -14,7 +13,7 @@ import { ImobziPeopleService } from './imobziPeople.service';
       maxRedirects: 5,
     }),
   ],
-  providers: [ImobziPeopleProvider, ImobziPeopleService, PrismaService, ImobziParamService, ImobziUrlService],
+  providers: [ImobziPeopleService, PrismaService, ImobziParamService, ImobziUrlService],
   exports: [ImobziPeopleService],
 })
 export class ImobziPeopleModule {}

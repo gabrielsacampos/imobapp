@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { PropertiesService } from './properties.service';
-import { PropertiesCreateDTO } from './propertiesCreate.dtos';
+import { PropertyCreateDTO } from './propertiesCreate.dtos';
+
 import { PropertiesUpdateDTO } from './propertiesUpdate.dtos';
 
 @Controller('properties')
@@ -8,7 +9,7 @@ export class PropertiesController {
   constructor(private readonly propertiesService: PropertiesService) {}
 
   @Post()
-  async create(@Body() data: PropertiesCreateDTO) {
+  async create(@Body() data: PropertyCreateDTO) {
     return await this.propertiesService.create(data);
   }
 

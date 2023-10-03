@@ -60,18 +60,6 @@ export class LeasesCreateDTO {
   @Type(() => BeneficiariesCreateDTO)
   beneficiaries!: BeneficiariesCreateDTO[];
 
-  @ValidateIf((o) => {
-    const shareSum = o.beneficiaries.reduce((acc: number, curr: BeneficiariesCreateDTO) => {
-      acc += curr.share;
-      return acc;
-    }, 0);
-    if (shareSum !== 100) {
-      throw new NotAcceptableException('Sum of benficiaries share must be equal to 100');
-    }
-    return true;
-  })
-  share: number;
-
   @ValidateNested({
     message: 'You need to set at least one beneficiary to lease',
   })

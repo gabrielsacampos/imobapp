@@ -17,7 +17,7 @@ export class PeopleCreateDTO {
   @IsNotEmpty()
   phone: string;
 
-  birthdate?: Date;
+  birthdate?: string;
   alternative_address?: string;
   alternative_address_reference?: string;
   gender?: string;

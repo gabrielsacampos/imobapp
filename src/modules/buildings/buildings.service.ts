@@ -27,7 +27,7 @@ export class BuildingsService {
 
     await this.prisma.building.create({ data });
 
-    return { message: `${data.name} property created` };
+    return { message: `${data.name} building created` };
   }
 
   async findAll() {

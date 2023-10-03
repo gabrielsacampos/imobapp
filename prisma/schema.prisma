@@ -13,11 +13,11 @@ datasource db {
 model Person {
   id                            Int       @id @default(autoincrement())
   id_imobzi                     String    @unique
-  cpf                           String    @unique @db.VarChar(255)
+  cpf                           String?    @unique @db.VarChar(255)
   fullname                      String?
   birthdate                     DateTime?
-  email                         String    @db.VarChar(255)
-  phone                         String    @db.VarChar(255)
+  email                         String?    @db.VarChar(255)
+  phone                         String?   @db.VarChar(255)
   alternative_address           String?
   alternative_address_reference String?
   gender                        String?
@@ -50,9 +50,9 @@ model Organization {
   name String
   cnpj String @unique
 
-  representative_type String
-  phone               String
-  email               String
+  representative_type String?
+  phone               String?
+  email               String?
   address             String?
   created_at          DateTime @default(now())
   updated_at          DateTime @updatedAt
@@ -87,7 +87,7 @@ model Property {
   status    String
 
   id_building_imobzi String
-  building           Building @relation(fields: [id_building_imobzi], references: [id_imobzi], onDelete: Cascade, onUpdate: Cascade)
+  buildings           Building @relation(fields: [id_building_imobzi], references: [id_imobzi], onDelete: Cascade, onUpdate: Cascade)
 
   area             Float?
   bedroom          Int?
@@ -114,7 +114,7 @@ model Owner {
   person                 Person? @relation(fields: [id_owner_person_imobzi], references: [id_imobzi], onDelete: Cascade, onUpdate: Cascade)
 
   id_owner_organization_imobzi String?
-  owner_organization           Organization? @relation(fields: [id_owner_organization_imobzi], references: [id_imobzi], onDelete: Cascade, onUpdate: Cascade)
+  organization                 Organization? @relation(fields: [id_owner_organization_imobzi], references: [id_imobzi], onDelete: Cascade, onUpdate: Cascade)
 
   share      Float
   created_at DateTime @default(now())
@@ -144,7 +144,7 @@ model Lease {
   guarantor                Person? @relation("personGrarantorToLease", fields: [id_main_guarantor_imobzi], references: [id_imobzi], onDelete: Cascade, onUpdate: Cascade)
 
   fee                           Float
-  guarantee_type                String
+  guarantee_type                String?
   guarantee_value               Float?
   id_annual_readjustment_imobzi String?
   irrf                          Boolean
@@ -171,7 +171,6 @@ model LeaseItem {
   value               Float
   until_due_date      Boolean
   behavior            String
-  autopay_on_due_date Boolean
   repeat_index        Int
   include_in_dimob    Boolean
   start_date          String

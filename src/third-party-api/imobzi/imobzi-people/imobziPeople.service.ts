@@ -1,50 +1,77 @@
+import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
+import { PeopleCreateDTO } from 'src/modules/people/peopleCreate.dtos';
+import { ImobziParamService, ImobziUrlService } from '../imobzi-urls-params/imobziUrls.service';
 import { GroupPersonal } from './imobziPeople.dtos';
-import { ImobziPeopleProvider } from './imobziPeople.providers';
 
 @Injectable()
 export class ImobziPeopleService {
-  constructor(private readonly imobziPeopleProvider: ImobziPeopleProvider) {}
+  constructor(
+    private readonly httpService: HttpService,
+    private readonly imobziUrl: ImobziUrlService,
+    private readonly imobziParam: ImobziParamService,
+  ) {}
 
-  async formatPersonDataToDb(id_person_imobzi: number | string): Promise<any> {
-    const personFullData = await this.imobziPeopleProvider.getPersonFullDataFromImobzi(id_person_imobzi);
-    const id_imobzi = personFullData.db_id.toString();
-    const { fullname, email, code: code_imobzi } = personFullData;
+  async getRequiredPersonDataToDb(id_imobzi: string): Promise<PeopleCreateDTO> {
+    try {
+      const { data } = await this.httpService.axiosRef.get(
+        this.imobziUrl.urlPersonDetails(id_imobzi),
+        this.imobziParam,
+      );
 
-    let maritalStatus: any;
-    let gender: any;
-    let profession: any;
+      const phone = data.phone?.number;
+      const { fullname, email, code: code_imobzi } = data;
 
-    for (const item of personFullData.fields.group_personal) {
-      maritalStatus = item.find((item: GroupPersonal) => {
-        return item.field_id === 'marital_status';
-      });
-      if (maritalStatus) {
-        maritalStatus = maritalStatus.value;
-        break;
+      let marital_status: string;
+      let gender: any;
+      let profession: any;
+      let cpf: string;
+
+      for (const item of data.fields.group_personal) {
+        const foundItem = item.find((item: GroupPersonal) => {
+          return item.field_id === 'cpf';
+        });
+        if (foundItem) {
+          cpf = foundItem.value;
+          break;
+        }
       }
-    }
 
-    for (const item of personFullData.fields.group_personal) {
-      gender = item.find((item: GroupPersonal) => {
-        return item.field_id === 'gender';
-      });
-      if (gender) {
-        gender = gender.value;
-        break;
+      for (const item of data.fields.group_personal) {
+        const foundItem = item.find((item: GroupPersonal) => {
+          return item.field_id === 'marital_status';
+        });
+        if (foundItem) {
+          marital_status = foundItem.value;
+          break;
+        }
       }
-    }
 
-    for (const item of personFullData.fields.group_personal) {
-      profession = item.find((item: GroupPersonal) => {
-        return item.field_id === 'profession';
-      });
-      if (profession) {
-        profession = profession.value;
-        break;
+      for (const item of data.fields.group_personal) {
+        const foundItem = item.find((item: GroupPersonal) => {
+          return item.field_id === 'gender';
+        });
+        if (foundItem) {
+          gender = foundItem.value;
+          break;
+        }
       }
-    }
 
-    return { id_imobzi, fullname, email, code_imobzi, maritalStatus, gender, profession };
+      for (const item of data.fields.group_personal) {
+        const foundItem = item.find((item: GroupPersonal) => {
+          return item.field_id === 'profession';
+        });
+        if (foundItem) {
+          profession = foundItem.value;
+          break;
+        }
+      }
+
+      return { id_imobzi, cpf, phone, fullname, email, code_imobzi, marital_status, gender, profession };
+    } catch (error) {
+      console.error('error on getPersonDataToDb function');
+      console.error('request with id', id_imobzi);
+      console.error(error.message);
+    }
   }
 }

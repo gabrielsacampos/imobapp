@@ -1,15 +1,15 @@
-import { IsNotEmpty, ValidateIf } from 'class-validator';
 import { NotAcceptableException } from '@nestjs/common';
+import { ValidateIf } from 'class-validator';
 
-export class OwnersUpdateDTO {
+export class OwnersCreateDTO {
   @ValidateIf((o) => {
-    if (!o.id_owner_person && !o.id_owner_organization) {
+    if (!o.id_owner_person_imobzi && !o.id_owner_organization_imobzi) {
       throw new NotAcceptableException(
-        'one of `id_owner_person` or `id_owner_organization` must has value',
+        'one of `id_owner_person_imobzi` or `id_owner_organization_imobzi` must has value',
       );
-    } else if (o.id_owner_person && o.id_owner_organization) {
+    } else if (o.id_owner_person_imobzi && o.id_owner_organization_imobzi) {
       throw new NotAcceptableException(
-        'only one of `id_owner_person` or `id_owner_organization` must has value',
+        'only one of `id_owner_person_imobzi` or `id_owner_organization_imobzi` must has value',
       );
     }
     return true;
@@ -22,9 +22,7 @@ export class OwnersUpdateDTO {
     }
     return true;
   })
-  id_owner_orgnization: bigint;
-  id_owner_person: bigint;
-
-  @IsNotEmpty()
+  id_owner_person_imobzi: string;
+  id_owner_organization_imobzi: string;
   share: number;
 }

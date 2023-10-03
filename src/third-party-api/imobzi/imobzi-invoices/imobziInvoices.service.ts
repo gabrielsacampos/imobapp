@@ -1,60 +1,39 @@
+import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/database/prisma.service';
 import { ItemsInvoiceDTO } from 'src/modules/invoices/invoice-items/invoice-items.dtos';
 import { InvoiceCreateDTO } from 'src/modules/invoices/invoicesCreate.dtos';
 import { MyFunctionsService } from 'src/my-usefull-functions/myFunctions.service';
-import { ImobziInvoicesProvider } from './imobziInvoices.provider';
+import { ImobziParamService, ImobziUrlService } from '../imobzi-urls-params/imobziUrls.service';
+import { ImobziInvoiceDetailsDTO, ImobziInvoiceItem } from './imobziInvoiceDetails.dtos';
+import { ImobziInvoiceDTO, InvoicesDTO } from './imobziInvoices.dtos';
 
 @Injectable()
 export class ImobziInvoicesService {
   constructor(
-    private readonly prisma: PrismaService,
-    private readonly imobziInvoicesProvider: ImobziInvoicesProvider,
+    private readonly httpService: HttpService,
+    private readonly imobziUrlService: ImobziUrlService,
+    private readonly imobziParamService: ImobziParamService,
     private readonly myFunctionsService: MyFunctionsService,
   ) {}
 
-  async getInvoicesImobziIdsToUpdate() {
-    const invoicesOnDb = await this.prisma.invoice.findMany({
-      where: {
-        NOT: {
-          status: {
-            in: ['deleted', 'expired', 'canceled'],
-          },
-          AND: {
-            paid_manual: false,
-          },
-        },
-      },
-    });
+  async getAllInvoicesFromImobzi(): Promise<InvoicesDTO[]> {
+    let page = 1;
+    const allInvoices = [];
 
-    const invoicesFromApi = await this.imobziInvoicesProvider.getAllInvoicesFromImobzi();
-    const invoicesFromApiIds = invoicesFromApi.map((invoiceFromApi) => invoiceFromApi.invoice_id);
-
-    const idsToUpdate = invoicesFromApiIds.filter((invoiceFromApiId) => {
-      const currentInvoiceOnDb = invoicesOnDb.find((invoiceOnDb) => invoiceOnDb.id_imobzi === invoiceFromApiId);
-      const currentInvoiceFromApi = invoicesFromApi.find(
-        (invoiceFromApi) => invoiceFromApi.invoice_id === invoiceFromApiId,
+    while (page) {
+      const { data } = await this.httpService.axiosRef.get<ImobziInvoiceDTO>(
+        this.imobziUrlService.urlAllInvoices(page),
+        this.imobziParamService,
       );
-      if (currentInvoiceOnDb) {
-        return currentInvoiceFromApi.status !== currentInvoiceOnDb.status;
-      } else {
-        return true;
-      }
-    });
+      allInvoices.push(...data.invoices);
+      page = data.next_page;
+    }
 
-    return idsToUpdate;
+    return allInvoices;
   }
 
-  async getInvoiceMainDataFromImobzi(id_invoice_imobzi: string): Promise<InvoiceCreateDTO> {
-    const invoiceFullData = await this.imobziInvoicesProvider.getInvoiceFullDataFromImobzi(id_invoice_imobzi);
-    const id_lease_imobzi = invoiceFullData.lease.db_id.toString();
-    const management_fee = invoiceFullData.onlendings_and_fees.management_fee_value;
-    const account_credit = invoiceFullData.account.name;
-    const onlending_value = invoiceFullData.onlendings_and_fees.predicted_onlending_value;
-    const { paid_at } = invoiceFullData;
-    const credit_at = this.myFunctionsService.defineCreditDate(paid_at);
-
-    const items: ItemsInvoiceDTO[] = invoiceFullData.items.map((item) => {
+  getRequiredInvoiceItemsDataToDb(invoiceItems: ImobziInvoiceItem[]): ItemsInvoiceDTO[] {
+    return invoiceItems.map((item) => {
       const {
         until_due_date,
         item_type,
@@ -71,7 +50,6 @@ export class ImobziInvoicesService {
         until_due_date,
         item_type,
         id_imobzi,
-        id_invoice_imobzi,
         description,
         behavior,
         include_in_dimob,
@@ -80,7 +58,20 @@ export class ImobziInvoicesService {
         due_date,
       };
     });
+  }
 
+  async getRequiredInvoicesDataToDb(id_invoice_imobzi: string): Promise<InvoiceCreateDTO> {
+    const { data } = await this.httpService.axiosRef.get<ImobziInvoiceDetailsDTO>(
+      this.imobziUrlService.urlInvoiceDetail(id_invoice_imobzi),
+      this.imobziParamService,
+    );
+
+    const id_lease_imobzi = data.lease.db_id.toString();
+    const management_fee = data.onlendings_and_fees.management_fee_value;
+    const account_credit = data.account.name;
+    const onlending_value = data.onlendings_and_fees.predicted_onlending_value;
+    const { paid_at } = data;
+    const credit_at = this.myFunctionsService.defineCreditDate(paid_at);
     const {
       invoice_id: id_imobzi,
       status,
@@ -95,8 +86,8 @@ export class ImobziInvoicesService {
       interest_value,
       invoice_paid_manual: paid_manual,
       charge_fee_value: bank_fee_value,
-    } = invoiceFullData;
-
+    } = data;
+    const items = this.getRequiredInvoiceItemsDataToDb(data.items);
     return {
       id_imobzi,
       status,

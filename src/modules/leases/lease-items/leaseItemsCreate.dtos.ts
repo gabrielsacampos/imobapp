@@ -2,9 +2,6 @@ import { IsBoolean, IsNotEmpty } from 'class-validator';
 
 export class LeaseItemsCreateDTO {
   @IsNotEmpty()
-  lease_id: bigint;
-
-  @IsNotEmpty()
   due_date: string;
 
   @IsNotEmpty()
@@ -24,9 +21,6 @@ export class LeaseItemsCreateDTO {
 
   @IsNotEmpty()
   behavior: string;
-
-  @IsNotEmpty()
-  autopay_on_due_date: boolean;
 
   @IsNotEmpty()
   @IsBoolean()

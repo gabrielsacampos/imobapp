@@ -1,56 +1,49 @@
+import { HttpService } from '@nestjs/axios';
 import { Test, TestingModule } from '@nestjs/testing';
-import { ImobziPersonDTO } from './imobziPeople.dtos';
-import { ImobziPeopleProvider } from './imobziPeople.providers';
+import { ImobziParamService, ImobziUrlService } from '../imobzi-urls-params/imobziUrls.service';
+import { imobziPersonMock } from './imobziPeople.mocks';
 import { ImobziPeopleService } from './imobziPeople.service';
-
-const personFullDataFromImobziMock: Partial<ImobziPersonDTO> = {
-  db_id: 123412421234,
-  fullname: 'john doe sauro',
-  email: 'john@example.com',
-  code: '23',
-  fields: {
-    group_personal: [
-      [],
-      [],
-      [],
-      [],
-      [{ field_id: 'marital_status', value: 'single' }],
-      [],
-      [{ field_id: 'profession', value: 'Developer' }],
-      [{ field_id: 'gender', value: 'Male' }],
-    ],
-  },
-};
 
 describe('ImobziPeopleService', () => {
   let imobziPeopleService: ImobziPeopleService;
-  let imobziPeopleProviderMock: { getPersonFullDataFromImobzi: jest.Mock };
-
+  let httpServiceMock: { axiosRef: { get: jest.Mock } };
   beforeEach(async () => {
-    imobziPeopleProviderMock = { getPersonFullDataFromImobzi: jest.fn() };
+    httpServiceMock = { axiosRef: { get: jest.fn() } };
 
     const moduleRef: TestingModule = await Test.createTestingModule({
       providers: [
+        ImobziUrlService,
+        ImobziParamService,
         ImobziPeopleService,
         {
-          provide: ImobziPeopleProvider,
-          useValue: imobziPeopleProviderMock,
+          provide: HttpService,
+          useValue: httpServiceMock,
         },
       ],
     }).compile();
 
-    imobziPeopleProviderMock.getPersonFullDataFromImobzi.mockResolvedValue(personFullDataFromImobziMock);
     imobziPeopleService = moduleRef.get<ImobziPeopleService>(ImobziPeopleService);
+
+    httpServiceMock.axiosRef.get.mockImplementation((url) => {
+      const id = url.split('/').pop();
+      if (id === imobziPersonMock.db_id.toString()) {
+        return Promise.resolve({ data: imobziPersonMock });
+      } else {
+        return Promise.reject(`id ${id} not found at organiations`);
+      }
+    });
   });
 
   test('getPersonDataToDb', async () => {
-    const result = await imobziPeopleService.formatPersonDataToDb(12345);
+    const result = await imobziPeopleService.getRequiredPersonDataToDb('123412421234');
     expect(result).toEqual({
       id_imobzi: '123412421234',
+      cpf: '002.002.000-00',
+      phone: '00 00000-000000',
       fullname: 'john doe sauro',
       email: 'john@example.com',
       code_imobzi: '23',
-      maritalStatus: 'single',
+      marital_status: 'single',
       gender: 'Male',
       profession: 'Developer',
     });

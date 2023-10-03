@@ -2,11 +2,11 @@
 CREATE TABLE `people` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `id_imobzi` VARCHAR(191) NOT NULL,
-    `cpf` VARCHAR(255) NOT NULL,
-    `fullname` VARCHAR(191) NULL,
-    `birthdate` DATETIME(3) NULL,
-    `email` VARCHAR(255) NOT NULL,
-    `phone` VARCHAR(255) NOT NULL,
+    `cpf` VARCHAR(255) NULL,
+    `fullname` VARCHAR(191) NOT NULL,
+    `email` VARCHAR(255) NULL,
+    `phone` VARCHAR(255) NULL,
+    `birthdate` VARCHAR(191) NULL,
     `alternative_address` VARCHAR(191) NULL,
     `alternative_address_reference` VARCHAR(191) NULL,
     `gender` VARCHAR(191) NULL,
@@ -33,9 +33,9 @@ CREATE TABLE `organizations` (
     `id_person_representative` VARCHAR(191) NOT NULL,
     `name` VARCHAR(191) NOT NULL,
     `cnpj` VARCHAR(191) NOT NULL,
-    `representative_type` VARCHAR(191) NOT NULL,
-    `phone` VARCHAR(191) NOT NULL,
-    `email` VARCHAR(191) NOT NULL,
+    `representative_type` VARCHAR(191) NULL,
+    `phone` VARCHAR(191) NULL,
+    `email` VARCHAR(191) NULL,
     `address` VARCHAR(191) NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     `updated_at` DATETIME(3) NOT NULL,
@@ -69,7 +69,7 @@ CREATE TABLE `properties` (
     `type` VARCHAR(191) NOT NULL,
     `active` BOOLEAN NOT NULL,
     `status` VARCHAR(191) NOT NULL,
-    `id_building_imobzi` VARCHAR(191) NOT NULL,
+    `id_building_imobzi` VARCHAR(191) NULL,
     `area` DOUBLE NULL,
     `bedroom` INTEGER NULL,
     `suite` INTEGER NULL,
@@ -148,12 +148,11 @@ CREATE TABLE `lease_items` (
 
 -- CreateTable
 CREATE TABLE `invoices` (
-    `id` VARCHAR(191) NOT NULL,
+    `id_imobzi` VARCHAR(191) NOT NULL,
     `status` VARCHAR(191) NOT NULL,
     `reference_start_at` VARCHAR(191) NULL,
     `reference_end_at` VARCHAR(191) NULL,
     `due_date` VARCHAR(191) NOT NULL,
-    `id_imobzi` VARCHAR(191) NOT NULL,
     `id_lease_imobzi` VARCHAR(191) NOT NULL,
     `management_fee` DOUBLE NOT NULL,
     `invoice_url` VARCHAR(191) NOT NULL,
@@ -172,7 +171,7 @@ CREATE TABLE `invoices` (
     `updated_at` DATETIME(3) NOT NULL,
 
     UNIQUE INDEX `invoices_id_imobzi_key`(`id_imobzi`),
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`id_imobzi`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable

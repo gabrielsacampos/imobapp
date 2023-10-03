@@ -1,4 +1,4 @@
-export interface PropertyDetailsDTO {
+export interface ImobziPropertyDetailsDTO {
   code: string;
   neighborhood: string;
   features: Features;
@@ -48,7 +48,6 @@ export interface PropertyDetailsDTO {
   cover_photo: CoverPhoto;
   property_calendar: any[];
   lot_measure_right: number;
-  nearby: string[];
   photos: Photos;
   built: number;
   property_unity: number;
@@ -59,16 +58,15 @@ export interface PropertyDetailsDTO {
   cover_photo_private: CoverPhotoPrivate;
   building: boolean;
   building_id: number;
-  owners: Owner[];
+  owners: ImobziPropertyOwnerDTO[];
   measure_type: string;
   address_complement: string;
   new_code: string;
   database: string;
   has_contract_linked: boolean;
-  fields: Fields;
   created_at: string;
   lot_measure_type: string;
-  property_situation: string;
+  property_situation: any;
   sale_value: number;
   longitude: number;
   units_per_floor: number;
@@ -99,7 +97,7 @@ export interface CoverPhotoPrivate {
   db_id: number;
 }
 
-export interface Owner {
+export interface ImobziPropertyOwnerDTO {
   bank_data: BankData;
   code: string;
   name: string;
@@ -127,139 +125,4 @@ export interface Phone {
   number: string;
   country_code: any;
   alpha2Code: string;
-}
-
-export interface Fields {
-  guarantee: Guarantee[][];
-  Exigências: Exigncum[][];
-  additional_values: AdditionalValue[][];
-  Outros: Outro[][];
-}
-
-export interface Guarantee {
-  default: boolean;
-  group_position: number;
-  required: boolean;
-  name: string;
-  active: boolean;
-  position: string;
-  configuration: Configuration;
-  field_id: string;
-  value?: boolean;
-  group_name: string;
-}
-
-export interface Configuration {
-  typecommercial: boolean;
-  multiple: boolean;
-  typeresidential: boolean;
-  url: any;
-  typebox: boolean;
-  typevalue: string;
-  typelandlot: boolean;
-  mask: string;
-  require_value: any;
-  inactive: boolean;
-  showingroup: boolean;
-  values: string[];
-  validate: string;
-  type: string;
-  typerural: boolean;
-  description: string;
-}
-
-export interface Exigncum {
-  default: boolean;
-  group_position: number;
-  required: boolean;
-  name: string;
-  active: boolean;
-  position: string;
-  configuration: Configuration2;
-  field_id: string;
-  value: any;
-  group_name: string;
-}
-
-export interface Configuration2 {
-  typecommercial: boolean;
-  multiple: boolean;
-  typeresidential: boolean;
-  url: any;
-  typebox: boolean;
-  typevalue: string;
-  typelandlot: boolean;
-  mask: string;
-  require_value: any;
-  inactive: boolean;
-  showingroup: boolean;
-  values: string[];
-  validate: string;
-  type: string;
-  typerural: boolean;
-  description: string;
-}
-
-export interface AdditionalValue {
-  default: boolean;
-  group_position: number;
-  required: boolean;
-  name: string;
-  active: boolean;
-  position: string;
-  configuration: Configuration3;
-  field_id: string;
-  value?: number;
-  group_name: string;
-}
-
-export interface Configuration3 {
-  typecommercial: boolean;
-  multiple: boolean;
-  typeresidential: boolean;
-  url: any;
-  typebox: boolean;
-  typevalue: string;
-  typelandlot: boolean;
-  mask: string;
-  require_value: any;
-  inactive: boolean;
-  showingroup: boolean;
-  values: string[];
-  validate: string;
-  type: string;
-  typerural: boolean;
-  description: string;
-}
-
-export interface Outro {
-  default: boolean;
-  group_position: number;
-  required: boolean;
-  name: string;
-  active: boolean;
-  position: string;
-  configuration: Configuration4;
-  field_id: string;
-  value: any;
-  group_name: string;
-}
-
-export interface Configuration4 {
-  typecommercial: boolean;
-  multiple: boolean;
-  typeresidential: boolean;
-  url: any;
-  typebox: boolean;
-  typevalue: string;
-  typelandlot: boolean;
-  mask: string;
-  require_value: any;
-  inactive: boolean;
-  showingroup: boolean;
-  values: string[];
-  validate: string;
-  type: string;
-  typerural: boolean;
-  description: string;
 }

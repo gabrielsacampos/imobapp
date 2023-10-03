@@ -3,11 +3,11 @@ export interface ImobziLeasesDTO {
   management_fee_total: number;
   cursor: string;
   value_total: number;
-  leases: ImobziLease[];
+  leases: LeaseDTO[];
   count_lease_digital_real_estate: number;
 }
 
-export interface ImobziLease {
+export interface LeaseDTO {
   status: string;
   code: string;
   start_at: string;
