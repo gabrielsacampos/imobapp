@@ -4,19 +4,17 @@ import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { ItemsInvoiceCreateDTO } from 'src/modules/invoices/invoice-items/invoice-items.dtos';
 import { InvoiceCreateDTO } from 'src/modules/invoices/invoicesCreate.dtos';
-import { MyFunctionsService } from 'src/my-usefull-functions/myFunctions.service';
-import { ImobziParamService, ImobziUrlService } from '../imobzi-urls-params/imobziUrls.service';
 import { ImobziInvoiceDetailsDTO, ImobziInvoiceItem } from './imobziInvoiceDetails.dtos';
 import { ImobziInvoiceDTO, InvoicesDTO } from './imobziInvoices.dtos';
+import { imobziUrls, imobziParams } from '../imobzi-urls-params/imobzi.urls';
+
+import { dateFunctions } from '../../../my-usefull-functions/date.functions';
 
 @Injectable()
 export class ImobziInvoicesService {
   constructor(
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
     private readonly httpService: HttpService,
-    private readonly imobziUrlService: ImobziUrlService,
-    private readonly imobziParamService: ImobziParamService,
-    private readonly myFunctionsService: MyFunctionsService,
   ) {}
 
   async getAllInvoicesFromImobzi(): Promise<InvoicesDTO[]> {
@@ -26,8 +24,8 @@ export class ImobziInvoicesService {
 
       while (page) {
         const { data } = await this.httpService.axiosRef.get<ImobziInvoiceDTO>(
-          this.imobziUrlService.urlAllInvoices(page),
-          this.imobziParamService,
+          imobziUrls.urlAllInvoices(page),
+          imobziParams,
         );
         allInvoices.push(...data.invoices);
 
@@ -70,8 +68,8 @@ export class ImobziInvoicesService {
   async getRequiredInvoicesDataToDb(id_invoice_imobzi: string): Promise<InvoiceCreateDTO> {
     try {
       const { data } = await this.httpService.axiosRef.get<ImobziInvoiceDetailsDTO>(
-        this.imobziUrlService.urlInvoiceDetail(id_invoice_imobzi),
-        this.imobziParamService,
+        imobziUrls.urlInvoiceDetail(id_invoice_imobzi),
+        imobziParams,
       );
 
       const id_lease_imobzi = data.lease?.db_id.toString();
@@ -79,7 +77,7 @@ export class ImobziInvoicesService {
       const account_credit = data.account?.name;
       const onlending_value = data.onlendings_and_fees?.predicted_onlending_value;
       const { paid_at } = data;
-      const credit_at = this.myFunctionsService.defineCreditDate(paid_at);
+      const credit_at = dateFunctions.defineCreditDate(paid_at);
       const {
         invoice_id: id_imobzi,
         status,

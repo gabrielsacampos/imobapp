@@ -1,6 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { Test, TestingModule } from '@nestjs/testing';
-import { ImobziParamService, ImobziUrlService } from '../imobzi-urls-params/imobziUrls.service';
+import { ImobziParamService, ImobziUrlService } from '../imobzi-urls-params/imobzi.urls';
 import { imobziPersonMock } from './imobziPeople.mocks';
 import { ImobziPeopleService } from './imobziPeople.service';
 

@@ -1,11 +1,7 @@
-import { Injectable } from '@nestjs/common';
 import { add, format, isWeekend } from 'date-fns';
 import { myConstants } from './myConstants';
 
-@Injectable()
-export class MyFunctionsService {
-  constructor() {}
-
+export const dateFunctions = {
   defineCreditDate(stringDate: string) {
     const paymentDate = new Date(stringDate);
     let validDaysPast = 0;
@@ -41,5 +37,5 @@ export class MyFunctionsService {
     // giving the datetime +3h so we can format properly.
 
     return nextDayString;
-  }
-}
+  },
+};

@@ -1,9 +1,9 @@
 import { HttpService } from '@nestjs/axios';
 import { Test, TestingModule } from '@nestjs/testing';
-import { MyFunctionsService } from 'src/my-usefull-functions/myFunctions.service';
+import { MyFunctionsService } from 'src/my-usefull-functions/date.functions';
 import { ImobziInvoicesService } from './imobziInvoices.service';
 import { imobziInvoiceMock, imobziInvoicesMock } from './imobziInvoices.mocks';
-import { ImobziParamService, ImobziUrlService } from '../imobzi-urls-params/imobziUrls.service';
+import { ImobziParamService, ImobziUrlService } from '../imobzi-urls-params/imobzi.urls';
 
 describe('ImobziInvoicesService', () => {
   let imobziInvoicesService: ImobziInvoicesService;

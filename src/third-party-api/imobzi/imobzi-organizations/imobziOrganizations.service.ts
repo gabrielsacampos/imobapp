@@ -2,24 +2,19 @@ import { HttpService } from '@nestjs/axios';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { OrganizationsCreateDTO } from 'src/modules/organizations/organizationsCreate.dtos';
-import { ImobziParamService, ImobziUrlService } from '../imobzi-urls-params/imobziUrls.service';
 import { GroupAddress, GroupCompanyDaum } from './imobziOrganizations.dtos';
+import { imobziUrls, imobziParams } from '../imobzi-urls-params/imobzi.urls';
 
 @Injectable()
 export class ImobziOrganizationsService {
   constructor(
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
     private readonly httpService: HttpService,
-    private readonly imobziUrl: ImobziUrlService,
-    private readonly imobziParam: ImobziParamService,
   ) {}
 
   async getRequiredOrganizationDataToDb(id_imobzi: string): Promise<OrganizationsCreateDTO> {
     try {
-      const { data } = await this.httpService.axiosRef.get(
-        this.imobziUrl.urlOrganizationDetails(id_imobzi),
-        this.imobziParam,
-      );
+      const { data } = await this.httpService.axiosRef.get(imobziUrls.urlOrganizationDetails(id_imobzi), imobziParams);
 
       let address: any;
       let cnpj: any;

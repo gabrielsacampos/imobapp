@@ -4,17 +4,15 @@ import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { BeneficiariesCreateDTO } from 'src/modules/leases/lease-beneficiaries/lease-beneficiaries.dtos';
 import { LeaseItemsCreateDTO } from 'src/modules/leases/lease-items/leaseItemsCreate.dtos';
 import { LeasesCreateDTO } from 'src/modules/leases/leasesCreate.dtos';
-import { ImobziParamService, ImobziUrlService } from '../imobzi-urls-params/imobziUrls.service';
 import { ImobziLeasesDTO, LeaseDTO } from './imobziLeases.dtos';
 import { ImobziLeaseBeneficiaryDTO, ImobziLeaseDetailsDTO, ImobziLeaseItemDTO } from './imobziLeasesDetails.dtos';
+import { imobziUrls, imobziParams } from '../imobzi-urls-params/imobzi.urls';
 
 @Injectable()
 export class ImobziLeasesService {
   constructor(
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
     private readonly httpService: HttpService,
-    private readonly imobziUrlService: ImobziUrlService,
-    private readonly imobziParaService: ImobziParamService,
   ) {}
 
   async getAllLeasesFromImobzi(): Promise<LeaseDTO[]> {
@@ -24,8 +22,8 @@ export class ImobziLeasesService {
 
       do {
         const { data } = await this.httpService.axiosRef.get<ImobziLeasesDTO>(
-          this.imobziUrlService.urlAllLeases(cursor),
-          this.imobziParaService,
+          imobziUrls.urlAllLeases(cursor),
+          imobziParams,
         );
         allLeases.push(...data.leases);
         cursor = data.cursor;
@@ -82,8 +80,8 @@ export class ImobziLeasesService {
   async getRequiredLeaseDataToDb(id_imobzi: string): Promise<LeasesCreateDTO> {
     try {
       const { data } = await this.httpService.axiosRef.get<ImobziLeaseDetailsDTO>(
-        this.imobziUrlService.urlLeaseDetails(id_imobzi),
-        this.imobziParaService,
+        imobziUrls.urlLeaseDetails(id_imobzi),
+        imobziParams,
       );
 
       const id_annual_readjustment_imobzi = data.annual_readjustment?.db_id.toString();

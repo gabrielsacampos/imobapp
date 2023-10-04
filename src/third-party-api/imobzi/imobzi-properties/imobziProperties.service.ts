@@ -3,17 +3,15 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { OwnersCreateDTO } from 'src/modules/properties/owners/OwnerCreate.dtos';
 import { PropertyCreateDTO } from 'src/modules/properties/propertiesCreate.dtos';
-import { ImobziUrlService, ImobziParamService } from '../imobzi-urls-params/imobziUrls.service';
 import { ImobziPropertiesDTO } from './imobziProperties.dtos';
 import { ImobziPropertyOwnerDTO } from './imobziPropertyDetails.dtos';
+import { imobziUrls, imobziParams } from '../imobzi-urls-params/imobzi.urls';
 
 @Injectable()
 export class ImobziPropertiesService {
   constructor(
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
     private readonly httpService: HttpService,
-    private readonly imobziUrl: ImobziUrlService,
-    private readonly imobziParam: ImobziParamService,
   ) {}
 
   async getAllProperties(): Promise<any> {
@@ -23,8 +21,8 @@ export class ImobziPropertiesService {
       let cursor = '';
       do {
         const { data } = await this.httpService.axiosRef.get<ImobziPropertiesDTO>(
-          this.imobziUrl.urlProperties('all', cursor),
-          this.imobziParam,
+          imobziUrls.urlProperties('all', cursor),
+          imobziParams,
         );
         allProperties.push(...data.properties);
         cursor = data.cursor;
@@ -33,8 +31,8 @@ export class ImobziPropertiesService {
       cursor = '';
       do {
         const { data } = await this.httpService.axiosRef.get<ImobziPropertiesDTO>(
-          this.imobziUrl.urlProperties('unavailable_properties', cursor),
-          this.imobziParam,
+          imobziUrls.urlProperties('unavailable_properties', cursor),
+          imobziParams,
         );
         allProperties.push(...data.properties);
         cursor = data.cursor;
@@ -65,10 +63,7 @@ export class ImobziPropertiesService {
 
   async getRequiredPropertyDataToDb(id_imobzi: string): Promise<PropertyCreateDTO> {
     try {
-      const { data } = await this.httpService.axiosRef.get(
-        this.imobziUrl.urlPropertyDetails(id_imobzi),
-        this.imobziParam,
-      );
+      const { data } = await this.httpService.axiosRef.get(imobziUrls.urlPropertyDetails(id_imobzi), imobziParams);
       const unit = data.property_unity?.toString();
       const id_building_imobzi = data.building_id ? data.building_id.toString() : null;
 
