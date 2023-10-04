@@ -19,7 +19,7 @@ export class ImobziInvoicesService {
 
   async getAllInvoicesFromImobzi(): Promise<InvoicesDTO[]> {
     try {
-      let page = 10;
+      let page = 1;
       const allInvoices = [];
 
       while (page) {

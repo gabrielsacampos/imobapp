@@ -1,6 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { Test, TestingModule } from '@nestjs/testing';
-import { ImobziParamService, ImobziUrlService } from '../imobzi-urls-params/imobzi.urls';
+import { SharedModule } from 'src/third-party-api/shared.module';
 import { imobziPersonMock } from './imobziPeople.mocks';
 import { ImobziPeopleService } from './imobziPeople.service';
 
@@ -11,9 +11,8 @@ describe('ImobziPeopleService', () => {
     httpServiceMock = { axiosRef: { get: jest.fn() } };
 
     const moduleRef: TestingModule = await Test.createTestingModule({
+      imports: [SharedModule],
       providers: [
-        ImobziUrlService,
-        ImobziParamService,
         ImobziPeopleService,
         {
           provide: HttpService,

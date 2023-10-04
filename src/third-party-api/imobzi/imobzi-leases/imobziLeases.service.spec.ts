@@ -1,6 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { Test, TestingModule } from '@nestjs/testing';
-import { ImobziParamService, ImobziUrlService } from '../imobzi-urls-params/imobzi.urls';
+import { SharedModule } from 'src/third-party-api/shared.module';
 import { imobziLeaseMock, imobziLeasesMock } from './imobziLease.mock';
 import { ImobziLeasesService } from './imobziLeases.service';
 
@@ -14,9 +14,8 @@ describe('ImobziLeasesService', () => {
     };
 
     const moduleRef: TestingModule = await Test.createTestingModule({
+      imports: [SharedModule],
       providers: [
-        ImobziUrlService,
-        ImobziParamService,
         ImobziLeasesService,
         {
           provide: HttpService,
@@ -38,9 +37,9 @@ describe('ImobziLeasesService', () => {
       }
 
       switch (url) {
-        case 'https://api.imobzi.app/v1/leases?cursor=':
+        case 'https://api.imobzi.app/v1/leases?smart_list=all&cursor=':
           return Promise.resolve({ data: imobziLeasesMock.page1 });
-        case 'https://api.imobzi.app/v1/leases?cursor=abc':
+        case 'https://api.imobzi.app/v1/leases?smart_list=all&cursor=abc':
           return Promise.resolve({ data: imobziLeasesMock.page2 });
 
         default:

@@ -1,9 +1,8 @@
 import { HttpService } from '@nestjs/axios';
 import { Test, TestingModule } from '@nestjs/testing';
-import { MyFunctionsService } from 'src/my-usefull-functions/date.functions';
 import { ImobziInvoicesService } from './imobziInvoices.service';
 import { imobziInvoiceMock, imobziInvoicesMock } from './imobziInvoices.mocks';
-import { ImobziParamService, ImobziUrlService } from '../imobzi-urls-params/imobzi.urls';
+import { SharedModule } from 'src/third-party-api/shared.module';
 
 describe('ImobziInvoicesService', () => {
   let imobziInvoicesService: ImobziInvoicesService;
@@ -13,10 +12,8 @@ describe('ImobziInvoicesService', () => {
     httpServiceMock = { axiosRef: { get: jest.fn() } };
 
     const moduleRef: TestingModule = await Test.createTestingModule({
+      imports: [SharedModule],
       providers: [
-        ImobziUrlService,
-        ImobziParamService,
-        MyFunctionsService,
         ImobziInvoicesService,
         {
           provide: HttpService,
@@ -67,7 +64,6 @@ describe('ImobziInvoicesService', () => {
         include_in_dimob: true,
         management_fee: true,
         value: 1000,
-        due_date: undefined,
       },
       {
         until_due_date: false,
@@ -78,12 +74,11 @@ describe('ImobziInvoicesService', () => {
         include_in_dimob: false,
         management_fee: false,
         value: 500,
-        due_date: '2022-10-25',
       },
     ]);
   });
 
-  test('getRequiredInvoiceItemsDataToDb', async () => {
+  test('getRequiredInvoicesDataToDb', async () => {
     const result = await imobziInvoicesService.getRequiredInvoicesDataToDb('abc');
     expect(result).toEqual({
       id_imobzi: 'abc',
@@ -115,7 +110,6 @@ describe('ImobziInvoicesService', () => {
           include_in_dimob: true,
           management_fee: true,
           value: 1000,
-          due_date: undefined,
         },
         {
           until_due_date: false,
@@ -126,7 +120,6 @@ describe('ImobziInvoicesService', () => {
           include_in_dimob: false,
           management_fee: false,
           value: 500,
-          due_date: '2022-10-25',
         },
       ],
     });

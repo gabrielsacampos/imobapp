@@ -23,12 +23,12 @@ export class ImobziBuildingsService {
         allBuildings.push(...data.properties);
         cursor = data.cursor;
 
-        // this.logger.verbose(`buildings catched > ${allBuildings.length}`);
+        this.logger.verbose(`buildings catched > ${allBuildings.length}`);
       } while (cursor);
 
       return allBuildings;
     } catch (error) {
-      // this.logger.error(` Error on ImobziBuildings.service > getAllBuildings: ${error}`);
+      this.logger.error(` Error on ImobziBuildings.service > getAllBuildings: ${error}`);
     }
   }
 

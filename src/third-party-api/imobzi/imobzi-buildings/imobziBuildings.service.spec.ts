@@ -4,7 +4,8 @@ import { SharedModule } from 'src/third-party-api/shared.module';
 import { ImobziBuildingsService } from './imobziBuildings.service';
 
 const buildingsMock = {
-  page1: { cursor: 'abc', properties: [{ db_id: 12345 }, { db_id: 12345 }] },
+  page1: { cursor: 'abc', properties: [{ db_id: 111111 }, { db_id: 2222222 }] },
+  page2: { cursor: null, properties: [{ db_id: 333333 }, { db_id: 4444444 }] },
 };
 
 describe('ImobziBuildingService', () => {
@@ -12,19 +13,31 @@ describe('ImobziBuildingService', () => {
   let httpServiceMock: { axiosRef: { get: jest.Mock } };
 
   beforeEach(async () => {
-    httpServiceMock = { axiosRef: { get: jest.fn() } };
+    httpServiceMock = {
+      axiosRef: { get: jest.fn() },
+    };
 
     const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [SharedModule],
-      providers: [ImobziBuildingsService, { provide: HttpService, useValue: { httpServiceMock } }],
+      providers: [ImobziBuildingsService, { provide: HttpService, useValue: httpServiceMock }],
     }).compile();
 
-    httpServiceMock.axiosRef.get.mockResolvedValue(buildingsMock);
     imobziBuildingsService = moduleRef.get<ImobziBuildingsService>(ImobziBuildingsService);
+    httpServiceMock.axiosRef.get.mockImplementation((url: string) => {
+      switch (url) {
+        case 'https://api.imobzi.app/v1/properties?smart_list=buildings&cursor=':
+          return Promise.resolve({ data: buildingsMock.page1 });
+        case 'https://api.imobzi.app/v1/properties?smart_list=buildings&cursor=abc':
+          return Promise.resolve({ data: buildingsMock.page2 });
+
+        default:
+          throw new Error(`verify the url: ${url} and try again`);
+      }
+    });
   });
 
-  test('getRequiredBuildingDataToDb', async () => {
+  test('getAllBuildings', async () => {
     const result = await imobziBuildingsService.getAllBuildings();
-    console.log(result);
+    expect(result).toEqual([...buildingsMock.page1.properties, ...buildingsMock.page2.properties]);
   });
 });

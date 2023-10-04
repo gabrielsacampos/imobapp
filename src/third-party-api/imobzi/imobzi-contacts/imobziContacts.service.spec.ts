@@ -1,6 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { Test, TestingModule } from '@nestjs/testing';
-import { ImobziParamService, ImobziUrlService } from '../imobzi-urls-params/imobzi.urls';
+import { SharedModule } from 'src/third-party-api/shared.module';
 import { ImobziContactsService } from './imobziContacts.service';
 
 const imobziContactsApiReturnMock = {
@@ -34,9 +34,8 @@ describe('ImobziContactsService -- access to third-party api data', () => {
     };
 
     const moduleRef: TestingModule = await Test.createTestingModule({
+      imports: [SharedModule],
       providers: [
-        ImobziParamService,
-        ImobziUrlService,
         ImobziContactsService,
         {
           provide: HttpService,
