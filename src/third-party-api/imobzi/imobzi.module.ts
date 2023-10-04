@@ -1,3 +1,4 @@
+import { BullAdapter } from '@bull-board/api/bullAdapter';
 import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
 import { ImobziQueueConsumer } from './imobziQueue.consumer';
@@ -33,7 +34,7 @@ import { ExpressAdapter } from '@nestjs/platform-express';
     }),
     BullBoardModule.forFeature({
       name: 'ImobziQueue',
-      adapter: BullApater,
+      adapter: BullAdapter,
     }),
     BullBoardModule.forRoot({
       route: '/queues',
