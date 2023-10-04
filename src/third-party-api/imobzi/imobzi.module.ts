@@ -19,7 +19,7 @@ import { SharedModule } from '../shared.module';
 import { ImobziLeasesService } from './imobzi-leases/imobziLeases.service';
 import { ImobziInvoicesService } from './imobzi-invoices/imobziInvoices.service';
 import { BullBoardModule } from '@bull-board/nestjs';
-import { ExpressAdapter } from '@nestjs/platform-express';
+import { ExpressAdapter } from '@bull-board/express';
 
 @Module({
   imports: [
