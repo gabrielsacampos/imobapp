@@ -1,14 +1,16 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { OwnersCreateDTO } from 'src/modules/properties/owners/OwnerCreate.dtos';
 import { PropertyCreateDTO } from 'src/modules/properties/propertiesCreate.dtos';
 import { ImobziUrlService, ImobziParamService } from '../imobzi-urls-params/imobziUrls.service';
 import { ImobziPropertiesDTO } from './imobziProperties.dtos';
-import { ImobziPropertyDetailsDTO, ImobziPropertyOwnerDTO } from './imobziPropertyDetails.dtos';
+import { ImobziPropertyOwnerDTO } from './imobziPropertyDetails.dtos';
 
 @Injectable()
 export class ImobziPropertiesService {
   constructor(
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
     private readonly httpService: HttpService,
     private readonly imobziUrl: ImobziUrlService,
     private readonly imobziParam: ImobziParamService,
@@ -40,7 +42,7 @@ export class ImobziPropertiesService {
 
       return allProperties;
     } catch (error) {
-      console.error(error.message);
+      this.logger.error(` Error on ImobziProperties.service > getAllProperties: ${error}`);
     }
   }
 
@@ -63,13 +65,13 @@ export class ImobziPropertiesService {
 
   async getRequiredPropertyDataToDb(id_imobzi: string): Promise<PropertyCreateDTO> {
     try {
-      const { data } = await this.httpService.axiosRef.get<ImobziPropertyDetailsDTO>(
+      const { data } = await this.httpService.axiosRef.get(
         this.imobziUrl.urlPropertyDetails(id_imobzi),
         this.imobziParam,
       );
-
       const unit = data.property_unity?.toString();
-      const id_building_imobzi = data.building_id.toString();
+      const id_building_imobzi = data.building_id ? data.building_id.toString() : null;
+
       const {
         alternative_code,
         area,
@@ -102,7 +104,9 @@ export class ImobziPropertiesService {
         active,
       };
     } catch (error) {
-      console.error(error.message);
+      this.logger.error(
+        ` Error on ImobziInvoices.service > getRequiredInvoicesDataToDb: id_imobzi: ${id_imobzi}: ${error}`,
+      );
     }
   }
 }

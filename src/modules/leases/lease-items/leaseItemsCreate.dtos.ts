@@ -29,8 +29,7 @@ export class LeaseItemsCreateDTO {
   @IsNotEmpty()
   include_in_dimob: boolean;
 
-  @IsNotEmpty()
-  start_date: string;
+  start_date?: string;
 
   repeat_total?: number;
 }

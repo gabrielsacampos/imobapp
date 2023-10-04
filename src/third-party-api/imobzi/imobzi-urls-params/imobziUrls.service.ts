@@ -7,6 +7,10 @@ export class ImobziUrlService {
     return `https://api.imobzi.app/v1/invoices?page=${page}&status=all&start_at=2000-01-01&end_at=2100-01-01&contract_type=all&order_by=desc`;
   }
 
+  urlAllBuildings(cursor: string): string {
+    return `https://api.imobzi.app/v1/properties?smart_list=buildings&cursor=${cursor}`;
+  }
+
   urlInvoiceDetail(invoiceId: number | string): string {
     return `https://api.imobzi.app/v1/invoice/${invoiceId}`;
   }
@@ -36,7 +40,7 @@ export class ImobziUrlService {
   }
 
   urlAllLeases(cursor: string = ''): string {
-    return `https://api.imobzi.app/v1/leases?cursor=${cursor}`;
+    return `https://api.imobzi.app/v1/leases?smart_list=all&cursor=${cursor}`;
   }
 }
 

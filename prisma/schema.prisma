@@ -13,10 +13,10 @@ datasource db {
 model Person {
   id                            Int       @id @default(autoincrement())
   id_imobzi                     String    @unique
-  cpf                           String?    @unique @db.VarChar(255)
+  cpf                           String?   @unique @db.VarChar(255)
   fullname                      String?
   birthdate                     DateTime?
-  email                         String?    @db.VarChar(255)
+  email                         String?   @db.VarChar(255)
   phone                         String?   @db.VarChar(255)
   alternative_address           String?
   alternative_address_reference String?
@@ -87,7 +87,7 @@ model Property {
   status    String
 
   id_building_imobzi String
-  buildings           Building @relation(fields: [id_building_imobzi], references: [id_imobzi], onDelete: Cascade, onUpdate: Cascade)
+  buildings          Building @relation(fields: [id_building_imobzi], references: [id_imobzi], onDelete: Cascade, onUpdate: Cascade)
 
   area             Float?
   bedroom          Int?
@@ -162,21 +162,21 @@ model Lease {
 }
 
 model LeaseItem {
-  id                  Int     @id @default(autoincrement())
-  due_date            String
-  description         String
-  management_fee      Boolean
-  recurrent           Boolean
-  repeat_total        Int?
-  value               Float
-  until_due_date      Boolean
-  behavior            String
-  repeat_index        Int
-  include_in_dimob    Boolean
-  start_date          String
+  id               Int     @id @default(autoincrement())
+  due_date         String
+  description      String
+  management_fee   Boolean
+  recurrent        Boolean
+  repeat_total     Int?
+  value            Float
+  until_due_date   Boolean
+  behavior         String
+  repeat_index     Int
+  include_in_dimob Boolean
+  start_date       String?
 
   id_lease_imobzi String
-  leases          Lease  @relation("leaseToLeaseItem", fields: [id_lease_imobzi], references: [id_imobzi], onDelete: Cascade, onUpdate: Cascade)
+  lease           Lease  @relation("leaseToLeaseItem", fields: [id_lease_imobzi], references: [id_imobzi], onDelete: Cascade, onUpdate: Cascade)
 
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
@@ -193,7 +193,7 @@ model Invoice {
   due_date           String
 
   id_lease_imobzi String
-  leases          Lease  @relation("leaseToInvoice", fields: [id_lease_imobzi], references: [id_imobzi], onDelete: Cascade, onUpdate: Cascade)
+  lease           Lease  @relation("leaseToInvoice", fields: [id_lease_imobzi], references: [id_imobzi], onDelete: Cascade, onUpdate: Cascade)
 
   management_fee  Float
   invoice_url     String
@@ -222,6 +222,7 @@ model InvoiceItem {
   id_invoice_imobzi String
   invoice           Invoice @relation(fields: [id_invoice_imobzi], references: [id_imobzi], onDelete: Cascade, onUpdate: Cascade)
 
+  until_due_date   Boolean
   item_type        String?
   description      String
   behavior         String

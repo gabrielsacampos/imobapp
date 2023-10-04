@@ -1,5 +1,6 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { PeopleCreateDTO } from 'src/modules/people/peopleCreate.dtos';
 import { ImobziParamService, ImobziUrlService } from '../imobzi-urls-params/imobziUrls.service';
 import { GroupPersonal } from './imobziPeople.dtos';
@@ -7,6 +8,7 @@ import { GroupPersonal } from './imobziPeople.dtos';
 @Injectable()
 export class ImobziPeopleService {
   constructor(
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
     private readonly httpService: HttpService,
     private readonly imobziUrl: ImobziUrlService,
     private readonly imobziParam: ImobziParamService,
@@ -69,9 +71,9 @@ export class ImobziPeopleService {
 
       return { id_imobzi, cpf, phone, fullname, email, code_imobzi, marital_status, gender, profession };
     } catch (error) {
-      console.error('error on getPersonDataToDb function');
-      console.error('request with id', id_imobzi);
-      console.error(error.message);
+      this.logger.error(
+        ` Error on ImobziPeople.service > getRequiredPersonDataToDb: id_imobzi: ${id_imobzi}: ${error}`,
+      );
     }
   }
 }

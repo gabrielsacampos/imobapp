@@ -1,5 +1,6 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { OrganizationsCreateDTO } from 'src/modules/organizations/organizationsCreate.dtos';
 import { ImobziParamService, ImobziUrlService } from '../imobzi-urls-params/imobziUrls.service';
 import { GroupAddress, GroupCompanyDaum } from './imobziOrganizations.dtos';
@@ -7,6 +8,7 @@ import { GroupAddress, GroupCompanyDaum } from './imobziOrganizations.dtos';
 @Injectable()
 export class ImobziOrganizationsService {
   constructor(
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
     private readonly httpService: HttpService,
     private readonly imobziUrl: ImobziUrlService,
     private readonly imobziParam: ImobziParamService,
@@ -57,9 +59,9 @@ export class ImobziOrganizationsService {
         name,
       };
     } catch (error) {
-      console.error('error on getOrgDataToDb function');
-      console.error('request with id', id_imobzi);
-      console.error(error.message);
+      this.logger.error(
+        ` Error on ImobziOrganizations.service > getRequiredOrganizationDataToDb: id_imobzi: ${id_imobzi}: ${error}`,
+      );
     }
   }
 }

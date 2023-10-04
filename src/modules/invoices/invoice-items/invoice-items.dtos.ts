@@ -1,6 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
 
-export class ItemsInvoiceDTO {
+export class ItemsInvoiceCreateDTO {
   @IsNotEmpty()
   id_imobzi: string;
 
@@ -23,5 +23,4 @@ export class ItemsInvoiceDTO {
   value: number;
 
   item_type?: string;
-  due_date: string;
 }

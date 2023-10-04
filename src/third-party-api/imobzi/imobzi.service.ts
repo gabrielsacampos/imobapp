@@ -1,5 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { PrismaService } from 'src/database/prisma.service';
+import { ItemsInvoiceCreateDTO } from 'src/modules/invoices/invoice-items/invoice-items.dtos';
+import { BuildingDTO } from './imobzi-buildings/imobziBuildings.dtos';
 import { ImobziBuildingsService } from './imobzi-buildings/imobziBuildings.service';
 import { ContactDTO } from './imobzi-contacts/imobziContacts.dtos';
 import { InvoicesDTO } from './imobzi-invoices/imobziInvoices.dtos';
@@ -14,6 +17,7 @@ import { ImobziPropertiesService } from './imobzi-properties/imobziProperties.se
 @Injectable()
 export class ImobziService {
   constructor(
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
     private readonly prisma: PrismaService,
     private readonly imobziPeopleService: ImobziPeopleService,
     private readonly imobziOrganizationsService: ImobziOrganizationsService,
@@ -40,9 +44,11 @@ export class ImobziService {
         });
       }
     } catch (error) {
-      throw new Error(`erro ao processar a fila - ${error}`);
+      this.logger.error(`Error at ImobziService > updatePeople | Verify imobziQueue info`);
+      throw new Error(`${error}`);
     }
   }
+
   async updateOrganization(contactData: ContactDTO) {
     try {
       const organizationsOnDb = await this.prisma.organization.findUnique({
@@ -62,28 +68,41 @@ export class ImobziService {
         });
       }
     } catch (error) {
-      // console.error(contactData);
-      // console.error(contactData.cnpj);
-      // console.error(contactData.contact_id);
-      // console.log(error)
-      throw new Error(`erro ao processar a fila - ${error}`);
+      this.logger.error(`Error at ImobziService > updateOrganizations| Verify imobziQueue info`);
+      throw new Error(`${error}`);
     }
   }
 
-  async updatePropertyAndBuilding(property: PropertyDTO) {
+  async updateBuilding(buildingData: BuildingDTO) {
+    try {
+      const buildingsOnDb = await this.prisma.building.findUnique({
+        where: { id_imobzi: buildingData.db_id.toString() },
+      });
+
+      if (!buildingsOnDb || new Date(buildingsOnDb?.updated_at) < new Date(buildingData.updated_at)) {
+        const organizationFromApi = await this.imobziBuildingsService.getRequiredBuildingDataToDb(buildingData);
+        await this.prisma.building.upsert({
+          where: {
+            id_imobzi: organizationFromApi.id_imobzi,
+          },
+          update: organizationFromApi,
+          create: organizationFromApi,
+        });
+      }
+    } catch (error) {
+      this.logger.error(`Error at ImobziService > updateBuildings| Verify imobziQueue info`);
+      throw new Error(`${error}`);
+    }
+  }
+
+  async updateProperty(property: PropertyDTO) {
     try {
       const propertyOnDb = await this.prisma.organization.findUnique({
         where: { id_imobzi: property.db_id.toString() },
       });
 
       if (!propertyOnDb || new Date(propertyOnDb?.updated_at) < new Date(property.updated_at)) {
-
         const propertyFromApi = await this.imobziPropertiesService.getRequiredPropertyDataToDb(property.db_id);
-        const buildingFromProperty = this.imobziBuildingsService.getRequiredBuildingDataToDb(propertyFromApi)
-
-        await this.prisma.building.upsert({
-          where: {id_imobzi: propertyFromApi.}
-        })
         await this.prisma.property.upsert({
           where: {
             id_imobzi: propertyFromApi.id_imobzi,
@@ -102,7 +121,8 @@ export class ImobziService {
         });
       }
     } catch (error) {
-      throw new Error(`erro ao processar a fila - ${error}`);
+      this.logger.error(`Error at ImobziService > updateProperties| Verify imobziQueue info`);
+      throw new Error(`${error}`);
     }
   }
 
@@ -147,7 +167,8 @@ export class ImobziService {
         });
       }
     } catch (error) {
-      throw new Error(`erro ao processar a fila - ${error}`);
+      this.logger.error(`Error at ImobziService > updateLeases| Verify imobziQueue info`);
+      throw new Error(`${error}`);
     }
   }
 
@@ -164,6 +185,9 @@ export class ImobziService {
         invoiceOnDb.paid_at !== invoice.paid_at
       ) {
         const invoiceFromApi = await this.imobziInvoicesService.getRequiredInvoicesDataToDb(invoice.invoice_id);
+        const items: ItemsInvoiceCreateDTO[] = invoiceFromApi.items;
+        delete invoiceFromApi.items;
+
         await this.prisma.invoice.upsert({
           where: {
             id_imobzi: invoiceFromApi.id_imobzi,
@@ -171,12 +195,13 @@ export class ImobziService {
           update: invoiceFromApi,
           create: {
             ...invoiceFromApi,
-            invoiceItems: { createMany: { data: invoiceFromApi.items } },
+            invoiceItems: { createMany: { data: items } },
           },
         });
       }
     } catch (error) {
-      throw new Error(`erro ao processar a fila - ${error}`);
+      this.logger.error(`Error at ImobziService > updateInvoices| Verify imobziQueue info`);
+      throw new Error(`${error}`);
     }
   }
 }
