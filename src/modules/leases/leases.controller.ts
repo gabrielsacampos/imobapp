@@ -23,10 +23,7 @@ export class LeasesController {
   }
 
   @Put(':id')
-  async updateLeaseItems(
-    @Param('id') id: string,
-    @Body() data: LeasesUpdateDTO,
-  ) {
+  async updateLeaseItems(@Param('id') id: string, @Body() data: LeasesUpdateDTO) {
     return await this.leasesService.updateLeaseItems(id, data);
   }
 }

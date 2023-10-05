@@ -1,14 +1,17 @@
 import { IsNotEmpty, ValidateIf, ValidateNested } from 'class-validator';
 import { Type } from 'class-transformer';
-import { OwnersUpdateDTO } from './owners/ownersUpdate.dtos';
 import { NotAcceptableException } from '@nestjs/common';
+import { OwnersCreateDTO } from './owners/OwnerCreate.dtos';
 
 export class PropertiesUpdateDTO {
+  @IsNotEmpty()
+  id_imobzi: string;
+
   @IsNotEmpty()
   unit: string;
 
   @IsNotEmpty()
-  building_id: bigint;
+  id_building_imobzi: string;
 
   @IsNotEmpty()
   active: boolean;
@@ -28,7 +31,7 @@ export class PropertiesUpdateDTO {
   alternative_code?: string;
 
   @ValidateIf((o) => {
-    const sumShare = o.owners.reduce((acc: number, curr: OwnersUpdateDTO) => {
+    const sumShare = o.owners.reduce((acc: number, curr: OwnersCreateDTO) => {
       acc += curr.share;
       return acc;
     }, 0);
@@ -37,8 +40,15 @@ export class PropertiesUpdateDTO {
     }
     return true;
   })
-  @IsNotEmpty()
+  @ValidateIf((o) => {
+    if (!o.owners) {
+      throw new NotAcceptableException(`Missing owners array`);
+    } else if (o.owners.length === 0) {
+      throw new NotAcceptableException(`Property must have at least one owner`);
+    }
+    return true;
+  })
   @ValidateNested()
-  @Type(() => OwnersUpdateDTO)
-  owners!: OwnersUpdateDTO;
+  @Type(() => OwnersCreateDTO)
+  owners: OwnersCreateDTO[];
 }

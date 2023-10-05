@@ -2,10 +2,13 @@ import { IsEmail, IsNotEmpty } from 'class-validator';
 
 export class OrganizationsUpdateDTO {
   @IsNotEmpty()
+  id_imobzi: string;
+
+  @IsNotEmpty()
   name: string;
 
   @IsNotEmpty()
-  person_id_representative: string;
+  id_person_representative: string;
 
   @IsNotEmpty()
   cnpj: string;

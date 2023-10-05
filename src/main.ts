@@ -2,9 +2,12 @@ import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { WinstonModule } from 'nest-winston';
+import { winstonConfig } from './config/winston.config';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const logger = WinstonModule.createLogger(winstonConfig);
+  const app = await NestFactory.create(AppModule, { logger });
 
   const config = new DocumentBuilder()
     .setTitle('ImobManager')
@@ -17,6 +20,8 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
 
-  await app.listen(3000);
+  const port = 3000;
+  logger.log(`App running at http://localhost:${port}`);
+  await app.listen(port);
 }
 bootstrap();

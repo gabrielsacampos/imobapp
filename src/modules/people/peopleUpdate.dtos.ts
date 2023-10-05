@@ -2,6 +2,9 @@ import { IsEmail, IsNotEmpty } from 'class-validator';
 
 export class PeopleUpdateDTO {
   @IsNotEmpty()
+  id_imobzi: string;
+
+  @IsNotEmpty()
   cpf: string;
 
   @IsNotEmpty()
@@ -14,7 +17,7 @@ export class PeopleUpdateDTO {
   @IsNotEmpty()
   phone: string;
 
-  birthdate?: Date;
+  birthdate?: string;
   alternative_address?: string;
   alternative_address_reference?: string;
   gender?: string;
