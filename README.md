@@ -44,13 +44,21 @@ BackEnd structure:
   - BullMQ
 
 Our Entities: 
-  - People :white_check_mark:
-  - Organizations :white_check_mark:
-  - Buildings :white_check_mark:
-  - Properties :white_check_mark:
-    - Owners :white_check_mark:
-  - Leases :white_check_mark:
-    - Leases_items :white_check_mark:
-  - Invoices :white_check_mark:
-    - Invoices_items :white_check_mark:
-  - Updates_table :clock10:
+  - People (Module)
+  - Organizations (Module)
+  - Buildings (Module)
+  - Properties (Module)
+    - Owners 
+  - Leases (Module)
+    - Leases_items 
+  - Invoices (Module)
+    - Invoices_items
+   
+3rd-party Api Modules:
+  - ImobziContacts
+  - ImobziPeople
+  - ImobziOrganizations
+  - ImobziBuildings
+  - ImobziProperties
+  - ImobziLeases
+  - ImobziInvoices
