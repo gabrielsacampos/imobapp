@@ -8,21 +8,21 @@ export interface ImobziLeasesDTO {
 }
 
 export interface LeaseDTO {
-  status: string;
-  code: string;
-  start_at: string;
-  insurances: Insurance[];
-  db_id: number;
-  items_management_fee: number;
-  irrf: boolean;
-  management_fee: ManagementFee;
-  in_progress: boolean;
-  value: number;
-  source: string;
-  lease_type: string;
-  property: Property;
-  tenants: Tenant[];
-  invoice_items_value: number;
+  status?: string;
+  code?: string;
+  start_at?: string;
+  insurances?: Insurance[];
+  db_id?: number;
+  items_management_fee?: number;
+  irrf?: boolean;
+  management_fee?: ManagementFee;
+  in_progress?: boolean;
+  value?: number;
+  source?: string;
+  lease_type?: string;
+  property?: Property;
+  tenants?: Tenant[];
+  invoice_items_value?: number;
 }
 
 export interface Insurance {

@@ -97,7 +97,7 @@ export class ImobziService {
 
   async updateProperty(property: PropertyDTO) {
     try {
-      const propertyOnDb = await this.prisma.organization.findUnique({
+      const propertyOnDb = await this.prisma.property.findUnique({
         where: { id_imobzi: property.db_id.toString() },
       });
 
@@ -127,12 +127,12 @@ export class ImobziService {
   }
 
   //we need to request each lease detail to get update date
-  async updateLease(lease: LeaseDTO) {
+  async updateLease(leaseData: LeaseDTO) {
     try {
       const leaseOnDb = await this.prisma.lease.findUnique({
-        where: { id_imobzi: lease.db_id.toString() },
+        where: { id_imobzi: leaseData.db_id.toString() },
       });
-      const leaseFromApi = await this.imobziLeasesService.getRequiredLeaseDataToDb(lease.db_id.toString());
+      const leaseFromApi = await this.imobziLeasesService.getRequiredLeaseDataToDb(leaseData.db_id.toString());
       const beneficiaries = leaseFromApi.beneficiaries;
       const leaseItems = leaseFromApi.lease_items;
 
@@ -172,19 +172,19 @@ export class ImobziService {
     }
   }
 
-  async updateInvoice(invoice: InvoicesDTO) {
+  async updateInvoice(invoiceData: InvoicesDTO) {
     try {
       const invoiceOnDb = await this.prisma.invoice.findUnique({
-        where: { id_imobzi: invoice.invoice_id },
+        where: { id_imobzi: invoiceData.invoice_id },
       });
 
       if (
         !invoiceOnDb ||
-        invoiceOnDb.status !== invoice.status ||
-        invoiceOnDb.total_value !== invoice.total_value ||
-        invoiceOnDb.paid_at !== invoice.paid_at
+        invoiceOnDb.status !== invoiceData.status ||
+        invoiceOnDb.total_value !== invoiceData.total_value ||
+        invoiceOnDb.paid_at !== invoiceData.paid_at
       ) {
-        const invoiceFromApi = await this.imobziInvoicesService.getRequiredInvoicesDataToDb(invoice.invoice_id);
+        const invoiceFromApi = await this.imobziInvoicesService.getRequiredInvoicesDataToDb(invoiceData.invoice_id);
         const items: ItemsInvoiceCreateDTO[] = invoiceFromApi.items;
         delete invoiceFromApi.items;
 
