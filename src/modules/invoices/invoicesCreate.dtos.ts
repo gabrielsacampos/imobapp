@@ -26,7 +26,7 @@ export class InvoiceCreateDTO {
     example: '2023-05-10',
   })
   @IsNotEmpty()
-  due_date: string;
+  due_date: Date;
 
   @ApiProperty({
     description: 'total of management fee',
@@ -113,8 +113,8 @@ export class InvoiceCreateDTO {
   @Type(() => ItemsInvoiceCreateDTO)
   items: ItemsInvoiceCreateDTO[];
 
-  paid_at?: string;
-  credit_at?: string;
+  paid_at?: Date;
+  credit_at?: Date;
   paid_manual?: boolean;
   bank_fee_value?: number;
   account_credit?: string;

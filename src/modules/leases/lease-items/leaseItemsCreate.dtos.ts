@@ -2,7 +2,7 @@ import { IsBoolean, IsNotEmpty } from 'class-validator';
 
 export class LeaseItemsCreateDTO {
   @IsNotEmpty()
-  due_date: string;
+  due_date: Date;
 
   @IsNotEmpty()
   description: string;
@@ -29,7 +29,7 @@ export class LeaseItemsCreateDTO {
   @IsNotEmpty()
   include_in_dimob: boolean;
 
-  start_date?: string;
+  start_date?: Date;
 
   repeat_total?: number;
 }

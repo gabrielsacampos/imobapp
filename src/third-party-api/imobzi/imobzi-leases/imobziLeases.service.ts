@@ -27,6 +27,7 @@ export class ImobziLeasesService {
         );
         allLeases.push(...data.leases);
         cursor = data.cursor;
+        this.logger.verbose(`Leases catched > ${allLeases.length}`);
       } while (cursor);
 
       return allLeases;
@@ -47,8 +48,10 @@ export class ImobziLeasesService {
 
   getRequiredLeaseItemsDataToDb(leaseItems: ImobziLeaseItemDTO[]): LeaseItemsCreateDTO[] {
     return leaseItems.map((item) => {
+      const validStartDate = item.start_date === '' ? null : new Date(item.start_date);
+      const start_date = validStartDate;
+      const due_date = new Date(item.due_date);
       const {
-        due_date,
         repeat_total,
         repeat_index,
         description,
@@ -58,7 +61,6 @@ export class ImobziLeasesService {
         until_due_date,
         behavior,
         include_in_dimob,
-        start_date,
       } = item;
 
       return {

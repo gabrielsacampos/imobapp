@@ -30,7 +30,7 @@ export class ImobziQueueProducer {
       // for (const person of people) {
       //   await this.imobziQueue.add('updatePeople', person, {
       //     attempts: 3,
-      //     delay: 3000,
+      //     delay: 5000,
       //     backoff: { delay: 10000, type: 'exponential' },
       //   });
       // }
@@ -38,7 +38,7 @@ export class ImobziQueueProducer {
       // for (const org of organiations) {
       //   await this.imobziQueue.add('updateOrganizations', org, {
       //     attempts: 3,
-      //     delay: 3000,
+      //     delay: 5000,
       //     backoff: { delay: 10000, type: 'exponential' },
       //   });
       // }
@@ -48,7 +48,7 @@ export class ImobziQueueProducer {
       // for (const building of allBuildings) {
       //   await this.imobziQueue.add('updateBuildings', building, {
       //     attempts: 3,
-      //     delay: 3000,
+      //     delay: 5000,
       //     backoff: { delay: 10000, type: 'exponential' },
       //   });
       // }
@@ -58,7 +58,7 @@ export class ImobziQueueProducer {
       // for (const property of allProperties) {
       //   await this.imobziQueue.add('updateProperties', property, {
       //     attempts: 3,
-      //     delay: 3000,
+      //     delay: 5000,
       //     backoff: { delay: 10000, type: 'exponential' },
       //   });
       // }
@@ -68,7 +68,7 @@ export class ImobziQueueProducer {
       // for (const lease of allLeases) {
       //   await this.imobziQueue.add('updateLeases', lease, {
       //     attempts: 3,
-      //     delay: 3000,
+      //     delay: 5000,
       //     backoff: { delay: 10000, type: 'exponential' },
       //   });
       // }
@@ -78,13 +78,12 @@ export class ImobziQueueProducer {
       for (const invoice of allInvoices) {
         await this.imobziQueue.add('updateInvoices', invoice, {
           attempts: 3,
-          delay: 3000,
+          delay: 5000,
           backoff: { delay: 10000, type: 'exponential' },
         });
       }
     } catch (error) {
       this.logger.error(`Error: ImobziQueue.producer > verifyEntitiesToUpdate. ${error}`);
-      throw new Error(error);
     }
   }
 }

@@ -35,6 +35,7 @@ export class ImobziPropertiesService {
           imobziParams,
         );
         allProperties.push(...data.properties);
+        this.logger.verbose(`Properties catched > ${allProperties.length}`);
         cursor = data.cursor;
       } while (cursor);
 

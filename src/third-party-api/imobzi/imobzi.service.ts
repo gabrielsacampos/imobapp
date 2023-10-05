@@ -182,7 +182,7 @@ export class ImobziService {
         !invoiceOnDb ||
         invoiceOnDb.status !== invoiceData.status ||
         invoiceOnDb.total_value !== invoiceData.total_value ||
-        invoiceOnDb.paid_at !== invoiceData.paid_at
+        new Date(invoiceOnDb.paid_at) !== new Date(invoiceData.paid_at)
       ) {
         const invoiceFromApi = await this.imobziInvoicesService.getRequiredInvoicesDataToDb(invoiceData.invoice_id);
         const items: ItemsInvoiceCreateDTO[] = invoiceFromApi.items;

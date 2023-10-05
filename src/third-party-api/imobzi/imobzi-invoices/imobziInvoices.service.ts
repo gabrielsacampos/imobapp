@@ -76,14 +76,19 @@ export class ImobziInvoicesService {
       const management_fee = data.onlendings_and_fees?.management_fee_value;
       const account_credit = data.account?.name;
       const onlending_value = data.onlendings_and_fees?.predicted_onlending_value;
-      const { paid_at } = data;
-      const credit_at = dateFunctions.defineCreditDate(paid_at);
+      const paidAtString = data.paid_at;
+      const creditAtString = paidAtString ? dateFunctions.defineCreditDate(paidAtString) : null; //function handle and returns date as string
+
+      // Requireds as Date ISO
+      const due_date = new Date(data.due_date);
+      const paid_at = new Date(paidAtString); // db requires as Date format
+      const credit_at = new Date(creditAtString);
+
       const {
         invoice_id: id_imobzi,
         status,
         reference_start_at,
         reference_end_at,
-        due_date,
         invoice_url,
         barcode,
         bank_slip_id,

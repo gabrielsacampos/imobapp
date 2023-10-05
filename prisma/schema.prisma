@@ -15,7 +15,7 @@ model Person {
   id_imobzi                     String    @unique
   cpf                           String?   @unique @db.VarChar(255)
   fullname                      String?
-  birthdate                     DateTime?
+  DateTime                     DateTime?
   email                         String?   @db.VarChar(255)
   phone                         String?   @db.VarChar(255)
   alternative_address           String?
@@ -128,7 +128,7 @@ model Lease {
   id_imobzi   String  @unique
   status      String
   code_imobzi String?
-  start_at    String
+  start_at    DateTime
   duration    Int
 
   id_property_imobzi String
@@ -163,7 +163,7 @@ model Lease {
 
 model LeaseItem {
   id               Int     @id @default(autoincrement())
-  due_date         String
+  due_date         DateTime
   description      String
   management_fee   Boolean
   recurrent        Boolean
@@ -173,7 +173,7 @@ model LeaseItem {
   behavior         String
   repeat_index     Int
   include_in_dimob Boolean
-  start_date       String?
+  start_date       DateTime?
 
   id_lease_imobzi String
   lease           Lease  @relation("leaseToLeaseItem", fields: [id_lease_imobzi], references: [id_imobzi], onDelete: Cascade, onUpdate: Cascade)
@@ -190,7 +190,7 @@ model Invoice {
   status             String
   reference_start_at String?
   reference_end_at   String?
-  due_date           String
+  due_date           DateTime
 
   id_lease_imobzi String
   lease           Lease  @relation("leaseToInvoice", fields: [id_lease_imobzi], references: [id_imobzi], onDelete: Cascade, onUpdate: Cascade)
@@ -202,8 +202,8 @@ model Invoice {
   bank_slip_id    String?
   total_value     Float
   interest_value  Float
-  paid_at         String?
-  credit_at       String?
+  paid_at         DateTime?
+  credit_at       DateTime?
   paid_manual     Boolean?
   bank_fee_value  Float?
   account_credit  String?
