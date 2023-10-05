@@ -22,6 +22,7 @@ export class PropertyCreateDTO {
   @IsNotEmpty()
   type: string;
 
+  property_block: string;
   bedroom?: number;
   suite?: number;
   garage?: number;

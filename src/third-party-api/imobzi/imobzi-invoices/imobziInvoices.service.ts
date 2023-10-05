@@ -81,8 +81,8 @@ export class ImobziInvoicesService {
 
       // Requireds as Date ISO
       const due_date = new Date(data.due_date);
-      const paid_at = new Date(paidAtString); // db requires as Date format
-      const credit_at = new Date(creditAtString);
+      const paid_at = paidAtString ? new Date(paidAtString) : null; // db requires as Date format
+      const credit_at = creditAtString ? new Date(creditAtString) : null;
 
       const {
         invoice_id: id_imobzi,

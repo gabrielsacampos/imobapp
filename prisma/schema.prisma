@@ -15,7 +15,7 @@ model Person {
   id_imobzi                     String    @unique
   cpf                           String?   @unique @db.VarChar(255)
   fullname                      String?
-  DateTime                     DateTime?
+  DateTime                      DateTime?
   email                         String?   @db.VarChar(255)
   phone                         String?   @db.VarChar(255)
   alternative_address           String?
@@ -90,6 +90,7 @@ model Property {
   buildings          Building @relation(fields: [id_building_imobzi], references: [id_imobzi], onDelete: Cascade, onUpdate: Cascade)
 
   area             Float?
+  property_block   String
   bedroom          Int?
   suite            Int?
   garage           Int?
@@ -124,8 +125,8 @@ model Owner {
 }
 
 model Lease {
-  id          Int     @id @default(autoincrement())
-  id_imobzi   String  @unique
+  id          Int      @id @default(autoincrement())
+  id_imobzi   String   @unique
   status      String
   code_imobzi String?
   start_at    DateTime
@@ -162,7 +163,7 @@ model Lease {
 }
 
 model LeaseItem {
-  id               Int     @id @default(autoincrement())
+  id               Int       @id @default(autoincrement())
   due_date         DateTime
   description      String
   management_fee   Boolean
@@ -208,8 +209,8 @@ model Invoice {
   bank_fee_value  Float?
   account_credit  String?
   onlending_value Float?
-  created_at      DateTime @default(now())
-  updated_at      DateTime @updatedAt
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
 
   invoiceItems InvoiceItem[]
 

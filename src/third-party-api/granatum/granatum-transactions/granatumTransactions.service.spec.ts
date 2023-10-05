@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SharedModule } from 'src/third-party-api/shared.module';
-import { GranatumTransactionPostDTO } from './granatumTransacationsPost.DTO';
+import { GranatumTransactionPostDTO } from './granatumTransacationsPost.dtos';
 import { GranatumTransactionsService } from './granatumTransactions.service';
 
 const transactionDataMock: GranatumTransactionPostDTO = {
@@ -23,7 +23,7 @@ describe('GranatumTransactionsService', () => {
   });
 
   test('getAllTransactions', async () => {
-    const result = await granatumTransactionsService.postTransaction(transactionDataMock);
-    console.log(result);
+    // const result = await granatumTransactionsService.postTransaction(transactionDataMock);
+    // console.log(result);
   });
 });

@@ -69,6 +69,7 @@ export class ImobziPropertiesService {
       const id_building_imobzi = data.building_id ? data.building_id.toString() : null;
 
       const {
+        property_block,
         alternative_code,
         area,
         sale_value,
@@ -84,6 +85,7 @@ export class ImobziPropertiesService {
       const owners = this.getRequiredPropertyOwnersToDb(data.owners);
 
       return {
+        property_block,
         unit,
         owners,
         id_imobzi,

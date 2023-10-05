@@ -97,9 +97,10 @@ export class ImobziService {
 
   async updateProperty(property: PropertyDTO) {
     try {
-      const propertyOnDb = await this.prisma.property.findUnique({
-        where: { id_imobzi: property.db_id.toString() },
-      });
+      // const propertyOnDb = await this.prisma.property.findUnique({
+      //   where: { id_imobzi: property.db_id.toString() },
+      // });
+      const propertyOnDb = null;
 
       if (!propertyOnDb || new Date(propertyOnDb?.updated_at) < new Date(property.updated_at)) {
         const propertyFromApi = await this.imobziPropertiesService.getRequiredPropertyDataToDb(property.db_id);
