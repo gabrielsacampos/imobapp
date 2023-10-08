@@ -5,7 +5,7 @@ import { ImobziQueueConsumer } from './imobziQueue.consumer';
 import { ImobziController } from './imobzi.controllers';
 import { ImobziService } from './imobzi.service';
 import { ImobziQueueProducer } from './imobziQueue.producer';
-import { ImobziContactsService } from './imobzi-contacts/ImobziContacts.service';
+import { ImobziContactsService } from './imobzi-contacts/imobziContacts.service';
 import { ImobziBuildingsService } from './imobzi-buildings/imobziBuildings.service';
 import { ImobziPropertiesService } from './imobzi-properties/imobziProperties.service';
 import { ImobziBuildingsModule } from './imobzi-buildings/imobziBuildings.module';
