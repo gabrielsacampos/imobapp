@@ -25,8 +25,8 @@ import { ExpressAdapter } from '@bull-board/express';
   imports: [
     BullModule.forRoot({
       redis: {
-        host: 'localhost',
-        port: 6379,
+        host: process.env.redis_host,
+        port: Number(process.env.redis_port),
       },
     }),
     BullModule.registerQueue({
