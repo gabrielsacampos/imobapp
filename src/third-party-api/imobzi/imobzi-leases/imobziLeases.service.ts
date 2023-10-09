@@ -19,7 +19,6 @@ export class ImobziLeasesService {
     try {
       const allLeases = [];
       let cursor = '';
-
       do {
         const { data } = await this.httpService.axiosRef.get<ImobziLeasesDTO>(
           imobziUrls.urlAllLeases(cursor),
@@ -31,6 +30,7 @@ export class ImobziLeasesService {
 
       return allLeases;
     } catch (error) {
+      console.log(error);
       this.logger.error(` Error on ImobziLeases.service > getAllLeasesFromImobzi: ${error}`);
     }
   }

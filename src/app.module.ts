@@ -3,9 +3,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ImobziController } from './third-party-api/imobzi/imobzi.controllers';
 import { ImobziModule } from './third-party-api/imobzi/imobzi.module';
+import { SharedModule } from './third-party-api/shared.module';
 
 @Module({
-  imports: [ImobziModule],
+  imports: [ImobziModule, SharedModule],
   controllers: [AppController, ImobziController],
   providers: [AppService],
 })
