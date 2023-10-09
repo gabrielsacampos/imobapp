@@ -44,7 +44,7 @@ export class ImobziService {
         });
       }
     } catch (error) {
-      this.logger.error(`Error at ImobziService > updatePeople | Verify imobziQueue info`);
+      this.logger.error(error);
       throw new Error(`${error}`);
     }
   }
@@ -68,7 +68,7 @@ export class ImobziService {
         });
       }
     } catch (error) {
-      this.logger.error(`Error at ImobziService > updateOrganizations| Verify imobziQueue info`);
+      this.logger.error(error);
       throw new Error(`${error}`);
     }
   }
@@ -90,7 +90,7 @@ export class ImobziService {
         });
       }
     } catch (error) {
-      this.logger.error(`Error at ImobziService > updateBuildings| Verify imobziQueue info`);
+      this.logger.error(error);
       throw new Error(`${error}`);
     }
   }
@@ -121,7 +121,7 @@ export class ImobziService {
         });
       }
     } catch (error) {
-      this.logger.error(`Error at ImobziService > updateProperties| Verify imobziQueue info`);
+      this.logger.error(error);
       throw new Error(`${error}`);
     }
   }
@@ -167,7 +167,7 @@ export class ImobziService {
         });
       }
     } catch (error) {
-      this.logger.error(`Error at ImobziService > updateLeases| Verify imobziQueue info`);
+      this.logger.error(error);
       throw new Error(`${error}`);
     }
   }
@@ -200,7 +200,7 @@ export class ImobziService {
         });
       }
     } catch (error) {
-      this.logger.error(`Error at ImobziService > updateInvoices| Verify imobziQueue info`);
+      this.logger.error(error);
       throw new Error(`${error}`);
     }
   }

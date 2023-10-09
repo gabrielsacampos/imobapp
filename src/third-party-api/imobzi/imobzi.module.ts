@@ -24,10 +24,7 @@ import { ExpressAdapter } from '@bull-board/express';
 @Module({
   imports: [
     BullModule.forRoot({
-      redis: {
-        host: process.env.redis_host,
-        port: Number(process.env.redis_port),
-      },
+      url: process.env.redis_url,
     }),
     BullModule.registerQueue({
       name: 'ImobziQueue',

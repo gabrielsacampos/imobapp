@@ -40,7 +40,8 @@ export class ImobziPropertiesService {
 
       return allProperties;
     } catch (error) {
-      this.logger.error(` Error on ImobziProperties.service > getAllProperties: ${error}`);
+      this.logger.error(error);
+      throw new Error(error);
     }
   }
 
@@ -99,9 +100,8 @@ export class ImobziPropertiesService {
         active,
       };
     } catch (error) {
-      this.logger.error(
-        ` Error on ImobziInvoices.service > getRequiredInvoicesDataToDb: id_imobzi: ${id_imobzi}: ${error}`,
-      );
+      this.logger.error(error);
+      throw new Error(error);
     }
   }
 }

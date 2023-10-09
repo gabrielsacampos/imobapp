@@ -35,7 +35,8 @@ export class ImobziInvoicesService {
 
       return allInvoices;
     } catch (error) {
-      this.logger.error(` Error on ImobziInvoices.service > getAllInvoicesFromImobzi: ${error}`);
+      this.logger.error(error);
+      throw new Error(error);
     }
   }
 
@@ -117,9 +118,8 @@ export class ImobziInvoicesService {
         items,
       };
     } catch (error) {
-      this.logger.error(
-        ` Error on ImobziInvoices.service > getRequiredInvoicesDataToDb: id_imobzi: ${id_invoice_imobzi}: ${error}`,
-      );
+      this.logger.error(error);
+      throw new Error(error);
     }
   }
 }

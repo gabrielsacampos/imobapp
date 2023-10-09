@@ -22,56 +22,56 @@ export class ImobziQueueProducer {
 
   async verifyEntitiesToUpdate() {
     try {
-      // const allContacts = await this.imobziContactsService.getAllContacts();
+      const allContacts = await this.imobziContactsService.getAllContacts();
 
-      // const people = allContacts.filter((contact) => contact.contact_type === 'person');
-      // const organiations = allContacts.filter((contact) => contact.contact_type === 'organization');
+      const people = allContacts.filter((contact) => contact.contact_type === 'person');
+      const organiations = allContacts.filter((contact) => contact.contact_type === 'organization');
 
-      // for (const person of people) {
-      //   await this.imobziQueue.add('updatePeople', person, {
-      //     attempts: 3,
-      //     delay: 3000,
-      //     backoff: { delay: 10000, type: 'exponential' },
-      //   });
-      // }
+      for (const person of people) {
+        await this.imobziQueue.add('updatePeople', person, {
+          attempts: 3,
+          delay: 3000,
+          backoff: { delay: 10000, type: 'exponential' },
+        });
+      }
 
-      // for (const org of organiations) {
-      //   await this.imobziQueue.add('updateOrganizations', org, {
-      //     attempts: 3,
-      //     delay: 3000,
-      //     backoff: { delay: 10000, type: 'exponential' },
-      //   });
-      // }
+      for (const org of organiations) {
+        await this.imobziQueue.add('updateOrganizations', org, {
+          attempts: 3,
+          delay: 3000,
+          backoff: { delay: 10000, type: 'exponential' },
+        });
+      }
 
-      // const allBuildings = await this.imobziBuildingsService.getAllBuildings();
+      const allBuildings = await this.imobziBuildingsService.getAllBuildings();
 
-      // for (const building of allBuildings) {
-      //   await this.imobziQueue.add('updateBuildings', building, {
-      //     attempts: 3,
-      //     delay: 3000,
-      //     backoff: { delay: 10000, type: 'exponential' },
-      //   });
-      // }
+      for (const building of allBuildings) {
+        await this.imobziQueue.add('updateBuildings', building, {
+          attempts: 3,
+          delay: 3000,
+          backoff: { delay: 10000, type: 'exponential' },
+        });
+      }
 
-      // const allProperties = await this.imobziPropertiesService.getAllProperties();
+      const allProperties = await this.imobziPropertiesService.getAllProperties();
 
-      // for (const property of allProperties) {
-      //   await this.imobziQueue.add('updateProperties', property, {
-      //     attempts: 3,
-      //     delay: 3000,
-      //     backoff: { delay: 10000, type: 'exponential' },
-      //   });
-      // }
+      for (const property of allProperties) {
+        await this.imobziQueue.add('updateProperties', property, {
+          attempts: 3,
+          delay: 3000,
+          backoff: { delay: 10000, type: 'exponential' },
+        });
+      }
 
-      // const allLeases = await this.imobziLeasesService.getAllLeasesFromImobzi();
+      const allLeases = await this.imobziLeasesService.getAllLeasesFromImobzi();
 
-      // for (const lease of allLeases) {
-      //   await this.imobziQueue.add('updateLeases', lease, {
-      //     attempts: 3,
-      //     delay: 3000,
-      //     backoff: { delay: 10000, type: 'exponential' },
-      //   });
-      // }
+      for (const lease of allLeases) {
+        await this.imobziQueue.add('updateLeases', lease, {
+          attempts: 3,
+          delay: 3000,
+          backoff: { delay: 10000, type: 'exponential' },
+        });
+      }
 
       const allInvoices = await this.imobziInvoicesService.getAllInvoicesFromImobzi();
 
@@ -83,7 +83,7 @@ export class ImobziQueueProducer {
         });
       }
     } catch (error) {
-      this.logger.error(`Error: ImobziQueue.producer > verifyEntitiesToUpdate. ${error}`);
+      this.logger.error(error);
       throw new Error(error);
     }
   }

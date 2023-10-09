@@ -28,7 +28,8 @@ export class ImobziBuildingsService {
 
       return allBuildings;
     } catch (error) {
-      this.logger.error(` Error on ImobziBuildings.service > getAllBuildings: ${error}`);
+      this.logger.error(error);
+      throw new Error(error);
     }
   }
 

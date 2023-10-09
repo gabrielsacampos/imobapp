@@ -8,6 +8,10 @@ primary_region = "gig"
 
 [build]
 
+[env]
+  CACHE_DRIVER = 'redis'
+  REDIS_CACHE_DN = "0"
+
 
 [http_service]
   internal_port = 3000
