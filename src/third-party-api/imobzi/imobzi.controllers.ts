@@ -1,24 +1,20 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
+import { ImobziWebhookDTO } from './imobzi-dtos/imobziWebhook.dtos';
 import { ImobziLeasesService } from './imobzi-leases/imobziLeases.service';
 import { ImobziService } from './imobzi.service';
-import { ImobziQueueProducer } from './imobziQueue.producer';
 
 @Controller('imobzi')
 export class ImobziController {
-  constructor(
-    private readonly imobziService: ImobziService,
-    private readonly imobziLeasesService: ImobziLeasesService,
-    private readonly imobziQueueProducer: ImobziQueueProducer,
-  ) {}
+  constructor(private readonly imobziService: ImobziService) {}
 
-  @Get('')
-  async printInfo() {
-    return { message: 'You are at imobzi area' };
+  @Post('webhooks')
+  async updateDatabase(@Body() data: ImobziWebhookDTO) {
+    return this.imobziService.handleWebhook(data);
   }
 
-  @Get('update')
-  async updateEntities() {
-    this.imobziQueueProducer.verifyEntitiesToUpdate();
-    return 'starting updates';
-  }
+  // @Get('update')
+  // async updateEntities() {
+  //   this.imobziQueueProducer.verifyEntitiesToUpdate();
+  //   return 'starting updates';
+  // }
 }

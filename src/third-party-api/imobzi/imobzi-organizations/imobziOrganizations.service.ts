@@ -54,8 +54,10 @@ export class ImobziOrganizationsService {
         name,
       };
     } catch (error) {
-      this.logger.error(error);
-      throw new Error(error);
+      this.logger.error(error + ` on ImobziOrganizationsService.getRequiredOrganizationDataToDb`, {
+        stack: error.stack,
+      });
+      throw new Error(error.status);
     }
   }
 }

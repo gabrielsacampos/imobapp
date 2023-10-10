@@ -5,6 +5,7 @@ import { ItemsInvoiceCreateDTO } from 'src/modules/invoices/invoice-items/invoic
 import { BuildingDTO } from './imobzi-buildings/imobziBuildings.dtos';
 import { ImobziBuildingsService } from './imobzi-buildings/imobziBuildings.service';
 import { ContactDTO } from './imobzi-contacts/imobziContacts.dtos';
+import { ImobziWebhookDTO } from './imobzi-dtos/imobziWebhook.dtos';
 import { InvoicesDTO } from './imobzi-invoices/imobziInvoices.dtos';
 import { ImobziInvoicesService } from './imobzi-invoices/imobziInvoices.service';
 import { LeaseDTO } from './imobzi-leases/imobziLeases.dtos';
@@ -26,6 +27,55 @@ export class ImobziService {
     private readonly imobziLeasesService: ImobziLeasesService,
     private readonly imobziInvoicesService: ImobziInvoicesService,
   ) {}
+
+  async handleWebhook(data: ImobziWebhookDTO) {
+    let updateDone: boolean = false;
+
+    switch (data.event) {
+      case 'contact_created':
+      case 'contact_updated':
+        const person = await this.imobziPeopleService.getRequiredPersonDataToDb(data.db_id);
+        await this.prisma.person.upsert({
+          where: {
+            id_imobzi: person.id_imobzi,
+          },
+          update: person,
+          create: person,
+        });
+
+        if (person) {
+          updateDone = true;
+          break;
+        }
+
+        const organization = await this.imobziOrganizationsService.getRequiredOrganizationDataToDb(data.db_id);
+        await this.updateOrganization(organization);
+        updateDone = true;
+        break;
+
+      case 'property_created' || 'property_updated':
+        const property = await this.imobziPropertiesService.getRequiredPropertyDataToDb(data.db_id);
+        await this.updateProperty(property);
+        updateDone = true;
+        break;
+
+      case 'lease_created' || 'lease_updated':
+        const lease = await this.imobziLeasesService.getRequiredLeaseDataToDb(data.db_id);
+        await this.updateLease(lease);
+        updateDone = true;
+        break;
+
+      case 'invoice_created' || 'invoice_updated':
+        const invoice = await this.imobziInvoicesService.getRequiredInvoicesDataToDb(data.db_id);
+        await this.updateInvoice(invoice);
+        updateDone = true;
+        break;
+    }
+
+    await this.prisma.webhook.create({
+      data: { event: data.event, id_entity_imobzi: data.db_id, done: updateDone },
+    });
+  }
 
   async updatePerson(contactData: ContactDTO) {
     try {

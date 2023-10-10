@@ -2,11 +2,11 @@ import { InjectQueue } from '@nestjs/bull';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Queue } from 'bull';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { ImobziBuildingsService } from './imobzi-buildings/imobziBuildings.service';
-import { ImobziContactsService } from './imobzi-contacts/imobziContacts.service';
-import { ImobziInvoicesService } from './imobzi-invoices/imobziInvoices.service';
-import { ImobziLeasesService } from './imobzi-leases/imobziLeases.service';
-import { ImobziPropertiesService } from './imobzi-properties/imobziProperties.service';
+import { ImobziBuildingsService } from '../imobzi-buildings/imobziBuildings.service';
+import { ImobziContactsService } from '../imobzi-contacts/imobziContacts.service';
+import { ImobziInvoicesService } from '../imobzi-invoices/imobziInvoices.service';
+import { ImobziLeasesService } from '../imobzi-leases/imobziLeases.service';
+import { ImobziPropertiesService } from '../imobzi-properties/imobziProperties.service';
 
 @Injectable()
 export class ImobziQueueProducer {

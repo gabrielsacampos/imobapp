@@ -1,4 +1,4 @@
-# fly.toml app configuration file generated for imobapp on 2023-10-08T11:39:21-03:00
+# fly.toml app configuration file generated for imobapp on 2023-10-10T14:46:13-03:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
@@ -9,9 +9,8 @@ primary_region = "gig"
 [build]
 
 [env]
-  CACHE_DRIVER = 'redis'
+  CACHE_DRIVER = "redis"
   REDIS_CACHE_DN = "0"
-
 
 [http_service]
   internal_port = 3000
