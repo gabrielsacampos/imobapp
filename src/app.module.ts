@@ -4,10 +4,10 @@ import { AppService } from './app.service';
 import { ImobziQueueModule } from './third-party-api/imobzi/imobzi-Queue/imobziQueue.module';
 import { ImobziModule } from './third-party-api/imobzi/imobzi.module';
 import { SharedModule } from './third-party-api/shared.module';
-import { GranatumAccountsModule } from './granatum-accounts/granatum-accounts.module';
+import { GranatumModule } from './third-party-api/granatum/granatum.module';
 
 @Module({
-  imports: [ImobziModule, ImobziQueueModule, SharedModule, GranatumAccountsModule],
+  imports: [ImobziModule, ImobziQueueModule, SharedModule, GranatumModule],
   controllers: [AppController],
   providers: [AppService],
 })

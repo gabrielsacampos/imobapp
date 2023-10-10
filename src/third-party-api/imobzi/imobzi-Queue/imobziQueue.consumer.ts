@@ -15,10 +15,6 @@ export class ImobziQueueConsumer {
   @Process('updatePeople')
   async updatePerson(job: Job<ContactDTO>) {
     const contact = job.data;
-<<<<<<< HEAD:src/third-party-api/imobzi/imobziQueue.consumer.ts
-
-=======
->>>>>>> master:src/third-party-api/imobzi/imobzi-Queue/imobziQueue.consumer.ts
     await new Promise((resolve) => setTimeout(resolve, 5000));
     await this.imobziService.updatePerson(contact);
   }
