@@ -9,9 +9,35 @@ import { GranatumAccountsModule } from './granatum-accounts/granatum-accounts.mo
 import { GranatumCostCenterModule } from './granatum-cost-center/granatum-cost-center.module';
 import { GranatumClientsModule } from './granatum-clients/granatum-clients.module';
 import { GranatumSupliersModule } from './granatum-supliers/granatum-supliers.module';
+import { GranatumAccountsService } from './granatum-accounts/granatum-accounts.service';
+import { GranatumCostCenterService } from './granatum-cost-center/granatum-cost-center.service';
+import { GranatumClientsService } from './granatum-clients/granatum-clients.service';
+import { GranatumSupliersService } from './granatum-supliers/granatum-supliers.service';
+import { GranatumService } from './granatum.service';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
-  imports: [GranatumTransactionsModule, GranatumCategoriesModule, SharedModule, GranatumAccountsModule, GranatumCostCenterModule, GranatumClientsModule, GranatumSupliersModule],
-  providers: [GranatumTransactionsService, GranatumCategoriesService, PrismaService],
+  imports: [
+    ScheduleModule.forRoot(),
+    GranatumTransactionsModule,
+    GranatumCategoriesModule,
+    SharedModule,
+    GranatumAccountsModule,
+    GranatumCostCenterModule,
+    GranatumClientsModule,
+    GranatumSupliersModule,
+  ],
+  providers: [
+    GranatumTransactionsService,
+    GranatumCategoriesService,
+    GranatumAccountsService,
+    GranatumCostCenterService,
+    GranatumClientsService,
+    GranatumSupliersService,
+    GranatumCategoriesService,
+    GranatumService,
+    PrismaService,
+  ],
+  exports: [GranatumService],
 })
 export class GranatumModule {}
