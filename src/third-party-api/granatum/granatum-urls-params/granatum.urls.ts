@@ -1,3 +1,6 @@
+import * as dotenv from 'dotenv';
+dotenv.config();
+
 export const granatumUrls = {
   posTransaciontsUrl(): string {
     return `https://api.granatum.com.br/v1/lancamentos?access_token=${process.env.GRANATUM_CORRETAGEM_KEY}`;
@@ -6,11 +9,7 @@ export const granatumUrls = {
   allCategoriesUrl(): string {
     return `https://api.granatum.com.br/v1/categorias?access_token=${process.env.GRANATUM_CORRETAGEM_KEY}`;
   },
-  // accountsUrls(accountId: number | string, id?: number | string): string {
-  //   if (id) {
-  //     return `https://api.granatum.com.br/v1/lancamentos/${id}?access_token=${process.env.GRANATUM_CORRETAGEM_KEY}&conta_id=${accountId}`;
-  //   } else {
-  //     return `https://api.granatum.com.br/v1/lancamentos?access_token=${process.env.GRANATUM_CORRETAGEM_KEY}&conta_id=${accountId}`;
-  //   }
-  // },
+  allAccountsUrl(): string {
+    return `https://api.granatum.com.br/v1/contas?access_token=${process.env.GRANATUM_CORRETAGEM_KEY}`;
+  },
 };
