@@ -29,7 +29,10 @@ export class ImobziService {
   ) {}
 
   async handleWebhook(data: ImobziWebhookDTO) {
-    let updateDone: boolean = false;
+    // regist event before handle with updates - if some error, database does not miss event.
+    const event = await this.prisma.webhook.create({
+      data: { event: data.event, id_entity_imobzi: data.db_id },
+    });
 
     switch (data.event) {
       case 'contact_created':
@@ -44,37 +47,34 @@ export class ImobziService {
         });
 
         if (person) {
-          updateDone = true;
+          await this.prisma.webhook.update({ where: { id: event.id }, data: { done: true } });
           break;
         }
 
         const organization = await this.imobziOrganizationsService.getRequiredOrganizationDataToDb(data.db_id);
         await this.updateOrganization(organization);
-        updateDone = true;
+        await this.prisma.webhook.update({ where: { id: event.id }, data: { done: true } });
         break;
 
-      case 'property_created' || 'property_updated':
-        const property = await this.imobziPropertiesService.getRequiredPropertyDataToDb(data.db_id);
-        await this.updateProperty(property);
-        updateDone = true;
+      case 'property_created':
+      case 'property_updated':
+        await this.updateProperty({ db_id: data.db_id });
+        await this.prisma.webhook.update({ where: { id: event.id }, data: { done: true } });
         break;
 
-      case 'lease_created' || 'lease_updated':
+      case 'lease_created':
+      case 'lease_updated':
         const lease = await this.imobziLeasesService.getRequiredLeaseDataToDb(data.db_id);
         await this.updateLease(lease);
-        updateDone = true;
+        await this.prisma.webhook.update({ where: { id: event.id }, data: { done: true } });
         break;
 
-      case 'invoice_created' || 'invoice_updated':
-        const invoice = await this.imobziInvoicesService.getRequiredInvoicesDataToDb(data.db_id);
-        await this.updateInvoice(invoice);
-        updateDone = true;
-        break;
+      // case 'invoice_created' || 'invoice_updated':
+      //   const invoice = await this.imobziInvoicesService.getRequiredInvoicesDataToDb(data.db_id);
+      //   await this.updateInvoice(invoice);
+      //   await this.prisma.webhook.update({ where: { id: event.id }, data: { done: true } });
+      //   break;
     }
-
-    await this.prisma.webhook.create({
-      data: { event: data.event, id_entity_imobzi: data.db_id, done: updateDone },
-    });
   }
 
   async updatePerson(contactData: ContactDTO) {
@@ -145,12 +145,11 @@ export class ImobziService {
     }
   }
 
-  async updateProperty(property: PropertyDTO) {
+  async updateProperty(property: Partial<PropertyDTO>) {
     try {
-      // const propertyOnDb = await this.prisma.property.findUnique({
-      //   where: { id_imobzi: property.db_id.toString() },
-      // });
-      const propertyOnDb = null;
+      const propertyOnDb = await this.prisma.property.findUnique({
+        where: { id_imobzi: property.db_id.toString() },
+      });
 
       if (!propertyOnDb || new Date(propertyOnDb?.updated_at) < new Date(property.updated_at)) {
         const propertyFromApi = await this.imobziPropertiesService.getRequiredPropertyDataToDb(property.db_id);
@@ -223,7 +222,7 @@ export class ImobziService {
     }
   }
 
-  async updateInvoice(invoiceData: InvoicesDTO) {
+  async updateInvoice(invoiceData: InvoicesDTO | any) {
     try {
       const invoiceOnDb = await this.prisma.invoice.findUnique({
         where: { id_imobzi: invoiceData.invoice_id },

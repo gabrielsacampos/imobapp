@@ -4,6 +4,7 @@ import { PrismaService } from 'src/database/prisma.service';
 import { GranatumAccountsService } from './granatum-accounts/granatum-accounts.service';
 import { GranatumCategoriesService } from './granatum-categories/granatumCategories.service';
 import { GranatumCostCenterService } from './granatum-cost-center/granatum-cost-center.service';
+import { GranatumTransactionPostDTO } from './granatum-transactions/granatumTransacationsPost.dtos';
 import { GranatumTransactionsService } from './granatum-transactions/granatumTransactions.service';
 
 @Injectable()
@@ -21,13 +22,30 @@ export class GranatumService {
   //   console.log('oiii');
   // }
 
+  // async syncGranatumWithImobziInvoices() {
+  //   const paidInvoices = await this.getCreditInvoicesByPeriod();
+
+  //   const paidInvoicesWithGranatumIds = [];
+
+  //   for (const invoice of paidInvoices) {
+  //     const itemsWithCategoriesIds = this.setItemsGranatumCategoriesId(invoice.invoiceItems);
+  //     const costCenterId = this.setCostCenterGranatumId(invoice.lease.property);
+  //     const accountId = this.setAccountGranatumId(invoice.account_credit);
+
+  //     paidInvoicesWithGranatumIds.push({
+  //       ...paidInvoices,
+  //       itemsWithCategoriesIds,
+  //       costCenterId,
+  //       accountId,
+  //     });
+  //   }
+  // }
   async setItemsGranatumCategoriesId(invoiceItems) {
     const itemsWithGranatumCategoriesIds = [];
     for (const item of invoiceItems) {
       const id = await this.granatumCategoriesService.findIdByDescription(item.description);
       itemsWithGranatumCategoriesIds.push({ ...item, id_category_granatum: id });
     }
-
     return itemsWithGranatumCategoriesIds;
   }
 
@@ -35,12 +53,12 @@ export class GranatumService {
     return await this.granatumAccountsService.findIdByDescription(accountName);
   }
 
-  async setCostCenterGranatumId(invoiceItems) {
-    const result = await this.granatumCostCenterService.findIdByDescription();
+  async setCostCenterGranatumId(property) {
+    return await this.granatumCostCentersService.findIdByDescription(property);
   }
 
   async getCreditInvoicesByPeriod(start_at: string, end_at: string) {
-    const result = await this.prisma.invoice.findMany({
+    return await this.prisma.invoice.findMany({
       select: {
         created_at: true,
         account_credit: true,

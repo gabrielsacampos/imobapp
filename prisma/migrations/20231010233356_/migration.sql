@@ -4,7 +4,7 @@ CREATE TABLE "people" (
     "id_imobzi" TEXT NOT NULL,
     "cpf" VARCHAR(255),
     "fullname" TEXT,
-    "birthdate" TIMESTAMP(3),
+    "DateTime" TIMESTAMP(3),
     "email" VARCHAR(255),
     "phone" VARCHAR(255),
     "alternative_address" TEXT,
@@ -64,6 +64,7 @@ CREATE TABLE "properties" (
     "status" TEXT NOT NULL,
     "id_building_imobzi" TEXT NOT NULL,
     "area" DOUBLE PRECISION,
+    "property_block" TEXT,
     "bedroom" INTEGER,
     "suite" INTEGER,
     "garage" INTEGER,
@@ -95,7 +96,7 @@ CREATE TABLE "leases" (
     "id_imobzi" TEXT NOT NULL,
     "status" TEXT NOT NULL,
     "code_imobzi" TEXT,
-    "start_at" TEXT NOT NULL,
+    "start_at" TIMESTAMP(3) NOT NULL,
     "duration" INTEGER NOT NULL,
     "id_property_imobzi" TEXT NOT NULL,
     "id_tenant_person_imobzi" TEXT,
@@ -118,7 +119,7 @@ CREATE TABLE "leases" (
 -- CreateTable
 CREATE TABLE "lease_items" (
     "id" SERIAL NOT NULL,
-    "due_date" TEXT NOT NULL,
+    "due_date" TIMESTAMP(3) NOT NULL,
     "description" TEXT NOT NULL,
     "management_fee" BOOLEAN NOT NULL,
     "recurrent" BOOLEAN NOT NULL,
@@ -128,7 +129,7 @@ CREATE TABLE "lease_items" (
     "behavior" TEXT NOT NULL,
     "repeat_index" INTEGER NOT NULL,
     "include_in_dimob" BOOLEAN NOT NULL,
-    "start_date" TEXT,
+    "start_date" TIMESTAMP(3),
     "id_lease_imobzi" TEXT NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
@@ -142,7 +143,7 @@ CREATE TABLE "invoices" (
     "status" TEXT NOT NULL,
     "reference_start_at" TEXT,
     "reference_end_at" TEXT,
-    "due_date" TEXT NOT NULL,
+    "due_date" TIMESTAMP(3) NOT NULL,
     "id_lease_imobzi" TEXT NOT NULL,
     "management_fee" DOUBLE PRECISION NOT NULL,
     "invoice_url" TEXT NOT NULL,
@@ -151,8 +152,8 @@ CREATE TABLE "invoices" (
     "bank_slip_id" TEXT,
     "total_value" DOUBLE PRECISION NOT NULL,
     "interest_value" DOUBLE PRECISION NOT NULL,
-    "paid_at" TEXT,
-    "credit_at" TEXT,
+    "paid_at" TIMESTAMP(3),
+    "credit_at" TIMESTAMP(3),
     "paid_manual" BOOLEAN,
     "bank_fee_value" DOUBLE PRECISION,
     "account_credit" TEXT,
@@ -194,22 +195,24 @@ CREATE TABLE "beneficiaries" (
 );
 
 -- CreateTable
-CREATE TABLE "ReadjustmentIndex" (
+CREATE TABLE "readjustment_indexes" (
     "id" SERIAL NOT NULL,
     "id_index_readjustment_imobzi" TEXT NOT NULL,
     "name" TEXT NOT NULL,
 
-    CONSTRAINT "ReadjustmentIndex_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "readjustment_indexes_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "updated_tables" (
+CREATE TABLE "webhooks" (
     "id" SERIAL NOT NULL,
-    "updated_table" TEXT NOT NULL,
-    "details" TEXT,
+    "event" TEXT NOT NULL,
+    "id_entity_imobzi" TEXT NOT NULL,
+    "done" BOOLEAN NOT NULL DEFAULT false,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
 
-    CONSTRAINT "updated_tables_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "webhooks_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex

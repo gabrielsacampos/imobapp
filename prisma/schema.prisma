@@ -90,7 +90,7 @@ model Property {
   buildings          Building @relation(fields: [id_building_imobzi], references: [id_imobzi], onDelete: Cascade, onUpdate: Cascade)
 
   area             Float?
-  property_block   String
+  property_block   String?
   bedroom          Int?
   suite            Int?
   garage           Int?
