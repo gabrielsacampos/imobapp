@@ -1,20 +1,24 @@
 import { Process, Processor } from '@nestjs/bull';
+import { Inject, forwardRef } from '@nestjs/common';
 import { Job } from 'bull';
 import { ContactDTO } from 'src/third-party-api/imobzi/imobzi-contacts/imobziContacts.dtos';
-import { BuildingDTO } from './imobzi-buildings/imobziBuildings.dtos';
-import { InvoicesDTO } from './imobzi-invoices/imobziInvoices.dtos';
-import { LeaseDTO } from './imobzi-leases/imobziLeases.dtos';
-import { PropertyDTO } from './imobzi-properties/imobziProperties.dtos';
-import { ImobziService } from './imobzi.service';
+import { BuildingDTO } from '../imobzi-buildings/imobziBuildings.dtos';
+import { InvoicesDTO } from '../imobzi-invoices/imobziInvoices.dtos';
+import { LeaseDTO } from '../imobzi-leases/imobziLeases.dtos';
+import { PropertyDTO } from '../imobzi-properties/imobziProperties.dtos';
+import { ImobziService } from '../imobzi.service';
 
 @Processor('ImobziQueue')
 export class ImobziQueueConsumer {
-  constructor(private readonly imobziService: ImobziService) {}
+  constructor(@Inject(forwardRef(() => ImobziService)) private readonly imobziService: ImobziService) {}
 
   @Process('updatePeople')
   async updatePerson(job: Job<ContactDTO>) {
     const contact = job.data;
+<<<<<<< HEAD:src/third-party-api/imobzi/imobziQueue.consumer.ts
 
+=======
+>>>>>>> master:src/third-party-api/imobzi/imobzi-Queue/imobziQueue.consumer.ts
     await new Promise((resolve) => setTimeout(resolve, 5000));
     await this.imobziService.updatePerson(contact);
   }

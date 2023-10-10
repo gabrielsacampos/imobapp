@@ -7,14 +7,14 @@ import { PrismaService } from 'src/database/prisma.service';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     HttpModule.register({
       timeout: 10000,
       maxRedirects: 5,
     }),
     WinstonModule.forRoot(winstonConfig),
-    ConfigModule.forRoot({
-      isGlobal: true,
-    }),
   ],
   providers: [PrismaService],
   exports: [HttpModule, PrismaService],

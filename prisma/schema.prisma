@@ -6,8 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL_MYSQL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Person {
@@ -255,17 +255,21 @@ model Beneficiary {
   @@map("beneficiaries")
 }
 
-model ReadjustmentIndex {
+model Readjustment_index {
   id                           Int    @id @default(autoincrement())
   id_index_readjustment_imobzi String
   name                         String
+
+  @@map("readjustment_indexes")
 }
 
-model Update {
-  id            Int      @id @default(autoincrement())
-  updated_table String
-  details       String?
-  created_at    DateTime @default(now())
+model Webhook {
+  id Int @id @default(autoincrement())
+  event String
+  id_entity_imobzi String
+  done Boolean @default(false)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
-  @@map("updated_tables")
+  @@map("webhooks")
 }

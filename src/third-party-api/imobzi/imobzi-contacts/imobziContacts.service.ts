@@ -28,7 +28,8 @@ export class ImobziContactsService {
 
       return allContacts;
     } catch (error) {
-      this.logger.error(` Error on ImobziContacts.service > getAllContacts: ${error}`);
+      this.logger.error(error);
+      throw new Error(error);
     }
   }
 }

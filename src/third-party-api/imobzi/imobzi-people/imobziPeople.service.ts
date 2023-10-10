@@ -66,9 +66,8 @@ export class ImobziPeopleService {
 
       return { id_imobzi, cpf, phone, fullname, email, code_imobzi, marital_status, gender, profession };
     } catch (error) {
-      this.logger.error(
-        ` Error on ImobziPeople.service > getRequiredPersonDataToDb: id_imobzi: ${id_imobzi}: ${error}`,
-      );
+      this.logger.error(error);
+      throw new Error(error);
     }
   }
 }
