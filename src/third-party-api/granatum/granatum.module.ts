@@ -8,9 +8,10 @@ import { GranatumTransactionsService } from './granatum-transactions/granatumTra
 import { GranatumAccountsModule } from './granatum-accounts/granatum-accounts.module';
 import { GranatumCostCenterModule } from './granatum-cost-center/granatum-cost-center.module';
 import { GranatumClientsModule } from './granatum-clients/granatum-clients.module';
+import { GranatumSupliersModule } from './granatum-supliers/granatum-supliers.module';
 
 @Module({
-  imports: [GranatumTransactionsModule, GranatumCategoriesModule, SharedModule, GranatumAccountsModule, GranatumCostCenterModule, GranatumClientsModule],
+  imports: [GranatumTransactionsModule, GranatumCategoriesModule, SharedModule, GranatumAccountsModule, GranatumCostCenterModule, GranatumClientsModule, GranatumSupliersModule],
   providers: [GranatumTransactionsService, GranatumCategoriesService, PrismaService],
 })
 export class GranatumModule {}
