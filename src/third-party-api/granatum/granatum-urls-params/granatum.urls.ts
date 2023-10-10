@@ -17,4 +17,12 @@ export const granatumUrls = {
   allAccountsUrl(): string {
     return `https://api.granatum.com.br/v1/contas?access_token=${process.env.GRANATUM_CORRETAGEM_KEY}`;
   },
+
+  allClientsUrl(): string {
+    return `https://api.granatum.com.br/v1/clientes?access_token=${process.env.GRANATUM_CORRETAGEM_KEY}`;
+  },
+
+  allSupliersUrl(): string {
+    return `https://api.granatum.com.br/v1/fornecedores?access_token=${process.env.GRANATUM_CORRETAGEM_KEY}`;
+  },
 };
