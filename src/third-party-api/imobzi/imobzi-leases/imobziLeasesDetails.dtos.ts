@@ -357,7 +357,7 @@ export interface Checklist {
 
 export interface ImobziLeaseItemDTO {
   landlords: any[];
-  due_date: string;
+  due_date: Date;
   repeat_total: number;
   description: string;
   bar_code: string;

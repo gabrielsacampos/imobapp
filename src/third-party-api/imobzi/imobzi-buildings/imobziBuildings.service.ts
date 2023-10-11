@@ -1,7 +1,7 @@
 import { Logger } from 'winston';
 import { HttpService } from '@nestjs/axios';
 import { Inject, Injectable } from '@nestjs/common';
-import { BuildingsCreateDTO } from 'src/modules/buildings/buildingsCreate.dtos';
+import { BuildingsCreateDTO } from 'src/db/modules/buildings/buildingsCreate.dtos';
 import { BuildingDTO } from './imobziBuildings.dtos';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { imobziUrls, imobziParams } from '../imobzi-urls-params/imobzi.urls';

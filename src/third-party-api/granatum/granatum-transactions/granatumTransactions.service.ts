@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaService } from 'src/prisma-client/prisma.service';
 import { granatumUrls } from '../granatum-urls-params/granatum.urls';
 import { GranatumTransactionPostDTO } from './granatumTransacationsPost.dtos';
 

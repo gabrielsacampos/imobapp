@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaService } from 'src/prisma-client/prisma.service';
 import { GranatumAccountsService } from './granatum-accounts/granatum-accounts.service';
 import { GranatumCategoriesService } from './granatum-categories/granatumCategories.service';
 import { GranatumCostCenterService } from './granatum-cost-center/granatum-cost-center.service';

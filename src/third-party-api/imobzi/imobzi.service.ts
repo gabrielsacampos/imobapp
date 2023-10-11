@@ -1,7 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { PrismaService } from 'src/database/prisma.service';
-import { ItemsInvoiceCreateDTO } from 'src/modules/invoices/invoice-items/invoice-items.dtos';
+import { PrismaService } from 'src/prisma-client/prisma.service';
+import { ItemsInvoiceCreateDTO } from 'src/db/modules/invoices/invoice-items/invoice-items.dtos';
 import { BuildingDTO } from './imobzi-buildings/imobziBuildings.dtos';
 import { ImobziBuildingsService } from './imobzi-buildings/imobziBuildings.service';
 import { ContactDTO } from './imobzi-contacts/imobziContacts.dtos';
@@ -54,45 +54,35 @@ export class ImobziService {
         const organization = await this.imobziOrganizationsService.getRequiredOrganizationDataToDb(data.db_id);
         await this.updateOrganization(organization);
         await this.prisma.webhook.update({ where: { id: event.id }, data: { done: true } });
-        break;
 
       case 'property_created':
       case 'property_updated':
         await this.updateProperty({ db_id: data.db_id });
         await this.prisma.webhook.update({ where: { id: event.id }, data: { done: true } });
-        break;
 
       case 'lease_created':
       case 'lease_updated':
         const lease = await this.imobziLeasesService.getRequiredLeaseDataToDb(data.db_id);
         await this.updateLease(lease);
         await this.prisma.webhook.update({ where: { id: event.id }, data: { done: true } });
-        break;
 
-      // case 'invoice_created' || 'invoice_updated':
-      //   const invoice = await this.imobziInvoicesService.getRequiredInvoicesDataToDb(data.db_id);
-      //   await this.updateInvoice(invoice);
-      //   await this.prisma.webhook.update({ where: { id: event.id }, data: { done: true } });
-      //   break;
+      case 'invoice_created' || 'invoice_updated':
+        const invoice = await this.imobziInvoicesService.getRequiredInvoicesDataToDb(data.db_id);
+        await this.updateInvoice(invoice);
+        await this.prisma.webhook.update({ where: { id: event.id }, data: { done: true } });
     }
   }
 
   async updatePerson(contactData: ContactDTO) {
     try {
-      const personOnDb = await this.prisma.person.findUnique({
-        where: { id_imobzi: contactData.contact_id.toString() },
+      const personFromApi = await this.imobziPeopleService.getRequiredPersonDataToDb(contactData.contact_id);
+      await this.prisma.person.upsert({
+        where: {
+          id_imobzi: personFromApi.id_imobzi,
+        },
+        update: personFromApi,
+        create: personFromApi,
       });
-
-      if (!personOnDb || new Date(personOnDb?.updated_at) < new Date(contactData.updated_at)) {
-        const personFromApi = await this.imobziPeopleService.getRequiredPersonDataToDb(contactData.contact_id);
-        await this.prisma.person.upsert({
-          where: {
-            id_imobzi: personFromApi.id_imobzi,
-          },
-          update: personFromApi,
-          create: personFromApi,
-        });
-      }
     } catch (error) {
       this.logger.error(error);
       throw new Error(`${error}`);
@@ -101,22 +91,16 @@ export class ImobziService {
 
   async updateOrganization(contactData: ContactDTO) {
     try {
-      const organizationsOnDb = await this.prisma.organization.findUnique({
-        where: { id_imobzi: contactData.contact_id.toString() },
+      const organizationFromApi = await this.imobziOrganizationsService.getRequiredOrganizationDataToDb(
+        contactData.contact_id,
+      );
+      await this.prisma.organization.upsert({
+        where: {
+          id_imobzi: organizationFromApi.id_imobzi,
+        },
+        update: organizationFromApi,
+        create: organizationFromApi,
       });
-
-      if (!organizationsOnDb || new Date(organizationsOnDb?.updated_at) < new Date(contactData.updated_at)) {
-        const organizationFromApi = await this.imobziOrganizationsService.getRequiredOrganizationDataToDb(
-          contactData.contact_id,
-        );
-        await this.prisma.organization.upsert({
-          where: {
-            id_imobzi: organizationFromApi.id_imobzi,
-          },
-          update: organizationFromApi,
-          create: organizationFromApi,
-        });
-      }
     } catch (error) {
       this.logger.error(error);
       throw new Error(`${error}`);
@@ -125,20 +109,14 @@ export class ImobziService {
 
   async updateBuilding(buildingData: BuildingDTO) {
     try {
-      const buildingsOnDb = await this.prisma.building.findUnique({
-        where: { id_imobzi: buildingData.db_id.toString() },
+      const organizationFromApi = await this.imobziBuildingsService.getRequiredBuildingDataToDb(buildingData);
+      await this.prisma.building.upsert({
+        where: {
+          id_imobzi: organizationFromApi.id_imobzi,
+        },
+        update: organizationFromApi,
+        create: organizationFromApi,
       });
-
-      if (!buildingsOnDb || new Date(buildingsOnDb?.updated_at) < new Date(buildingData.updated_at)) {
-        const organizationFromApi = await this.imobziBuildingsService.getRequiredBuildingDataToDb(buildingData);
-        await this.prisma.building.upsert({
-          where: {
-            id_imobzi: organizationFromApi.id_imobzi,
-          },
-          update: organizationFromApi,
-          create: organizationFromApi,
-        });
-      }
     } catch (error) {
       this.logger.error(error);
       throw new Error(`${error}`);
@@ -147,29 +125,23 @@ export class ImobziService {
 
   async updateProperty(property: Partial<PropertyDTO>) {
     try {
-      const propertyOnDb = await this.prisma.property.findUnique({
-        where: { id_imobzi: property.db_id.toString() },
+      const propertyFromApi = await this.imobziPropertiesService.getRequiredPropertyDataToDb(property.db_id);
+      await this.prisma.property.upsert({
+        where: {
+          id_imobzi: propertyFromApi.id_imobzi,
+        },
+        update: {
+          ...propertyFromApi,
+          owners: {
+            deleteMany: {},
+            createMany: { data: propertyFromApi.owners },
+          },
+        },
+        create: {
+          ...propertyFromApi,
+          owners: { createMany: { data: propertyFromApi.owners } },
+        },
       });
-
-      if (!propertyOnDb || new Date(propertyOnDb?.updated_at) < new Date(property.updated_at)) {
-        const propertyFromApi = await this.imobziPropertiesService.getRequiredPropertyDataToDb(property.db_id);
-        await this.prisma.property.upsert({
-          where: {
-            id_imobzi: propertyFromApi.id_imobzi,
-          },
-          update: {
-            ...propertyFromApi,
-            owners: {
-              deleteMany: {},
-              createMany: { data: propertyFromApi.owners },
-            },
-          },
-          create: {
-            ...propertyFromApi,
-            owners: { createMany: { data: propertyFromApi.owners } },
-          },
-        });
-      }
     } catch (error) {
       this.logger.error(error);
       throw new Error(`${error}`);
@@ -179,9 +151,6 @@ export class ImobziService {
   //we need to request each lease detail to get update date
   async updateLease(leaseData: LeaseDTO) {
     try {
-      const leaseOnDb = await this.prisma.lease.findUnique({
-        where: { id_imobzi: leaseData.db_id.toString() },
-      });
       const leaseFromApi = await this.imobziLeasesService.getRequiredLeaseDataToDb(leaseData.db_id.toString());
       const beneficiaries = leaseFromApi.beneficiaries;
       const leaseItems = leaseFromApi.lease_items;
@@ -189,33 +158,31 @@ export class ImobziService {
       delete leaseFromApi.lease_items;
       delete leaseFromApi.beneficiaries;
 
-      if (!leaseOnDb || new Date(leaseOnDb?.updated_at) < new Date(leaseFromApi.updated_at)) {
-        await this.prisma.lease.upsert({
-          where: {
-            id_imobzi: leaseFromApi.id_imobzi,
+      await this.prisma.lease.upsert({
+        where: {
+          id_imobzi: leaseFromApi.id_imobzi,
+        },
+        update: {
+          ...leaseFromApi,
+          beneficiariesLease: {
+            deleteMany: {},
+            createMany: { data: beneficiaries },
           },
-          update: {
-            ...leaseFromApi,
-            beneficiariesLease: {
-              deleteMany: {},
-              createMany: { data: beneficiaries },
-            },
-            leasesItems: {
-              deleteMany: {},
-              createMany: { data: leaseItems },
-            },
+          leasesItems: {
+            deleteMany: {},
+            createMany: { data: leaseItems },
           },
-          create: {
-            ...leaseFromApi,
-            beneficiariesLease: {
-              createMany: { data: beneficiaries },
-            },
-            leasesItems: {
-              createMany: { data: leaseItems },
-            },
+        },
+        create: {
+          ...leaseFromApi,
+          beneficiariesLease: {
+            createMany: { data: beneficiaries },
           },
-        });
-      }
+          leasesItems: {
+            createMany: { data: leaseItems },
+          },
+        },
+      });
     } catch (error) {
       this.logger.error(error);
       throw new Error(`${error}`);
@@ -224,31 +191,17 @@ export class ImobziService {
 
   async updateInvoice(invoiceData: InvoicesDTO | any) {
     try {
-      const invoiceOnDb = await this.prisma.invoice.findUnique({
-        where: { id_imobzi: invoiceData.invoice_id },
+      const invoiceFromApi = await this.imobziInvoicesService.getRequiredInvoicesDataToDb(invoiceData.invoice_id);
+      const items: ItemsInvoiceCreateDTO[] = invoiceFromApi.items;
+      delete invoiceFromApi.items;
+
+      await this.prisma.invoice.upsert({
+        where: {
+          id_imobzi: invoiceFromApi.id_imobzi,
+        },
+        update: invoiceFromApi,
+        create: { ...invoiceFromApi, invoiceItems: { createMany: { data: items } } },
       });
-
-      if (
-        !invoiceOnDb ||
-        invoiceOnDb.status !== invoiceData.status ||
-        invoiceOnDb.total_value !== invoiceData.total_value ||
-        new Date(invoiceOnDb.paid_at) !== new Date(invoiceData.paid_at)
-      ) {
-        const invoiceFromApi = await this.imobziInvoicesService.getRequiredInvoicesDataToDb(invoiceData.invoice_id);
-        const items: ItemsInvoiceCreateDTO[] = invoiceFromApi.items;
-        delete invoiceFromApi.items;
-
-        await this.prisma.invoice.upsert({
-          where: {
-            id_imobzi: invoiceFromApi.id_imobzi,
-          },
-          update: invoiceFromApi,
-          create: {
-            ...invoiceFromApi,
-            invoiceItems: { createMany: { data: items } },
-          },
-        });
-      }
     } catch (error) {
       this.logger.error(error);
       throw new Error(`${error}`);

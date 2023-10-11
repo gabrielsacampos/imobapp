@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaService } from 'src/prisma-client/prisma.service';
 import { SharedModule } from '../shared.module';
 import { GranatumCategoriesModule } from './granatum-categories/granatumCategories.module';
 import { GranatumCategoriesService } from './granatum-categories/granatumCategories.service';

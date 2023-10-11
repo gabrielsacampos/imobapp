@@ -1,9 +1,9 @@
 import { HttpService } from '@nestjs/axios';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { BeneficiariesCreateDTO } from 'src/modules/leases/lease-beneficiaries/lease-beneficiaries.dtos';
-import { LeaseItemsCreateDTO } from 'src/modules/leases/lease-items/leaseItemsCreate.dtos';
-import { LeasesCreateDTO } from 'src/modules/leases/leasesCreate.dtos';
+import { BeneficiariesCreateDTO } from 'src/db/modules/leases/lease-beneficiaries/lease-beneficiaries.dtos';
+import { LeaseItemsCreateDTO } from 'src/db/modules/leases/lease-items/leaseItemsCreate.dtos';
+import { LeasesCreateDTO } from 'src/db/modules/leases/leasesCreate.dtos';
 import { ImobziLeasesDTO, LeaseDTO } from './imobziLeases.dtos';
 import { ImobziLeaseBeneficiaryDTO, ImobziLeaseDetailsDTO, ImobziLeaseItemDTO } from './imobziLeasesDetails.dtos';
 import { imobziUrls, imobziParams } from '../imobzi-urls-params/imobzi.urls';

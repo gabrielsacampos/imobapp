@@ -14,7 +14,7 @@ export interface ImobziInvoiceDetailsDTO {
   bank_slip_id: string;
   difference_value: number;
   status: string;
-  due_date: string;
+  due_date: Date;
   total_value: number;
   barcode: string;
   onlendings_and_fees: OnlendingsAndFees;

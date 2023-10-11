@@ -1,8 +1,8 @@
 import { HttpService } from '@nestjs/axios';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { OwnersCreateDTO } from 'src/modules/properties/owners/OwnerCreate.dtos';
-import { PropertyCreateDTO } from 'src/modules/properties/propertiesCreate.dtos';
+import { OwnersCreateDTO } from 'src/db/modules/properties/owners/OwnerCreate.dtos';
+import { PropertyCreateDTO } from 'src/db/modules/properties/propertiesCreate.dtos';
 import { ImobziPropertiesDTO } from './imobziProperties.dtos';
 import { ImobziPropertyOwnerDTO } from './imobziPropertyDetails.dtos';
 import { imobziUrls, imobziParams } from '../imobzi-urls-params/imobzi.urls';
