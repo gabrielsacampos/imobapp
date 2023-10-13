@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ImobziModule } from './third-party-api/imobzi/imobzi.module';
-import { SharedModule } from './third-party-api/shared.module';
-import { GranatumModule } from './third-party-api/granatum/granatum.module';
+import { ImobziModule } from './imobzi/imobzi.module';
+import { SharedModule } from './shared.module';
+import { GranatumModule } from './granatum/granatum.module';
 
 @Module({
   imports: [ImobziModule, SharedModule, GranatumModule],

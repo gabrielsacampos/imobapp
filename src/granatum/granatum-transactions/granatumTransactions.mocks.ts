@@ -1,0 +1,56 @@
+export const formatDataToPostTransactionMock = [
+  {
+    tags: [{ id: 59943 }],
+    observacao: 'Faturas pagas em:2023-05-01 e creditadas em: 2023-05-02',
+    conta_id: 103796,
+    categoria_id: 1843956,
+    data_vencimento: '2023-05-02',
+    data_pagamento: '2023-05-02',
+    valor: -3.2,
+    descricao: ' Cobrança Imobzi',
+    itens_adicionais: [
+      { tags: [{ id: 59943 }], descricao: 'Juros e multa de faturas', categoria_id: 1848070, valor: 0 },
+      {
+        tags: [{ id: 59943 }],
+        descricao: 'Aluguel > Fatura: invoiceid1234 > imóvel: 333 - Ipê',
+        valor: 1000,
+        categoria_id: 1846027,
+        centro_custo_lucro_id: 244547,
+      },
+      {
+        tags: [{ id: 59943 }],
+        descricao: 'iptu > Fatura: invoiceid1234 > imóvel: 333 - Ipê',
+        valor: 100,
+        categoria_id: 1843892,
+        centro_custo_lucro_id: 244547,
+      },
+    ],
+  },
+  {
+    tags: [{ id: 59943 }],
+    observacao: 'Faturas pagas em:2023-05-02 e creditadas em: 2023-05-03',
+    conta_id: 103796,
+    categoria_id: 1843956,
+    data_vencimento: '2023-05-03',
+    data_pagamento: '2023-05-03',
+    valor: -3.2,
+    descricao: ' Cobrança Imobzi',
+    itens_adicionais: [
+      { tags: [{ id: 59943 }], descricao: 'Juros e multa de faturas', categoria_id: 1848070, valor: 0 },
+      {
+        tags: [{ id: 59943 }],
+        descricao: 'Aluguel > Fatura: invoiceid33333 > imóvel: 1101 - Ipê',
+        valor: 1000,
+        categoria_id: 1846027,
+        centro_custo_lucro_id: 244547,
+      },
+      {
+        tags: [{ id: 59943 }],
+        descricao: 'iptu > Fatura: invoiceid33333 > imóvel: 1101 - Ipê',
+        valor: 100,
+        categoria_id: 1843892,
+        centro_custo_lucro_id: 244547,
+      },
+    ],
+  },
+];
