@@ -49,50 +49,49 @@ describe('GranatumTransactionsService', () => {
     prismaMock.invoice.findMany.mockResolvedValue(getCreditInvoicesByPeriodMock);
   });
 
-  // test('setItemsGranatumCategoriesId', async () => {
-  //   const result = await granatumService.setItemsGranatumCategoriesId([
-  //     { description: 'aluguel' },
-  //     { description: 'iptu' },
-  //   ]);
-  //   expect(result).toEqual([
-  //     { description: 'aluguel', id_category_granatum: 1846027 },
-  //     { description: 'iptu', id_category_granatum: 1843892 },
-  //   ]);
-  // });
+  test('setItemsGranatumCategoriesId', async () => {
+    const result = await granatumService.setItemsGranatumCategoriesId([
+      { description: 'aluguel' },
+      { description: 'iptu' },
+    ]);
+    expect(result).toEqual([
+      { description: 'aluguel', id_category_granatum: 1846027 },
+      { description: 'iptu', id_category_granatum: 1843892 },
+    ]);
+  });
 
-  // test('setAccountGranatumId', async () => {
-  //   const result = await granatumService.setAccountGranatumId('Inter');
-  //   expect(result).toBe(103796);
-  // });
+  test('setAccountGranatumId', async () => {
+    const result = await granatumService.setAccountGranatumId('Inter');
+    expect(result).toBe(103796);
+  });
 
-  // test('setCostCenterGramatumId', async () => {
-  //   const result1 = await granatumService.setCostCenterGranatumId({
-  //     building: { name: 'Itália' },
-  //     property_block: null,
-  //   });
-  //   expect(result1).toBe(244549);
+  test('setCostCenterGramatumId', async () => {
+    const result1 = await granatumService.setCostCenterGranatumId({
+      building: { name: 'Itália' },
+      property_block: null,
+    });
+    expect(result1).toBe(244549);
 
-  //   const result2 = await granatumService.setCostCenterGranatumId({
-  //     building: { name: 'Eko Home Club' },
-  //     property_block: 'Ipê',
-  //   });
-  //   expect(result2).toBe(244547);
+    const result2 = await granatumService.setCostCenterGranatumId({
+      building: { name: 'Eko Home Club' },
+      property_block: 'Ipê',
+    });
+    expect(result2).toBe(244547);
 
-  //   const result3 = await granatumService.setCostCenterGranatumId({
-  //     building: { name: 'Mont Serrat' },
-  //     property_block: 'B',
-  //   });
-  //   expect(result3).toBe(244554);
-  // });
+    const result3 = await granatumService.setCostCenterGranatumId({
+      building: { name: 'Mont Serrat' },
+      property_block: 'B',
+    });
+    expect(result3).toBe(244554);
+  });
 
-  // test('getCreditInvoicesByPeriod', async () => {
-  //   const result = await granatumService.getCreditInvoicesByPeriod('2023-05-01', '2023-05-31');
-  //   expect(result).toBeDefined();
-  // });
+  test('getCreditInvoicesByPeriod', async () => {
+    const result = await granatumService.getCreditInvoicesByPeriod('2023-05-01', '2023-05-31');
+    expect(result).toBeDefined();
+  });
 
-  test('syncGranatumWithImobziInvoices', async () => {
+  test('setGranatumIdsIntoInvoices', async () => {
     const result = await granatumService.setGranatumIdsIntoInvoices('2023-05-01', '2023-05-31');
-    console.log(JSON.stringify(result, null, 2));
-    // expect(result).toEqual(setGranatumIdsIntoInvoicesMock);
+    expect(result).toEqual(setGranatumIdsIntoInvoicesMock);
   });
 });

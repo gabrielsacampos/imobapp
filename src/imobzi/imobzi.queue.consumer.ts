@@ -1,5 +1,4 @@
 import { Process, Processor } from '@nestjs/bull';
-import { Inject, forwardRef } from '@nestjs/common';
 import { Job } from 'bull';
 import { ContactDTO } from 'src/imobzi/imobzi-contacts/imobziContacts.dtos';
 import { BuildingDTO } from './imobzi-buildings/imobziBuildings.dtos';
@@ -11,7 +10,7 @@ import { ImobziService } from './imobzi.service';
 
 @Processor('ImobziQueue')
 export class ImobziQueueConsumer {
-  constructor(@Inject(forwardRef(() => ImobziService)) private readonly imobziService: ImobziService) {}
+  constructor(private readonly imobziService: ImobziService) {}
 
   @Process('updatePeople')
   async updatePerson(job: Job<ContactDTO>) {

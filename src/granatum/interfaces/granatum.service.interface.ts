@@ -6,6 +6,7 @@ export interface GetCreditInvoicesByPeriodDTO {
   id_imobzi: string;
   bank_fee_value: number;
   interest_value: number;
+  onlending_value: number;
   invoiceItems: Array<{ description: string; value: number }>;
   lease: {
     tenant_person: { fullname: string; cpf: string };
@@ -14,7 +15,7 @@ export interface GetCreditInvoicesByPeriodDTO {
     property: {
       unit: string;
       property_block: string;
-      buildings: { name: string; address: string };
+      building: { name: string; address: string };
     };
   };
 }

@@ -11,12 +11,12 @@ export class PropertiesService {
   async create(data: PropertyCreateDTO) {
     const existsIdProperty = await this.prisma.property.findUnique({
       where: { id_imobzi: data.id_imobzi },
-      include: { buildings: { select: { name: true } } },
+      include: { building: { select: { name: true } } },
     });
 
     if (existsIdProperty) {
       throw new NotAcceptableException(
-        `ID: ${data.id_imobzi} already registered to property: ${existsIdProperty.unit} - ${existsIdProperty.buildings.name} `,
+        `ID: ${data.id_imobzi} already registered to property: ${existsIdProperty.unit} - ${existsIdProperty.building.name} `,
       );
     }
 
@@ -27,7 +27,7 @@ export class PropertiesService {
   async findAll() {
     return await this.prisma.property.findMany({
       include: {
-        buildings: {
+        building: {
           select: {
             name: true,
           },
@@ -40,7 +40,7 @@ export class PropertiesService {
     const found = await this.prisma.property.findUnique({
       where: { id_imobzi },
       include: {
-        buildings: {
+        building: {
           select: { name: true },
         },
       },

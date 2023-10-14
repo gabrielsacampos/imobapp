@@ -7,8 +7,7 @@ import { InvoiceCreateDTO } from 'src/db/modules/invoices/invoicesCreate.dtos';
 import { ImobziInvoiceDetailsDTO, ImobziInvoiceItem } from './imobziInvoiceDetails.dtos';
 import { ImobziInvoiceDTO, InvoicesDTO } from './imobziInvoices.dtos';
 import { imobziUrls, imobziParams } from '../imobzi-urls-params/imobzi.urls';
-
-import { dateFunctions } from '../../my-usefull-functions/date.functions';
+import { dateFunctions } from 'src/my-usefull-functions/date.functions';
 
 @Injectable()
 export class ImobziInvoicesService {

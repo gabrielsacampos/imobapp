@@ -15,10 +15,31 @@ import { GranatumClientsService } from './granatum-clients/granatum-clients.serv
 import { GranatumSupliersService } from './granatum-supliers/granatum-supliers.service';
 import { GranatumService } from './granatum.service';
 import { ScheduleModule } from '@nestjs/schedule';
+import { BullModule } from '@nestjs/bull';
+import { BullBoardModule } from '@bull-board/nestjs';
+import { BullAdapter } from '@bull-board/api/bullAdapter';
+import { ExpressAdapter } from '@bull-board/express';
+import { GranatumQueueProducer } from './granatum.queue.producer';
+import { GrganatumQueueConsumer } from './granatum.queue.consumer';
+import { GranatumController } from './granatum.controller';
 
 @Module({
   imports: [
     ScheduleModule.forRoot(),
+    BullModule.forRoot({
+      url: process.env.redis_url,
+    }),
+    BullModule.registerQueue({
+      name: 'GranatumQueue',
+    }),
+    BullBoardModule.forFeature({
+      name: 'GranatumQueue',
+      adapter: BullAdapter,
+    }),
+    BullBoardModule.forRoot({
+      route: '/queues',
+      adapter: ExpressAdapter,
+    }),
     GranatumTransactionsModule,
     GranatumCategoriesModule,
     SharedModule,
@@ -27,7 +48,10 @@ import { ScheduleModule } from '@nestjs/schedule';
     GranatumClientsModule,
     GranatumSupliersModule,
   ],
+  controllers: [GranatumController],
   providers: [
+    GranatumQueueProducer,
+    GrganatumQueueConsumer,
     GranatumTransactionsService,
     GranatumCategoriesService,
     GranatumAccountsService,

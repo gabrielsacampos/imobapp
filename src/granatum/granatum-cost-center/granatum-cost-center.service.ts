@@ -50,7 +50,7 @@ export class GranatumCostCenterService {
       }
       return costCenterFound.id;
     } catch (error) {
-      console.error(error.message);
+      throw new Error(error + `on granatumCostCenterService.findIdByDescription`);
     }
   }
 }

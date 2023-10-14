@@ -90,7 +90,7 @@ model Property {
   updated_at         DateTime @updatedAt
   leasesProperty     Lease[]  @relation("propertyToLease")
   owners             Owner[]
-  buildings          Building @relation(fields: [id_building_imobzi], references: [id_imobzi], onDelete: Cascade)
+  building           Building @relation(fields: [id_building_imobzi], references: [id_imobzi], onDelete: Cascade)
 
   @@map("properties")
 }
@@ -164,30 +164,30 @@ model LeaseItem {
 }
 
 model Invoice {
-  id_imobzi          String    @id @unique
+  id_imobzi          String   @id @unique
   status             String
   reference_start_at String?
   reference_end_at   String?
   due_date           DateTime
-  
-  id_lease_imobzi    String
-  lease              Lease     @relation("leaseToInvoice", fields: [id_lease_imobzi], references: [id_imobzi], onDelete: Cascade)
-  
-  management_fee     Float
-  invoice_url        String
-  barcode            String?
-  bank_slip_url      String?
-  bank_slip_id       String?
-  total_value        Float
-  interest_value     Float
-  paid_at            DateTime?
-  credit_at          DateTime?
-  paid_manual        Boolean?
-  bank_fee_value     Float?
-  account_credit     String?
-  onlending_value    Float?
-  created_at         DateTime  @default(now())
-  updated_at         DateTime  @updatedAt
+
+  id_lease_imobzi String
+  lease           Lease  @relation("leaseToInvoice", fields: [id_lease_imobzi], references: [id_imobzi], onDelete: Cascade)
+
+  management_fee  Float
+  invoice_url     String
+  barcode         String?
+  bank_slip_url   String?
+  bank_slip_id    String?
+  total_value     Float
+  interest_value  Float
+  paid_at         DateTime?
+  credit_at       DateTime?
+  paid_manual     Boolean?
+  bank_fee_value  Float?
+  account_credit  String?
+  onlending_value Float?
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
 
   invoiceItems InvoiceItem[]
 
@@ -243,4 +243,31 @@ model Webhook {
   id_entity_imobzi String
 
   @@map("webhooks")
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  name       String
+  email      String
+  password   String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+enum Queue {
+  granatum_queue
+  imobzi_queue
+}
+
+model FailedQueueJob {
+  id         Int      @id @default(autoincrement())
+  queue      Queue
+  error_message String
+  redis_key  String
+  job        Json
+  status     String   @default("failed")
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("failed_queue_jobs")
 }

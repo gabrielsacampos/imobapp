@@ -12,22 +12,26 @@ export class GranatumAccountsService {
   }
 
   async findIdByDescription(accountName: string) {
-    const cleanedAccountName = accountName
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '') // remove accents
-      .toLowerCase()
-      .split(' ')[0]
-      .replace(/\./g, '');
-    const accounts = await this.getAllAccounts();
-
-    const accountFound = accounts.find((element) => {
-      const cleanedName = element.descricao
+    try {
+      const cleanedAccountName = accountName
         .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '') // remove accents
-        .toLowerCase();
-      return cleanedName.includes(cleanedAccountName);
-    });
+        .toLowerCase()
+        .split(' ')[0]
+        .replace(/\./g, '');
+      const accounts = await this.getAllAccounts();
 
-    return accountFound.id;
+      const accountFound = accounts.find((element) => {
+        const cleanedName = element.descricao
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '') // remove accents
+          .toLowerCase();
+        return cleanedName.includes(cleanedAccountName);
+      });
+
+      return accountFound.id;
+    } catch (error) {
+      throw new Error(error + `on granatumAccountsService.findIdByDescription`);
+    }
   }
 }
