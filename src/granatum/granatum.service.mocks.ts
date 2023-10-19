@@ -1,39 +1,85 @@
 export const getCreditInvoicesByPeriodMock = [
   {
-    id_imobzi: 'invoiceid1234',
-    interest_value: 0,
-    paid_at: '2023-05-01',
-    credit_at: '2023-05-02',
-    bank_fee_value: 3.2,
+    credit_at: '2023-09-18T00:00:00.000Z',
     account_credit: 'Inter',
+    paid_at: '2023-09-14T00:00:00.000Z',
+    paid_manual: null,
+    id_imobzi: '009d02754be211eebf61e5d320fbd003',
+    bank_fee_value: 3.2,
+    interest_value: 0,
+    onlending_value: 1384.52,
     invoiceItems: [
-      { description: 'Aluguel', value: 1000 },
-      { description: 'iptu', value: 100 },
+      {
+        description: 'Aluguel ref. 01/08/2023 a 31/08/2023',
+        value: 1628.85,
+      },
     ],
     lease: {
+      tenant_person: null,
+      tenant_org: {
+        name: 'Clinica Oftalmologica Cristina Arruda Ltda-me',
+        cnpj: '11.331.127/0001-00',
+      },
+      beneficiariesLease: [
+        {
+          beneficiary_organization_imobzi: null,
+          beneficiary_person_imobzi: {
+            id_imobzi: '5265744175562752',
+            cpf: '001.867.244-20',
+          },
+          share: 100,
+        },
+      ],
+      id: 157,
       property: {
-        unit: '333',
-        property_block: 'Ipê',
-        building: { name: 'Eko Home Club' },
+        unit: '805',
+        property_block: 'Sala',
+        building: {
+          name: 'Trade Center',
+          address: 'Avenida Oswaldo Cruz, 217',
+        },
       },
     },
   },
   {
-    id_imobzi: 'invoiceid33333',
-    paid_at: '2023-05-02',
-    interest_value: 0,
-    credit_at: '2023-05-03',
-    bank_fee_value: 3.2,
+    credit_at: '2023-09-18T00:00:00.000Z',
     account_credit: 'Inter',
+    paid_at: '2023-09-14T00:00:00.000Z',
+    paid_manual: null,
+    id_imobzi: '009d02754be211eebf61e5d320fbd003',
+    bank_fee_value: 3.2,
+    interest_value: 0,
+    onlending_value: 1384.52,
     invoiceItems: [
-      { description: 'Aluguel', value: 1000 },
-      { description: 'iptu', value: 100 },
+      {
+        description: 'Aluguel ref. 01/08/2023 a 31/08/2023',
+        value: 1628.85,
+      },
     ],
     lease: {
+      tenant_person: null,
+      tenant_org: {
+        name: 'Clinica Oftalmologica Cristina Arruda Ltda-me',
+        cnpj: '11.331.127/0001-00',
+      },
+      beneficiariesLease: [
+        {
+          beneficiary_organization_imobzi: null,
+          beneficiary_person_imobzi: {
+            id_imobzi: '5265744175562752',
+            cpf: '001.867.244-20',
+          },
+          share: 100,
+        },
+      ],
+      id: 157,
       property: {
-        unity: '202',
-        property_block: 'Ipê',
-        building: { name: 'Eko Home Club' },
+        unit: '805',
+        property_block: 'Sala',
+        building: {
+          name: 'Trade Center',
+          address: 'Avenida Oswaldo Cruz, 217',
+        },
       },
     },
   },

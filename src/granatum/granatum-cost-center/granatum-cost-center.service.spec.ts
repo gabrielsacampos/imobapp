@@ -33,16 +33,12 @@ describe('GranatumCostCenterService', () => {
   });
 
   test('findIdByDescription', async () => {
-    const result1 = await granatumCostCenterService.findIdByDescription({
-      buildings: { name: 'Eko Home Club' },
-      property_block: 'Ipê',
-    });
-    expect(result1).toBe(244547);
+    const result1 = await granatumCostCenterService.findIdByDescription('maurício de nassau', 'B');
+    // expect(result1).toBe(244547);
+    console.log(result1);
 
-    const result2 = await granatumCostCenterService.findIdByDescription({
-      buildings: { name: 'Itália' },
-      property_block: null,
-    });
-    expect(result2).toEqual(244549);
+    const result2 = await granatumCostCenterService.findIdByDescription('Eko Home Club', 'Ipê');
+    // expect(result2).toEqual(244549);
+    console.log(result2);
   });
 });

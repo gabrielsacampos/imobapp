@@ -1,5 +1,6 @@
 import { add, format, isWeekend } from 'date-fns';
 import { myConstants } from './myConstants';
+import { zonedTimeToUtc } from 'date-fns-tz';
 
 export const dateFunctions = {
   defineCreditDate(stringDate: string) {
@@ -37,5 +38,18 @@ export const dateFunctions = {
     // giving the datetime +3h so we can format properly.
 
     return nextDayString;
+  },
+
+  formatToUS(date_string: string) {
+    let date = new Date(date_string);
+    date = add(date, { hours: 3 });
+    const usDate = format(date, 'yyyy-MM-dd');
+    return usDate;
+  },
+  formatToBr(date_string: string) {
+    let date = new Date(date_string);
+    date = add(date, { hours: 3 });
+    const brDate = format(date, 'dd-MM-yyyy');
+    return brDate;
   },
 };

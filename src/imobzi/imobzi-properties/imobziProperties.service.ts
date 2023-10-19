@@ -1,8 +1,8 @@
 import { HttpService } from '@nestjs/axios';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { OwnersCreateDTO } from 'src/db/modules/properties/owners/OwnerCreate.dtos';
-import { PropertyCreateDTO } from 'src/db/modules/properties/propertiesCreate.dtos';
+import { OwnersCreateDTO } from 'src/repository/modules/properties/owners/OwnerCreate.dtos';
+import { PropertyCreateDTO } from 'src/repository/modules/properties/propertiesCreate.dtos';
 import { ImobziPropertiesDTO } from './imobziProperties.dtos';
 import { ImobziPropertyOwnerDTO } from './imobziPropertyDetails.dtos';
 import { imobziUrls, imobziParams } from '../imobzi-urls-params/imobzi.urls';
@@ -66,11 +66,11 @@ export class ImobziPropertiesService {
   async getRequiredPropertyDataToDb(id_imobzi: string): Promise<PropertyCreateDTO> {
     try {
       const { data } = await this.httpService.axiosRef.get(imobziUrls.urlPropertyDetails(id_imobzi), imobziParams);
-      const unit = data.property_unity?.toString();
+      const unity = data.property_unity?.toString();
       const id_building_imobzi = data.building_id ? data.building_id.toString() : null;
 
       const {
-        property_block,
+        property_block: block,
         alternative_code,
         area,
         sale_value,
@@ -86,8 +86,8 @@ export class ImobziPropertiesService {
       const owners = this.getRequiredPropertyOwnersToDb(data.owners);
 
       return {
-        property_block,
-        unit,
+        block,
+        unity,
         owners,
         id_imobzi,
         alternative_code,

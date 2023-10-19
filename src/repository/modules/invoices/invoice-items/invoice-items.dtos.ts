@@ -17,7 +17,7 @@ export class ItemsInvoiceCreateDTO {
   include_in_dimob: boolean;
 
   @IsNotEmpty()
-  management_fee: boolean;
+  charge_management_fee: boolean;
 
   @IsNotEmpty()
   value: number;

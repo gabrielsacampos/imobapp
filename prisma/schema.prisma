@@ -60,6 +60,7 @@ model Building {
   id         Int        @id @default(autoincrement())
   id_imobzi  String     @unique
   name       String     @unique
+  block      String?
   address    String
   city       String
   zipcode    String
@@ -73,8 +74,8 @@ model Building {
 model Property {
   id                 Int      @id @default(autoincrement())
   id_imobzi          String   @unique
-  property_block     String?
-  unit               String
+  unity              String?
+  block              String?
   type               String
   active             Boolean
   status             String
@@ -179,11 +180,9 @@ model Invoice {
   bank_slip_url   String?
   bank_slip_id    String?
   total_value     Float
-  interest_value  Float
   paid_at         DateTime?
   credit_at       DateTime?
   paid_manual     Boolean?
-  bank_fee_value  Float?
   account_credit  String?
   onlending_value Float?
   created_at      DateTime  @default(now())
@@ -195,18 +194,18 @@ model Invoice {
 }
 
 model InvoiceItem {
-  id_imobzi         String   @id
-  id_invoice_imobzi String
-  until_due_date    Boolean
-  item_type         String?
-  description       String
-  behavior          String
-  include_in_dimob  Boolean
-  management_fee    Boolean
-  value             Float
-  created_at        DateTime @default(now())
-  updated_at        DateTime @updatedAt
-  invoice           Invoice  @relation(fields: [id_invoice_imobzi], references: [id_imobzi], onDelete: Cascade)
+  id_imobzi             String   @id
+  id_invoice_imobzi     String
+  until_due_date        Boolean
+  item_type             String?
+  description           String
+  behavior              String
+  include_in_dimob      Boolean
+  charge_management_fee Boolean
+  value                 Float
+  created_at            DateTime @default(now())
+  updated_at            DateTime @updatedAt
+  invoice               Invoice  @relation(fields: [id_invoice_imobzi], references: [id_imobzi], onDelete: Cascade)
 
   @@map("invoices_items")
 }
@@ -246,12 +245,15 @@ model Webhook {
 }
 
 model User {
-  id         Int      @id @default(autoincrement())
-  name       String
-  email      String
-  password   String
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id          Int      @id @default(autoincrement())
+  name        String
+  email       String
+  password    String
+  last_access DateTime
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  @@map("users")
 }
 
 enum Queue {
@@ -260,14 +262,14 @@ enum Queue {
 }
 
 model FailedQueueJob {
-  id         Int      @id @default(autoincrement())
-  queue      Queue
+  id            Int      @id @default(autoincrement())
+  queue         Queue
   error_message String
-  redis_key  String
-  job        Json
-  status     String   @default("failed")
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  redis_key     String
+  job           Json
+  status        String   @default("failed")
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
 
   @@map("failed_queue_jobs")
 }

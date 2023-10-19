@@ -1,3 +1,6 @@
+-- CreateEnum
+CREATE TYPE "Queue" AS ENUM ('granatum_queue', 'imobzi_queue');
+
 -- CreateTable
 CREATE TABLE "people" (
     "id" SERIAL NOT NULL,
@@ -45,6 +48,7 @@ CREATE TABLE "buildings" (
     "id" SERIAL NOT NULL,
     "id_imobzi" TEXT NOT NULL,
     "name" TEXT NOT NULL,
+    "block" TEXT,
     "address" TEXT NOT NULL,
     "city" TEXT NOT NULL,
     "zipcode" TEXT NOT NULL,
@@ -58,8 +62,8 @@ CREATE TABLE "buildings" (
 CREATE TABLE "properties" (
     "id" SERIAL NOT NULL,
     "id_imobzi" TEXT NOT NULL,
-    "property_block" TEXT,
-    "unit" TEXT NOT NULL,
+    "unity" TEXT,
+    "block" TEXT,
     "type" TEXT NOT NULL,
     "active" BOOLEAN NOT NULL,
     "status" TEXT NOT NULL,
@@ -151,11 +155,9 @@ CREATE TABLE "invoices" (
     "bank_slip_url" TEXT,
     "bank_slip_id" TEXT,
     "total_value" DOUBLE PRECISION NOT NULL,
-    "interest_value" DOUBLE PRECISION NOT NULL,
     "paid_at" TIMESTAMP(3),
-    "credit_at" TEXT,
+    "credit_at" TIMESTAMP(3),
     "paid_manual" BOOLEAN,
-    "bank_fee_value" DOUBLE PRECISION,
     "account_credit" TEXT,
     "onlending_value" DOUBLE PRECISION,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -173,7 +175,7 @@ CREATE TABLE "invoices_items" (
     "description" TEXT NOT NULL,
     "behavior" TEXT NOT NULL,
     "include_in_dimob" BOOLEAN NOT NULL,
-    "management_fee" BOOLEAN NOT NULL,
+    "charge_management_fee" BOOLEAN NOT NULL,
     "value" DOUBLE PRECISION NOT NULL,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
@@ -213,6 +215,33 @@ CREATE TABLE "webhooks" (
     "id_entity_imobzi" TEXT NOT NULL,
 
     CONSTRAINT "webhooks_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "users" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "last_access" TIMESTAMP(3) NOT NULL,
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "users_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "failed_queue_jobs" (
+    "id" SERIAL NOT NULL,
+    "queue" "Queue" NOT NULL,
+    "error_message" TEXT NOT NULL,
+    "redis_key" TEXT NOT NULL,
+    "job" JSONB NOT NULL,
+    "status" TEXT NOT NULL DEFAULT 'failed',
+    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "failed_queue_jobs_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex

@@ -1,17 +1,17 @@
-import { IsNotEmpty, ValidateIf, ValidateNested } from 'class-validator';
-import { Type } from 'class-transformer';
 import { NotAcceptableException } from '@nestjs/common';
+import { Type } from 'class-transformer';
+import { IsNotEmpty, ValidateIf, ValidateNested } from 'class-validator';
 import { OwnersCreateDTO } from './owners/OwnerCreate.dtos';
 
-export class PropertiesUpdateDTO {
+export class PropertyCreateDTO {
   @IsNotEmpty()
   id_imobzi: string;
 
   @IsNotEmpty()
-  unit: string;
+  id_building_imobzi: string;
 
   @IsNotEmpty()
-  id_building_imobzi: string;
+  unity: string;
 
   @IsNotEmpty()
   active: boolean;
@@ -29,6 +29,7 @@ export class PropertiesUpdateDTO {
   rental_value?: number;
   sale_value?: number;
   alternative_code?: string;
+  block?: string;
 
   @ValidateIf((o) => {
     const sumShare = o.owners.reduce((acc: number, curr: OwnersCreateDTO) => {

@@ -16,7 +16,7 @@ export class PropertiesService {
 
     if (existsIdProperty) {
       throw new NotAcceptableException(
-        `ID: ${data.id_imobzi} already registered to property: ${existsIdProperty.unit} - ${existsIdProperty.building.name} `,
+        `ID: ${data.id_imobzi} already registered to property: ${existsIdProperty.unity} - ${existsIdProperty.building.name} `,
       );
     }
 

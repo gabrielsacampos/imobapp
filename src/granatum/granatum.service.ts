@@ -1,63 +1,28 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma-client/prisma.service';
-import { GranatumAccountsService } from './granatum-accounts/granatum-accounts.service';
-import { GranatumCategoriesService } from './granatum-categories/granatumCategories.service';
-import { GranatumCostCenterService } from './granatum-cost-center/granatum-cost-center.service';
-import { GranatumTransactionsService } from './granatum-transactions/granatumTransactions.service';
-import { GetCreditInvoicesByPeriodDTO } from './interfaces/granatum.service.interface';
+import { InvoicesService } from 'src/repository/modules/invoices/invoices.service';
+import { GranatumQueueProducer } from './granatum.queue.producer';
 
 @Injectable()
 export class GranatumService {
   constructor(
-    private readonly prisma: PrismaService,
-    private readonly granatumTransactionsService: GranatumTransactionsService,
-    private readonly granatumCostCentersService: GranatumCostCenterService,
-    private readonly granatumCategoriesService: GranatumCategoriesService,
-    private readonly granatumAccountsService: GranatumAccountsService,
+    private readonly invoicesService: InvoicesService,
+    private readonly granatumQueue: GranatumQueueProducer,
   ) {}
 
-  async getPaidInvoicesFromDb(start_at: string, end_at: string): Promise<GetCreditInvoicesByPeriodDTO[]> {
-    try {
-      return await this.prisma.invoice.findMany({
-        select: {
-          credit_at: true,
-          account_credit: true,
-          paid_at: true,
-          paid_manual: true,
-          id_imobzi: true,
-          bank_fee_value: true,
-          interest_value: true,
-          onlending_value: true,
-          invoiceItems: { select: { description: true, value: true } },
-          lease: {
-            select: {
-              tenant_person: { select: { fullname: true, cpf: true } },
-              tenant_org: { select: { name: true, cnpj: true } },
-              id: true,
-              property: {
-                select: {
-                  unit: true,
-                  property_block: true,
-                  building: {
-                    select: {
-                      name: true,
-                      address: true,
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-        where: {
-          credit_at: {
-            gte: new Date(start_at),
-            lte: new Date(end_at),
-          },
-        },
+  async storeItemsFromDb(start_at: string, end_at: string) {
+    const itemsFromDb = await this.invoicesService.getItemsPaid(start_at, end_at);
+    const invoicesFromDb = await this.invoicesService.getInvoicesSimpleData(start_at, end_at);
+    const invoicesWithItems = this.setItemsIntoInvoices(invoicesFromDb, itemsFromDb);
+    this.granatumQueue.syncImobziGranatumTransactions(invoicesWithItems);
+  }
+
+  setItemsIntoInvoices(invoices, items): any[] {
+    invoices.forEach((invoice) => {
+      const itemsFromInvoice = items.filter((item) => {
+        return item.id_invoice === invoice.id_imobzi;
       });
-    } catch (error) {
-      throw new Error(error);
-    }
+      invoice.items = itemsFromInvoice;
+    });
+    return invoices;
   }
 }

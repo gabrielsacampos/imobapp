@@ -2,8 +2,8 @@ import { HttpService } from '@nestjs/axios';
 import { Inject, Injectable } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
-import { ItemsInvoiceCreateDTO } from 'src/db/modules/invoices/invoice-items/invoice-items.dtos';
-import { InvoiceCreateDTO } from 'src/db/modules/invoices/invoicesCreate.dtos';
+import { ItemsInvoiceCreateDTO } from 'src/repository/modules/invoices/invoice-items/invoice-items.dtos';
+import { InvoiceCreateDTO } from 'src/repository/modules/invoices/invoicesCreate.dtos';
 import { ImobziInvoiceDetailsDTO, ImobziInvoiceItem } from './imobziInvoiceDetails.dtos';
 import { ImobziInvoiceDTO, InvoicesDTO } from './imobziInvoices.dtos';
 import { imobziUrls, imobziParams } from '../imobzi-urls-params/imobzi.urls';
@@ -48,7 +48,7 @@ export class ImobziInvoicesService {
         description,
         behavior,
         include_in_dimob,
-        charge_management_fee: management_fee,
+        charge_management_fee,
         value,
       } = item;
 
@@ -59,7 +59,7 @@ export class ImobziInvoicesService {
         description,
         behavior,
         include_in_dimob,
-        management_fee,
+        charge_management_fee,
         value,
       };
     });

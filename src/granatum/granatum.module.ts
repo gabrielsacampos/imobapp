@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { PrismaService } from 'src/prisma-client/prisma.service';
 import { SharedModule } from '../shared.module';
 import { GranatumCategoriesModule } from './granatum-categories/granatumCategories.module';
 import { GranatumCategoriesService } from './granatum-categories/granatumCategories.service';
@@ -20,8 +19,9 @@ import { BullBoardModule } from '@bull-board/nestjs';
 import { BullAdapter } from '@bull-board/api/bullAdapter';
 import { ExpressAdapter } from '@bull-board/express';
 import { GranatumQueueProducer } from './granatum.queue.producer';
-import { GrganatumQueueConsumer } from './granatum.queue.consumer';
+import { GranatumQueueConsumer } from './granatum.queue.consumer';
 import { GranatumController } from './granatum.controller';
+import { InvoicesService } from 'src/repository/modules/invoices/invoices.service';
 
 @Module({
   imports: [
@@ -51,7 +51,7 @@ import { GranatumController } from './granatum.controller';
   controllers: [GranatumController],
   providers: [
     GranatumQueueProducer,
-    GrganatumQueueConsumer,
+    GranatumQueueConsumer,
     GranatumTransactionsService,
     GranatumCategoriesService,
     GranatumAccountsService,
@@ -60,7 +60,7 @@ import { GranatumController } from './granatum.controller';
     GranatumSupliersService,
     GranatumCategoriesService,
     GranatumService,
-    PrismaService,
+    InvoicesService,
   ],
   exports: [GranatumService],
 })

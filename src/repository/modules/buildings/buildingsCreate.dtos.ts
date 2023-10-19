@@ -36,4 +36,6 @@ export class BuildingsCreateDTO {
   })
   @IsNotEmpty()
   zipcode: string;
+
+  block?: string;
 }

@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { PeopleCreateDTO } from 'src/db/modules/people/peopleCreate.dtos';
+import { PeopleCreateDTO } from 'src/repository/modules/people/peopleCreate.dtos';
 import { GroupPersonal } from './imobziPeople.dtos';
 import { imobziUrls, imobziParams } from '../imobzi-urls-params/imobzi.urls';
 

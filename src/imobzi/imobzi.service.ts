@@ -1,7 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { PrismaService } from 'src/prisma-client/prisma.service';
-import { ItemsInvoiceCreateDTO } from 'src/db/modules/invoices/invoice-items/invoice-items.dtos';
+import { ItemsInvoiceCreateDTO } from 'src/repository/modules/invoices/invoice-items/invoice-items.dtos';
 import { BuildingDTO } from './imobzi-buildings/imobziBuildings.dtos';
 import { ImobziBuildingsService } from './imobzi-buildings/imobziBuildings.service';
 import { ContactDTO } from './imobzi-contacts/imobziContacts.dtos';
@@ -195,6 +195,30 @@ export class ImobziService {
       const items: ItemsInvoiceCreateDTO[] = invoiceFromApi.items;
       delete invoiceFromApi.items;
 
+      const interestItem: ItemsInvoiceCreateDTO = {
+        until_due_date: false,
+        item_type: null,
+        id_imobzi: invoiceFromApi.id_imobzi,
+        description: 'Juros',
+        behavior: 'charge_tenant_and_onlend',
+        include_in_dimob: true,
+        charge_management_fee: true,
+        value: invoiceFromApi.interest_value,
+      };
+
+      const bankFeeItem: ItemsInvoiceCreateDTO = {
+        until_due_date: false,
+        item_type: null,
+        id_imobzi: invoiceFromApi.id_imobzi,
+        description: 'Taxa de Boleto',
+        behavior: 'bank_withheld',
+        include_in_dimob: false,
+        charge_management_fee: false,
+        value: invoiceFromApi.interest_value,
+      };
+
+      delete invoiceFromApi.interest_value;
+
       await this.prisma.invoice.upsert({
         where: {
           id_imobzi: invoiceFromApi.id_imobzi,
@@ -202,6 +226,18 @@ export class ImobziService {
         update: invoiceFromApi,
         create: { ...invoiceFromApi, invoiceItems: { createMany: { data: items } } },
       });
+
+      if (interestItem.value > 0) {
+        await this.prisma.invoiceItem.create({
+          data: { id_invoice_imobzi: invoiceFromApi.id_imobzi, ...interestItem },
+        });
+      }
+
+      if (bankFeeItem.value > 0) {
+        await this.prisma.invoiceItem.create({
+          data: { id_invoice_imobzi: invoiceFromApi.id_imobzi, ...bankFeeItem },
+        });
+      }
     } catch (error) {
       this.logger.error(error);
       throw new Error(`${error}`);

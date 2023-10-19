@@ -11,16 +11,16 @@ export class GranatumCostCenterService {
     return data;
   }
 
-  async findIdByDescription(propertyObj: any) {
+  async findIdByDescription(building_name: string, block: string) {
     try {
-      const cleanedBuilding = propertyObj.building.name
+      const cleanedBuilding = building_name
         .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '')
         .toLowerCase();
 
       let cleanedBlock;
-      if (propertyObj.property_block) {
-        cleanedBlock = propertyObj.property_block
+      if (block) {
+        cleanedBlock = block
           .normalize('NFD')
           .replace(/[\u0300-\u036f]/g, '')
           .toLowerCase();
@@ -50,7 +50,7 @@ export class GranatumCostCenterService {
       }
       return costCenterFound.id;
     } catch (error) {
-      throw new Error(error + `on granatumCostCenterService.findIdByDescription`);
+      throw new Error(error.message + `on granatumCostCenterService.findIdByDescription`);
     }
   }
 }

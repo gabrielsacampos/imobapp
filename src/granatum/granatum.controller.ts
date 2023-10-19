@@ -1,13 +1,13 @@
 import { Body, Controller, Post } from '@nestjs/common';
-import { GranatumQueueProducer } from './granatum.queue.producer';
+import { GranatumService } from './granatum.service';
 
 @Controller('granatum')
 export class GranatumController {
-  constructor(private readonly granatumQueueProducer: GranatumQueueProducer) {}
+  constructor(private readonly granatumService: GranatumService) {}
 
   @Post('sync')
   async syncGranatumImobzi(@Body() data: { start_at: string; end_at: string }) {
-    this.granatumQueueProducer.syncImobziGranatumTransactions(data.start_at, data.end_at);
+    this.granatumService.storeItemsFromDb(data.start_at, data.end_at);
     return { message: 'GranatumService starting queue...' };
   }
 }
