@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { isArray } from 'class-validator';
 import { SharedModule } from 'src/shared.module';
-
 import { HttpService } from '@nestjs/axios';
 import { GranatumCostCenterService } from './granatum-cost-center.service';
 import { costCentersMock } from './granatum-cost-center.mocks';
@@ -32,13 +31,31 @@ describe('GranatumCostCenterService', () => {
     expect(isArray(result)).toBe(true);
   });
 
-  test('findIdByDescription', async () => {
-    const result1 = await granatumCostCenterService.findIdByDescription('maurício de nassau', 'B');
-    // expect(result1).toBe(244547);
-    console.log(result1);
+  test('findMotherCostCenter & findChildCostCenter', () => {
+    const result1 = granatumCostCenterService.findMotherCostCenter('maurício de nassau', costCentersMock);
+    expect(result1.id).toBe(244553);
 
-    const result2 = await granatumCostCenterService.findIdByDescription('Eko Home Club', 'Ipê');
-    // expect(result2).toEqual(244549);
-    console.log(result2);
+    const result2 = granatumCostCenterService.findMotherCostCenter('Eko Home Club', costCentersMock);
+    expect(result2.id).toBe(244545);
+
+    const result3 = granatumCostCenterService.findChildCostCenter('Figueiras', result2);
+    expect(result3.id).toBe(244546);
+
+    const result4 = granatumCostCenterService.findChildCostCenter('Oliveiras', result2);
+    expect(result4).toBeUndefined();
+  });
+
+  test('findIDByDescription', () => {
+    const result = granatumCostCenterService.findIdByDescription('Eko Home Club', 'Figueiras', costCentersMock);
+    expect(result).toBe(244546);
+
+    const result2 = granatumCostCenterService.findIdByDescription('Eko Home Club', 'Ipê', costCentersMock);
+    expect(result2).toBe(244547);
+
+    const result3 = granatumCostCenterService.findIdByDescription('Eko Home Club', 'Oliveiras', costCentersMock);
+    expect(result3).toBe(254187);
+
+    const result4 = granatumCostCenterService.findIdByDescription('Jardins', 'Oliveiras', costCentersMock);
+    expect(result4).toBe(254187);
   });
 });

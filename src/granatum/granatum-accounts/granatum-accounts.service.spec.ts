@@ -31,10 +31,10 @@ describe('GranatumAccountsService', () => {
     expect(isArray(result)).toBe(true);
   });
 
-  test('findIdByDescription', async () => {
-    const result1 = await granatumAccountsService.findIdByDescription('PjBank');
+  test('findIdByDescription', () => {
+    const result1 = granatumAccountsService.findIdByDescription('PjBank', accountsMocks);
     expect(result1).toBe(104193);
-    const result2 = await granatumAccountsService.findIdByDescription('Inter');
+    const result2 = granatumAccountsService.findIdByDescription('Inter', accountsMocks);
     expect(result2).toBe(103796);
   });
 });

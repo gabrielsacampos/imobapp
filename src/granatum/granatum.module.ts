@@ -22,6 +22,7 @@ import { GranatumQueueProducer } from './granatum.queue.producer';
 import { GranatumQueueConsumer } from './granatum.queue.consumer';
 import { GranatumController } from './granatum.controller';
 import { InvoicesService } from 'src/repository/modules/invoices/invoices.service';
+import { GranatumQueueJobs } from './granatum.queue.jobs';
 
 @Module({
   imports: [
@@ -50,8 +51,6 @@ import { InvoicesService } from 'src/repository/modules/invoices/invoices.servic
   ],
   controllers: [GranatumController],
   providers: [
-    GranatumQueueProducer,
-    GranatumQueueConsumer,
     GranatumTransactionsService,
     GranatumCategoriesService,
     GranatumAccountsService,
@@ -60,6 +59,9 @@ import { InvoicesService } from 'src/repository/modules/invoices/invoices.servic
     GranatumSupliersService,
     GranatumCategoriesService,
     GranatumService,
+    GranatumQueueJobs,
+    GranatumQueueProducer,
+    GranatumQueueConsumer,
     InvoicesService,
   ],
   exports: [GranatumService],

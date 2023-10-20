@@ -12,4 +12,17 @@ export interface GranatumTransactionPostDTO {
   tipo_custo_nivel_producao_id?: number;
   tipo_custo_apropriacao_produto_id?: number;
   tags?: [{ id: number }];
+  itens_adicionais: [];
+}
+
+export interface GranatumTransactionItemsPostDTO {
+  tags: Tag[];
+  descricao: string;
+  categoria_id: number;
+  centro_custo_lucro_id?: number;
+  valor: number;
+}
+
+export interface Tag {
+  id: number;
 }

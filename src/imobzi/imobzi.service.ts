@@ -209,15 +209,16 @@ export class ImobziService {
       const bankFeeItem: ItemsInvoiceCreateDTO = {
         until_due_date: false,
         item_type: null,
-        id_imobzi: invoiceFromApi.id_imobzi,
+        id_imobzi: `${invoiceFromApi.id_imobzi}-bank-fee`,
         description: 'Taxa de Boleto',
         behavior: 'bank_withheld',
         include_in_dimob: false,
         charge_management_fee: false,
-        value: invoiceFromApi.interest_value,
+        value: 0 - invoiceFromApi.bank_fee_value,
       };
 
       delete invoiceFromApi.interest_value;
+      delete invoiceFromApi.bank_fee_value;
 
       await this.prisma.invoice.upsert({
         where: {
@@ -233,7 +234,7 @@ export class ImobziService {
         });
       }
 
-      if (bankFeeItem.value > 0) {
+      if (bankFeeItem.value !== 0) {
         await this.prisma.invoiceItem.create({
           data: { id_invoice_imobzi: invoiceFromApi.id_imobzi, ...bankFeeItem },
         });

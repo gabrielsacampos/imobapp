@@ -1,6 +1,7 @@
 import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma-client/prisma.service';
-import { InvoiceCreateDTO } from './invoicesCreate.dtos';
+import { GetPaidItemDTO } from './dtos/invoice.queries.dtos';
+import { InvoiceCreateDTO } from './dtos/invoiceCreate.dto';
 
 @Injectable()
 export class InvoicesService {
@@ -8,22 +9,22 @@ export class InvoicesService {
 
   // it can create properties from imobzi or not
   async create(data: InvoiceCreateDTO) {
-    // const existsInvoice = await this.prisma.invoice.findFirst({
-    //   where: { id_imobzi: data.id_imobzi },
-    // });
-    // if (existsInvoice) {
-    //   throw new NotAcceptableException(`Invoice ${data.id_imobzi} already exists`);
-    // }
-    // const items = data.items;
-    // delete data.items;
+    const existsInvoice = await this.prisma.invoice.findFirst({
+      where: { id_imobzi: data.id_imobzi },
+    });
+    if (existsInvoice) {
+      throw new NotAcceptableException(`Invoice ${data.id_imobzi} already exists`);
+    }
+    const items = data.items;
+    delete data.items;
 
-    // await this.prisma.invoice.create({
-    //   data: {
-    //     ...data,
-    //     invoiceItems: { create: items },
-    //   },
-    // });
-    // return { message: `invoice ${data.id_imobzi} created.` };
+    await this.prisma.invoice.create({
+      data: {
+        ...data,
+        invoiceItems: { create: items },
+      },
+    });
+    return { message: `invoice ${data.id_imobzi} created.` };
   }
 
   async findAll() {
@@ -63,47 +64,29 @@ export class InvoicesService {
     return { message: `invoice ${id_imobzi} updated` };
   }
 
-  async getInvoicesSimpleData(start_at: string, end_at: string): Promise<any[]> {
+  async getPaidItems(start_at: string, end_at: string): Promise<GetPaidItemDTO[]> {
     const start_date = new Date(start_at);
     const end_date = new Date(end_at);
 
     return await this.prisma.$queryRaw`
-    SELECT 
-    i.id_imobzi,
-    i.account_credit,
-    i.credit_at,
-    i.paid_at,
+    select 
+    i.id_imobzi, 
+    ii.description, 
+    ii.value, 
+    i.paid_at, 
+    i.credit_at, 
+    p.unity, 
+    p.block, 
+    b."name" as building, 
     i.paid_manual,
-    i.bank_fee_value,
-    i.management_fee  AS fee,
-    i.total_value,
-    l.code_imobzi AS lease_code,
-    p2.unity,
-    p2.block,
-    b."name" AS building_name
-    FROM invoices AS i
-    INNER JOIN leases AS l ON i.id_lease_imobzi = l.id_imobzi
-    INNER JOIN properties AS p2 ON p2.id_imobzi = l.id_property_imobzi
-    INNER JOIN buildings AS b ON b.id_imobzi = p2.id_building_imobzi 
-    WHERE (i.status = 'paid' OR i.status = 'partially_paid') and i.credit_at  >= ${start_date} and i.credit_at <= ${end_date};
-    `;
-  }
-
-  async getItemsPaid(start_at: string, end_at: string): Promise<any[]> {
-    const start_date = new Date(start_at);
-    const end_date = new Date(end_at);
-
-    return await this.prisma.$queryRaw`
-      select 
-      i.id_imobzi as id_invoice,
-      ii.description, ii.value as value_item,
-      p.unity as property_unity, p.block, b."name" as building
-      from invoices as i
-      inner join invoices_items ii on ii.id_invoice_imobzi = i.id_imobzi
-      inner join leases l on l.id_imobzi = i.id_lease_imobzi 
-      inner join properties p on p.id_imobzi = l.id_property_imobzi
-      inner join buildings b on p.id_building_imobzi = b.id_imobzi
-      WHERE (i.status = 'paid' OR i.status = 'partially_paid') and i.credit_at >= ${start_date} and i.credit_at <= ${end_date};
+    i.account_credit  
+    from invoices i
+    inner join invoices_items ii on ii.id_invoice_imobzi = i.id_imobzi 
+    inner join leases l on l.id_imobzi = i.id_lease_imobzi
+    inner join properties p on p.id_imobzi = l.id_property_imobzi 
+    inner join buildings b on b.id_imobzi = p.id_building_imobzi 
+    WHERE (i.status = 'paid' OR i.status = 'partially_paid')
+    AND  i.paid_at >= ${start_date} AND i.paid_at <= ${end_date};
     `;
   }
 }

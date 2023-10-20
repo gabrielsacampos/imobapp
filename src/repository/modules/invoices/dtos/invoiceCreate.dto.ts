@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsNotEmpty, ValidateNested } from 'class-validator';
-import { ItemsInvoiceCreateDTO } from './invoice-items/invoice-items.dtos';
+import { ItemsInvoiceCreateDTO } from '../invoice-items/invoice-items.dtos';
 
 export class InvoiceCreateDTO {
   @ApiProperty({

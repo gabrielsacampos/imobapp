@@ -21,7 +21,7 @@ describe('GranatumTransactionsService', () => {
   });
 
   test('getAllTransactions', async () => {
-    const result = await granatumCategoriesService.findIdByDescription('aluguel referente a abril');
+    const result = await granatumCategoriesService.findIdByDescription('aluguel referente a abril', categoriesMocks);
     expect(result).toEqual(1846027);
   });
 });

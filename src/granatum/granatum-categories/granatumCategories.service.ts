@@ -1,20 +1,19 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { granatumUrls } from '../granatum-urls-params/granatum.urls';
+import { GranatumCategoryDTO } from './dtos/granatum-categories.dtos';
 
 @Injectable()
 export class GranatumCategoriesService {
   constructor(private readonly httpService: HttpService) {}
 
-  async getSlipCategories() {
+  async getSlipCategories(): Promise<GranatumCategoryDTO> {
     const { data } = await this.httpService.axiosRef.get(granatumUrls.allCategoriesUrl());
     return data.find((element) => {
       return element.descricao === 'Recebimentos por Boleto';
     });
   }
-  async findIdByDescription(description: string) {
-    const slipCategoryMother = await this.getSlipCategories();
-
+  findIdByDescription(description: string, slipCategories: GranatumCategoryDTO) {
     const cleanedDescription = description
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '') // remove accents
@@ -22,7 +21,7 @@ export class GranatumCategoriesService {
       .split(' ')[0]
       .replace(/\./g, '');
 
-    const foundCategory = slipCategoryMother.categorias_filhas.find((element) => {
+    const foundCategory = slipCategories.categorias_filhas.find((element) => {
       const cleanedElement = element.descricao
         .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '')
@@ -31,7 +30,9 @@ export class GranatumCategoriesService {
       return cleanedElement.includes(cleanedDescription);
     });
 
-    if (foundCategory) {
+    if (description === 'Taxa de Boleto') {
+      return 1843956;
+    } else if (foundCategory) {
       return foundCategory.id;
     } else {
       return 1838279; // if script do not find the category, return the no_category category id.

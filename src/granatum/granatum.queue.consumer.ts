@@ -5,46 +5,33 @@ import { GranatumAccountsService } from './granatum-accounts/granatum-accounts.s
 import { GranatumCategoriesService } from './granatum-categories/granatumCategories.service';
 import { GranatumCostCenterService } from './granatum-cost-center/granatum-cost-center.service';
 import { GranatumTransactionsService } from './granatum-transactions/granatumTransactions.service';
+import { GranatumQueueJobs } from './granatum.queue.jobs';
 import { GranatumQueueProducer } from './granatum.queue.producer';
+import { GroupItems } from './interfaces/granatum.service.interface';
 
 @Processor('GranatumQueue')
 export class GranatumQueueConsumer {
   constructor(
     private readonly prisma: PrismaService,
     private readonly granatumQueueProducer: GranatumQueueProducer,
-    private readonly granatumTransactionsService: GranatumTransactionsService,
-    private readonly granatumAccountsService: GranatumAccountsService,
-    private readonly granatumCostCenterService: GranatumCostCenterService,
-    private readonly granatumCategoriesService: GranatumCategoriesService,
+    private readonly granatumQueueJobs: GranatumQueueJobs,
   ) {}
 
   @Process('setGranatumIds')
-  async setGanatumIds(job) {
-    const creditGroup = job.data;
+  async setGanatumIds(job: Job) {
+    const creditGroup: GroupItems = job.data;
 
-    creditGroup.id_account_granatum = await this.granatumAccountsService.findIdByDescription(
-      creditGroup.account_credit,
-    );
+    const itemsWithGranatumIds = await this.granatumQueueJobs.setGanatumIds(creditGroup.items);
 
-    const items = creditGroup.items;
-
-    for (const item of items) {
-      item.id_category_granatum = await this.granatumCategoriesService.findIdByDescription(item.description);
-      item.id_cost_center_granatum = await this.granatumCostCenterService.findIdByDescription(
-        item.building,
-        item.block,
-      );
-    }
-    creditGroup.items = items;
-    await this.granatumQueueProducer.addNewJob('formatToPost', creditGroup);
+    await this.granatumQueueProducer.addNewJob('formatToPost', itemsWithGranatumIds);
   }
 
   @Process('formatToPost')
   async formatDataToPost(job: Job) {
     try {
-      const invoices = job.data;
-      const formatedData = this.granatumTransactionsService.templateTransactions(invoices);
-      await this.granatumQueueProducer.addNewJob('postData', formatedData);
+      const items = job.data;
+      const formatedData = this.granatumQueueJobs.formatDataToPost(items);
+      await this.granatumQueueProducer.addNewJob('postData', { ...formatedData });
     } catch (error) {
       throw new Error(error);
     }
@@ -53,8 +40,8 @@ export class GranatumQueueConsumer {
   @Process('postData')
   async postDataIntoGranatum(job: Job) {
     try {
-      const dataReadyToPost = await job.data;
-      await this.granatumTransactionsService.postTransactions(dataReadyToPost);
+      const dataReadyToPost = await job.data[0];
+      await this.granatumQueueJobs.postTransaction(dataReadyToPost);
     } catch (error) {
       await this.handlQueueError(error, job);
     }
