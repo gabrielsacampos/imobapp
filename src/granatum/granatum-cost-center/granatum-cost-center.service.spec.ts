@@ -34,13 +34,10 @@ describe('GranatumCostCenterService', () => {
   test('findMotherCostCenter & findChildCostCenter', () => {
     const result1 = granatumCostCenterService.findMotherCostCenter('maurício de nassau', costCentersMock);
     expect(result1.id).toBe(244553);
-
     const result2 = granatumCostCenterService.findMotherCostCenter('Eko Home Club', costCentersMock);
     expect(result2.id).toBe(244545);
-
     const result3 = granatumCostCenterService.findChildCostCenter('Figueiras', result2);
     expect(result3.id).toBe(244546);
-
     const result4 = granatumCostCenterService.findChildCostCenter('Oliveiras', result2);
     expect(result4).toBeUndefined();
   });

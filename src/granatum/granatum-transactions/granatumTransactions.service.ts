@@ -55,9 +55,9 @@ export class GranatumTransactionsService {
       ' > Imóvel: ' +
       item.unity +
       ' - ' +
-      item.building +
-      ' ' +
-      (item.block || '');
+      (item.block || '') +
+      '  - ';
+    item.building;
 
     const valor = item.value;
 

@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { granatumUrls } from '../granatum-urls-params/granatum.urls';
-import { CostCenterChildDTO, CostCenterDTO } from './dtos/costCenters.dto';
+import { CostCenterDTO } from './dtos/costCenters.dto';
 
 @Injectable()
 export class GranatumCostCenterService {
@@ -18,6 +18,8 @@ export class GranatumCostCenterService {
 
     if (!motherCostCenterFound) {
       return unknowCostCenter.id;
+    } else if (motherCostCenterFound && block === '') {
+      return motherCostCenterFound.id;
     }
     const childCostCenterFound = this.findChildCostCenter(block, motherCostCenterFound);
 
@@ -47,6 +49,7 @@ export class GranatumCostCenterService {
 
   findChildCostCenter(block: string | undefined, arrayCostCenters: CostCenterDTO) {
     let cleanedBlock;
+
     if (block) {
       cleanedBlock = block
         .normalize('NFD')
@@ -59,6 +62,7 @@ export class GranatumCostCenterService {
         .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '')
         .toLowerCase();
+
       return cleanedDescription.includes(cleanedBlock);
     });
   }
