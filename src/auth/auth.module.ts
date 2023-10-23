@@ -8,6 +8,7 @@ import { LocalStrategy } from './strategies/local.strategy';
 import { UsersService } from 'src/repository/modules/users/users.service';
 import { PrismaService } from 'src/prisma-client/prisma.service';
 import { JwtStrategy } from './strategies/jwt.strategies';
+import { LoginValidationMiddleware } from './middlewares/login-validation.middleware';
 
 @Module({
   imports: [
@@ -21,4 +22,8 @@ import { JwtStrategy } from './strategies/jwt.strategies';
   controllers: [AuthController],
   providers: [AuthService, LocalStrategy, UsersService, PrismaService, JwtStrategy],
 })
-export class AuthModule {}
+export class AuthModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoginValidationMiddleware).forRoutes('login');
+  }
+}
