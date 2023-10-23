@@ -8,9 +8,10 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './repository/modules/users/users.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { WebhookModule } from './repository/modules/webhook/webhook.module';
 
 @Module({
-  imports: [ImobziModule, SharedModule, GranatumModule, AuthModule, UsersModule],
+  imports: [ImobziModule, SharedModule, GranatumModule, AuthModule, UsersModule, WebhookModule],
   controllers: [AppController],
   providers: [
     AppService,
