@@ -1,11 +1,11 @@
+import { HttpService } from '@nestjs/axios';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { PrismaService } from 'src/prisma-client/prisma.service';
 import { ItemsInvoiceCreateDTO } from 'src/repository/modules/invoices/invoice-items/invoice-items.dtos';
+import { Webhook } from 'src/repository/modules/webhook/entities/webhook.entity';
 import { BuildingDTO } from './imobzi-buildings/imobziBuildings.dtos';
 import { ImobziBuildingsService } from './imobzi-buildings/imobziBuildings.service';
 import { ContactDTO } from './imobzi-contacts/imobziContacts.dtos';
-import { ImobziWebhookDTO } from './imobzi-dtos/imobziWebhook.dtos';
 import { InvoicesDTO } from './imobzi-invoices/imobziInvoices.dtos';
 import { ImobziInvoicesService } from './imobzi-invoices/imobziInvoices.service';
 import { LeaseDTO } from './imobzi-leases/imobziLeases.dtos';
@@ -19,7 +19,7 @@ import { ImobziPropertiesService } from './imobzi-properties/imobziProperties.se
 export class ImobziService {
   constructor(
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
-    private readonly prisma: PrismaService,
+    private readonly httpService: HttpService,
     private readonly imobziPeopleService: ImobziPeopleService,
     private readonly imobziOrganizationsService: ImobziOrganizationsService,
     private readonly imobziBuildingsService: ImobziBuildingsService,
@@ -28,48 +28,39 @@ export class ImobziService {
     private readonly imobziInvoicesService: ImobziInvoicesService,
   ) {}
 
-  async handleWebhook(data: ImobziWebhookDTO) {
-    // regist event before handle with updates - if some error, database does not miss event.
-    const event = await this.prisma.webhook.create({
-      data: { event: data.event, id_entity_imobzi: data.db_id },
-    });
-
+  async handleWebhook(data: Webhook) {
     switch (data.event) {
       case 'contact_created':
       case 'contact_updated':
-        const person = await this.imobziPeopleService.getRequiredPersonDataToDb(data.db_id);
-        await this.prisma.person.upsert({
-          where: {
-            id_imobzi: person.id_imobzi,
-          },
-          update: person,
-          create: person,
-        });
+        const person = await this.imobziPeopleService.getRequiredPersonDataToDb(data.id_entity_imobzi);
+        // update webhook by endpoint
 
         if (person) {
-          await this.prisma.webhook.update({ where: { id: event.id }, data: { done: true } });
+          // update webhook by endpoint
           break;
         }
 
-        const organization = await this.imobziOrganizationsService.getRequiredOrganizationDataToDb(data.db_id);
+        const organization = await this.imobziOrganizationsService.getRequiredOrganizationDataToDb(
+          data.id_entity_imobzi,
+        );
         await this.updateOrganization(organization);
-        await this.prisma.webhook.update({ where: { id: event.id }, data: { done: true } });
+      // update webhook by endpoint
 
       case 'property_created':
       case 'property_updated':
-        await this.updateProperty({ db_id: data.db_id });
-        await this.prisma.webhook.update({ where: { id: event.id }, data: { done: true } });
+        await this.updateProperty({ db_id: data.id_entity_imobzi });
+      // update webhook by endpoint
 
       case 'lease_created':
       case 'lease_updated':
-        const lease = await this.imobziLeasesService.getRequiredLeaseDataToDb(data.db_id);
+        const lease = await this.imobziLeasesService.getRequiredLeaseDataToDb(data.id_entity_imobzi);
         await this.updateLease(lease);
-        await this.prisma.webhook.update({ where: { id: event.id }, data: { done: true } });
+      // update webhook by endpoint
 
       case 'invoice_created' || 'invoice_updated':
-        const invoice = await this.imobziInvoicesService.getRequiredInvoicesDataToDb(data.db_id);
+        const invoice = await this.imobziInvoicesService.getRequiredInvoicesDataToDb(data.id_entity_imobzi);
         await this.updateInvoice(invoice);
-        await this.prisma.webhook.update({ where: { id: event.id }, data: { done: true } });
+      // update webhook by endpoint
     }
   }
 
