@@ -1,9 +1,9 @@
 import { HttpService } from '@nestjs/axios';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { OrganizationsCreateDTO } from 'src/repository/modules/organizations/organizationsCreate.dtos';
 import { GroupAddress, GroupCompanyDaum } from './imobziOrganizations.dtos';
 import { imobziUrls, imobziParams } from '../imobzi-urls-params/imobzi.urls';
+import { CreateOrganizationDTO } from 'src/repository/modules/organizations/dtos/create-organization.dtos';
 
 @Injectable()
 export class ImobziOrganizationsService {
@@ -12,7 +12,7 @@ export class ImobziOrganizationsService {
     private readonly httpService: HttpService,
   ) {}
 
-  async getRequiredOrganizationDataToDb(id_imobzi: string): Promise<OrganizationsCreateDTO> {
+  async getRequiredOrganizationDataToDb(id_imobzi: string): Promise<CreateOrganizationDTO> {
     try {
       const { data } = await this.httpService.axiosRef.get(imobziUrls.urlOrganizationDetails(id_imobzi), imobziParams);
 

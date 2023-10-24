@@ -1,9 +1,9 @@
 import { HttpService } from '@nestjs/axios';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { PeopleCreateDTO } from 'src/repository/modules/people/peopleCreate.dtos';
 import { GroupPersonal } from './imobziPeople.dtos';
 import { imobziUrls, imobziParams } from '../imobzi-urls-params/imobzi.urls';
+import { CreatePersonDTO } from 'src/repository/modules/people/dtos/create-person.dtos';
 
 @Injectable()
 export class ImobziPeopleService {
@@ -12,7 +12,7 @@ export class ImobziPeopleService {
     private readonly httpService: HttpService,
   ) {}
 
-  async getRequiredPersonDataToDb(id_imobzi: string): Promise<PeopleCreateDTO> {
+  async getRequiredPersonDataToDb(id_imobzi: string): Promise<CreatePersonDTO> {
     try {
       const { data } = await this.httpService.axiosRef.get(imobziUrls.urlPersonDetails(id_imobzi), imobziParams);
 

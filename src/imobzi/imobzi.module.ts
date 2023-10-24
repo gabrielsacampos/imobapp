@@ -48,25 +48,7 @@ import { ImobziQueueConsumer } from './imobzi.queue.consumer';
     ImobziInvoicesModule,
   ],
   controllers: [ImobziController],
-  providers: [
-    ImobziQueueProducer,
-    ImobziQueueConsumer,
-    ImobziContactsService,
-    ImobziPropertiesService,
-    ImobziBuildingsService,
-    ImobziLeasesService,
-    ImobziInvoicesService,
-    ImobziService,
-  ],
-  exports: [
-    ImobziService,
-    ImobziInvoicesService,
-    SharedModule,
-    ImobziContactsService,
-    ImobziPropertiesService,
-    ImobziBuildingsService,
-    ImobziLeasesService,
-    ImobziService,
-  ],
+  providers: [ImobziQueueProducer, ImobziQueueConsumer, ImobziService],
+  exports: [ImobziService],
 })
 export class ImobziModule {}

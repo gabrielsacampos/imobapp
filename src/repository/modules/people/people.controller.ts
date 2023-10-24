@@ -1,14 +1,14 @@
 import { Controller, Get, Post, Body, Param, Put } from '@nestjs/common';
-import { PeopleCreateDTO } from './peopleCreate.dtos';
 import { PeopleService } from './people.service';
-import { PeopleUpdateDTO } from './peopleUpdate.dtos';
+import { UpdatePersonDTO } from './dtos/update-person.dtos';
+import { CreatePersonDTO } from './dtos/create-person.dtos';
 
 @Controller('people')
 export class PeopleController {
   constructor(private readonly peopleService: PeopleService) {}
 
   @Post()
-  async create(@Body() data: PeopleCreateDTO) {
+  async create(@Body() data: CreatePersonDTO) {
     return await this.peopleService.create(data);
   }
 
@@ -23,7 +23,7 @@ export class PeopleController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() data: PeopleUpdateDTO) {
+  async update(@Param('id') id: string, @Body() data: UpdatePersonDTO) {
     return await this.peopleService.update(id, data);
   }
 }

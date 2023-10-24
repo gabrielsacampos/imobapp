@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
-import { OrganizationsCreateDTO } from './organizationsCreate.dtos';
 import { OrganizationsService } from './organizations.service';
-import { OrganizationsUpdateDTO } from './organizationsUpdate.dtos';
+import { UpdateOrganizationDTO } from './dtos/update-organization.dtos';
+import { CreateOrganizationDTO } from './dtos/create-organization.dtos';
 
 @Controller('organizations')
 export class OrganizationsController {
@@ -18,12 +18,12 @@ export class OrganizationsController {
   }
 
   @Post()
-  async create(@Body() data: OrganizationsCreateDTO) {
+  async create(@Body() data: CreateOrganizationDTO) {
     return await this.organizationsService.create(data);
   }
 
   @Put()
-  async update(@Param('id') id: string, @Body() data: OrganizationsUpdateDTO) {
+  async update(@Param('id') id: string, @Body() data: UpdateOrganizationDTO) {
     return await this.organizationsService.update(id, data);
   }
 }

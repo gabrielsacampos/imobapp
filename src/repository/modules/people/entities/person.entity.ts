@@ -1,28 +1,16 @@
-import { IsEmail, IsNotEmpty } from 'class-validator';
-
-export class PeopleCreateDTO {
-  @IsNotEmpty()
+export class Person {
+  id?: number;
   id_imobzi: string;
-
-  @IsNotEmpty()
   cpf: string;
-
-  @IsNotEmpty()
   fullname: string;
-
-  @IsNotEmpty()
-  @IsEmail()
+  birthdate?: Date;
   email: string;
-
-  @IsNotEmpty()
   phone: string;
-
-  birthdate?: string;
+  code_imobzi?: string;
   alternative_address?: string;
   alternative_address_reference?: string;
   gender?: string;
   marital_status?: string;
-  code_imobzi?: string;
   profession?: string;
   children?: number;
   pets?: number;

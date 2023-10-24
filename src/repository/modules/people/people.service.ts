@@ -1,13 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma-client/prisma.service';
-import { PeopleCreateDTO } from './peopleCreate.dtos';
-import { PeopleUpdateDTO } from './peopleUpdate.dtos';
+import { CreatePersonDTO } from './dtos/create-person.dtos';
+import { UpdatePersonDTO } from './dtos/update-person.dtos';
 
 @Injectable()
 export class PeopleService {
   constructor(private prisma: PrismaService) {}
 
-  async create(data: PeopleCreateDTO) {
+  async create(data: CreatePersonDTO) {
     const existsIdPerson = await this.prisma.person.findFirst({
       where: { id_imobzi: data.id_imobzi },
     });
@@ -51,7 +51,7 @@ export class PeopleService {
     return found;
   }
 
-  async update(id_imobzi: string, data: PeopleUpdateDTO) {
+  async update(id_imobzi: string, data: UpdatePersonDTO) {
     const personExists = await this.prisma.person.findFirst({
       where: { id_imobzi },
     });
@@ -61,5 +61,15 @@ export class PeopleService {
     }
 
     return await this.prisma.person.update({ where: { id_imobzi }, data });
+  }
+
+  async upsert(data: CreatePersonDTO): Promise<void> {
+    await this.prisma.person.upsert({
+      where: {
+        id_imobzi: data.id_imobzi,
+      },
+      update: data,
+      create: data,
+    });
   }
 }

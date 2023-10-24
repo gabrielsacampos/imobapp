@@ -1,6 +1,7 @@
 import { IsEmail, IsNotEmpty } from 'class-validator';
+import { Organization } from '../entities/organization.entity';
 
-export class OrganizationsCreateDTO {
+export class CreateOrganizationDTO extends Organization {
   @IsNotEmpty()
   id_imobzi: string;
 

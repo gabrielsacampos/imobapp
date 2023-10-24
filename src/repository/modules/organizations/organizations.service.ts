@@ -1,13 +1,13 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma-client/prisma.service';
-import { OrganizationsCreateDTO } from './organizationsCreate.dtos';
-import { OrganizationsUpdateDTO } from './organizationsUpdate.dtos';
+import { CreateOrganizationDTO } from './dtos/create-organization.dtos';
+import { UpdateOrganizationDTO } from './dtos/update-organization.dtos';
 
 @Injectable()
 export class OrganizationsService {
   constructor(private prisma: PrismaService) {}
 
-  async create(data: OrganizationsCreateDTO) {
+  async create(data: CreateOrganizationDTO) {
     const existsIdOrganization = await this.prisma.organization.findFirst({
       where: { id_imobzi: data.id_imobzi },
     });
@@ -44,7 +44,7 @@ export class OrganizationsService {
     return await this.prisma.organization.findMany();
   }
 
-  async update(id_imobzi: string, data: OrganizationsUpdateDTO) {
+  async update(id_imobzi: string, data: UpdateOrganizationDTO) {
     const found = await this.prisma.organization.findFirst({
       where: { id_imobzi },
     });
