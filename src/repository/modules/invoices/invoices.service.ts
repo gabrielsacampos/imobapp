@@ -1,14 +1,14 @@
 import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma-client/prisma.service';
+import { CreateInvoiceDTO } from './dtos/create-invoice.dtos';
 import { GetPaidItemDTO } from './dtos/return-invoice.queries.dtos';
-import { CreateInvoiceDTO, InvoiceCreateDTO } from './dtos/create-invoice.dtos';
 
 @Injectable()
 export class InvoicesService {
   constructor(private prisma: PrismaService) {}
 
   // it can create properties from imobzi or not
-  async create(data: InvoiceCreateDTO) {
+  async create(data: CreateInvoiceDTO) {
     const existsInvoice = await this.prisma.invoice.findFirst({
       where: { id_imobzi: data.id_imobzi },
     });
@@ -44,7 +44,7 @@ export class InvoicesService {
     return found;
   }
 
-  async update(id_imobzi: string, data: InvoiceCreateDTO) {
+  async update(id_imobzi: string, data: CreateInvoiceDTO) {
     const existsInvoice = await this.prisma.invoice.findFirst({
       where: { id_imobzi },
     });
