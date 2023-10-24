@@ -1,10 +1,10 @@
 import { Logger } from 'winston';
 import { HttpService } from '@nestjs/axios';
 import { Inject, Injectable } from '@nestjs/common';
-import { BuildingsCreateDTO } from 'src/repository/modules/buildings/buildingsCreate.dtos';
 import { BuildingDTO } from './imobziBuildings.dtos';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { imobziUrls, imobziParams } from '../imobzi-urls-params/imobzi.urls';
+import { CreateBuildingDTO } from 'src/repository/modules/buildings/dtos/create-building.dtos';
 
 @Injectable()
 export class ImobziBuildingsService {
@@ -33,7 +33,7 @@ export class ImobziBuildingsService {
     }
   }
 
-  async getRequiredBuildingDataToDb(buildingData: BuildingDTO): Promise<BuildingsCreateDTO> {
+  async getRequiredBuildingDataToDb(buildingData: BuildingDTO): Promise<CreateBuildingDTO> {
     const { address, city, building_name: name, zipcode } = buildingData;
     const id_imobzi = buildingData.db_id.toString();
     return { id_imobzi, address, city, name, zipcode };

@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { BuildingsService } from './buildings.service';
-import { BuildingsCreateDTO } from './buildingsCreate.dtos';
-import { BuildingsUpdateDTO } from './buildingsUpdate.dtos';
+import { CreateBuildingDTO } from './dtos/create-building.dtos';
+import { UpdateBuildingDTO } from './dtos/update-building.dtos';
 
 @Controller('buildings')
 export class BuildingsController {
@@ -18,12 +18,12 @@ export class BuildingsController {
   }
 
   @Post()
-  async create(@Body() data: BuildingsCreateDTO) {
+  async create(@Body() data: CreateBuildingDTO) {
     return await this.buildingsService.create(data);
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() data: BuildingsUpdateDTO) {
+  async update(@Param('id') id: string, @Body() data: UpdateBuildingDTO) {
     return await this.buildingsService.update(id, data);
   }
 }

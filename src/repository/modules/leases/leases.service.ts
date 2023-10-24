@@ -1,5 +1,6 @@
 import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma-client/prisma.service';
+import { CreateLeaseDTO } from './dtos/create-lease.dtos';
 import { LeasesCreateDTO } from './leasesCreate.dtos';
 import { LeasesUpdateDTO } from './leasesUpdate.dtos';
 
@@ -81,5 +82,33 @@ export class LeasesService {
     });
 
     return { message: `Items updated at lease ${id_imobzi} updated` };
+  }
+
+  async upsert(data: CreateLeaseDTO) {
+    this.prisma.lease.upsert({
+      where: {
+        id_imobzi: data.id_imobzi,
+      },
+      update: {
+        ...data,
+        beneficiariesLease: {
+          deleteMany: {},
+          createMany: { data: data.beneficiaries },
+        },
+        leasesItems: {
+          deleteMany: {},
+          createMany: { data: data.lease_items },
+        },
+      },
+      create: {
+        ...data,
+        beneficiariesLease: {
+          createMany: { data: data.beneficiaries },
+        },
+        leasesItems: {
+          createMany: { data: data.lease_items },
+        },
+      },
+    });
   }
 }

@@ -7,6 +7,7 @@ import { LeasesCreateDTO } from 'src/repository/modules/leases/leasesCreate.dtos
 import { ImobziLeasesDTO, LeaseDTO } from './imobziLeases.dtos';
 import { ImobziLeaseBeneficiaryDTO, ImobziLeaseDetailsDTO, ImobziLeaseItemDTO } from './imobziLeasesDetails.dtos';
 import { imobziUrls, imobziParams } from '../imobzi-urls-params/imobzi.urls';
+import { CreateLeaseDTO } from 'src/repository/modules/leases/dtos/create-lease.dtos';
 
 @Injectable()
 export class ImobziLeasesService {
@@ -79,7 +80,7 @@ export class ImobziLeasesService {
     });
   }
 
-  async getRequiredLeaseDataToDb(id_imobzi: string): Promise<LeasesCreateDTO> {
+  async getRequiredLeaseDataToDb(id_imobzi: string): Promise<CreateLeaseDTO> {
     try {
       const { data } = await this.httpService.axiosRef.get<ImobziLeaseDetailsDTO>(
         imobziUrls.urlLeaseDetails(id_imobzi),
@@ -97,16 +98,8 @@ export class ImobziLeasesService {
       const id_tenant_person_imobzi = data.tenants[0].type === 'person' ? data.tenants[0].db_id.toString() : null;
       const fee = data.management_fee.percent;
       const updated_at = new Date(data.updated_at);
-      const {
-        status,
-        value: lease_value,
-        duration,
-        irrf,
-        indeterminate,
-        start_at,
-        code: code_imobzi,
-        include_in_dimob,
-      } = data;
+      const start_at = new Date(data.start_at);
+      const { status, value: lease_value, duration, irrf, indeterminate, code: code_imobzi, include_in_dimob } = data;
 
       const beneficiaries = this.getRequiredLeaseBeneficiariesDataToDb(data.beneficiaries);
       const lease_items = this.getRequiredLeaseItemsDataToDb(data.items);

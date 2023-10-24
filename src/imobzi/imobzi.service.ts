@@ -3,6 +3,7 @@ import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { BuildingsService } from 'src/repository/modules/buildings/buildings.service';
 import { CreateInvoiceItemDTO } from 'src/repository/modules/invoices/invoice-items/dtos/create-invoice.dtos';
 import { InvoicesService } from 'src/repository/modules/invoices/invoices.service';
+import { LeasesService } from 'src/repository/modules/leases/leases.service';
 import { OrganizationsService } from 'src/repository/modules/organizations/organizations.service';
 import { PropertiesService } from 'src/repository/modules/properties/properties.service';
 import { BuildingDTO } from './imobzi-buildings/imobziBuildings.dtos';
@@ -11,6 +12,7 @@ import { ContactDTO } from './imobzi-contacts/imobziContacts.dtos';
 import { ImobziContactsService } from './imobzi-contacts/imobziContacts.service';
 import { InvoicesDTO } from './imobzi-invoices/imobziInvoices.dtos';
 import { ImobziInvoicesService } from './imobzi-invoices/imobziInvoices.service';
+import { LeaseDTO } from './imobzi-leases/imobziLeases.dtos';
 import { ImobziLeasesService } from './imobzi-leases/imobziLeases.service';
 import { ImobziOrganizationsService } from './imobzi-organizations/imobziOrganizations.service';
 import { ImobziPeopleService } from './imobzi-people/imobziPeople.service';
@@ -22,6 +24,7 @@ export class ImobziService {
   constructor(
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
     private readonly invoicesService: InvoicesService,
+    private readonly leasesService: LeasesService,
     private readonly propertiesService: PropertiesService,
     private readonly organizationsService: OrganizationsService,
     private readonly buildingsService: BuildingsService,
@@ -69,38 +72,8 @@ export class ImobziService {
   //we need to request each lease detail to get update date
   async updateLease(leaseData: LeaseDTO) {
     try {
-      const leaseFromApi = await this.imobziLeasesService.getRequiredLeaseDataToDb(leaseData.db_id.toString());
-      const beneficiaries = leaseFromApi.beneficiaries;
-      const leaseItems = leaseFromApi.lease_items;
-
-      delete leaseFromApi.lease_items;
-      delete leaseFromApi.beneficiaries;
-
-      await this.prisma.lease.upsert({
-        where: {
-          id_imobzi: leaseFromApi.id_imobzi,
-        },
-        update: {
-          ...leaseFromApi,
-          beneficiariesLease: {
-            deleteMany: {},
-            createMany: { data: beneficiaries },
-          },
-          leasesItems: {
-            deleteMany: {},
-            createMany: { data: leaseItems },
-          },
-        },
-        create: {
-          ...leaseFromApi,
-          beneficiariesLease: {
-            createMany: { data: beneficiaries },
-          },
-          leasesItems: {
-            createMany: { data: leaseItems },
-          },
-        },
-      });
+      const leaseFromImobzi = await this.imobziLeasesService.getRequiredLeaseDataToDb(leaseData.db_id.toString());
+      await this.leasesService.upsert(leaseFromImobzi);
     } catch (error) {
       this.logger.error(error);
       throw new Error(`${error}`);
