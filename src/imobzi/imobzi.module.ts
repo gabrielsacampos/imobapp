@@ -15,6 +15,8 @@ import { BullModule } from '@nestjs/bull';
 import { ImobziService } from './imobzi.service';
 import { ImobziQueueProducer } from './imobzi.queue.producer';
 import { ImobziQueueConsumer } from './imobzi.queue.consumer';
+import { InvoicesModule } from 'src/repository/modules/invoices/invoices.module';
+import { RepositoryModule } from 'src/repository/modules/repository.module';
 
 @Module({
   imports: [
@@ -41,6 +43,8 @@ import { ImobziQueueConsumer } from './imobzi.queue.consumer';
     ImobziPropertiesModule,
     ImobziLeasesModule,
     ImobziInvoicesModule,
+    InvoicesModule,
+    RepositoryModule,
   ],
   controllers: [ImobziController],
   providers: [ImobziQueueProducer, ImobziQueueConsumer, ImobziService],
