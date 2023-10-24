@@ -1,7 +1,7 @@
 import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma-client/prisma.service';
-import { GetPaidItemDTO } from './dtos/invoice.queries.dtos';
-import { InvoiceCreateDTO } from './dtos/invoiceCreate.dto';
+import { GetPaidItemDTO } from './dtos/return-invoice.queries.dtos';
+import { CreateInvoiceDTO, InvoiceCreateDTO } from './dtos/create-invoice.dtos';
 
 @Injectable()
 export class InvoicesService {
@@ -62,6 +62,18 @@ export class InvoicesService {
     });
 
     return { message: `invoice ${id_imobzi} updated` };
+  }
+
+  async upsert(data: CreateInvoiceDTO) {
+    try {
+      await this.prisma.invoice.upsert({
+        where: { id_imobzi: data.id_imobzi },
+        update: data,
+        create: data,
+      });
+    } catch (error) {
+      throw new Error(error.message);
+    }
   }
 
   async getPaidItems(start_at: string, end_at: string): Promise<GetPaidItemDTO[]> {

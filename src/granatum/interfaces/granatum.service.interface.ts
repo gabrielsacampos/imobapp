@@ -1,4 +1,4 @@
-import { GetPaidItemDTO } from 'src/repository/modules/invoices/dtos/invoice.queries.dtos';
+import { GetPaidItemDTO } from 'src/repository/modules/invoices/dtos/return-invoice.queries.dtos';
 
 export interface GroupItems {
   count_invoices: number;

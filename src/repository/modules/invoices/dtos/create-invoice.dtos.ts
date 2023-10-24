@@ -1,9 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsNotEmpty, ValidateNested } from 'class-validator';
+import { Invoice } from '../entities/invoice.entity';
 import { ItemsInvoiceCreateDTO } from '../invoice-items/invoice-items.dtos';
 
-export class InvoiceCreateDTO {
+export class CreateInvoiceDTO extends Invoice {
   @ApiProperty({
     description: 'invoice id from imobzi',
     example: '12huh8377dbgs81734cgd',

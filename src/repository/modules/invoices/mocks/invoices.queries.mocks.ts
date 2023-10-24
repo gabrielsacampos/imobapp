@@ -1,4 +1,4 @@
-import { GetPaidItemDTO } from '../dtos/invoice.queries.dtos';
+import { GetPaidItemDTO } from '../dtos/return-invoice.queries.dtos';
 
 export const getItemsPaidMock: GetPaidItemDTO[] = [
   {
