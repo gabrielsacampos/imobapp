@@ -2,6 +2,7 @@ import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/c
 import { PrismaService } from 'src/prisma-client/prisma.service';
 import { CreateInvoiceDTO } from './dtos/create-invoice.dtos';
 import { GetPaidItemDTO } from './dtos/return-invoice.queries.dtos';
+import { CreateInvoiceItemDTO } from './invoice-items/dtos/create-invoice.dtos';
 
 @Injectable()
 export class InvoicesService {
@@ -74,6 +75,10 @@ export class InvoicesService {
     } catch (error) {
       throw new Error(error.message);
     }
+  }
+
+  async insertItems(data: CreateInvoiceItemDTO): Promise<void> {
+    await this.prisma.invoiceItem.create({ data });
   }
 
   async getPaidItems(start_at: string, end_at: string): Promise<GetPaidItemDTO[]> {

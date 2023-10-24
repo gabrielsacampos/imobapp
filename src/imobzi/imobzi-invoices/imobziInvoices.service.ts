@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
 import { ItemsInvoiceCreateDTO } from 'src/repository/modules/invoices/invoice-items/invoice-items.dtos';
-import { InvoiceCreateDTO } from 'src/repository/modules/invoices/dtos/create-invoice.dtos';
+import { CreateInvoiceDTO } from 'src/repository/modules/invoices/dtos/create-invoice.dtos';
 import { ImobziInvoiceDetailsDTO, ImobziInvoiceItem } from './imobziInvoiceDetails.dtos';
 import { ImobziInvoiceDTO, InvoicesDTO } from './imobziInvoices.dtos';
 import { imobziUrls, imobziParams } from '../imobzi-urls-params/imobzi.urls';
@@ -65,7 +65,7 @@ export class ImobziInvoicesService {
     });
   }
 
-  async getRequiredInvoicesDataToDb(id_invoice_imobzi: string): Promise<InvoiceCreateDTO> {
+  async getRequiredInvoicesDataToDb(id_invoice_imobzi: string): Promise<CreateInvoiceDTO> {
     try {
       const { data } = await this.httpService.axiosRef.get<ImobziInvoiceDetailsDTO>(
         imobziUrls.urlInvoiceDetail(id_invoice_imobzi),
