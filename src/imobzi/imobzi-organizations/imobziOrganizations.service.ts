@@ -3,7 +3,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { GroupAddress, GroupCompanyDaum } from './imobziOrganizations.dtos';
 import { imobziUrls, imobziParams } from '../imobzi-urls-params/imobzi.urls';
-import { CreateOrganizationDTO } from 'src/repository/modules/organizations/dtos/create-organization.dtos';
+import { CreateOrganizationDTO } from 'src/repository/organizations/dtos/create-organization.dtos';
 
 @Injectable()
 export class ImobziOrganizationsService {

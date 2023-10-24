@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { GetPaidItemDTO } from 'src/repository/modules/invoices/dtos/return-invoice.queries.dtos';
-import { InvoicesService } from 'src/repository/modules/invoices/invoices.service';
+import { GetPaidItemDTO } from 'src/repository/invoices/dtos/return-invoice.queries.dtos';
+import { InvoicesService } from 'src/repository/invoices/invoices.service';
 import { GranatumQueueProducer } from './granatum.queue.producer';
 import { GroupItems } from './interfaces/granatum.service.interface';
 

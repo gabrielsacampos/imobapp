@@ -21,7 +21,7 @@ import { ExpressAdapter } from '@bull-board/express';
 import { GranatumQueueProducer } from './granatum.queue.producer';
 import { GranatumQueueConsumer } from './granatum.queue.consumer';
 import { GranatumController } from './granatum.controller';
-import { InvoicesService } from 'src/repository/modules/invoices/invoices.service';
+import { InvoicesService } from 'src/repository/invoices/invoices.service';
 import { GranatumQueueJobs } from './granatum.queue.jobs';
 
 @Module({

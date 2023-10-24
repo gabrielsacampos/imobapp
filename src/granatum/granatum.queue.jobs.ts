@@ -1,4 +1,4 @@
-import { GetPaidItemDTO } from 'src/repository/modules/invoices/dtos/return-invoice.queries.dtos';
+import { GetPaidItemDTO } from 'src/repository/invoices/dtos/return-invoice.queries.dtos';
 import { GranatumCostCenterService } from './granatum-cost-center/granatum-cost-center.service';
 import { GranatumCategoriesService } from './granatum-categories/granatumCategories.service';
 import { GranatumAccountsService } from './granatum-accounts/granatum-accounts.service';

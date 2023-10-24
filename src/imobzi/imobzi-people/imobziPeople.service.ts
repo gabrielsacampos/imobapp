@@ -3,7 +3,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { GroupPersonal } from './imobziPeople.dtos';
 import { imobziUrls, imobziParams } from '../imobzi-urls-params/imobzi.urls';
-import { CreatePersonDTO } from 'src/repository/modules/people/dtos/create-person.dtos';
+import { CreatePersonDTO } from 'src/repository/people/dtos/create-person.dtos';
 
 @Injectable()
 export class ImobziPeopleService {

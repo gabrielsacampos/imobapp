@@ -5,10 +5,10 @@ import { ImobziModule } from './imobzi/imobzi.module';
 import { SharedModule } from './shared.module';
 import { GranatumModule } from './granatum/granatum.module';
 import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './repository/modules/users/users.module';
+import { UsersModule } from './repository/users/users.module';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
-import { WebhookModule } from './repository/modules/webhook/webhook.module';
+import { WebhookModule } from './repository/webhook/webhook.module';
 
 @Module({
   imports: [ImobziModule, SharedModule, GranatumModule, AuthModule, UsersModule, WebhookModule],

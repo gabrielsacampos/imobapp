@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { getItemsPaidMock } from 'src/repository/modules/invoices/mocks/invoices.queries.mocks';
+import { getItemsPaidMock } from 'src/repository/invoices/mocks/invoices.queries.mocks';
 import { SharedModule } from 'src/shared.module';
 import { GranatumAccountsService } from './granatum-accounts/granatum-accounts.service';
 import { GranatumCategoriesService } from './granatum-categories/granatumCategories.service';

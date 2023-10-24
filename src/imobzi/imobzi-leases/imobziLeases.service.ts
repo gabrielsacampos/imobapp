@@ -1,13 +1,13 @@
 import { HttpService } from '@nestjs/axios';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { BeneficiariesCreateDTO } from 'src/repository/modules/leases/lease-beneficiaries/lease-beneficiaries.dtos';
-import { LeaseItemsCreateDTO } from 'src/repository/modules/leases/lease-items/leaseItemsCreate.dtos';
-import { LeasesCreateDTO } from 'src/repository/modules/leases/leasesCreate.dtos';
+import { BeneficiariesCreateDTO } from 'src/repository/leases/lease-beneficiaries/lease-beneficiaries.dtos';
+import { LeaseItemsCreateDTO } from 'src/repository/leases/lease-items/leaseItemsCreate.dtos';
+import { LeasesCreateDTO } from 'src/repository/leases/leasesCreate.dtos';
 import { ImobziLeasesDTO, LeaseDTO } from './imobziLeases.dtos';
 import { ImobziLeaseBeneficiaryDTO, ImobziLeaseDetailsDTO, ImobziLeaseItemDTO } from './imobziLeasesDetails.dtos';
 import { imobziUrls, imobziParams } from '../imobzi-urls-params/imobzi.urls';
-import { CreateLeaseDTO } from 'src/repository/modules/leases/dtos/create-lease.dtos';
+import { CreateLeaseDTO } from 'src/repository/leases/dtos/create-lease.dtos';
 
 @Injectable()
 export class ImobziLeasesService {

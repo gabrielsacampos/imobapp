@@ -1,12 +1,12 @@
 import { BullModule } from '@nestjs/bull';
 import { Test, TestingModule } from '@nestjs/testing';
-import { InvoicesModule } from 'src/repository/modules/invoices/invoices.module';
-import { InvoicesService } from 'src/repository/modules/invoices/invoices.service';
+import { InvoicesModule } from 'src/repository/invoices/invoices.module';
+import { InvoicesService } from 'src/repository/invoices/invoices.service';
 import { SharedModule } from '../shared.module';
 import { GranatumModule } from './granatum.module';
 import { GranatumQueueProducer } from './granatum.queue.producer';
 import { GranatumService } from './granatum.service';
-import { getItemsPaidMock } from '../repository/modules/invoices/mocks/invoices.queries.mocks';
+import { getItemsPaidMock } from '../repository/invoices/mocks/invoices.queries.mocks';
 
 describe('GranatumTransactionsService', () => {
   let granatumService: GranatumService;

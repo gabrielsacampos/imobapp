@@ -4,7 +4,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { BuildingDTO } from './imobziBuildings.dtos';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { imobziUrls, imobziParams } from '../imobzi-urls-params/imobzi.urls';
-import { CreateBuildingDTO } from 'src/repository/modules/buildings/dtos/create-building.dtos';
+import { CreateBuildingDTO } from 'src/repository/buildings/dtos/create-building.dtos';
 
 @Injectable()
 export class ImobziBuildingsService {

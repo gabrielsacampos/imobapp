@@ -1,11 +1,11 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { BuildingsService } from 'src/repository/modules/buildings/buildings.service';
-import { CreateInvoiceItemDTO } from 'src/repository/modules/invoices/invoice-items/dtos/create-invoice.dtos';
-import { InvoicesService } from 'src/repository/modules/invoices/invoices.service';
-import { LeasesService } from 'src/repository/modules/leases/leases.service';
-import { OrganizationsService } from 'src/repository/modules/organizations/organizations.service';
-import { PropertiesService } from 'src/repository/modules/properties/properties.service';
+import { BuildingsService } from 'src/repository/buildings/buildings.service';
+import { CreateInvoiceItemDTO } from 'src/repository/invoices/invoice-items/dtos/create-invoice.dtos';
+import { InvoicesService } from 'src/repository/invoices/invoices.service';
+import { LeasesService } from 'src/repository/leases/leases.service';
+import { OrganizationsService } from 'src/repository/organizations/organizations.service';
+import { PropertiesService } from 'src/repository/properties/properties.service';
 import { BuildingDTO } from './imobzi-buildings/imobziBuildings.dtos';
 import { ImobziBuildingsService } from './imobzi-buildings/imobziBuildings.service';
 import { ContactDTO } from './imobzi-contacts/imobziContacts.dtos';
