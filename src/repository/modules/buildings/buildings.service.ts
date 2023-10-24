@@ -1,14 +1,14 @@
 import { Injectable, NotAcceptableException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma-client/prisma.service';
-import { BuildingsCreateDTO } from './buildingsCreate.dtos';
-import { BuildingsUpdateDTO } from './buildingsUpdate.dtos';
+import { CreateBuildingDTO } from './dtos/create-building.dtos';
+import { UpdateBuildingDTO } from './dtos/update-building.dtos';
 
 @Injectable()
 export class BuildingsService {
   constructor(private prisma: PrismaService) {}
 
   // it can create properties from imobzi or not
-  async create(data: BuildingsCreateDTO) {
+  async create(data: CreateBuildingDTO) {
     const existsBuildingId = await this.prisma.building.findFirst({
       where: { id_imobzi: data.id_imobzi },
     });
@@ -51,7 +51,7 @@ export class BuildingsService {
   }
 
   // update using db id.
-  async update(id: string, data: BuildingsUpdateDTO) {
+  async update(id: string, data: UpdateBuildingDTO) {
     const buildingExists = await this.prisma.building.findMany({
       where: { id: Number(id) },
     });
@@ -67,5 +67,13 @@ export class BuildingsService {
       data,
     });
     return updated;
+  }
+
+  async upsert(data: CreateBuildingDTO) {
+    await this.prisma.building.upsert({
+      where: { id_imobzi: data.id_imobzi },
+      update: data,
+      create: data,
+    });
   }
 }

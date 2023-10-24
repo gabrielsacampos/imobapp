@@ -1,15 +1,16 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { BuildingsService } from 'src/repository/modules/buildings/buildings.service';
 import { CreateInvoiceItemDTO } from 'src/repository/modules/invoices/invoice-items/dtos/create-invoice.dtos';
-import { ItemsInvoiceCreateDTO } from 'src/repository/modules/invoices/invoice-items/invoice-items.dtos';
 import { InvoicesService } from 'src/repository/modules/invoices/invoices.service';
+import { OrganizationsService } from 'src/repository/modules/organizations/organizations.service';
+import { PropertiesService } from 'src/repository/modules/properties/properties.service';
 import { BuildingDTO } from './imobzi-buildings/imobziBuildings.dtos';
 import { ImobziBuildingsService } from './imobzi-buildings/imobziBuildings.service';
 import { ContactDTO } from './imobzi-contacts/imobziContacts.dtos';
 import { ImobziContactsService } from './imobzi-contacts/imobziContacts.service';
 import { InvoicesDTO } from './imobzi-invoices/imobziInvoices.dtos';
 import { ImobziInvoicesService } from './imobzi-invoices/imobziInvoices.service';
-import { LeaseDTO } from './imobzi-leases/imobziLeases.dtos';
 import { ImobziLeasesService } from './imobzi-leases/imobziLeases.service';
 import { ImobziOrganizationsService } from './imobzi-organizations/imobziOrganizations.service';
 import { ImobziPeopleService } from './imobzi-people/imobziPeople.service';
@@ -21,6 +22,9 @@ export class ImobziService {
   constructor(
     @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
     private readonly invoicesService: InvoicesService,
+    private readonly propertiesService: PropertiesService,
+    private readonly organizationsService: OrganizationsService,
+    private readonly buildingsService: BuildingsService,
     private readonly imobziContacts: ImobziContactsService,
     private readonly imobziPeopleService: ImobziPeopleService,
     private readonly imobziOrganizationsService: ImobziOrganizationsService,
@@ -32,103 +36,76 @@ export class ImobziService {
 
   async updateOrganization(contactData: ContactDTO) {
     try {
-      const organizationFromApi = await this.imobziOrganizationsService.getRequiredOrganizationDataToDb(
+      const organizationFromImobzi = await this.imobziOrganizationsService.getRequiredOrganizationDataToDb(
         contactData.contact_id,
       );
-      await this.prisma.organization.upsert({
-        where: {
-          id_imobzi: organizationFromApi.id_imobzi,
-        },
-        update: organizationFromApi,
-        create: organizationFromApi,
-      });
+      await this.organizationsService.upsert(organizationFromImobzi);
     } catch (error) {
       this.logger.error(error);
       throw new Error(`${error}`);
     }
   }
 
-  // async updateBuilding(buildingData: BuildingDTO) {
-  //   try {
-  //     const organizationFromApi = await this.imobziBuildingsService.getRequiredBuildingDataToDb(buildingData);
-  //     await this.prisma.building.upsert({
-  //       where: {
-  //         id_imobzi: organizationFromApi.id_imobzi,
-  //       },
-  //       update: organizationFromApi,
-  //       create: organizationFromApi,
-  //     });
-  //   } catch (error) {
-  //     this.logger.error(error);
-  //     throw new Error(`${error}`);
-  //   }
-  // }
+  async updateBuilding(buildingData: BuildingDTO) {
+    try {
+      const buildingFromImobzi = await this.imobziBuildingsService.getRequiredBuildingDataToDb(buildingData);
+      await this.buildingsService.upsert(buildingFromImobzi);
+    } catch (error) {
+      this.logger.error(error);
+      throw new Error(`${error}`);
+    }
+  }
 
-  // async updateProperty(property: Partial<PropertyDTO>) {
-  //   try {
-  //     const propertyFromApi = await this.imobziPropertiesService.getRequiredPropertyDataToDb(property.db_id);
-  //     await this.prisma.property.upsert({
-  //       where: {
-  //         id_imobzi: propertyFromApi.id_imobzi,
-  //       },
-  //       update: {
-  //         ...propertyFromApi,
-  //         owners: {
-  //           deleteMany: {},
-  //           createMany: { data: propertyFromApi.owners },
-  //         },
-  //       },
-  //       create: {
-  //         ...propertyFromApi,
-  //         owners: { createMany: { data: propertyFromApi.owners } },
-  //       },
-  //     });
-  //   } catch (error) {
-  //     this.logger.error(error);
-  //     throw new Error(`${error}`);
-  //   }
-  // }
+  async updateProperty(property: Partial<PropertyDTO>) {
+    try {
+      const propertyFromImobzi = await this.imobziPropertiesService.getRequiredPropertyDataToDb(property.db_id);
+      await this.propertiesService.upsert(propertyFromImobzi);
+    } catch (error) {
+      this.logger.error(error);
+      throw new Error(`${error}`);
+    }
+  }
 
-  // //we need to request each lease detail to get update date
-  // async updateLease(leaseData: LeaseDTO) {
-  //   try {
-  //     const leaseFromApi = await this.imobziLeasesService.getRequiredLeaseDataToDb(leaseData.db_id.toString());
-  //     const beneficiaries = leaseFromApi.beneficiaries;
-  //     const leaseItems = leaseFromApi.lease_items;
+  //we need to request each lease detail to get update date
+  async updateLease(leaseData: LeaseDTO) {
+    try {
+      const leaseFromApi = await this.imobziLeasesService.getRequiredLeaseDataToDb(leaseData.db_id.toString());
+      const beneficiaries = leaseFromApi.beneficiaries;
+      const leaseItems = leaseFromApi.lease_items;
 
-  //     delete leaseFromApi.lease_items;
-  //     delete leaseFromApi.beneficiaries;
+      delete leaseFromApi.lease_items;
+      delete leaseFromApi.beneficiaries;
 
-  //     await this.prisma.lease.upsert({
-  //       where: {
-  //         id_imobzi: leaseFromApi.id_imobzi,
-  //       },
-  //       update: {
-  //         ...leaseFromApi,
-  //         beneficiariesLease: {
-  //           deleteMany: {},
-  //           createMany: { data: beneficiaries },
-  //         },
-  //         leasesItems: {
-  //           deleteMany: {},
-  //           createMany: { data: leaseItems },
-  //         },
-  //       },
-  //       create: {
-  //         ...leaseFromApi,
-  //         beneficiariesLease: {
-  //           createMany: { data: beneficiaries },
-  //         },
-  //         leasesItems: {
-  //           createMany: { data: leaseItems },
-  //         },
-  //       },
-  //     });
-  //   } catch (error) {
-  //     this.logger.error(error);
-  //     throw new Error(`${error}`);
-  //   }
-  // }
+      await this.prisma.lease.upsert({
+        where: {
+          id_imobzi: leaseFromApi.id_imobzi,
+        },
+        update: {
+          ...leaseFromApi,
+          beneficiariesLease: {
+            deleteMany: {},
+            createMany: { data: beneficiaries },
+          },
+          leasesItems: {
+            deleteMany: {},
+            createMany: { data: leaseItems },
+          },
+        },
+        create: {
+          ...leaseFromApi,
+          beneficiariesLease: {
+            createMany: { data: beneficiaries },
+          },
+          leasesItems: {
+            createMany: { data: leaseItems },
+          },
+        },
+      });
+    } catch (error) {
+      this.logger.error(error);
+      throw new Error(`${error}`);
+    }
+  }
 
   async updateInvoice(invoiceData: InvoicesDTO | any) {
     try {

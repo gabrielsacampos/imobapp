@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
+import { Building } from '../entities/building.entity';
 
-export class BuildingsCreateDTO {
+export class CreateBuildingDTO extends Building {
   @ApiProperty({
     description: 'the id from building (BigInt)',
     example: 34122412324324,

@@ -1,5 +1,6 @@
 import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma-client/prisma.service';
+import { CreatePropertyDTO } from './dtos/create-property.dtos';
 import { PropertyCreateDTO } from './propertiesCreate.dtos';
 
 import { PropertiesUpdateDTO } from './propertiesUpdate.dtos';
@@ -63,5 +64,24 @@ export class PropertiesService {
       },
     });
     return { message: `Property #${id_imobzi} updated` };
+  }
+
+  async upsert(data: CreatePropertyDTO) {
+    await this.prisma.property.upsert({
+      where: {
+        id_imobzi: data.id_imobzi,
+      },
+      update: {
+        ...data,
+        owners: {
+          deleteMany: {},
+          createMany: { data: data.owners },
+        },
+      },
+      create: {
+        ...data,
+        owners: { createMany: { data: data.owners } },
+      },
+    });
   }
 }

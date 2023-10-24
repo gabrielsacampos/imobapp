@@ -55,4 +55,12 @@ export class OrganizationsService {
 
     return this.prisma.organization.update({ where: { id_imobzi }, data });
   }
+
+  async upsert(data: CreateOrganizationDTO) {
+    await this.prisma.organization.upsert({
+      where: { id_imobzi: data.id_imobzi },
+      create: data,
+      update: data,
+    });
+  }
 }
