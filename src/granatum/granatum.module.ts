@@ -1,31 +1,27 @@
-import { Module } from '@nestjs/common';
-import { SharedModule } from '../shared.module';
-import { GranatumCategoriesModule } from './granatum-categories/granatumCategories.module';
-import { GranatumCategoriesService } from './granatum-categories/granatumCategories.service';
-import { GranatumTransactionsModule } from './granatum-transactions/granatumTransactions.module';
-import { GranatumTransactionsService } from './granatum-transactions/granatumTransactions.service';
-import { GranatumAccountsModule } from './granatum-accounts/granatum-accounts.module';
-import { GranatumCostCenterModule } from './granatum-cost-center/granatum-cost-center.module';
-import { GranatumClientsModule } from './granatum-clients/granatum-clients.module';
-import { GranatumSupliersModule } from './granatum-supliers/granatum-supliers.module';
-import { GranatumAccountsService } from './granatum-accounts/granatum-accounts.service';
-import { GranatumCostCenterService } from './granatum-cost-center/granatum-cost-center.service';
-import { GranatumClientsService } from './granatum-clients/granatum-clients.service';
-import { GranatumSupliersService } from './granatum-supliers/granatum-supliers.service';
-import { GranatumService } from './granatum.service';
-import { ScheduleModule } from '@nestjs/schedule';
-import { BullModule } from '@nestjs/bull';
-import { BullBoardModule } from '@bull-board/nestjs';
 import { BullAdapter } from '@bull-board/api/bullAdapter';
 import { ExpressAdapter } from '@bull-board/express';
-import { GranatumQueueProducer } from './granatum.queue.producer';
-import { GranatumQueueConsumer } from './granatum.queue.consumer';
-import { GranatumController } from './granatum.controller';
+import { BullBoardModule } from '@bull-board/nestjs';
+import { BullModule } from '@nestjs/bull';
+import { Module } from '@nestjs/common';
+import { ScheduleModule } from '@nestjs/schedule';
 import { InvoicesService } from 'src/repository/invoices/invoices.service';
+import { RepositoryModule } from 'src/repository/repository.module';
+import { SharedModule } from '../shared.module';
+import { GranatumAccountsModule } from './granatum-accounts/granatum-accounts.module';
+import { GranatumCategoriesModule } from './granatum-categories/granatumCategories.module';
+import { GranatumClientsModule } from './granatum-clients/granatum-clients.module';
+import { GranatumCostCenterModule } from './granatum-cost-center/granatum-cost-center.module';
+import { GranatumSupliersModule } from './granatum-supliers/granatum-supliers.module';
+import { GranatumTransactionsModule } from './granatum-transactions/granatumTransactions.module';
+import { GranatumController } from './granatum.controller';
+import { GranatumQueueConsumer } from './granatum.queue.consumer';
 import { GranatumQueueJobs } from './granatum.queue.jobs';
+import { GranatumQueueProducer } from './granatum.queue.producer';
+import { GranatumService } from './granatum.service';
 
 @Module({
   imports: [
+    SharedModule,
     ScheduleModule.forRoot(),
     BullModule.forRoot({
       url: process.env.redis_url,
@@ -43,27 +39,14 @@ import { GranatumQueueJobs } from './granatum.queue.jobs';
     }),
     GranatumTransactionsModule,
     GranatumCategoriesModule,
-    SharedModule,
     GranatumAccountsModule,
     GranatumCostCenterModule,
     GranatumClientsModule,
     GranatumSupliersModule,
+    RepositoryModule,
   ],
   controllers: [GranatumController],
-  providers: [
-    GranatumTransactionsService,
-    GranatumCategoriesService,
-    GranatumAccountsService,
-    GranatumCostCenterService,
-    GranatumClientsService,
-    GranatumSupliersService,
-    GranatumCategoriesService,
-    GranatumService,
-    GranatumQueueJobs,
-    GranatumQueueProducer,
-    GranatumQueueConsumer,
-    InvoicesService,
-  ],
+  providers: [GranatumService, GranatumQueueJobs, GranatumQueueProducer, GranatumQueueConsumer],
   exports: [GranatumService],
 })
 export class GranatumModule {}

@@ -30,10 +30,14 @@ export class GranatumCategoriesService {
       return cleanedElement.includes(cleanedDescription);
     });
 
-    if (description === 'Taxa de Boleto') {
-      return 1843956;
-    } else if (foundCategory) {
+    if (foundCategory) {
       return foundCategory.id;
+    } else if (description === 'Taxa de Boleto') {
+      return 1843956;
+    } else if (description === 'Repasse') {
+      return 1898344;
+    } else if (description === 'Comissão de Aluguel') {
+      return 1837221;
     } else {
       return 1838279; // if script do not find the category, return the no_category category id.
     }

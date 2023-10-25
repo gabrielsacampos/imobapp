@@ -1,8 +1,7 @@
 import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma-client/prisma.service';
 import { CreateInvoiceDTO } from './dtos/create-invoice.dtos';
-import { GetPaidItemDTO } from './dtos/return-invoice.queries.dtos';
-import { CreateInvoiceItemDTO } from './invoice-items/dtos/create-invoice.dtos';
+import { GetOnlendingsDTO, GetPaidItemDTO } from './dtos/return-invoice.queries.dtos';
 
 @Injectable()
 export class InvoicesService {
@@ -66,19 +65,18 @@ export class InvoicesService {
   }
 
   async upsert(data: CreateInvoiceDTO) {
+    const items = data.items;
+    items.forEach((item) => delete item.id_invoice_imobzi);
+    delete data.items;
     try {
       await this.prisma.invoice.upsert({
         where: { id_imobzi: data.id_imobzi },
         update: data,
-        create: data,
+        create: { ...data, invoiceItems: { createMany: { data: items } } },
       });
     } catch (error) {
       throw new Error(error.message);
     }
-  }
-
-  async insertItems(data: CreateInvoiceItemDTO): Promise<void> {
-    await this.prisma.invoiceItem.create({ data });
   }
 
   async getPaidItems(start_at: string, end_at: string): Promise<GetPaidItemDTO[]> {
@@ -87,8 +85,9 @@ export class InvoicesService {
 
     return await this.prisma.$queryRaw`
     select 
-    i.id_imobzi, 
+    i.id_imobzi as invoice_id, 
     ii.description, 
+    ii.behavior,
     ii.value, 
     i.paid_at, 
     i.credit_at, 
@@ -105,5 +104,28 @@ export class InvoicesService {
     WHERE (i.status = 'paid' OR i.status = 'partially_paid')
     AND  i.paid_at >= ${start_date} AND i.paid_at <= ${end_date};
     `;
+  }
+
+  async getOnlendings(start_at: string, end_at: string): Promise<GetOnlendingsDTO[]> {
+    const start_date = new Date(start_at);
+    const end_date = new Date(end_at);
+
+    return await this.prisma.$queryRaw`
+    SELECT
+    i.id_imobzi as invoice_id,
+    p.cpf AS beneficiary_cpf,
+    o.cnpj AS beneficiary_cnpj,
+    'Repasse' as "description",
+    i.onlending_value, p2.unity, b."name" as building, p2.block,
+    i.account_credit
+  FROM invoices AS i
+  INNER JOIN leases AS l ON i.id_lease_imobzi = l.id_imobzi
+  inner join properties p3 on p3.id_imobzi = l.id_property_imobzi
+  LEFT JOIN beneficiaries AS b1 ON b1.id_lease_imobzi = l.id_imobzi
+  LEFT JOIN people AS p ON p.id_imobzi = b1.id_beneficiary_person_imobzi
+  LEFT JOIN organizations AS o ON o.id_imobzi = b1.id_beneficiary_organization_imobzi
+  INNER JOIN properties AS p2 ON p2.id_imobzi = l.id_property_imobzi
+  INNER JOIN buildings AS b ON b.id_imobzi = p2.id_building_imobzi
+  WHERE (i.status = 'paid' OR i.status = 'partially_paid') and i.paid_at >= ${start_date} and i.paid_at <= ${end_date};`;
   }
 }

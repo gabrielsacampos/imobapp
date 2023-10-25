@@ -8,6 +8,7 @@ import { ImobziInvoiceDetailsDTO, ImobziInvoiceItem } from './imobziInvoiceDetai
 import { ImobziInvoiceDTO, InvoicesDTO } from './imobziInvoices.dtos';
 import { imobziUrls, imobziParams } from '../imobzi-urls-params/imobzi.urls';
 import { dateFunctions } from 'src/my-usefull-functions/date.functions';
+import { CreateInvoiceItemDTO } from 'src/repository/invoices/invoice-items/dtos/create-invoice.dtos';
 
 @Injectable()
 export class ImobziInvoicesService {
@@ -39,7 +40,10 @@ export class ImobziInvoicesService {
     }
   }
 
-  getRequiredInvoiceItemsDataToDb(invoiceItems: ImobziInvoiceItem[]): ItemsInvoiceCreateDTO[] {
+  getRequiredInvoiceItemsDataToDb(
+    invoiceItems: ImobziInvoiceItem[],
+    id_invoice_imobzi: string,
+  ): CreateInvoiceItemDTO[] {
     return invoiceItems.map((item) => {
       const {
         until_due_date,
@@ -61,6 +65,7 @@ export class ImobziInvoicesService {
         include_in_dimob,
         charge_management_fee,
         value,
+        id_invoice_imobzi,
       };
     });
   }
@@ -98,7 +103,7 @@ export class ImobziInvoicesService {
         invoice_paid_manual: paid_manual,
         charge_fee_value: bank_fee_value,
       } = data;
-      const items = this.getRequiredInvoiceItemsDataToDb(data.items);
+      const items = this.getRequiredInvoiceItemsDataToDb(data.items, id_invoice_imobzi);
       return {
         id_imobzi,
         status,

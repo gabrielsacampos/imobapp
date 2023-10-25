@@ -10,9 +10,8 @@ export class GranatumSupliersService {
     const { data } = await this.httpService.axiosRef.get(granatumUrls.allSupliersUrl());
     return data;
   }
-  async findIdByDocument(document: string) {
+  findIdByDocument(document: string, supliers): number {
     const cleanedDocument = document.replace(/[^\d]/g, '');
-    const supliers = await this.getAllSupliers();
 
     const suplierFound = supliers.find((element) => {
       return element.documento === cleanedDocument;

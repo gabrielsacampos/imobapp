@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsNotEmpty, ValidateNested } from 'class-validator';
 import { Invoice } from '../entities/invoice.entity';
-import { ItemsInvoiceCreateDTO } from '../invoice-items/invoice-items.dtos';
+import { CreateInvoiceItemDTO } from '../invoice-items/dtos/create-invoice.dtos';
 
 export class CreateInvoiceDTO extends Invoice {
   @ApiProperty({
@@ -111,8 +111,8 @@ export class CreateInvoiceDTO extends Invoice {
   @ValidateNested({
     message: 'You need to set at least one item to invoice',
   })
-  @Type(() => ItemsInvoiceCreateDTO)
-  items: ItemsInvoiceCreateDTO[];
+  @Type(() => CreateInvoiceItemDTO)
+  items: CreateInvoiceItemDTO[];
 
   paid_at?: Date;
   credit_at?: Date;

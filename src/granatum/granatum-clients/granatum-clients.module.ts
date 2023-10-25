@@ -5,5 +5,6 @@ import { SharedModule } from 'src/shared.module';
 @Module({
   imports: [SharedModule],
   providers: [GranatumClientsService],
+  exports: [GranatumClientsService],
 })
 export class GranatumClientsModule {}

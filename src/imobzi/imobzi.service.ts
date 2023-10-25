@@ -5,11 +5,11 @@ import { CreateInvoiceItemDTO } from 'src/repository/invoices/invoice-items/dtos
 import { InvoicesService } from 'src/repository/invoices/invoices.service';
 import { LeasesService } from 'src/repository/leases/leases.service';
 import { OrganizationsService } from 'src/repository/organizations/organizations.service';
+import { PeopleService } from 'src/repository/people/people.service';
 import { PropertiesService } from 'src/repository/properties/properties.service';
 import { BuildingDTO } from './imobzi-buildings/imobziBuildings.dtos';
 import { ImobziBuildingsService } from './imobzi-buildings/imobziBuildings.service';
 import { ContactDTO } from './imobzi-contacts/imobziContacts.dtos';
-import { ImobziContactsService } from './imobzi-contacts/imobziContacts.service';
 import { InvoicesDTO } from './imobzi-invoices/imobziInvoices.dtos';
 import { ImobziInvoicesService } from './imobzi-invoices/imobziInvoices.service';
 import { LeaseDTO } from './imobzi-leases/imobziLeases.dtos';
@@ -28,7 +28,7 @@ export class ImobziService {
     private readonly propertiesService: PropertiesService,
     private readonly organizationsService: OrganizationsService,
     private readonly buildingsService: BuildingsService,
-    private readonly imobziContacts: ImobziContactsService,
+    private readonly peopleService: PeopleService,
     private readonly imobziPeopleService: ImobziPeopleService,
     private readonly imobziOrganizationsService: ImobziOrganizationsService,
     private readonly imobziBuildingsService: ImobziBuildingsService,
@@ -43,6 +43,16 @@ export class ImobziService {
         contactData.contact_id,
       );
       await this.organizationsService.upsert(organizationFromImobzi);
+    } catch (error) {
+      this.logger.error(error);
+      throw new Error(`${error}`);
+    }
+  }
+
+  async updatePerson(contactData: ContactDTO) {
+    try {
+      const personFromImobzi = await this.imobziPeopleService.getRequiredPersonDataToDb(contactData.contact_id);
+      await this.peopleService.upsert(personFromImobzi);
     } catch (error) {
       this.logger.error(error);
       throw new Error(`${error}`);
@@ -108,34 +118,18 @@ export class ImobziService {
         value: 0 - invoiceFromImobzi.bank_fee_value,
       };
 
-      const managementItem: CreateInvoiceItemDTO = {
-        id_invoice_imobzi: invoiceData.invoice_id,
-        until_due_date: false,
-        item_type: null,
-        id_imobzi: `${invoiceFromImobzi.id_imobzi}-management-fee`,
-        description: 'Comissão de Aluguel',
-        behavior: 'imob_withheld',
-        include_in_dimob: false,
-        charge_management_fee: false,
-        value: 0 - invoiceFromImobzi.bank_fee_value,
-      };
-
       delete invoiceFromImobzi.interest_value;
       delete invoiceFromImobzi.bank_fee_value;
 
-      await this.invoicesService.upsert(invoiceFromImobzi);
-
       if (interestItem.value !== 0) {
-        await this.invoicesService.insertItems(interestItem);
+        invoiceFromImobzi.items.push(interestItem);
       }
 
       if (bankFeeItem.value !== 0) {
-        await this.invoicesService.insertItems(bankFeeItem);
+        invoiceFromImobzi.items.push(bankFeeItem);
       }
 
-      if (managementItem.value !== 0) {
-        await this.invoicesService.insertItems(managementItem);
-      }
+      await this.invoicesService.upsert(invoiceFromImobzi);
     } catch (error) {
       this.logger.error(error);
       throw new Error(`${error}`);

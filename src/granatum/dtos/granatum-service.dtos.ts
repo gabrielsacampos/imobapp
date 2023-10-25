@@ -23,3 +23,26 @@ export class GetOnlendingsDTO {
   building: string;
   block: string;
 }
+
+export class GroupedItemsDTO {
+  type: string;
+  count_invoices: number;
+  paid_at: string;
+  credit_at: string;
+  account_credit: string;
+  description: string;
+  items: GetPaidItemDTO[];
+}
+
+export class GroupedOnlendingsDTO {
+  type: string;
+  count_invoices: number;
+  account_credit: string;
+  description: string;
+  items: GetOnlendingsDTO[];
+}
+
+export class GetInvoicesComponentsDTO {
+  groupedItems: GroupedItemsDTO[];
+  groupedOnlendings: GroupedOnlendingsDTO[];
+}

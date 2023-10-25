@@ -5,5 +5,6 @@ import { GranatumCostCenterService } from './granatum-cost-center.service';
 @Module({
   imports: [SharedModule],
   providers: [GranatumCostCenterService],
+  exports: [GranatumCostCenterService],
 })
 export class GranatumCostCenterModule {}

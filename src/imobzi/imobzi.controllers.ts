@@ -7,17 +7,17 @@ import { ImobziService } from './imobzi.service';
 export class ImobziController {
   constructor(
     private readonly imobziService: ImobziService,
-    private readonly imobziQueue: ImobziQueueProducer,
+    private readonly imobziQueueProducer: ImobziQueueProducer,
   ) {}
 
   @Post('webhooks')
   async updateDatabase(@Body() data: ImobziWebhookDTO) {
-    return this.imobziQueue.handleWebhook(data);
+    return this.imobziQueueProducer.handleWebhook(data);
   }
 
   @Get('dumpdb')
   async dumpDatabase() {
-    this.imobziQueue.dumpEntitiesData();
+    this.imobziQueueProducer.dumpEntitiesData();
     return { message: 'application started queues and update' };
   }
 }

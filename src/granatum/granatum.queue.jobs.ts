@@ -1,11 +1,11 @@
-import { GetPaidItemDTO } from 'src/repository/invoices/dtos/return-invoice.queries.dtos';
-import { GranatumCostCenterService } from './granatum-cost-center/granatum-cost-center.service';
-import { GranatumCategoriesService } from './granatum-categories/granatumCategories.service';
-import { GranatumAccountsService } from './granatum-accounts/granatum-accounts.service';
-import { GranatumTransactionsService } from './granatum-transactions/granatumTransactions.service';
 import { Injectable } from '@nestjs/common';
-import { JobSetGranatumIdsDTO } from './dtos/jobs.dtos';
+import { GroupedItemsDTO, GroupedOnlendingsDTO } from './dtos/granatum-service.dtos';
+import { GranatumAccountsService } from './granatum-accounts/granatum-accounts.service';
+import { GranatumCategoriesService } from './granatum-categories/granatumCategories.service';
+import { GranatumCostCenterService } from './granatum-cost-center/granatum-cost-center.service';
+import { GranatumSupliersService } from './granatum-supliers/granatum-supliers.service';
 import { GranatumTransactionPostDTO } from './granatum-transactions/dtos/granatum-transactions.dtos';
+import { GranatumTransactionsService } from './granatum-transactions/granatumTransactions.service';
 
 @Injectable()
 export class GranatumQueueJobs {
@@ -14,19 +14,22 @@ export class GranatumQueueJobs {
     private readonly granatumAccountsService: GranatumAccountsService,
     private readonly granatumCostCenterService: GranatumCostCenterService,
     private readonly granatumCategoriesService: GranatumCategoriesService,
+    private readonly granatumSupliersService: GranatumSupliersService,
   ) {}
-  async setGanatumIds(items: GetPaidItemDTO[]) {
+  async setGranatumIds(data: GroupedOnlendingsDTO | GroupedItemsDTO): Promise<GroupedOnlendingsDTO | GroupedItemsDTO> {
     try {
       const granatumAccounts = await this.granatumAccountsService.getAllAccounts();
       const granatumCategories = await this.granatumCategoriesService.getSlipCategories();
       const granatumCostCenters = await this.granatumCostCenterService.getAllCostCenters();
+      const granatumSupliers = await this.granatumSupliersService.getAllSupliers();
 
-      const itemsWithIds: Partial<JobSetGranatumIdsDTO>[] = [];
-      for (const item of items) {
-        const id_account_granatum = this.granatumAccountsService.findIdByDescription(
-          item.account_credit,
-          granatumAccounts,
-        );
+      const id_account_granatum = this.granatumAccountsService.findIdByDescription(
+        data.account_credit,
+        granatumAccounts,
+      );
+
+      const itemsWithIds = [];
+      for (const item of data.items) {
         const id_category_granatum = this.granatumCategoriesService.findIdByDescription(
           item.description,
           granatumCategories,
@@ -36,25 +39,41 @@ export class GranatumQueueJobs {
           item.block,
           granatumCostCenters,
         );
-        itemsWithIds.push({ ...item, id_account_granatum, id_category_granatum, id_cost_center_granatum });
+        let client_suplier_document: string;
+        let id_suplier_client: number;
+        if ('beneficiary_cnpj' in item || 'beneficiary_cnpj' in item) {
+          client_suplier_document = item.beneficiary_cnpj === null ? item.beneficiary_cpf : item.beneficiary_cnpj;
+          id_suplier_client = this.granatumSupliersService.findIdByDocument(client_suplier_document, granatumSupliers);
+        }
+
+        itemsWithIds.push({
+          ...item,
+          id_account_granatum,
+          id_category_granatum,
+          id_cost_center_granatum,
+          id_suplier_client,
+        });
       }
-      return itemsWithIds;
+
+      data.items = itemsWithIds;
+      const newData = { ...data, id_account_granatum };
+      return newData;
     } catch (error) {
       throw new Error(error.message);
     }
   }
 
-  formatDataToPost(items: JobSetGranatumIdsDTO[]): any[] {
+  formatInvoiceItemsToPost(data: GroupedItemsDTO | GroupedOnlendingsDTO): GranatumTransactionPostDTO {
     try {
-      return this.granatumTransactionsService.templateTransactions(items);
+      return this.granatumTransactionsService.templateTransaction(data);
     } catch (error) {
       throw new Error(error.message);
     }
   }
 
-  async postTransaction(items: GranatumTransactionPostDTO): Promise<void> {
+  async postTransaction(transaction: GranatumTransactionPostDTO): Promise<void> {
     try {
-      await this.granatumTransactionsService.postTransactions(items);
+      await this.granatumTransactionsService.postTransactions(transaction);
     } catch (error) {
       throw new Error(error.message);
     }

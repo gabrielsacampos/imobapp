@@ -12,47 +12,47 @@ import { ImobziService } from './imobzi.service';
 export class ImobziQueueConsumer {
   constructor(private readonly imobziService: ImobziService) {}
 
-  // @Process('updatePeople')
-  // async updatePerson(job: Job<ContactDTO>) {
-  //   const contact = job.data;
-  //   await new Promise((resolve) => setTimeout(resolve, 5000));
-  //   await this.imobziService.updatePerson(contact);
-  // }
+  @Process('updatePeople')
+  async updatePerson(job: Job<ContactDTO>) {
+    const contact = job.data;
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    await this.imobziService.updatePerson(contact);
+  }
 
-  // @Process('updateOrganizations')
-  // async updateOrganization(job: Job<ContactDTO>) {
-  //   const contact = job.data;
-  //   await new Promise((resolve) => setTimeout(resolve, 5000));
-  //   await this.imobziService.updateOrganization(contact);
-  // }
+  @Process('updateOrganizations')
+  async updateOrganization(job: Job<ContactDTO>) {
+    const contact = job.data;
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    await this.imobziService.updateOrganization(contact);
+  }
 
-  // @Process('updateBuildings')
-  // async updateBuildings(job: Job<BuildingDTO>) {
-  //   const building = job.data;
-  //   await new Promise((resolve) => setTimeout(resolve, 5000));
-  //   await this.imobziService.updateBuilding(building);
-  // }
+  @Process('updateBuildings')
+  async updateBuildings(job: Job<BuildingDTO>) {
+    const building = job.data;
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    await this.imobziService.updateBuilding(building);
+  }
 
-  // @Process('updateProperties')
-  // async updateProperties(job: Job<PropertyDTO>) {
-  //   const property = job.data;
-  //   await new Promise((resolve) => setTimeout(resolve, 5000));
-  //   await this.imobziService.updateProperty(property);
-  // }
+  @Process('updateProperties')
+  async updateProperties(job: Job<PropertyDTO>) {
+    const property = job.data;
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    await this.imobziService.updateProperty(property);
+  }
 
-  // @Process('updateLeases')
-  // async updateLease(job: Job<LeaseDTO>) {
-  //   const lease = job.data;
-  //   await new Promise((resolve) => setTimeout(resolve, 5000));
-  //   await this.imobziService.updateLease(lease);
-  // }
+  @Process('updateLeases')
+  async updateLease(job: Job<LeaseDTO>) {
+    const lease = job.data;
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    await this.imobziService.updateLease(lease);
+  }
 
-  // @Process('updateInvoices')
-  // async updateInvoice(job: Job<InvoicesDTO>) {
-  //   const invoice = job.data;
-  //   await new Promise((resolve) => setTimeout(resolve, 5000));
-  //   await this.imobziService.updateInvoice(invoice);
-  // }
+  @Process('updateInvoices')
+  async updateInvoice(job: Job<InvoicesDTO>) {
+    const invoice = job.data;
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    await this.imobziService.updateInvoice(invoice);
+  }
 
   // @Process('handleWebhook')
   // async handleWebhook(job: Job<ImobziWebhookDTO>) {

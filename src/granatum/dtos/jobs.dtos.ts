@@ -1,15 +1,17 @@
-export interface JobSetGranatumIdsDTO {
-  id_imobzi: string;
-  account_credit: string;
-  description: string;
-  value: number;
-  paid_at: string;
-  credit_at: string;
-  unity: string;
-  block: string;
-  building: string;
-  paid_manual?: boolean;
-  id_account_granatum: number;
+import { PartialType } from '@nestjs/mapped-types';
+import { GetPaidItemDTO } from 'src/repository/invoices/dtos/return-invoice.queries.dtos';
+
+export class SetGranatumIdsDTO extends PartialType(GetPaidItemDTO) {
+  onlending_value?: number;
+  id_account_granatum?: number;
   id_cost_center_granatum?: number;
-  id_category_granatum: number;
+  id_category_granatum?: number;
+  id_suplier_client?: number;
+  beneficiary_cpf?: string;
+  beneficiary_cnpj?: string;
+  id_imobzi?: string;
+  behavior?: string;
+  value?: number;
+  paid_at?: string;
+  credit_at?: string;
 }
