@@ -32,7 +32,5 @@ describe('GranatumTransactionsService', () => {
 
   test('', async () => {
     // const result = await granatumService.groupItemsFromDb(getItemsPaidMock);
-    const result = granatumService.groupOnlendingsFromDb(getOnlendingsMock);
-    console.log(JSON.stringify(result, null, 2));
   });
 });
