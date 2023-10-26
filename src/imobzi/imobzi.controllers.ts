@@ -1,5 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { ImobziWebhookDTO } from './imobzi-dtos/imobziWebhook.dtos';
+import { Controller, Get } from '@nestjs/common';
 import { ImobziQueueProducer } from './imobzi.queue.producer';
 import { ImobziService } from './imobzi.service';
 
@@ -9,11 +8,6 @@ export class ImobziController {
     private readonly imobziService: ImobziService,
     private readonly imobziQueueProducer: ImobziQueueProducer,
   ) {}
-
-  @Post('webhooks')
-  async updateDatabase(@Body() data: ImobziWebhookDTO) {
-    return this.imobziQueueProducer.handleWebhook(data);
-  }
 
   @Get('dumpdb')
   async dumpDatabase() {

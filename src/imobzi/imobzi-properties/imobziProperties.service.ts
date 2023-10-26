@@ -1,18 +1,14 @@
 import { HttpService } from '@nestjs/axios';
-import { Inject, Injectable, Logger } from '@nestjs/common';
-import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { Injectable } from '@nestjs/common';
+import { CreatePropertyDTO } from 'src/repository/properties/dtos/create-property.dtos';
 import { OwnersCreateDTO } from 'src/repository/properties/owners/OwnerCreate.dtos';
+import { imobziParams, imobziUrls } from '../imobzi-urls-params/imobzi.urls';
 import { ImobziPropertiesDTO } from './imobziProperties.dtos';
 import { ImobziPropertyOwnerDTO } from './imobziPropertyDetails.dtos';
-import { imobziUrls, imobziParams } from '../imobzi-urls-params/imobzi.urls';
-import { CreatePropertyDTO } from 'src/repository/properties/dtos/create-property.dtos';
 
 @Injectable()
 export class ImobziPropertiesService {
-  constructor(
-    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
-    private readonly httpService: HttpService,
-  ) {}
+  constructor(private readonly httpService: HttpService) {}
 
   async getAllProperties(): Promise<any> {
     try {
@@ -35,13 +31,11 @@ export class ImobziPropertiesService {
           imobziParams,
         );
         allProperties.push(...data.properties);
-        this.logger.verbose(`Properties catched > ${allProperties.length}`);
         cursor = data.cursor;
       } while (cursor);
 
       return allProperties;
     } catch (error) {
-      this.logger.error(error);
       throw new Error(error);
     }
   }
@@ -103,7 +97,6 @@ export class ImobziPropertiesService {
         active,
       };
     } catch (error) {
-      this.logger.error(error);
       throw new Error(error);
     }
   }

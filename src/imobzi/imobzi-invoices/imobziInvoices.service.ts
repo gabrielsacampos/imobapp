@@ -1,20 +1,15 @@
 import { HttpService } from '@nestjs/axios';
-import { Inject, Injectable } from '@nestjs/common';
-import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { Logger } from 'winston';
+import { Injectable } from '@nestjs/common';
+import { dateFunctions } from 'src/my-usefull-functions/date.functions';
 import { CreateInvoiceDTO } from 'src/repository/invoices/dtos/create-invoice.dtos';
+import { CreateInvoiceItemDTO } from 'src/repository/invoices/invoice-items/dtos/create-invoice.dtos';
+import { imobziParams, imobziUrls } from '../imobzi-urls-params/imobzi.urls';
 import { ImobziInvoiceDetailsDTO, ImobziInvoiceItem } from './imobziInvoiceDetails.dtos';
 import { ImobziInvoiceDTO, InvoicesDTO } from './imobziInvoices.dtos';
-import { imobziUrls, imobziParams } from '../imobzi-urls-params/imobzi.urls';
-import { dateFunctions } from 'src/my-usefull-functions/date.functions';
-import { CreateInvoiceItemDTO } from 'src/repository/invoices/invoice-items/dtos/create-invoice.dtos';
 
 @Injectable()
 export class ImobziInvoicesService {
-  constructor(
-    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
-    private readonly httpService: HttpService,
-  ) {}
+  constructor(private readonly httpService: HttpService) {}
 
   async getAllInvoicesFromImobzi(): Promise<InvoicesDTO[]> {
     try {
@@ -27,14 +22,11 @@ export class ImobziInvoicesService {
           imobziParams,
         );
         allInvoices.push(...data.invoices);
-
-        this.logger.verbose(`invoices catched  > ${allInvoices.length}`);
         page = data.next_page;
       }
 
       return allInvoices;
     } catch (error) {
-      this.logger.error(error);
       throw new Error(error);
     }
   }
@@ -126,7 +118,6 @@ export class ImobziInvoicesService {
         items,
       };
     } catch (error) {
-      this.logger.error(error);
       throw new Error(error);
     }
   }

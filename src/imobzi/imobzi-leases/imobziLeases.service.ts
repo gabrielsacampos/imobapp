@@ -1,20 +1,15 @@
 import { HttpService } from '@nestjs/axios';
-import { Inject, Injectable, Logger } from '@nestjs/common';
-import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { Injectable } from '@nestjs/common';
+import { CreateLeaseDTO } from 'src/repository/leases/dtos/create-lease.dtos';
 import { BeneficiariesCreateDTO } from 'src/repository/leases/lease-beneficiaries/lease-beneficiaries.dtos';
 import { LeaseItemsCreateDTO } from 'src/repository/leases/lease-items/leaseItemsCreate.dtos';
-import { LeasesCreateDTO } from 'src/repository/leases/leasesCreate.dtos';
+import { imobziParams, imobziUrls } from '../imobzi-urls-params/imobzi.urls';
 import { ImobziLeasesDTO, LeaseDTO } from './imobziLeases.dtos';
 import { ImobziLeaseBeneficiaryDTO, ImobziLeaseDetailsDTO, ImobziLeaseItemDTO } from './imobziLeasesDetails.dtos';
-import { imobziUrls, imobziParams } from '../imobzi-urls-params/imobzi.urls';
-import { CreateLeaseDTO } from 'src/repository/leases/dtos/create-lease.dtos';
 
 @Injectable()
 export class ImobziLeasesService {
-  constructor(
-    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
-    private readonly httpService: HttpService,
-  ) {}
+  constructor(private readonly httpService: HttpService) {}
 
   async getAllLeasesFromImobzi(): Promise<LeaseDTO[]> {
     try {
@@ -27,12 +22,10 @@ export class ImobziLeasesService {
         );
         allLeases.push(...data.leases);
         cursor = data.cursor;
-        this.logger.verbose(`Leases catched > ${allLeases.length}`);
       } while (cursor);
 
       return allLeases;
     } catch (error) {
-      this.logger.error(error);
       throw new Error(error);
     }
   }
@@ -126,7 +119,6 @@ export class ImobziLeasesService {
         lease_items,
       };
     } catch (error) {
-      this.logger.error(error);
       throw new Error(error);
     }
   }

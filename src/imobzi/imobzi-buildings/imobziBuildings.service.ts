@@ -1,17 +1,13 @@
-import { Logger } from 'winston';
+
 import { HttpService } from '@nestjs/axios';
-import { Inject, Injectable } from '@nestjs/common';
-import { BuildingDTO } from './imobziBuildings.dtos';
-import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { imobziUrls, imobziParams } from '../imobzi-urls-params/imobzi.urls';
+import { Injectable } from '@nestjs/common';
 import { CreateBuildingDTO } from 'src/repository/buildings/dtos/create-building.dtos';
+import { imobziParams, imobziUrls } from '../imobzi-urls-params/imobzi.urls';
+import { BuildingDTO } from './imobziBuildings.dtos';
 
 @Injectable()
 export class ImobziBuildingsService {
-  constructor(
-    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
-    private readonly httpService: HttpService,
-  ) {}
+  constructor(private readonly httpService: HttpService) {}
 
   async getAllBuildings(): Promise<BuildingDTO[]> {
     try {
@@ -22,13 +18,10 @@ export class ImobziBuildingsService {
         const { data } = await this.httpService.axiosRef.get(imobziUrls.urlAllBuildings(cursor), imobziParams);
         allBuildings.push(...data.properties);
         cursor = data.cursor;
-
-        this.logger.verbose(`buildings catched > ${allBuildings.length}`);
       } while (cursor);
 
       return allBuildings;
     } catch (error) {
-      this.logger.error(error);
       throw new Error(error);
     }
   }

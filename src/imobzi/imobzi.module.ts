@@ -1,22 +1,23 @@
+import { BullAdapter } from '@bull-board/api/bullAdapter';
+import { ExpressAdapter } from '@bull-board/express';
+import { BullBoardModule } from '@bull-board/nestjs';
+import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
+import { ScheduleModule } from '@nestjs/schedule';
+import { FailedQueueJobsService } from 'src/repository/failed-queue-jobs/failed-queue-jobs.service';
+import { RepositoryModule } from 'src/repository/repository.module';
 import { SharedModule } from 'src/shared.module';
-import { ImobziController } from './imobzi.controllers';
 import { ImobziBuildingsModule } from './imobzi-buildings/imobziBuildings.module';
 import { ImobziContactsModule } from './imobzi-contacts/imobziContacts.module';
-import { ImobziPeopleModule } from './imobzi-people/imobziPeople.module';
-import { ImobziOrganizationsModule } from './imobzi-organizations/imobziOrganizations.module';
-import { ImobziPropertiesModule } from './imobzi-properties/imobziProperties.module';
-import { ImobziLeasesModule } from './imobzi-leases/imobziLeases.module';
 import { ImobziInvoicesModule } from './imobzi-invoices/imobziInvoices.module';
-import { BullBoardModule } from '@bull-board/nestjs';
-import { ExpressAdapter } from '@bull-board/express';
-import { BullAdapter } from '@bull-board/api/bullAdapter';
-import { BullModule } from '@nestjs/bull';
-import { ImobziService } from './imobzi.service';
-import { ImobziQueueProducer } from './imobzi.queue.producer';
+import { ImobziLeasesModule } from './imobzi-leases/imobziLeases.module';
+import { ImobziOrganizationsModule } from './imobzi-organizations/imobziOrganizations.module';
+import { ImobziPeopleModule } from './imobzi-people/imobziPeople.module';
+import { ImobziPropertiesModule } from './imobzi-properties/imobziProperties.module';
+import { ImobziController } from './imobzi.controllers';
 import { ImobziQueueConsumer } from './imobzi.queue.consumer';
-import { InvoicesModule } from 'src/repository/invoices/invoices.module';
-import { RepositoryModule } from 'src/repository/repository.module';
+import { ImobziQueueProducer } from './imobzi.queue.producer';
+import { ImobziService } from './imobzi.service';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { RepositoryModule } from 'src/repository/repository.module';
       adapter: ExpressAdapter,
     }),
     SharedModule,
+    ScheduleModule.forRoot(),
     ImobziBuildingsModule,
     ImobziContactsModule,
     ImobziPeopleModule,
@@ -45,7 +47,7 @@ import { RepositoryModule } from 'src/repository/repository.module';
     RepositoryModule,
   ],
   controllers: [ImobziController],
-  providers: [ImobziQueueProducer, ImobziQueueConsumer, ImobziService],
+  providers: [ImobziQueueProducer, ImobziQueueConsumer, ImobziService, FailedQueueJobsService],
   exports: [ImobziService],
 })
 export class ImobziModule {}

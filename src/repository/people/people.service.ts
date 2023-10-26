@@ -64,12 +64,16 @@ export class PeopleService {
   }
 
   async upsert(data: CreatePersonDTO): Promise<void> {
-    await this.prisma.person.upsert({
-      where: {
-        id_imobzi: data.id_imobzi,
-      },
-      update: data,
-      create: data,
-    });
+    try {
+      await this.prisma.person.upsert({
+        where: {
+          id_imobzi: data.id_imobzi,
+        },
+        update: data,
+        create: data,
+      });
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 }

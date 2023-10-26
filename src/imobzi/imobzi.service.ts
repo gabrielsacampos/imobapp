@@ -1,6 +1,5 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { ImmutableInvoice } from 'src/granatum/dtos/granatum-service.dtos';
 import { BuildingsService } from 'src/repository/buildings/buildings.service';
 import { CreateInvoiceItemDTO } from 'src/repository/invoices/invoice-items/dtos/create-invoice.dtos';
 import { InvoicesService } from 'src/repository/invoices/invoices.service';
@@ -38,6 +37,14 @@ export class ImobziService {
     private readonly imobziInvoicesService: ImobziInvoicesService,
   ) {}
 
+  async updatePerson(contactData: ContactDTO) {
+    try {
+      const personFromImobzi = await this.imobziPeopleService.getRequiredPersonDataToDb(contactData.contact_id);
+      await this.peopleService.upsert(personFromImobzi);
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
   async updateOrganization(contactData: ContactDTO) {
     try {
       const organizationFromImobzi = await this.imobziOrganizationsService.getRequiredOrganizationDataToDb(
@@ -45,18 +52,7 @@ export class ImobziService {
       );
       await this.organizationsService.upsert(organizationFromImobzi);
     } catch (error) {
-      this.logger.error(error);
-      throw new Error(`${error}`);
-    }
-  }
-
-  async updatePerson(contactData: ContactDTO) {
-    try {
-      const personFromImobzi = await this.imobziPeopleService.getRequiredPersonDataToDb(contactData.contact_id);
-      await this.peopleService.upsert(personFromImobzi);
-    } catch (error) {
-      this.logger.error(error);
-      throw new Error(`${error}`);
+      throw new Error(error.message);
     }
   }
 
@@ -65,8 +61,7 @@ export class ImobziService {
       const buildingFromImobzi = await this.imobziBuildingsService.getRequiredBuildingDataToDb(buildingData);
       await this.buildingsService.upsert(buildingFromImobzi);
     } catch (error) {
-      this.logger.error(error);
-      throw new Error(`${error}`);
+      throw new Error(error.message);
     }
   }
 
@@ -75,8 +70,7 @@ export class ImobziService {
       const propertyFromImobzi = await this.imobziPropertiesService.getRequiredPropertyDataToDb(property.db_id);
       await this.propertiesService.upsert(propertyFromImobzi);
     } catch (error) {
-      this.logger.error(error);
-      throw new Error(`${error}`);
+      throw new Error(error.message);
     }
   }
 
@@ -86,8 +80,7 @@ export class ImobziService {
       const leaseFromImobzi = await this.imobziLeasesService.getRequiredLeaseDataToDb(leaseData.db_id.toString());
       await this.leasesService.upsert(leaseFromImobzi);
     } catch (error) {
-      this.logger.error(error);
-      throw new Error(`${error}`);
+      throw new Error(error.message);
     }
   }
 
@@ -132,8 +125,7 @@ export class ImobziService {
 
       await this.invoicesService.upsert(invoiceFromImobzi);
     } catch (error) {
-      this.logger.error(error);
-      throw new Error(`${error}`);
+      throw new Error(error.message);
     }
   }
 }
