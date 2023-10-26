@@ -33,3 +33,7 @@ export type InvoicesComponentsGroups = {
   groupedOnlendings: GroupedInvoiceComponents[];
   groupedRevenues: GroupedInvoiceComponents[];
 };
+
+export type ImmutableInvoice = {
+  invoice_id: string;
+};

@@ -1,5 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { ImmutableInvoice } from 'src/granatum/dtos/granatum-service.dtos';
 import { BuildingsService } from 'src/repository/buildings/buildings.service';
 import { CreateInvoiceItemDTO } from 'src/repository/invoices/invoice-items/dtos/create-invoice.dtos';
 import { InvoicesService } from 'src/repository/invoices/invoices.service';

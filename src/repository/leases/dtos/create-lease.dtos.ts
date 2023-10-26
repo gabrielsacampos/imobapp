@@ -2,7 +2,6 @@ import { NotAcceptableException } from '@nestjs/common';
 import { Type } from 'class-transformer';
 import { IsNotEmpty, ValidateIf, ValidateNested } from 'class-validator';
 import { Lease } from '../entities/lease.entity';
-import { BeneficiariesCreateDTO } from '../lease-beneficiaries/lease-beneficiaries.dtos';
 import { LeaseItemsCreateDTO } from '../lease-items/leaseItemsCreate.dtos';
 import { CreateBeneficiaryDTO } from './create-beneficiary.dtos';
 

@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from 'src/prisma-client/prisma.service';
 import { InvoicesService } from './invoices.service';
+import { immutableInvoicesMock } from './mocks/invoices.queries.mocks';
 
 describe('InvoicesService', () => {
   let service: InvoicesService;
@@ -22,7 +23,15 @@ describe('InvoicesService', () => {
     // const result = await service.getInvoicesToNf('2023-07-01', '2023-07-30');
     // const result = await service.getItemsPaid('2023-07-01', '2023-07-30');
     // const result = await service.getPaidItems('2023-07-01', '2023-07-30');
-    const result = await service.getRevenue('2023-07-01', '2023-07-30');
-    console.log(JSON.stringify(result));
+    // const result = await service.getRevenue('2023-07-01', '2023-07-30');
+    // const result = await service.getImmutableInvoices();
+    const immutable = immutableInvoicesMock.map((eleemnt) => eleemnt.invoice_id);
+    const allInvoices = [...immutable, '1234', 'abc', 'efg'];
+
+    const invoicesToUpsert = allInvoices.filter((invoice) => {
+      return !immutable.includes(invoice.invoice_id);
+    });
+
+    console.log(allInvoices);
   });
 });

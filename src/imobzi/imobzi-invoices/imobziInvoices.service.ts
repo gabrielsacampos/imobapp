@@ -2,7 +2,6 @@ import { HttpService } from '@nestjs/axios';
 import { Inject, Injectable } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
-import { ItemsInvoiceCreateDTO } from 'src/repository/invoices/invoice-items/invoice-items.dtos';
 import { CreateInvoiceDTO } from 'src/repository/invoices/dtos/create-invoice.dtos';
 import { ImobziInvoiceDetailsDTO, ImobziInvoiceItem } from './imobziInvoiceDetails.dtos';
 import { ImobziInvoiceDTO, InvoicesDTO } from './imobziInvoices.dtos';

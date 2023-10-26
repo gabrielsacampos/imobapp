@@ -60,3 +60,20 @@
 //     paid_manual: true,
 //   },
 // ];
+
+import { ImmutableInvoice } from 'src/granatum/dtos/granatum-service.dtos';
+
+export const immutableInvoicesMock: ImmutableInvoice[] = [
+  { invoice_id: '4bc7b4e69a3611ed89d5e339ae92359d' },
+  { invoice_id: '541eff4f9a3611ed9b10e339ae92359d' },
+  { invoice_id: '3d2da8dc9a3611edb144e7f13f2cca18' },
+  { invoice_id: '6a2b9bc79a3611edab3d0bd98bf87057' },
+  { invoice_id: '4f5f27759a3611ed9fec755f0eb0b1e6' },
+  { invoice_id: '3bc2f6b39a3611ed938fe339ae92359d' },
+  { invoice_id: 'fcabbcb89a3511ed8da40bd98bf87057' },
+  { invoice_id: '68baa9c0a30611ed8a77bd50245e926e' },
+  { invoice_id: 'ec66e6d49a3511edac630bd98bf87057' },
+  { invoice_id: '5a31f5309a3611eda0dbe339ae92359d' },
+  { invoice_id: 'd8d971b8a30411ed89b45f50ddd41b53' },
+  { invoice_id: 'ffa4dadca25811ed81338335922e0b15' },
+];
