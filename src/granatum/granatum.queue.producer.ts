@@ -13,16 +13,26 @@ export class GranatumQueueProducer {
   ) {}
 
   async updateGranatum(start_at: string, end_at: string) {
-    const { groupedItems, groupedOnlendings } = await this.granatumService.getInvoicesComponents(start_at, end_at);
+    const { groupedItems, groupedOnlendings, groupedRevenues } = await this.granatumService.getInvoicesComponents(
+      start_at,
+      end_at,
+    );
 
-    groupedItems.forEach((group) => {
-      this.granatumQueue.add('sync', group, {
-        attempts: 3,
-        backoff: { delay: 10000, type: 'exponential' },
-      });
-    });
+    // groupedItems.forEach((group) => {
+    //   this.granatumQueue.add('sync', group, {
+    //     attempts: 3,
+    //     backoff: { delay: 10000, type: 'exponential' },
+    //   });
+    // });
 
-    groupedOnlendings.forEach((group) => {
+    // groupedOnlendings.forEach((group) => {
+    //   this.granatumQueue.add('sync', group, {
+    //     attempts: 3,
+    //     backoff: { delay: 10000, type: 'exponential' },
+    //   });
+    // });
+
+    groupedRevenues.forEach((group) => {
       this.granatumQueue.add('sync', group, {
         attempts: 3,
         backoff: { delay: 10000, type: 'exponential' },

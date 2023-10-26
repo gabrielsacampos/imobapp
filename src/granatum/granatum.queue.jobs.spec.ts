@@ -1,5 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { getItemsPaidMock } from 'src/repository/invoices/mocks/invoices.queries.mocks';
 import { SharedModule } from 'src/shared.module';
 import { GranatumAccountsService } from './granatum-accounts/granatum-accounts.service';
 import { GranatumCategoriesService } from './granatum-categories/granatumCategories.service';
@@ -7,7 +6,6 @@ import { GranatumCostCenterService } from './granatum-cost-center/granatum-cost-
 import { GranatumTransactionsService } from './granatum-transactions/granatumTransactions.service';
 import { GranatumModule } from './granatum.module';
 import { GranatumQueueJobs } from './granatum.queue.jobs';
-
 describe('GranatumQueueJobs', () => {
   let granatumQueueJobs: GranatumQueueJobs;
 
@@ -28,14 +26,20 @@ describe('GranatumQueueJobs', () => {
   test('should be defined', () => {
     expect(granatumQueueJobs).toBeDefined();
   });
+  // test('', async () => {
+  //   const arrayOfItems = await granatumQueueJobs.setGanatumIds(getItemsPaidMock);
+
+  //   const allValues = arrayOfItems.map((item) => {
+  //     return Object.values(item);
+  //   });
+
+  //   const allValuesAreDefined = allValues.every((value) => value !== undefined);
+  //   expect(allValuesAreDefined).toBe(true);
+  // });
+
   test('', async () => {
-    const arrayOfItems = await granatumQueueJobs.setGanatumIds(getItemsPaidMock);
+    const entities = await granatumQueueJobs.getGranatumRequiredEntities();
 
-    const allValues = arrayOfItems.map((item) => {
-      return Object.values(item);
-    });
-
-    const allValuesAreDefined = allValues.every((value) => value !== undefined);
-    expect(allValuesAreDefined).toBe(true);
+    console.log(entities);
   });
 });

@@ -1,5 +1,3 @@
-import { GroupedItemsDTO } from '../dtos/granatum-service.dtos';
-
 export const getOnlendingsMock = [
   {
     beneficiary_cpf: null,
@@ -20,7 +18,7 @@ export const getOnlendingsMock = [
     account_credit: 'Inter',
   },
 ];
-export const groupItemsFromDbMock: GroupedItemsDTO[] = [
+export const groupItemsFromDbMock = [
   {
     type: 'invoice',
     count_invoices: 2,

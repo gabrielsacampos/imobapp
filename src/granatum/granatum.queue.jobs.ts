@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { GroupedItemsDTO, GroupedOnlendingsDTO } from './dtos/granatum-service.dtos';
+import { GroupedInvoiceComponents } from './dtos/granatum-service.dtos';
 import { GranatumAccountsService } from './granatum-accounts/granatum-accounts.service';
 import { GranatumCategoriesService } from './granatum-categories/granatumCategories.service';
 import { GranatumCostCenterService } from './granatum-cost-center/granatum-cost-center.service';
@@ -16,12 +16,25 @@ export class GranatumQueueJobs {
     private readonly granatumCategoriesService: GranatumCategoriesService,
     private readonly granatumSupliersService: GranatumSupliersService,
   ) {}
-  async setGranatumIds(data: GroupedOnlendingsDTO | GroupedItemsDTO): Promise<GroupedOnlendingsDTO | GroupedItemsDTO> {
+
+  async getGranatumRequiredEntities() {
     try {
       const granatumAccounts = await this.granatumAccountsService.getAllAccounts();
       const granatumCategories = await this.granatumCategoriesService.getSlipCategories();
       const granatumCostCenters = await this.granatumCostCenterService.getAllCostCenters();
       const granatumSupliers = await this.granatumSupliersService.getAllSupliers();
+      return { granatumAccounts, granatumCategories, granatumCostCenters, granatumSupliers };
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  }
+  async setGranatumIds(data: GroupedInvoiceComponents): Promise<GroupedInvoiceComponents> {
+    try {
+      const { granatumAccounts, granatumCategories, granatumCostCenters, granatumSupliers } =
+        await this.getGranatumRequiredEntities();
+
+      let client_suplier_document: string;
+      let id_suplier_client: number;
 
       const id_account_granatum = this.granatumAccountsService.findIdByDescription(
         data.account_credit,
@@ -34,15 +47,15 @@ export class GranatumQueueJobs {
           item.description,
           granatumCategories,
         );
+
         const id_cost_center_granatum = this.granatumCostCenterService.findIdByDescription(
           item.building,
           item.block,
           granatumCostCenters,
         );
-        let client_suplier_document: string;
-        let id_suplier_client: number;
-        if ('beneficiary_cnpj' in item || 'beneficiary_cnpj' in item) {
-          client_suplier_document = item.beneficiary_cnpj === null ? item.beneficiary_cpf : item.beneficiary_cnpj;
+
+        if (data.type === 'onlending' || data.type === 'revenue') {
+          client_suplier_document = item.cnpj === null ? item.cpf : item.cnpj;
           id_suplier_client = this.granatumSupliersService.findIdByDocument(client_suplier_document, granatumSupliers);
         }
 
@@ -59,11 +72,11 @@ export class GranatumQueueJobs {
       const newData = { ...data, id_account_granatum };
       return newData;
     } catch (error) {
-      throw new Error(error.message);
+      throw new Error(error.message + error.stack);
     }
   }
 
-  formatInvoiceItemsToPost(data: GroupedItemsDTO | GroupedOnlendingsDTO): GranatumTransactionPostDTO {
+  formatInvoiceItemsToPost(data: GroupedInvoiceComponents): GranatumTransactionPostDTO {
     try {
       return this.granatumTransactionsService.templateTransaction(data);
     } catch (error) {

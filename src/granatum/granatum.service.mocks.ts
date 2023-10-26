@@ -18,14 +18,14 @@ export const getCreditInvoicesByPeriodMock = [
       tenant_person: null,
       tenant_org: {
         name: 'Clinica Oftalmologica Cristina Arruda Ltda-me',
-        cnpj: '11.331.127/0001-00',
+        owner_cnpj: '11.331.127/0001-00',
       },
       beneficiariesLease: [
         {
           beneficiary_organization_imobzi: null,
           beneficiary_person_imobzi: {
             id_imobzi: '5265744175562752',
-            cpf: '001.867.244-20',
+            owner_cpf: '001.867.244-20',
           },
           share: 100,
         },
@@ -60,14 +60,14 @@ export const getCreditInvoicesByPeriodMock = [
       tenant_person: null,
       tenant_org: {
         name: 'Clinica Oftalmologica Cristina Arruda Ltda-me',
-        cnpj: '11.331.127/0001-00',
+        owner_cnpj: '11.331.127/0001-00',
       },
       beneficiariesLease: [
         {
           beneficiary_organization_imobzi: null,
           beneficiary_person_imobzi: {
             id_imobzi: '5265744175562752',
-            cpf: '001.867.244-20',
+            owner_cpf: '001.867.244-20',
           },
           share: 100,
         },
@@ -171,5 +171,44 @@ export const setGranatumIdsIntoInvoicesMock = [
         },
       },
     ],
+  },
+];
+
+export const getRevenuesMock = [
+  {
+    account_credit: 'Inter',
+    invoice_id: '36877a63ffb011edbef1633bd29e8efb',
+    unity: '2204',
+    name: 'Eko Home Club',
+    block: 'Figueiras',
+    paid_at: '2023-07-11T00:00:00.000Z',
+    management_fee: 169.97,
+    owner_cnpj: '18.703.311/0001-82',
+    owner_cpf: null,
+    owner_type: 'PF',
+  },
+  {
+    account_credit: 'Conta Proprietario',
+    invoice_id: '15377c42ffb011eda96449fe3d1e4f7c',
+    unity: '1602',
+    name: 'River Place',
+    block: '',
+    paid_at: '2023-07-06T00:00:00.000Z',
+    management_fee: 277.7,
+    owner_cnpj: null,
+    owner_cpf: '508.485.504-04',
+    owner_type: 'PJ',
+  },
+  {
+    account_credit: 'Inter',
+    invoice_id: '15377c42ffb011eda96449fe3d1e4f7c',
+    unity: '1602',
+    name: 'River Place',
+    block: '',
+    paid_at: '2023-07-06T00:00:00.000Z',
+    management_fee: 277.7,
+    owner_cnpj: null,
+    owner_cpf: '001.867.244-20',
+    owner_type: 'PJ',
   },
 ];

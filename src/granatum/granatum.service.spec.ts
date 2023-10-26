@@ -6,6 +6,7 @@ import { SharedModule } from '../shared.module';
 import { GranatumModule } from './granatum.module';
 import { GranatumQueueProducer } from './granatum.queue.producer';
 import { GranatumService } from './granatum.service';
+import { getRevenuesMock } from './granatum.service.mocks';
 import { getOnlendingsMock } from './mocks/granatum.service.mocks';
 
 describe('GranatumTransactionsService', () => {
@@ -31,6 +32,7 @@ describe('GranatumTransactionsService', () => {
   });
 
   test('', async () => {
-    // const result = await granatumService.groupItemsFromDb(getItemsPaidMock);
+    const result = granatumService.groupRevenuesFromDb(getRevenuesMock);
+    console.log(JSON.stringify(result));
   });
 });

@@ -1,6 +1,4 @@
-import { GetPaidItemDTO } from '../dtos/return-invoice.queries.dtos';
-
-// export const getItemsPaidMock: GetPaidItemDTO[] = [
+// export const getItemsPaidMock: GetPaidInvoicesDTO[] = [
 //   {
 //     account_credit: 'Inter',
 //     id_imobzi: 'aad6228c1b2911eea347a7b9fa053b0f',

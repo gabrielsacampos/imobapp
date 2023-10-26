@@ -1,4 +1,3 @@
-import { SetGranatumIdsDTO } from 'src/granatum/dtos/jobs.dtos';
 
 export class GranatumTransactionPostDTO {
   descricao: string;
@@ -17,7 +16,7 @@ export class GranatumTransactionPostDTO {
   itens_adicionais: GranatumItemsPostDTO[];
 }
 
-export class GranatumItemsPostDTO extends SetGranatumIdsDTO {
+export class GranatumItemsPostDTO {
   tags: Tag[];
   descricao: string;
   categoria_id: number;

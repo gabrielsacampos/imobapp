@@ -1,7 +1,7 @@
 import { Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
 import { PrismaService } from 'src/prisma-client/prisma.service';
-import { GroupedItemsDTO, GroupedOnlendingsDTO } from './dtos/granatum-service.dtos';
+import { GroupedInvoiceComponents } from './dtos/granatum-service.dtos';
 import { GranatumQueueJobs } from './granatum.queue.jobs';
 
 @Processor('GranatumQueue')
@@ -12,12 +12,12 @@ export class GranatumQueueConsumer {
   ) {}
 
   @Process('sync')
-  async syncInvoices(job: Job<GroupedItemsDTO | GroupedOnlendingsDTO>): Promise<any> {
-    const data = job.data;
-    const dataWithGranatumIds = await this.granatumQueueJobs.setGranatumIds(data);
-    const dataFormated = this.granatumQueueJobs.formatInvoiceItemsToPost(dataWithGranatumIds);
+  async syncInvoices(job: Job<GroupedInvoiceComponents>): Promise<any> {
+    const components = job.data;
+    const componentsWithGranatumIds = await this.granatumQueueJobs.setGranatumIds(components);
+    const componentsFormated = this.granatumQueueJobs.formatInvoiceItemsToPost(componentsWithGranatumIds);
 
-    await this.granatumQueueJobs.postTransaction(dataFormated);
+    await this.granatumQueueJobs.postTransaction(componentsFormated);
   }
 
   async handlQueueError(error: { message: string }, job: Job) {
