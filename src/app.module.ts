@@ -1,3 +1,4 @@
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -6,8 +7,9 @@ import { SharedModule } from './shared.module';
 import { GranatumModule } from './granatum/granatum.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './repository/users/users.module';
-import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { HttpErrorFilter } from './shared/http-error.filter';
+import { LoggingInterceptor } from './shared/loggin.interceptor';
 
 @Module({
   imports: [ImobziModule, SharedModule, GranatumModule, AuthModule, UsersModule],
@@ -17,6 +19,14 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: HttpErrorFilter,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
     },
   ],
 })
