@@ -7,14 +7,18 @@ export class GranatumService {
   constructor(private readonly invoicesService: InvoicesService) {}
 
   async getInvoicesComponents(start_at: string, end_at: string): Promise<InvoicesComponentsGroups> {
-    const items = await this.invoicesService.getPaidInvoices(start_at, end_at);
-    const onlendings = await this.invoicesService.getOnlendings(start_at, end_at);
-    const revenues = await this.invoicesService.getRevenue(start_at, end_at);
+    try {
+      const items = await this.invoicesService.getPaidInvoices(start_at, end_at);
+      const onlendings = await this.invoicesService.getOnlendings(start_at, end_at);
+      const revenues = await this.invoicesService.getRevenue(start_at, end_at);
 
-    const groupedItems = this.groupItemsFromDb(items);
-    const groupedOnlendings = this.groupOnlendingsFromDb(onlendings);
-    const groupedRevenues = this.groupRevenuesFromDb(revenues);
-    return { groupedItems, groupedOnlendings, groupedRevenues };
+      const groupedItems = this.groupItemsFromDb(items);
+      const groupedOnlendings = this.groupOnlendingsFromDb(onlendings);
+      const groupedRevenues = this.groupRevenuesFromDb(revenues);
+      return { groupedItems, groupedOnlendings, groupedRevenues };
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   groupItemsFromDb(items: InvoiceComponents[]): GroupedInvoiceComponents[] {

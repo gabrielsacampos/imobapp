@@ -25,7 +25,7 @@ export type GroupedInvoiceComponents = {
   account_credit: string;
   description: string;
   items: InvoiceComponents[];
-  id_account_granatum?: number;
+  id_account_granatum: number;
 };
 
 export type InvoicesComponentsGroups = {

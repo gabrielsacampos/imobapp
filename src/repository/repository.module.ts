@@ -17,6 +17,14 @@ import { FailedQueueJobsModule } from './failed-queue-jobs/failed-queue-jobs.mod
     InvoicesModule,
     FailedQueueJobsModule,
   ],
-  exports: [PeopleModule, OrganizationsModule, LeasesModule, PropertiesModule, BuildingsModule, InvoicesModule],
+  exports: [
+    PeopleModule,
+    OrganizationsModule,
+    LeasesModule,
+    PropertiesModule,
+    BuildingsModule,
+    InvoicesModule,
+    FailedQueueJobsModule,
+  ],
 })
 export class RepositoryModule {}

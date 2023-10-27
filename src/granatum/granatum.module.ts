@@ -4,7 +4,7 @@ import { BullBoardModule } from '@bull-board/nestjs';
 import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
-import { InvoicesService } from 'src/repository/invoices/invoices.service';
+import { FailedQueueJobsService } from 'src/repository/failed-queue-jobs/failed-queue-jobs.service';
 import { RepositoryModule } from 'src/repository/repository.module';
 import { SharedModule } from '../shared.module';
 import { GranatumAccountsModule } from './granatum-accounts/granatum-accounts.module';
@@ -15,7 +15,6 @@ import { GranatumSupliersModule } from './granatum-supliers/granatum-supliers.mo
 import { GranatumTransactionsModule } from './granatum-transactions/granatumTransactions.module';
 import { GranatumController } from './granatum.controller';
 import { GranatumQueueConsumer } from './granatum.queue.consumer';
-import { GranatumQueueJobs } from './granatum.queue.jobs';
 import { GranatumQueueProducer } from './granatum.queue.producer';
 import { GranatumService } from './granatum.service';
 
@@ -46,7 +45,7 @@ import { GranatumService } from './granatum.service';
     RepositoryModule,
   ],
   controllers: [GranatumController],
-  providers: [GranatumService, GranatumQueueJobs, GranatumQueueProducer, GranatumQueueConsumer],
+  providers: [GranatumService, GranatumQueueProducer, GranatumQueueConsumer, GranatumService, FailedQueueJobsService],
   exports: [GranatumService],
 })
 export class GranatumModule {}

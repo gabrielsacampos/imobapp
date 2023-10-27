@@ -80,10 +80,11 @@ export class InvoicesService {
   }
 
   async getPaidInvoices(start_at: string, end_at: string): Promise<InvoiceComponents[]> {
-    const start_date = new Date(start_at);
-    const end_date = new Date(end_at);
+    try {
+      const start_date = new Date(start_at);
+      const end_date = new Date(end_at);
 
-    return await this.prisma.$queryRaw`
+      return await this.prisma.$queryRaw`
     select 
     i.id_imobzi as invoice_id, 
     ii.description, 
@@ -104,13 +105,17 @@ export class InvoicesService {
     WHERE (i.status = 'paid' OR i.status = 'partially_paid')
     AND  i.paid_at >= ${start_date} AND i.paid_at <= ${end_date};
     `;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   async getOnlendings(start_at: string, end_at: string): Promise<InvoiceComponents[]> {
-    const start_date = new Date(start_at);
-    const end_date = new Date(end_at);
+    try {
+      const start_date = new Date(start_at);
+      const end_date = new Date(end_at);
 
-    return await this.prisma.$queryRaw`
+      return await this.prisma.$queryRaw`
     SELECT
     i.id_imobzi as invoice_id,
     p.cpf AS cpf,
@@ -127,12 +132,16 @@ export class InvoicesService {
   INNER JOIN properties AS p2 ON p2.id_imobzi = l.id_property_imobzi
   INNER JOIN buildings AS b ON b.id_imobzi = p2.id_building_imobzi
   WHERE (i.status = 'paid' OR i.status = 'partially_paid') and i.paid_at >= ${start_date} and i.paid_at <= ${end_date};`;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   async getRevenue(start_at: string, end_at: string): Promise<InvoiceComponents[]> {
-    const start_date = new Date(start_at);
-    const end_date = new Date(end_at);
-    return await this.prisma.$queryRaw` 
+    try {
+      const start_date = new Date(start_at);
+      const end_date = new Date(end_at);
+      return await this.prisma.$queryRaw` 
 SELECT 
 	revenue.invoice_id, 
 	revenue.description, 
@@ -184,6 +193,9 @@ FROM
  		(select id_lease_imobzi , value, description from lease_items where description like '%IRRF%') lease_irrf
  	ON revenue.lease_id = lease_irrf.id_lease_imobzi;
 `;
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   async getImmutableInvoices(): Promise<ImmutableInvoice[]> {
