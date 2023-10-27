@@ -37,58 +37,58 @@ export class ImobziQueueProducer {
         });
       }
 
-      // for (const org of organiations) {
-      //   await this.imobziQueue.add('updateOrganizations', org, {
-      //     attempts: 3,
-      //     delay: 3000,
-      //     backoff: { delay: 10000, type: 'exponential' },
-      //   });
-      // }
+      for (const org of organiations) {
+        await this.imobziQueue.add('updateOrganizations', org, {
+          attempts: 3,
+          delay: 3000,
+          backoff: { delay: 10000, type: 'exponential' },
+        });
+      }
 
-      // const allBuildings = await this.imobziBuildingsService.getAllBuildings();
+      const allBuildings = await this.imobziBuildingsService.getAllBuildings();
 
-      // for (const building of allBuildings) {
-      //   await this.imobziQueue.add('updateBuildings', building, {
-      //     attempts: 3,
-      //     delay: 3000,
-      //     backoff: { delay: 10000, type: 'exponential' },
-      //   });
-      // }
+      for (const building of allBuildings) {
+        await this.imobziQueue.add('updateBuildings', building, {
+          attempts: 3,
+          delay: 3000,
+          backoff: { delay: 10000, type: 'exponential' },
+        });
+      }
 
-      // const allProperties = await this.imobziPropertiesService.getAllProperties();
+      const allProperties = await this.imobziPropertiesService.getAllProperties();
 
-      // for (const property of allProperties) {
-      //   await this.imobziQueue.add('updateProperties', property, {
-      //     attempts: 3,
-      //     delay: 3000,
-      //     backoff: { delay: 10000, type: 'exponential' },
-      //   });
-      // }
+      for (const property of allProperties) {
+        await this.imobziQueue.add('updateProperties', property, {
+          attempts: 3,
+          delay: 3000,
+          backoff: { delay: 10000, type: 'exponential' },
+        });
+      }
 
-      // const allLeases = await this.imobziLeasesService.getAllLeasesFromImobzi();
+      const allLeases = await this.imobziLeasesService.getAllLeasesFromImobzi();
 
-      // for (const lease of allLeases) {
-      //   await this.imobziQueue.add('updateLeases', lease, {
-      //     attempts: 3,
-      //     delay: 3000,
-      //     backoff: { delay: 10000, type: 'exponential' },
-      //   });
-      // }
+      for (const lease of allLeases) {
+        await this.imobziQueue.add('updateLeases', lease, {
+          attempts: 3,
+          delay: 3000,
+          backoff: { delay: 10000, type: 'exponential' },
+        });
+      }
 
-      // const allInvoices = await this.imobziInvoicesService.getAllInvoicesFromImobzi();
-      // const immutableInvoices = await this.invoicesService.getImmutableInvoices();
-      // const immutableInvoicesIds = immutableInvoices.map((invoice) => invoice.invoice_id);
-      // const invoicesToUpsert = allInvoices.filter((invoice) => {
-      //   return !immutableInvoicesIds.includes(invoice.invoice_id);
-      // });
+      const allInvoices = await this.imobziInvoicesService.getAllInvoicesFromImobzi();
+      const immutableInvoices = await this.invoicesService.getImmutableInvoices();
+      const immutableInvoicesIds = immutableInvoices.map((invoice) => invoice.invoice_id);
+      const invoicesToUpsert = allInvoices.filter((invoice) => {
+        return !immutableInvoicesIds.includes(invoice.invoice_id);
+      });
 
-      // for (const invoice of invoicesToUpsert) {
-      //   await this.imobziQueue.add('updateInvoices', invoice, {
-      //     attempts: 3,
-      //     delay: 3000,
-      //     backoff: { delay: 10000, type: 'exponential' },
-      //   });
-      // }
+      for (const invoice of invoicesToUpsert) {
+        await this.imobziQueue.add('updateInvoices', invoice, {
+          attempts: 3,
+          delay: 3000,
+          backoff: { delay: 10000, type: 'exponential' },
+        });
+      }
     } catch (error) {
       throw new Error(error);
     }
