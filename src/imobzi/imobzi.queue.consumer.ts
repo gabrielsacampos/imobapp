@@ -2,6 +2,7 @@ import { Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
 import { ContactDTO } from 'src/imobzi/imobzi-contacts/imobziContacts.dtos';
 import { FailedQueueJobsService } from 'src/repository/failed-queue-jobs/failed-queue-jobs.service';
+import { InvoicesService } from 'src/repository/invoices/invoices.service';
 import { BuildingDTO } from './imobzi-buildings/imobziBuildings.dtos';
 import { InvoicesDTO } from './imobzi-invoices/imobziInvoices.dtos';
 import { LeaseDTO } from './imobzi-leases/imobziLeases.dtos';
@@ -12,6 +13,7 @@ import { ImobziService } from './imobzi.service';
 export class ImobziQueueConsumer {
   constructor(
     private readonly imobziService: ImobziService,
+    private readonly invoicesService: InvoicesService,
     private readonly failedQueueJobsService: FailedQueueJobsService,
   ) {}
 
@@ -79,8 +81,10 @@ export class ImobziQueueConsumer {
   async updateInvoice(job: Job<InvoicesDTO>) {
     try {
       const invoice = job.data;
+      const invoicesToDb = await this.imobziService.prepareToDb(invoice);
+      await this.invoicesService.upsert(invoicesToDb);
+
       await new Promise((resolve) => setTimeout(resolve, 5000));
-      await this.imobziService.updateInvoice(invoice);
     } catch (error) {
       this.failedQueueJobsService.handleError(error, job);
       throw new Error(error);

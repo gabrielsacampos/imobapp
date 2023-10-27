@@ -11,7 +11,7 @@ export class ImobziController {
   ) {}
 
   @Get('dumpdb')
-  @Cron('0 * * * *')
+  // @Cron('0 * * * *')
   async dumpDatabase() {
     this.imobziQueueProducer.dumpEntitiesData();
     console.log(`cron iniciado as ${new Date()}`);

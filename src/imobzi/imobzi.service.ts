@@ -1,6 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { BuildingsService } from 'src/repository/buildings/buildings.service';
+import { CreateInvoiceDTO } from 'src/repository/invoices/dtos/create-invoice.dtos';
 import { CreateInvoiceItemDTO } from 'src/repository/invoices/invoice-items/dtos/create-invoice.dtos';
 import { InvoicesService } from 'src/repository/invoices/invoices.service';
 import { LeasesService } from 'src/repository/leases/leases.service';
@@ -84,7 +85,7 @@ export class ImobziService {
     }
   }
 
-  async updateInvoice(invoiceData: InvoicesDTO | any) {
+  async prepareToDb(invoiceData: InvoicesDTO | any): Promise<CreateInvoiceDTO> {
     try {
       const invoiceFromImobzi = await this.imobziInvoicesService.getRequiredInvoicesDataToDb(invoiceData.invoice_id);
 
@@ -123,9 +124,9 @@ export class ImobziService {
         invoiceFromImobzi.items.push(bankFeeItem);
       }
 
-      await this.invoicesService.upsert(invoiceFromImobzi);
+      return invoiceFromImobzi;
     } catch (error) {
-      throw new Error(error.message);
+      throw new Error(error);
     }
   }
 }

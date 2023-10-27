@@ -75,7 +75,7 @@ export class InvoicesService {
         create: { ...data, invoiceItems: { createMany: { data: items } } },
       });
     } catch (error) {
-      throw new Error(error.message);
+      throw new Error(error);
     }
   }
 
