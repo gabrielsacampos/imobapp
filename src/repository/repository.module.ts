@@ -6,6 +6,7 @@ import { OrganizationsModule } from './organizations/organizations.module';
 import { PeopleModule } from './people/people.module';
 import { PropertiesModule } from './properties/properties.module';
 import { FailedQueueJobsModule } from './failed-queue-jobs/failed-queue-jobs.module';
+import { WebhooksModule } from './webhooks/webhooks.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { FailedQueueJobsModule } from './failed-queue-jobs/failed-queue-jobs.mod
     BuildingsModule,
     InvoicesModule,
     FailedQueueJobsModule,
+    WebhooksModule,
   ],
   exports: [
     PeopleModule,
