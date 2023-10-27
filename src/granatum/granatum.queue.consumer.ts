@@ -85,8 +85,8 @@ export class GranatumQueueConsumer {
       }
 
       data.items = itemsWithIds;
-      const newData = data;
-      return newData;
+      data.id_account_granatum = data.id_account_granatum;
+      return data;
     } catch (error) {
       throw new Error(error);
     }
