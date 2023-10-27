@@ -1,10 +1,5 @@
-import { BullAdapter } from '@bull-board/api/bullAdapter';
-import { ExpressAdapter } from '@bull-board/express';
-import { BullBoardModule } from '@bull-board/nestjs';
-import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
-import { ScheduleModule } from '@nestjs/schedule';
-import { FailedQueueJobsService } from 'src/repository/failed-queue-jobs/failed-queue-jobs.service';
+import { QueuesModule } from 'src/queues/queues.module';
 import { RepositoryModule } from 'src/repository/repository.module';
 import { SharedModule } from '../shared.module';
 import { GranatumAccountsModule } from './granatum-accounts/granatum-accounts.module';
@@ -13,29 +8,14 @@ import { GranatumClientsModule } from './granatum-clients/granatum-clients.modul
 import { GranatumCostCenterModule } from './granatum-cost-center/granatum-cost-center.module';
 import { GranatumSupliersModule } from './granatum-supliers/granatum-supliers.module';
 import { GranatumTransactionsModule } from './granatum-transactions/granatumTransactions.module';
+import { GranatumTransactionsService } from './granatum-transactions/granatumTransactions.service';
 import { GranatumController } from './granatum.controller';
-import { GranatumQueueConsumer } from './granatum.queue.consumer';
-import { GranatumQueueProducer } from './granatum.queue.producer';
 import { GranatumService } from './granatum.service';
 
 @Module({
   imports: [
     SharedModule,
-    ScheduleModule.forRoot(),
-    BullModule.forRoot({
-      url: process.env.redis_url,
-    }),
-    BullModule.registerQueue({
-      name: 'GranatumQueue',
-    }),
-    BullBoardModule.forFeature({
-      name: 'GranatumQueue',
-      adapter: BullAdapter,
-    }),
-    BullBoardModule.forRoot({
-      route: '/queues',
-      adapter: ExpressAdapter,
-    }),
+    QueuesModule,
     GranatumTransactionsModule,
     GranatumCategoriesModule,
     GranatumAccountsModule,
@@ -45,7 +25,7 @@ import { GranatumService } from './granatum.service';
     RepositoryModule,
   ],
   controllers: [GranatumController],
-  providers: [GranatumService, GranatumQueueProducer, GranatumQueueConsumer, GranatumService, FailedQueueJobsService],
+  providers: [GranatumService, GranatumService, GranatumTransactionsService],
   exports: [GranatumService],
 })
 export class GranatumModule {}

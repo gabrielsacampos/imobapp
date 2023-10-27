@@ -10,9 +10,11 @@ import { UsersModule } from './repository/users/users.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { HttpErrorFilter } from './shared/http-error.filter';
 import { LoggingInterceptor } from './shared/loggin.interceptor';
+import { QueuesModule } from './queues/queues.module';
+import { GranatumQueueModule } from './src/queues/granatum-queue/granatum-queue.module';
 
 @Module({
-  imports: [ImobziModule, SharedModule, GranatumModule, AuthModule, UsersModule],
+  imports: [ImobziModule, SharedModule, GranatumModule, AuthModule, UsersModule, QueuesModule, GranatumQueueModule],
   controllers: [AppController],
   providers: [
     AppService,

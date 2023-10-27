@@ -1,12 +1,12 @@
 import { Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
 import { FailedQueueJobsService } from 'src/repository/failed-queue-jobs/failed-queue-jobs.service';
-import { GroupedInvoiceComponents } from './dtos/granatum-service.dtos';
-import { GranatumAccountsService } from './granatum-accounts/granatum-accounts.service';
-import { GranatumCategoriesService } from './granatum-categories/granatumCategories.service';
-import { GranatumCostCenterService } from './granatum-cost-center/granatum-cost-center.service';
-import { GranatumSupliersService } from './granatum-supliers/granatum-supliers.service';
-import { GranatumTransactionsService } from './granatum-transactions/granatumTransactions.service';
+import { GroupedInvoiceComponents } from '../../granatum/dtos/granatum-service.dtos';
+import { GranatumAccountsService } from '../../granatum/granatum-accounts/granatum-accounts.service';
+import { GranatumCategoriesService } from '../../granatum/granatum-categories/granatumCategories.service';
+import { GranatumCostCenterService } from '../../granatum/granatum-cost-center/granatum-cost-center.service';
+import { GranatumSupliersService } from '../../granatum/granatum-supliers/granatum-supliers.service';
+import { GranatumTransactionsService } from '../../granatum/granatum-transactions/granatumTransactions.service';
 
 @Processor('GranatumQueue')
 export class GranatumQueueConsumer {
