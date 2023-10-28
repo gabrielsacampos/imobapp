@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { Queue } from 'bull';
 
 @Injectable()
-export class GranatumQueueProducer {
+export class QueueGranatumProducer {
   constructor(@InjectQueue('GranatumQueue') private readonly granatumQueue: Queue) {}
 
   queueDefaultOpts = {

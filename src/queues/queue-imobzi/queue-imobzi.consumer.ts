@@ -1,20 +1,18 @@
 import { Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
+import { BuildingDTO } from 'src/imobzi/imobzi-buildings/imobziBuildings.dtos';
 import { ContactDTO } from 'src/imobzi/imobzi-contacts/imobziContacts.dtos';
-import { FailedQueueJobsService } from 'src/repository/failed-queue-jobs/failed-queue-jobs.service';
+import { InvoicesDTO } from 'src/imobzi/imobzi-invoices/imobziInvoices.dtos';
+import { LeaseDTO } from 'src/imobzi/imobzi-leases/imobziLeases.dtos';
+import { PropertyDTO } from 'src/imobzi/imobzi-properties/imobziProperties.dtos';
+import { ImobziService } from 'src/imobzi/imobzi.service';
 import { InvoicesService } from 'src/repository/invoices/invoices.service';
-import { BuildingDTO } from './imobzi-buildings/imobziBuildings.dtos';
-import { InvoicesDTO } from './imobzi-invoices/imobziInvoices.dtos';
-import { LeaseDTO } from './imobzi-leases/imobziLeases.dtos';
-import { PropertyDTO } from './imobzi-properties/imobziProperties.dtos';
-import { ImobziService } from './imobzi.service';
 
 @Processor('ImobziQueue')
-export class ImobziQueueConsumer {
+export class QueueImobziConsumer {
   constructor(
     private readonly imobziService: ImobziService,
     private readonly invoicesService: InvoicesService,
-    private readonly failedQueueJobsService: FailedQueueJobsService,
   ) {}
 
   @Process('updatePeople')
@@ -24,7 +22,6 @@ export class ImobziQueueConsumer {
       await new Promise((resolve) => setTimeout(resolve, 5000));
       await this.imobziService.updatePerson(contact);
     } catch (error) {
-      this.failedQueueJobsService.handleError(error, job);
       throw new Error(error);
     }
   }
@@ -36,7 +33,6 @@ export class ImobziQueueConsumer {
       await new Promise((resolve) => setTimeout(resolve, 5000));
       await this.imobziService.updateOrganization(contact);
     } catch (error) {
-      this.failedQueueJobsService.handleError(error, job);
       throw new Error(error);
     }
   }
@@ -48,7 +44,6 @@ export class ImobziQueueConsumer {
       await new Promise((resolve) => setTimeout(resolve, 5000));
       await this.imobziService.updateBuilding(building);
     } catch (error) {
-      this.failedQueueJobsService.handleError(error, job);
       throw new Error(error);
     }
   }
@@ -60,7 +55,6 @@ export class ImobziQueueConsumer {
       await new Promise((resolve) => setTimeout(resolve, 5000));
       await this.imobziService.updateProperty(property);
     } catch (error) {
-      this.failedQueueJobsService.handleError(error, job);
       throw new Error(error);
     }
   }
@@ -72,7 +66,6 @@ export class ImobziQueueConsumer {
       await new Promise((resolve) => setTimeout(resolve, 5000));
       await this.imobziService.updateLease(lease);
     } catch (error) {
-      this.failedQueueJobsService.handleError(error, job);
       throw new Error(error);
     }
   }
@@ -86,7 +79,6 @@ export class ImobziQueueConsumer {
 
       await new Promise((resolve) => setTimeout(resolve, 5000));
     } catch (error) {
-      this.failedQueueJobsService.handleError(error, job);
       throw new Error(error);
     }
   }

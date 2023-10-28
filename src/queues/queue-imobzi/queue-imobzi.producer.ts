@@ -1,16 +1,15 @@
 import { InjectQueue } from '@nestjs/bull';
 import { Injectable } from '@nestjs/common';
 import { Queue } from 'bull';
-import { FailedQueueJobsService } from 'src/repository/failed-queue-jobs/failed-queue-jobs.service';
 import { InvoicesService } from 'src/repository/invoices/invoices.service';
-import { ImobziBuildingsService } from './imobzi-buildings/imobziBuildings.service';
-import { ImobziContactsService } from './imobzi-contacts/imobziContacts.service';
-import { ImobziInvoicesService } from './imobzi-invoices/imobziInvoices.service';
-import { ImobziLeasesService } from './imobzi-leases/imobziLeases.service';
-import { ImobziPropertiesService } from './imobzi-properties/imobziProperties.service';
+import { ImobziBuildingsService } from '../../imobzi/imobzi-buildings/imobziBuildings.service';
+import { ImobziContactsService } from '../../imobzi/imobzi-contacts/imobziContacts.service';
+import { ImobziInvoicesService } from '../../imobzi/imobzi-invoices/imobziInvoices.service';
+import { ImobziLeasesService } from '../../imobzi/imobzi-leases/imobziLeases.service';
+import { ImobziPropertiesService } from '../../imobzi/imobzi-properties/imobziProperties.service';
 
 @Injectable()
-export class ImobziQueueProducer {
+export class QueueImobziProducer {
   constructor(
     @InjectQueue('ImobziQueue') private readonly imobziQueue: Queue,
     private readonly imobziContactsService: ImobziContactsService,
@@ -19,10 +18,9 @@ export class ImobziQueueProducer {
     private readonly imobziLeasesService: ImobziLeasesService,
     private readonly imobziInvoicesService: ImobziInvoicesService,
     private readonly invoicesService: InvoicesService,
-    private readonly failedQueueJobsService: FailedQueueJobsService,
   ) {}
 
-  async dumpEntitiesData() {
+  async produceContacts() {
     try {
       const allContacts = await this.imobziContactsService.getAllContacts();
 
@@ -44,7 +42,13 @@ export class ImobziQueueProducer {
           backoff: { delay: 10000, type: 'exponential' },
         });
       }
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
 
+  async produceBuildings() {
+    try {
       const allBuildings = await this.imobziBuildingsService.getAllBuildings();
 
       for (const building of allBuildings) {
@@ -54,7 +58,13 @@ export class ImobziQueueProducer {
           backoff: { delay: 10000, type: 'exponential' },
         });
       }
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
 
+  async produceProperties() {
+    try {
       const allProperties = await this.imobziPropertiesService.getAllProperties();
 
       for (const property of allProperties) {
@@ -64,7 +74,13 @@ export class ImobziQueueProducer {
           backoff: { delay: 10000, type: 'exponential' },
         });
       }
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
 
+  async produceLeases() {
+    try {
       const allLeases = await this.imobziLeasesService.getAllLeasesFromImobzi();
 
       for (const lease of allLeases) {
@@ -74,7 +90,13 @@ export class ImobziQueueProducer {
           backoff: { delay: 10000, type: 'exponential' },
         });
       }
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
 
+  async produceInvoices() {
+    try {
       const allInvoices = await this.imobziInvoicesService.getAllInvoicesFromImobzi();
       const immutableInvoices = await this.invoicesService.getImmutableInvoices();
       const immutableInvoicesIds = immutableInvoices.map((invoice) => invoice.invoice_id);

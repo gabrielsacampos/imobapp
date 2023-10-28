@@ -1,6 +1,5 @@
 import { Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
-import { FailedQueueJobsService } from 'src/repository/failed-queue-jobs/failed-queue-jobs.service';
 import { GroupedInvoiceComponents } from '../../granatum/dtos/granatum-service.dtos';
 import { GranatumAccountsService } from '../../granatum/granatum-accounts/granatum-accounts.service';
 import { GranatumCategoriesService } from '../../granatum/granatum-categories/granatumCategories.service';
@@ -9,9 +8,8 @@ import { GranatumSupliersService } from '../../granatum/granatum-supliers/granat
 import { GranatumTransactionsService } from '../../granatum/granatum-transactions/granatumTransactions.service';
 
 @Processor('GranatumQueue')
-export class GranatumQueueConsumer {
+export class QueueGranatumConsumer {
   constructor(
-    private readonly failedQueueJobs: FailedQueueJobsService,
     private readonly granatumTransactionsService: GranatumTransactionsService,
     private readonly granatumAccountsService: GranatumAccountsService,
     private readonly granatumCostCenterService: GranatumCostCenterService,
@@ -27,7 +25,6 @@ export class GranatumQueueConsumer {
       const componentsFormated = this.granatumTransactionsService.templateTransaction(componentsWithGranatumIds);
       await this.granatumTransactionsService.postTransactions(componentsFormated);
     } catch (error) {
-      this.failedQueueJobs.handleError(error, job);
       throw new Error(error);
     }
   }

@@ -4,7 +4,7 @@ import { InvoicesModule } from 'src/repository/invoices/invoices.module';
 import { InvoicesService } from 'src/repository/invoices/invoices.service';
 import { SharedModule } from '../shared.module';
 import { GranatumModule } from './granatum.module';
-import { GranatumQueueProducer } from './granatum.queue.producer';
+import { QueueGranatumProducer } from './granatum.queue.producer';
 import { GranatumService } from './granatum.service';
 import { getRevenuesMock } from './granatum.service.mocks';
 import { getOnlendingsMock } from './mocks/granatum.service.mocks';
@@ -25,7 +25,7 @@ describe('GranatumTransactionsService', () => {
         GranatumModule,
         InvoicesModule,
       ],
-      providers: [GranatumService, GranatumQueueProducer, InvoicesService],
+      providers: [GranatumService, QueueGranatumProducer, InvoicesService],
     }).compile();
 
     granatumService = moduleRef.get<GranatumService>(GranatumService);

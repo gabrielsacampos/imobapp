@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { GranatumQueueService } from './granatumQueue.service';
+import { QueueImobziService } from './queue-imobzi.service';
 
-describe('GranatumQueueService', () => {
-  let service: GranatumQueueService;
+describe('QueueImobziService', () => {
+  let service: QueueImobziService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [GranatumQueueService],
+      providers: [QueueImobziService],
     }).compile();
 
-    service = module.get<GranatumQueueService>(GranatumQueueService);
+    service = module.get<QueueImobziService>(QueueImobziService);
   });
 
   it('should be defined', () => {
