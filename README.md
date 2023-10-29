@@ -40,7 +40,9 @@ note: _API's documentation still in construction. For now, we can only see the e
 BackEnd structure: 
   - NestJs
   - Prisma ORM
-  - MySql
+  - Postgres
+  - Bcrypt
+  - Jwt Auth
   - BullMQ
 
 Our Entities: 
@@ -54,11 +56,20 @@ Our Entities:
   - Invoices (Module)
     - Invoices_items
    
-3rd-party Api Modules:
-  - ImobziContacts
-  - ImobziPeople
-  - ImobziOrganizations
-  - ImobziBuildings
-  - ImobziProperties
-  - ImobziLeases
-  - ImobziInvoices
+3rd-party Api Services:
+  - Imobzi
+    - ImobziContacts
+    - ImobziPeople
+    - ImobziOrganizations
+    - ImobziBuildings
+    - ImobziProperties
+    - ImobziLeases
+    - ImobziInvoices
+  - Granatum
+    - GranatumTransactions
+    - GranatumAccounts
+    - GranatumCategories
+    - GranatumCostCenters
+    - GranatumClients
+    - GranatumSupliers
+
