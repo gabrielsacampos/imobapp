@@ -14,6 +14,7 @@ BackEnd infra:
   - NestJs
   - Prisma ORM
   - Postgres
+  - Docker
   - BullMQ
   - Jwt Auth
   
