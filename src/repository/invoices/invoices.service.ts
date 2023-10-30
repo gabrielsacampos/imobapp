@@ -2,6 +2,8 @@ import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/c
 import { ImmutableInvoice, InvoiceComponents } from 'src/granatum/dtos/granatum-service.dtos';
 import { PrismaService } from 'src/prisma-client/prisma.service';
 import { CreateInvoiceDTO } from './dtos/create-invoice.dtos';
+import { Invoice } from './entities/invoice.entity';
+import { CreateInvoiceItemDTO } from './invoice-items/dtos/create-invoice.dtos';
 
 @Injectable()
 export class InvoicesService {
@@ -9,66 +11,83 @@ export class InvoicesService {
 
   // it can create properties from imobzi or not
   async create(data: CreateInvoiceDTO) {
-    const existsInvoice = await this.prisma.invoice.findFirst({
-      where: { id_imobzi: data.id_imobzi },
-    });
-    if (existsInvoice) {
-      throw new NotAcceptableException(`Invoice ${data.id_imobzi} already exists`);
-    }
-    const items = data.items;
-    delete data.items;
+    try {
+      const existsInvoice = await this.prisma.invoice.findFirst({
+        where: { id_imobzi: data.id_imobzi },
+      });
+      if (existsInvoice) {
+        throw new NotAcceptableException(`Invoice ${data.id_imobzi} already exists`);
+      }
 
-    await this.prisma.invoice.create({
-      data: {
-        ...data,
-        invoiceItems: { create: items },
-      },
-    });
-    return { message: `invoice ${data.id_imobzi} created.` };
+      const items: CreateInvoiceItemDTO[] = data.items;
+      delete data.items;
+
+      return await this.prisma.invoice.create({
+        data: {
+          ...data,
+          invoiceItems: { create: items },
+        },
+      });
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
-  async findAll() {
-    return await this.prisma.invoice.findMany();
+  async findAll(): Promise<Invoice[]> {
+    try {
+      return await this.prisma.invoice.findMany();
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   async findById(id_imobzi: string) {
-    const found = await this.prisma.invoice.findUnique({
-      where: { id_imobzi },
-      include: { invoiceItems: true },
-    });
+    try {
+      const found = await this.prisma.invoice.findUnique({
+        where: { id_imobzi },
+        include: { invoiceItems: true },
+      });
 
-    if (!found) {
-      throw new NotFoundException(`Invoice ${id_imobzi} not found`);
+      if (!found) {
+        throw new NotFoundException(`Invoice ${id_imobzi} not found`);
+      }
+
+      return found;
+    } catch (error) {
+      throw new Error(error);
     }
-
-    return found;
   }
 
   async update(id_imobzi: string, data: CreateInvoiceDTO) {
-    const existsInvoice = await this.prisma.invoice.findFirst({
-      where: { id_imobzi },
-    });
+    try {
+      const existsInvoice = await this.prisma.invoice.findFirst({
+        where: { id_imobzi },
+      });
 
-    if (!existsInvoice) {
-      throw new NotFoundException(`Invoice ${id_imobzi} does not exist.`);
+      if (!existsInvoice) {
+        throw new NotFoundException(`Invoice ${id_imobzi} does not exist.`);
+      }
+
+      const updatedInvoice = await this.prisma.invoice.update({
+        where: { id_imobzi },
+        data: {
+          ...data,
+        },
+        include: { invoiceItems: true },
+      });
+
+      return updatedInvoice;
+    } catch (error) {
+      throw new Error(error);
     }
-
-    await this.prisma.invoice.update({
-      where: { id_imobzi },
-      data: {
-        ...data,
-      },
-      include: { invoiceItems: true },
-    });
-
-    return { message: `invoice ${id_imobzi} updated` };
   }
 
   async upsert(data: CreateInvoiceDTO) {
-    const items = data.items;
-    items.forEach((item) => delete item.id_invoice_imobzi);
-    delete data.items;
     try {
+      const items = data.items;
+      items.forEach((item) => delete item.id_invoice_imobzi);
+      delete data.items;
+
       await this.prisma.invoice.upsert({
         where: { id_imobzi: data.id_imobzi },
         update: data,

@@ -54,9 +54,6 @@ export class CreateInvoiceDTO extends Invoice {
     description: 'charge and fee for late payment',
     example: 10,
   })
-  @IsNotEmpty()
-  interest_value: number;
-
   @ApiProperty({
     description: 'lease id from imobzi reference',
     example: 81728374782,
@@ -112,7 +109,7 @@ export class CreateInvoiceDTO extends Invoice {
     message: 'You need to set at least one item to invoice',
   })
   @Type(() => CreateInvoiceItemDTO)
-  items: CreateInvoiceItemDTO[];
+  items!: CreateInvoiceItemDTO[];
 
   paid_at?: Date;
   credit_at?: Date;
