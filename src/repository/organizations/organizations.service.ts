@@ -8,59 +8,81 @@ export class OrganizationsService {
   constructor(private prisma: PrismaService) {}
 
   async create(data: CreateOrganizationDTO) {
-    const existsIdOrganization = await this.prisma.organization.findFirst({
-      where: { id_imobzi: data.id_imobzi },
-    });
+    try {
+      const existsIdOrganization = await this.prisma.organization.findFirst({
+        where: { id_imobzi: data.id_imobzi },
+      });
 
-    if (existsIdOrganization) {
-      throw new NotFoundException(`ID: ${data.id_imobzi} already registered at company: ${existsIdOrganization.name}`);
+      if (existsIdOrganization) {
+        throw new NotFoundException(
+          `ID: ${data.id_imobzi} already registered at company: ${existsIdOrganization.name}`,
+        );
+      }
+
+      const existsCNPJOrganiation = await this.prisma.organization.findFirst({
+        where: {
+          cnpj: data.cnpj,
+        },
+      });
+
+      if (existsCNPJOrganiation) {
+        throw new NotFoundException(`CNPJ: ${data.cnpj} already registered at company: ${existsCNPJOrganiation.name}`);
+      }
+
+      return await this.prisma.organization.create({ data });
+    } catch (error) {
+      throw new Error(error);
     }
-
-    const existsCNPJOrganiation = await this.prisma.organization.findFirst({
-      where: {
-        cnpj: data.cnpj,
-      },
-    });
-
-    if (existsCNPJOrganiation) {
-      throw new NotFoundException(`CNPJ: ${data.cnpj} already registered at company: ${existsCNPJOrganiation.name}`);
-    }
-
-    return await this.prisma.organization.create({ data });
   }
 
   async findById(id_imobzi: string) {
-    const found = await this.prisma.organization.findUnique({
-      where: { id_imobzi },
-    });
+    try {
+      const found = await this.prisma.organization.findUnique({
+        where: { id_imobzi },
+      });
 
-    if (!found) {
-      throw new NotFoundException(`ID: ${id_imobzi} not found at organizations`);
+      if (!found) {
+        throw new NotFoundException(`ID: ${id_imobzi} not found at organizations`);
+      }
+      return found;
+    } catch (error) {
+      throw new Error(error);
     }
-    return found;
   }
 
   async findAll() {
-    return await this.prisma.organization.findMany();
+    try {
+      return await this.prisma.organization.findMany();
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   async update(id_imobzi: string, data: UpdateOrganizationDTO) {
-    const found = await this.prisma.organization.findFirst({
-      where: { id_imobzi },
-    });
+    try {
+      const found = await this.prisma.organization.findFirst({
+        where: { id_imobzi },
+      });
 
-    if (!found) {
-      throw new NotFoundException(`ID: ${id_imobzi} not found at organization`);
+      if (!found) {
+        throw new NotFoundException(`ID: ${id_imobzi} not found at organization`);
+      }
+
+      return await this.prisma.organization.update({ where: { id_imobzi }, data });
+    } catch (error) {
+      throw new Error(error);
     }
-
-    return this.prisma.organization.update({ where: { id_imobzi }, data });
   }
 
   async upsert(data: CreateOrganizationDTO) {
-    await this.prisma.organization.upsert({
-      where: { id_imobzi: data.id_imobzi },
-      create: data,
-      update: data,
-    });
+    try {
+      await this.prisma.organization.upsert({
+        where: { id_imobzi: data.id_imobzi },
+        create: data,
+        update: data,
+      });
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 }

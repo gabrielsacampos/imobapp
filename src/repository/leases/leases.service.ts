@@ -2,7 +2,6 @@ import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/c
 import { PrismaService } from 'src/prisma-client/prisma.service';
 import { CreateLeaseDTO } from './dtos/create-lease.dtos';
 import { UpdateLeaseDTO } from './dtos/update-lease.dtos';
-import { LeasesUpdateDTO } from './leasesUpdate.dtos';
 
 @Injectable()
 export class LeasesService {
