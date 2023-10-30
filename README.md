@@ -2,49 +2,21 @@
 
 This application has the function of storing data provided by a third-party API, which currently manages property rental payments for a property management company. After the complete integration between this application and the third-party API, we will create new features based on the data persisted in our own database.
 
-### To follow in your dependencies:
-``` 
-$ git clone https://github.com/gabrielsacampos/imobManager-server-NestJs.git && npm i
-```
 
------
-### Config Prisma: 
-We need to determinate **DATABASE_URL** for a MySQL database. You typically need to obtain this information from your hosting provider or your own server configuration. The **DATABASE_URL** is a connection string that contains the necessary information for connecting to the MySQL database. It typically follows this format:
-```mysql://username:password@hostname:port/database```
-
-set on file **.env**
-```DATABASE_URL_MYSQL="mysql://username:password@hostname:port/database?schema=public"```
-remember: `?schema=public` in the end.
-
-#### On terminal, to migrate PrismaSchema:
-```
- $ npx prisma migrate dev
-```
-*Seeds to dump into database come soon.*
-
-----------------
-
-#### On terminal, to start server:
-```
-$ npm run start:dev
-```
+## Third-party APIs 
+ - **Imobzi**: Real State Software, manages payments and contracts/leases
+ - **Granatum**: Financial software. Here we handle with cash flow, revenues and expenses. 
 
 
-> Our API: **http://localhost:3000/api**
-
-note: _API's documentation still in construction. For now, we can only see the endpoints and params. Body examples and schemas come soon._
-
-> Third-Party API: **https://developer.imobzi.com/#section/Introduction**
 
 
-BackEnd structure: 
+BackEnd infra: 
   - NestJs
   - Prisma ORM
   - Postgres
-  - Bcrypt
-  - Jwt Auth
   - BullMQ
-
+  - Jwt Auth
+  
 Our Entities: 
   - People (Module)
   - Organizations (Module)
@@ -56,7 +28,9 @@ Our Entities:
   - Invoices (Module)
     - Invoices_items
    
-3rd-party Api Services:
+
+## Firts step
+### __ImobziService__ is responsable for consume all data from Imobzi API, handle the data and store our own DATABASE. 
   - Imobzi
     - ImobziContacts
     - ImobziPeople
@@ -65,6 +39,8 @@ Our Entities:
     - ImobziProperties
     - ImobziLeases
     - ImobziInvoices
+
+  ### __GranatumService__ after our databse is up to date, this service get paid invoices and divide by catgory each item from invoices to store at cash flow. 
   - Granatum
     - GranatumTransactions
     - GranatumAccounts
@@ -73,3 +49,26 @@ Our Entities:
     - GranatumClients
     - GranatumSupliers
 
+### How does each service work? 
+  In Application, we have queues:
+  
+  __QueueImobzi__:  Listening POST method at the endpoint '/queues/imobzi/dump-db' with the body bellow:
+
+  ``` 
+  // we can choose wich entity we want to update on db. 
+   {
+	"contacts": true, 
+	"buildings": true,
+	"properties": true,
+	"leases": true,
+	"invoices": true
+}
+  ```
+
+  __QueueGranatum__:  Listening POST method at the endpoint '/queues/granatum/sync' with the body bellow:
+
+  ``` 
+  // here we need to send the payment date from invoices to process queue and sync with Granatum's API. 
+
+	{ "start_at": "2023-08-30", "end_at": "2023-09-29" }
+  ```

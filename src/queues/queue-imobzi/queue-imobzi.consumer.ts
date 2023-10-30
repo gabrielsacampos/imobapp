@@ -74,7 +74,7 @@ export class QueueImobziConsumer {
   async updateInvoice(job: Job<InvoicesDTO>) {
     try {
       const invoice = job.data;
-      const invoicesToDb = await this.imobziService.prepareToDb(invoice);
+      const invoicesToDb = await this.imobziService.updateInvoices(invoice);
       await this.invoicesService.upsert(invoicesToDb);
 
       await new Promise((resolve) => setTimeout(resolve, 5000));

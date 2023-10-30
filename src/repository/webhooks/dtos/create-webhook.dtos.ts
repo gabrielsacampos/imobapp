@@ -12,5 +12,5 @@ export class CreateWebhookDTO extends Webhook {
 
   @IsNotEmpty()
   @IsString()
-  id_entity_imobzi: string;
+  db_id: string;
 }

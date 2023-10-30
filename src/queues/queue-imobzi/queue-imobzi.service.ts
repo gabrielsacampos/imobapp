@@ -4,27 +4,27 @@ import { StoreDb } from './interfaces/imobziQueue.interface';
 
 @Injectable()
 export class QueueImobziService {
-  constructor(private readonly QueueImobziProducer: QueueImobziProducer) {}
+  constructor(private readonly queueImobziProducer: QueueImobziProducer) {}
   async storeDb(data: StoreDb) {
     const { contacts, buildings, properties, leases, invoices } = data;
     if (contacts) {
-      await this.QueueImobziProducer.produceContacts();
+      await this.queueImobziProducer.produceContacts();
     }
 
     if (buildings) {
-      await this.QueueImobziProducer.produceBuildings();
+      await this.queueImobziProducer.produceBuildings();
     }
 
     if (properties) {
-      await this.QueueImobziProducer.produceProperties();
+      await this.queueImobziProducer.produceProperties();
     }
 
     if (leases) {
-      await this.QueueImobziProducer.produceLeases();
+      await this.queueImobziProducer.produceLeases();
     }
 
     if (invoices) {
-      await this.QueueImobziProducer.produceInvoices();
+      await this.queueImobziProducer.produceInvoices();
     }
   }
 }

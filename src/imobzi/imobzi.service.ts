@@ -1,9 +1,7 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
-import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { Injectable } from '@nestjs/common';
 import { BuildingsService } from 'src/repository/buildings/buildings.service';
 import { CreateInvoiceDTO } from 'src/repository/invoices/dtos/create-invoice.dtos';
 import { CreateInvoiceItemDTO } from 'src/repository/invoices/invoice-items/dtos/create-invoice.dtos';
-import { InvoicesService } from 'src/repository/invoices/invoices.service';
 import { LeasesService } from 'src/repository/leases/leases.service';
 import { OrganizationsService } from 'src/repository/organizations/organizations.service';
 import { PeopleService } from 'src/repository/people/people.service';
@@ -23,8 +21,6 @@ import { ImobziPropertiesService } from './imobzi-properties/imobziProperties.se
 @Injectable()
 export class ImobziService {
   constructor(
-    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
-    private readonly invoicesService: InvoicesService,
     private readonly leasesService: LeasesService,
     private readonly propertiesService: PropertiesService,
     private readonly organizationsService: OrganizationsService,
@@ -85,7 +81,7 @@ export class ImobziService {
     }
   }
 
-  async prepareToDb(invoiceData: InvoicesDTO | any): Promise<CreateInvoiceDTO> {
+  async updateInvoices(invoiceData: InvoicesDTO | any): Promise<CreateInvoiceDTO> {
     try {
       const invoiceFromImobzi = await this.imobziInvoicesService.getRequiredInvoicesDataToDb(invoiceData.invoice_id);
 

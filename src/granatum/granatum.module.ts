@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { QueuesModule } from 'src/queues/queues.module';
 import { RepositoryModule } from 'src/repository/repository.module';
 import { SharedModule } from '../shared.module';
 import { GranatumAccountsModule } from './granatum-accounts/granatum-accounts.module';
