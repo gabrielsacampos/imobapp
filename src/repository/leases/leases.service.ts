@@ -1,7 +1,7 @@
 import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma-client/prisma.service';
 import { CreateLeaseDTO } from './dtos/create-lease.dtos';
-import { LeasesCreateDTO } from './leasesCreate.dtos';
+import { UpdateLeaseDTO } from './dtos/update-lease.dtos';
 import { LeasesUpdateDTO } from './leasesUpdate.dtos';
 
 @Injectable()
@@ -9,30 +9,33 @@ export class LeasesService {
   constructor(private prisma: PrismaService) {}
 
   // update using db id.
-  async createLeaseItems(data: LeasesCreateDTO) {
-    const existsIdLease = await this.prisma.lease.findFirst({
-      where: { id_imobzi: data.id_imobzi },
-    });
+  async create(data: CreateLeaseDTO) {
+    try {
+      const existsIdLease = await this.prisma.lease.findFirst({
+        where: { id_imobzi: data.id_imobzi },
+      });
 
-    if (existsIdLease) {
-      throw new NotAcceptableException(`ID: ${existsIdLease.id} already registered at leases.`);
+      if (existsIdLease) {
+        throw new NotAcceptableException(`ID: ${existsIdLease.id} already registered at leases.`);
+      }
+
+      const beneficiaries = data.beneficiaries;
+      delete data.beneficiaries;
+
+      return await this.prisma.lease.create({
+        data: {
+          ...data,
+          beneficiariesLease: {
+            create: beneficiaries,
+          },
+          leasesItems: {
+            create: data.lease_items,
+          },
+        },
+      });
+    } catch (error) {
+      throw new Error(error);
     }
-
-    const beneficiaries = data.beneficiaries;
-    delete data.beneficiaries;
-
-    await this.prisma.lease.create({
-      data: {
-        ...data,
-        beneficiariesLease: {
-          create: beneficiaries,
-        },
-        leasesItems: {
-          create: data.lease_items,
-        },
-      },
-    });
-    return { message: `lease #${data.id_imobzi} created` };
   }
 
   async findAll() {
@@ -53,35 +56,37 @@ export class LeasesService {
     return found;
   }
 
-  async updateLeaseItems(id_imobzi: string, data: LeasesUpdateDTO) {
-    const existsIdLease = await this.prisma.lease.findFirst({
-      where: { id_imobzi },
-    });
+  async update(id_imobzi: string, data: UpdateLeaseDTO) {
+    try {
+      const existsIdLease = await this.prisma.lease.findFirst({
+        where: { id_imobzi },
+      });
 
-    if (!existsIdLease) {
-      throw new NotFoundException(`id_imobzi: ${id_imobzi} not found`);
+      if (!existsIdLease) {
+        throw new NotFoundException(`id_imobzi: ${id_imobzi} not found`);
+      }
+
+      return await this.prisma.lease.update({
+        where: { id_imobzi },
+        data: {
+          ...data,
+          beneficiariesLease: {
+            deleteMany: [{ id_lease_imobzi: id_imobzi }],
+            createMany: {
+              data: data.beneficiaries,
+            },
+          },
+          leasesItems: {
+            deleteMany: [{ id_lease_imobzi: id_imobzi }],
+            createMany: {
+              data: data.lease_items,
+            },
+          },
+        },
+      });
+    } catch (error) {
+      throw new Error(error);
     }
-
-    await this.prisma.lease.update({
-      where: { id_imobzi },
-      data: {
-        ...data,
-        beneficiariesLease: {
-          deleteMany: [{ id_lease_imobzi: id_imobzi }],
-          createMany: {
-            data: data.beneficiaries,
-          },
-        },
-        leasesItems: {
-          deleteMany: [{ id_lease_imobzi: id_imobzi }],
-          createMany: {
-            data: data.lease_items,
-          },
-        },
-      },
-    });
-
-    return { message: `Items updated at lease ${id_imobzi} updated` };
   }
 
   async upsert(data: CreateLeaseDTO) {
