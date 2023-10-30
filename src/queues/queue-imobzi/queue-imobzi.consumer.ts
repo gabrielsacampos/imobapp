@@ -15,6 +15,12 @@ export class QueueImobziConsumer {
     private readonly invoicesService: InvoicesService,
   ) {}
 
+  @Process('retry')
+  async retry(job: Job) {
+    const [data] = job.data;
+    await this.imobziService.updateLease(data);
+  }
+
   @Process('updatePeople')
   async updatePerson(job: Job<ContactDTO>) {
     try {

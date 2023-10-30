@@ -85,30 +85,39 @@ export class LeasesService {
   }
 
   async upsert(data: CreateLeaseDTO) {
-    this.prisma.lease.upsert({
-      where: {
-        id_imobzi: data.id_imobzi,
-      },
-      update: {
-        ...data,
-        beneficiariesLease: {
-          deleteMany: {},
-          createMany: { data: data.beneficiaries },
+    try {
+      const beneficiaries = data.beneficiaries;
+      delete data.beneficiaries;
+      const leaseItems = data.lease_items;
+      delete data.lease_items;
+
+      await this.prisma.lease.upsert({
+        where: {
+          id_imobzi: data.id_imobzi,
         },
-        leasesItems: {
-          deleteMany: {},
-          createMany: { data: data.lease_items },
+        update: {
+          ...data,
+          beneficiariesLease: {
+            deleteMany: {},
+            createMany: { data: beneficiaries },
+          },
+          leasesItems: {
+            deleteMany: {},
+            createMany: { data: leaseItems },
+          },
         },
-      },
-      create: {
-        ...data,
-        beneficiariesLease: {
-          createMany: { data: data.beneficiaries },
+        create: {
+          ...data,
+          beneficiariesLease: {
+            createMany: { data: beneficiaries },
+          },
+          leasesItems: {
+            createMany: { data: leaseItems },
+          },
         },
-        leasesItems: {
-          createMany: { data: data.lease_items },
-        },
-      },
-    });
+      });
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 }

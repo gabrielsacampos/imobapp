@@ -71,13 +71,12 @@ export class ImobziService {
     }
   }
 
-  //we need to request each lease detail to get update date
   async updateLease(leaseData: LeaseDTO) {
     try {
       const leaseFromImobzi = await this.imobziLeasesService.getRequiredLeaseDataToDb(leaseData.db_id.toString());
       await this.leasesService.upsert(leaseFromImobzi);
     } catch (error) {
-      throw new Error(error.message);
+      throw new Error(error);
     }
   }
 
