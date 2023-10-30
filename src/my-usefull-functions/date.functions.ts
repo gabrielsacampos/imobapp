@@ -1,6 +1,5 @@
 import { add, format, isWeekend } from 'date-fns';
 import { myConstants } from './myConstants';
-import { zonedTimeToUtc } from 'date-fns-tz';
 
 export const dateFunctions = {
   defineCreditDate(stringDate: string) {

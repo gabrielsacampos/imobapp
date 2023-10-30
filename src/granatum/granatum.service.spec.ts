@@ -1,13 +1,12 @@
 import { BullModule } from '@nestjs/bull';
 import { Test, TestingModule } from '@nestjs/testing';
+import { QueueGranatumProducer } from 'src/queues/queue-granatum/queue-granatum.producer';
 import { InvoicesModule } from 'src/repository/invoices/invoices.module';
 import { InvoicesService } from 'src/repository/invoices/invoices.service';
 import { SharedModule } from '../shared.module';
 import { GranatumModule } from './granatum.module';
-import { QueueGranatumProducer } from './granatum.queue.producer';
 import { GranatumService } from './granatum.service';
 import { getRevenuesMock } from './granatum.service.mocks';
-import { getOnlendingsMock } from './mocks/granatum.service.mocks';
 
 describe('GranatumTransactionsService', () => {
   let granatumService: GranatumService;
@@ -32,7 +31,7 @@ describe('GranatumTransactionsService', () => {
   });
 
   test('', async () => {
-    const result = granatumService.groupRevenuesFromDb(getRevenuesMock);
+    // const result = granatumService.groupRevenues(getRevenuesMock);
     console.log(JSON.stringify(result));
   });
 });
