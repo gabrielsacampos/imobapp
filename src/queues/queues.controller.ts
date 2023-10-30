@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { FetchDb } from './queue-granatum/interfaces/imobziQueue.interface';
 import { QueueImobziService } from './queue-imobzi/queue-imobzi.service';
 import { StoreDb } from './queue-imobzi/interfaces/imobziQueue.interface';
