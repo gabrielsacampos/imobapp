@@ -5,7 +5,6 @@ export class Invoice {
   reference_end_at?: string;
   due_date: Date;
   id_lease_imobzi: string;
-
   management_fee: number;
   invoice_url: string;
   barcode?: string;
@@ -17,4 +16,5 @@ export class Invoice {
   paid_manual?: boolean;
   account_credit?: string;
   onlending_value?: number;
+  interest_value?: number;
 }
