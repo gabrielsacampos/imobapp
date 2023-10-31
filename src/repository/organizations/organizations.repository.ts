@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma-client/prisma.service';
 import { CreateOrganizationDTO } from './dtos/create-organization.dtos';
 import { Organization } from './entities/organization.entity';
@@ -25,7 +25,11 @@ export class OrganizationsRepository {
 
   async create(data: CreateOrganizationDTO): Promise<Organization> {
     try {
-      return await this.prisma.organization.create({ data });
+      const findExistingCNPJ = await this.findExistingCNPJ(data.cnpj);
+      if (findExistingCNPJ) {
+        throw new NotAcceptableException(`CNPJ ${data.cnpj} already exisits at company: ${findExistingCNPJ.name}`);
+      }
+      return this.prisma.organization.create({ data });
     } catch (error) {
       throw new Error(error);
     }
