@@ -5,7 +5,7 @@ import { PeopleRepository } from './people.repository';
 import { CreatePersonDTO } from './dtos/create-person.dtos';
 
 describe('PeopleRepository', () => {
-  let service: PeopleRepository;
+  let repository: PeopleRepository;
   let inMemoryPeopleRepository: InMemoryPeopleRepository;
 
   beforeEach(async () => {
@@ -14,41 +14,41 @@ describe('PeopleRepository', () => {
       providers: [{ provide: PeopleRepository, useValue: inMemoryPeopleRepository }],
     }).compile();
 
-    service = module.get<PeopleRepository>(PeopleRepository);
+    repository = module.get<PeopleRepository>(PeopleRepository);
   });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(repository).toBeDefined();
   });
 
   it('findAll > should return array of people', async () => {
-    const result = await service.findAll();
+    const result = await repository.findAll();
     expect(result).toBe(inMemoryPeopleRepositoryMock);
   });
 
   it('findUnique > existgin id_imobzi should return a person', async () => {
     const randomPersonToTest = inMemoryPeopleRepositoryMock[4];
     const randomPersonId = randomPersonToTest.id_imobzi;
-    const result = await service.findById(randomPersonId);
+    const result = await repository.findById(randomPersonId);
     const person = inMemoryPeopleRepositoryMock.find((person) => person.id_imobzi === randomPersonId);
     expect(result).toBe(person);
   });
 
   it('findUnique > NOT exsting id_imobzi should NOT return a person', async () => {
-    await expect(service.findById('10')).rejects.toThrow();
+    await expect(repository.findById('10')).rejects.toThrow();
   });
 
   it('findExistingCPF > existgin cpf should return a person', async () => {
     const randomPersonToTest = inMemoryPeopleRepositoryMock[4];
     const randomPersonCPF = randomPersonToTest.cpf;
     const person = inMemoryPeopleRepositoryMock.find((person) => person.cpf === randomPersonCPF);
-    const result = await service.findExistingCPF(randomPersonCPF);
+    const result = await repository.findExistingCPF(randomPersonCPF);
     expect(result).toBe(person);
   });
 
   it('create > exsting id_imobzi || cpf should NOT create a person', async () => {
     const randomPersonToTest = inMemoryPeopleRepositoryMock[4];
-    await expect(service.create(randomPersonToTest)).rejects.toThrow();
+    await expect(repository.create(randomPersonToTest)).rejects.toThrow();
   });
 
   it('create > should create and return the new person', async () => {
@@ -60,14 +60,14 @@ describe('PeopleRepository', () => {
       phone: '81 8181818181',
     };
 
-    await expect(service.create(newPerson)).resolves.not.toThrow();
+    await expect(repository.create(newPerson)).resolves.not.toThrow();
     expect(inMemoryPeopleRepository.items).toEqual(expect.arrayContaining([expect.objectContaining(newPerson)]));
   });
 
   it('upsert > create person or update if not exists', async () => {
     const randomPersonToTest = inMemoryPeopleRepositoryMock[4];
     randomPersonToTest.email = 'thaisnew@gmail.com';
-    await expect(service.upsert(randomPersonToTest)).resolves.not.toThrow();
+    await expect(repository.upsert(randomPersonToTest)).resolves.not.toThrow();
     expect(inMemoryPeopleRepository.items).toEqual(
       expect.arrayContaining([expect.objectContaining(randomPersonToTest)]),
     );

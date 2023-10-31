@@ -1,5 +1,5 @@
 import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
-import { ImmutableInvoice, InvoiceComponents } from 'src/granatum/dtos/granatum-service.dtos';
+import { ImmutableInvoice, InvoiceComponents } from 'src/3party-client/granatum/dtos/granatum-service.dtos';
 import { PrismaService } from 'src/prisma-client/prisma.service';
 import { CreateInvoiceDTO } from './dtos/create-invoice.dtos';
 import { Invoice } from './entities/invoice.entity';
@@ -22,12 +22,13 @@ export class InvoicesService {
       const items: CreateInvoiceItemDTO[] = data.items;
       delete data.items;
 
-      return await this.prisma.invoice.create({
+      const createdInvoice = await this.prisma.invoice.create({
         data: {
           ...data,
           invoiceItems: { create: items },
         },
       });
+      return createdInvoice;
     } catch (error) {
       throw new Error(error);
     }

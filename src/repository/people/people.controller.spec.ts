@@ -8,13 +8,13 @@ import { PeopleService } from './people.service';
 
 describe('PeopleController', () => {
   let controller: PeopleController;
-  let peopleRepository: InMemoryPeopleRepository;
+  let repository: InMemoryPeopleRepository;
 
   beforeEach(async () => {
-    peopleRepository = new InMemoryPeopleRepository();
+    repository = new InMemoryPeopleRepository();
     const module: TestingModule = await Test.createTestingModule({
       controllers: [PeopleController],
-      providers: [{ provide: PeopleRepository, useValue: peopleRepository }, PeopleService, PrismaService],
+      providers: [{ provide: PeopleRepository, useValue: repository }, PeopleService, PrismaService],
     }).compile();
 
     controller = module.get<PeopleController>(PeopleController);
@@ -26,31 +26,31 @@ describe('PeopleController', () => {
 
   it('should call create function ', async () => {
     //mock
-    const spy = jest.spyOn(peopleRepository, 'create');
+    const spy = jest.spyOn(repository, 'create');
     spy.mockResolvedValue(true as any);
 
     //call
     await controller.create(inMemoryPeopleRepositoryMock[0]);
-    expect(peopleRepository.create).toHaveBeenCalled();
+    expect(repository.create).toHaveBeenCalled();
   });
 
   it('should call upsert function', async () => {
     //mock
-    const spy = jest.spyOn(peopleRepository, 'upsert');
+    const spy = jest.spyOn(repository, 'upsert');
     spy.mockResolvedValue(true as any);
 
     //call
     await controller.upsert(inMemoryPeopleRepositoryMock[0]);
-    expect(peopleRepository.upsert).toHaveBeenCalled();
+    expect(repository.upsert).toHaveBeenCalled();
   });
 
   it('should call function  ', async () => {
     //mock
-    const spy = jest.spyOn(peopleRepository, 'findAll');
+    const spy = jest.spyOn(repository, 'findAll');
     spy.mockResolvedValue(true as any);
 
     //call
     await controller.findAll();
-    expect(peopleRepository.findAll).toHaveBeenCalled();
+    expect(repository.findAll).toHaveBeenCalled();
   });
 });

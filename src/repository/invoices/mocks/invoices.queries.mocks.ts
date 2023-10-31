@@ -61,7 +61,7 @@
 //   },
 // ];
 
-import { ImmutableInvoice } from 'src/granatum/dtos/granatum-service.dtos';
+import { ImmutableInvoice } from 'src/3party-client/granatum/dtos/granatum-service.dtos';
 
 export const immutableInvoicesMock: ImmutableInvoice[] = [
   { invoice_id: '4bc7b4e69a3611ed89d5e339ae92359d' },

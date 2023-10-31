@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { dateFunctions } from '../../my-usefull-functions/date.functions';
+import { dateFunctions } from '../../../my-usefull-functions/date.functions';
 import { GroupedInvoiceComponents, InvoiceComponents } from '../dtos/granatum-service.dtos';
 import { granatumUrls } from '../granatum-urls-params/granatum.urls';
 import { GranatumItemsPostDTO, GranatumTransactionPostDTO } from './dtos/granatum-transactions.dtos';

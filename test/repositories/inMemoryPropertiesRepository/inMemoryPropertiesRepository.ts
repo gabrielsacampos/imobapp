@@ -10,6 +10,12 @@ export class InMemoryPropertiesRepository implements Partial<PropertiesRepositor
   items = inMemoryPropertiesRepositoryMock;
 
   async create(data: CreatePropertyDTO): Promise<Property> {
+    const existingProperty = this.items.find((prop) => {
+      return prop.id_imobzi === data.id_imobzi;
+    });
+
+    if (existingProperty) throw new NotFoundException(`Property with id ${data.id_imobzi} already exists`);
+
     data.id = crypto.randomInt(1, 1000);
     this.items.push(data);
     return data;

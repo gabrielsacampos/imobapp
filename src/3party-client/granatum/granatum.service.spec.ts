@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { QueueGranatumProducer } from 'src/queues/queue-granatum/queue-granatum.producer';
 import { InvoicesModule } from 'src/repository/invoices/invoices.module';
 import { InvoicesService } from 'src/repository/invoices/invoices.service';
-import { SharedModule } from '../shared.module';
+import { SharedModule } from '../../shared.module';
 import { GranatumModule } from './granatum.module';
 import { GranatumService } from './granatum.service';
 import { getRevenuesMock } from './granatum.service.mocks';

@@ -7,7 +7,7 @@ import { BullAdapter } from '@bull-board/api/bullAdapter';
 import { BullBoardModule } from '@bull-board/nestjs';
 import { BullModule } from '@nestjs/bull';
 import { ExpressAdapter } from '@bull-board/express';
-import { ImobziModule } from 'src/imobzi/imobzi.module';
+import { ImobziModule } from 'src/3party-client/imobzi/imobzi.module';
 import { RepositoryModule } from 'src/repository/repository.module';
 
 @Module({

@@ -1,6 +1,6 @@
 import { CreateOrganizationDTO } from 'src/repository/organizations/dtos/create-organization.dtos';
 import * as crypto from 'node:crypto';
-import { NotFoundException } from '@nestjs/common';
+import { NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { inMemoryOrganizationsRepositoryMock } from './inMemoryOrganizationsRepository.mock';
 import { Organization } from 'src/repository/organizations/entities/organization.entity';
 import { OrganizationsRepository } from 'src/repository/organizations/organizations.repository';
@@ -8,7 +8,11 @@ import { OrganizationsRepository } from 'src/repository/organizations/organizati
 export class InMemoryOrganizationsRepository implements Partial<OrganizationsRepository> {
   public items: Organization[] = inMemoryOrganizationsRepositoryMock;
 
-  async create(data: CreateOrganizationDTO) {
+  async create(data: CreateOrganizationDTO): Promise<Organization> {
+    const findExistingCNPJ = this.items.find((org) => org.cnpj === data.cnpj);
+    if (findExistingCNPJ) {
+      throw new NotAcceptableException(`CNPJ ${data.cnpj} already exisits at company: ${findExistingCNPJ.name}`);
+    }
     data.id = crypto.randomInt(1, 1000);
     this.items.push(data);
     return data;

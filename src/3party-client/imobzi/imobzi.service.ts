@@ -3,9 +3,9 @@ import { BuildingsService } from 'src/repository/buildings/buildings.service';
 import { CreateInvoiceDTO } from 'src/repository/invoices/dtos/create-invoice.dtos';
 import { CreateInvoiceItemDTO } from 'src/repository/invoices/invoice-items/dtos/create-invoice.dtos';
 import { LeasesService } from 'src/repository/leases/leases.service';
-import { OrganizationsService } from 'src/repository/organizations/organizations.service';
-import { PeopleService } from 'src/repository/people/people.service';
-import { PropertiesService } from 'src/repository/properties/properties.service';
+import { OrganizationsController } from 'src/repository/organizations/organizations.controller';
+import { PeopleController } from 'src/repository/people/people.controller';
+import { PropertiesController } from 'src/repository/properties/properties.controller';
 import { BuildingDTO } from './imobzi-buildings/imobziBuildings.dtos';
 import { ImobziBuildingsService } from './imobzi-buildings/imobziBuildings.service';
 import { ContactDTO } from './imobzi-contacts/imobziContacts.dtos';
@@ -22,10 +22,10 @@ import { ImobziPropertiesService } from './imobzi-properties/imobziProperties.se
 export class ImobziService {
   constructor(
     private readonly leasesService: LeasesService,
-    private readonly propertiesService: PropertiesService,
-    private readonly organizationsService: OrganizationsService,
+    private readonly propertiesController: PropertiesController,
+    private readonly organizationsController: OrganizationsController,
     private readonly buildingsService: BuildingsService,
-    private readonly peopleService: PeopleService,
+    private readonly peopleController: PeopleController,
     private readonly imobziPeopleService: ImobziPeopleService,
     private readonly imobziOrganizationsService: ImobziOrganizationsService,
     private readonly imobziBuildingsService: ImobziBuildingsService,
@@ -37,7 +37,7 @@ export class ImobziService {
   async updatePerson(contactData: ContactDTO) {
     try {
       const personFromImobzi = await this.imobziPeopleService.getRequiredPersonDataToDb(contactData.contact_id);
-      await this.peopleService.upsert(personFromImobzi);
+      await this.peopleController.upsert(personFromImobzi);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -47,7 +47,7 @@ export class ImobziService {
       const organizationFromImobzi = await this.imobziOrganizationsService.getRequiredOrganizationDataToDb(
         contactData.contact_id,
       );
-      await this.organizationsService.upsert(organizationFromImobzi);
+      await this.organizationsController.upsert(organizationFromImobzi);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -65,7 +65,7 @@ export class ImobziService {
   async updateProperty(property: Partial<PropertyDTO>) {
     try {
       const propertyFromImobzi = await this.imobziPropertiesService.getRequiredPropertyDataToDb(property.db_id);
-      await this.propertiesService.upsert(propertyFromImobzi);
+      await this.propertiesController.upsert(propertyFromImobzi);
     } catch (error) {
       throw new Error(error.message);
     }

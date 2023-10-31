@@ -1,7 +1,8 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
+import { CreateOwnerDto } from 'src/repository/owners/dto/create-owner.dto';
 import { CreatePropertyDTO } from 'src/repository/properties/dtos/create-property.dtos';
-import { OwnersCreateDTO } from 'src/repository/properties/owners/OwnerCreate.dtos';
+
 import { imobziParams, imobziUrls } from '../imobzi-urls-params/imobzi.urls';
 import { ImobziPropertiesDTO } from './imobziProperties.dtos';
 import { ImobziPropertyOwnerDTO } from './imobziPropertyDetails.dtos';
@@ -40,7 +41,7 @@ export class ImobziPropertiesService {
     }
   }
 
-  getRequiredPropertyOwnersToDb(owners: Partial<ImobziPropertyOwnerDTO>[]): OwnersCreateDTO[] {
+  getRequiredPropertyOwnersToDb(owners: Partial<ImobziPropertyOwnerDTO>[]): CreateOwnerDto[] {
     return owners.map((owner) => {
       let id_owner_person_imobzi: string;
       let id_owner_organization_imobzi: string;

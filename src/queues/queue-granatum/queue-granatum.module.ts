@@ -8,9 +8,9 @@ import { QueueGranatumController } from './queue-granatum.controller';
 import { QueueGranatumService } from './queue-granatum.service';
 import { QueueGranatumConsumer } from './queue-granatum.consumer';
 import { QueueGranatumProducer } from './queue-granatum.producer';
-import { GranatumModule } from 'src/granatum/granatum.module';
+import { GranatumModule } from 'src/3party-client/granatum/granatum.module';
 import { RepositoryModule } from 'src/repository/repository.module';
-import { GranatumService } from 'src/granatum/granatum.service';
+import { GranatumService } from 'src/3party-client/granatum/granatum.service';
 import { InvoicesService } from 'src/repository/invoices/invoices.service';
 
 @Module({

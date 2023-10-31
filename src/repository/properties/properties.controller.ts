@@ -1,27 +1,41 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { CreatePropertyDTO } from './dtos/create-property.dtos';
-import { PropertiesService } from './properties.service';
+import { Property } from './entities/property.entity';
+import { PropertiesRepository } from './properties.repository';
 
-@Controller('properties')
+@Controller()
 export class PropertiesController {
-  constructor(private readonly propertiesService: PropertiesService) {}
+  constructor(private readonly propertiesRepository: PropertiesRepository) {}
 
-  @Post()
-  async create(@Body() data: CreatePropertyDTO) {
-    return await this.propertiesService.create(data);
+  async create(data: CreatePropertyDTO): Promise<Property> {
+    try {
+      return await this.propertiesRepository.create(data);
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
-  @Get()
-  async findAll() {
-    return await this.propertiesService.findAll();
-  }
-  @Get(':id')
-  async findById(@Param('id') id: string) {
-    return await this.propertiesService.findById(id);
+  async findAll(): Promise<Property[]> {
+    try {
+      return this.propertiesRepository.findAll();
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
-  @Put(':id')
-  async update(@Param('id') id: string, @Body() data: CreatePropertyDTO) {
-    return await this.propertiesService.upsert(data);
+  async findById(id_imobzi: string): Promise<Property> {
+    try {
+      return await this.propertiesRepository.findById(id_imobzi);
+    } catch (error) {
+      throw new Error(error);
+    }
+  }
+
+  async upsert(data: CreatePropertyDTO): Promise<Property> {
+    try {
+      return await this.propertiesRepository.upsert(data);
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 }

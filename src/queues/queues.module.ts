@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ImobziModule } from 'src/imobzi/imobzi.module';
+import { ImobziModule } from 'src/3party-client/imobzi/imobzi.module';
 import { FailedQueueJobsModule } from 'src/repository/failed-queue-jobs/failed-queue-jobs.module';
 import { FailedQueueJobsService } from 'src/repository/failed-queue-jobs/failed-queue-jobs.service';
 import { RepositoryModule } from 'src/repository/repository.module';

@@ -9,6 +9,9 @@ export class PropertiesRepository {
 
   async create(data: CreatePropertyDTO): Promise<Property> {
     try {
+      const existingProperty = await this.findById(data.id_imobzi);
+      if (existingProperty) throw new NotFoundException(`Property with id ${data.id_imobzi} already exists`);
+
       return await this.prisma.property.create({ data: { ...data, owners: { createMany: { data: data.owners } } } });
     } catch (error) {
       throw new Error(error);

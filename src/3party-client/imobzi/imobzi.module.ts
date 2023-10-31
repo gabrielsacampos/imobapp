@@ -13,6 +13,7 @@ import { ImobziLeasesService } from './imobzi-leases/imobziLeases.service';
 import { ImobziOrganizationsModule } from './imobzi-organizations/imobziOrganizations.module';
 import { ImobziPeopleModule } from './imobzi-people/imobziPeople.module';
 import { ImobziPropertiesModule } from './imobzi-properties/imobziProperties.module';
+
 import { ImobziPropertiesService } from './imobzi-properties/imobziProperties.service';
 import { ImobziController } from './imobzi.controllers';
 import { ImobziService } from './imobzi.service';

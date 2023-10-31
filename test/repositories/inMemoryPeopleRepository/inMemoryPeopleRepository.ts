@@ -9,6 +9,12 @@ export class InMemoryPeopleRepository implements Partial<PeopleRepository> {
   public items: Person[] = inMemoryPeopleRepositoryMock;
 
   async create(data: CreatePersonDTO) {
+    const existingPerson = this.items.find((person) => person.id_imobzi === data.id_imobzi);
+    const existingCPF = this.items.find((person) => person.cpf === data.cpf);
+
+    if (existingPerson) throw new NotAcceptableException(`Person id_imobzi: ${data.id_imobzi} already exists`);
+    if (existingCPF) throw new NotAcceptableException(`Person cpf: ${data.cpf} already exists`);
+
     data.id = crypto.randomInt(1, 1000);
     this.items.push(data);
     return data;

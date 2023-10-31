@@ -1,7 +1,6 @@
 import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma-client/prisma.service';
 import { CreatePersonDTO } from './dtos/create-person.dtos';
-import { UpdatePersonDTO } from './dtos/update-person.dtos';
 import { Person } from './entities/person.entity';
 
 @Injectable()
@@ -43,21 +42,25 @@ export class PeopleRepository {
   }
 
   async create(data: CreatePersonDTO): Promise<Person> {
-    const existingPerson = await this.findById(data.id_imobzi);
-    const existingCPF = await this.findExistingCPF(data.cpf);
+    try {
+      const existingPerson = await this.findById(data.id_imobzi);
+      const existingCPF = await this.findExistingCPF(data.cpf);
 
-    if (existingPerson) throw new NotAcceptableException(`Person id_imobzi: ${data.id_imobzi} already exists`);
-    if (existingCPF) throw new NotAcceptableException(`Person cpf: ${data.cpf} already exists`);
+      if (existingPerson) throw new NotAcceptableException(`Person id_imobzi: ${data.id_imobzi} already exists`);
+      if (existingCPF) throw new NotAcceptableException(`Person cpf: ${data.cpf} already exists`);
 
-    return this.prisma.person.create({ data });
+      return this.prisma.person.create({ data });
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   async findAll(): Promise<Person[]> {
-    return await this.prisma.person.findMany();
-  }
-
-  async update(id_imobzi: string, data: UpdatePersonDTO): Promise<Person> {
-    return await this.prisma.person.update({ where: { id_imobzi }, data });
+    try {
+      return await this.prisma.person.findMany();
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   async upsert(data: CreatePersonDTO): Promise<Person> {

@@ -2,11 +2,11 @@ import { InjectQueue } from '@nestjs/bull';
 import { Injectable } from '@nestjs/common';
 import { Queue } from 'bull';
 import { InvoicesService } from 'src/repository/invoices/invoices.service';
-import { ImobziBuildingsService } from '../../imobzi/imobzi-buildings/imobziBuildings.service';
-import { ImobziContactsService } from '../../imobzi/imobzi-contacts/imobziContacts.service';
-import { ImobziInvoicesService } from '../../imobzi/imobzi-invoices/imobziInvoices.service';
-import { ImobziLeasesService } from '../../imobzi/imobzi-leases/imobziLeases.service';
-import { ImobziPropertiesService } from '../../imobzi/imobzi-properties/imobziProperties.service';
+import { ImobziBuildingsService } from 'src/3party-client/imobzi/imobzi-buildings/imobziBuildings.service';
+import { ImobziContactsService } from 'src/3party-client/imobzi/imobzi-contacts/imobziContacts.service';
+import { ImobziInvoicesService } from 'src/3party-client/imobzi/imobzi-invoices/imobziInvoices.service';
+import { ImobziLeasesService } from 'src/3party-client/imobzi/imobzi-leases/imobziLeases.service';
+import { ImobziPropertiesService } from 'src/3party-client/imobzi/imobzi-properties/imobziProperties.service';
 
 @Injectable()
 export class QueueImobziProducer {

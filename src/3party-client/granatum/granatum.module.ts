@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { RepositoryModule } from 'src/repository/repository.module';
-import { SharedModule } from '../shared.module';
+import { SharedModule } from '../../shared.module';
 import { GranatumAccountsModule } from './granatum-accounts/granatum-accounts.module';
 import { GranatumAccountsService } from './granatum-accounts/granatum-accounts.service';
 import { GranatumCategoriesModule } from './granatum-categories/granatumCategories.module';

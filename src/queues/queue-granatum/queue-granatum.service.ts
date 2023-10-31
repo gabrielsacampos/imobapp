@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { GranatumService } from 'src/granatum/granatum.service';
+import { GranatumService } from 'src/3party-client/granatum/granatum.service';
 import { InvoicesService } from 'src/repository/invoices/invoices.service';
 import { FetchDb } from './interfaces/imobziQueue.interface';
 import { QueueGranatumProducer } from './queue-granatum.producer';
@@ -24,6 +24,7 @@ export class QueueGranatumService {
       const groupedRevenues = this.granatumService.groupRevenues(revenues);
       await this.queueGranatumProducer.produce({ groupedItems, groupedOnlendings, groupedRevenues });
     } catch (error) {
+      console.log(error);
       throw new Error(error);
     }
   }
