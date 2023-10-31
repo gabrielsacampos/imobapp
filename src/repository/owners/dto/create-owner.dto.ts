@@ -1,7 +1,8 @@
 import { NotAcceptableException } from '@nestjs/common';
 import { ValidateIf } from 'class-validator';
+import { Owner } from '../entities/owner.entity';
 
-export class OwnersCreateDTO {
+export class CreateOwnerDto extends Owner {
   @ValidateIf((o) => {
     if (!o.id_owner_person_imobzi && !o.id_owner_organization_imobzi) {
       throw new NotAcceptableException(
@@ -22,7 +23,7 @@ export class OwnersCreateDTO {
     }
     return true;
   })
-  id_owner_person_imobzi: string;
-  id_owner_organization_imobzi: string;
+  id_owner_person_imobzi: string | null;
+  id_owner_organization_imobzi: string | null;
   share: number;
 }

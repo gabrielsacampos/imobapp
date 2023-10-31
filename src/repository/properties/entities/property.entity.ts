@@ -1,6 +1,7 @@
 export class Property {
+  id?: number;
   id_imobzi: string;
-  unity?: string;
+  unity: string;
   block?: string;
   type: string;
   active: boolean;

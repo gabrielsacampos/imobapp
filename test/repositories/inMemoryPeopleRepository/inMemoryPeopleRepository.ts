@@ -2,17 +2,28 @@ import { CreatePersonDTO } from 'src/repository/people/dtos/create-person.dtos';
 import * as crypto from 'node:crypto';
 import { Person } from 'src/repository/people/entities/person.entity';
 import { inMemoryPeopleRepositoryMock } from './inMemoryPeopleRepository.mocks';
-import { NotAcceptableException } from '@nestjs/common';
+import { NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { PeopleRepository } from 'src/repository/people/people.repository';
 
 export class InMemoryPeopleRepository implements Partial<PeopleRepository> {
   public items: Person[] = inMemoryPeopleRepositoryMock;
+
+  async create(data: CreatePersonDTO) {
+    data.id = crypto.randomInt(1, 1000);
+    this.items.push(data);
+    return data;
+  }
+
+  async findAll() {
+    return this.items;
+  }
+
   async findExistingCPF(cpf: string) {
     try {
-      const found = await this.items.find((person) => person.cpf === cpf);
+      const found = this.items.find((person) => person.cpf === cpf);
 
       if (!found) {
-        throw new NotAcceptableException(`Person cpf: ${cpf} not found`);
+        throw new NotFoundException(`Person cpf: ${cpf} not found`);
       }
 
       return found;
@@ -32,16 +43,6 @@ export class InMemoryPeopleRepository implements Partial<PeopleRepository> {
     } catch (error) {
       throw new Error(error);
     }
-  }
-
-  async create(data: CreatePersonDTO) {
-    data.id = crypto.randomInt(1, 1000);
-    this.items.push(data);
-    return data;
-  }
-
-  async findAll() {
-    return this.items;
   }
 
   async upsert(data: CreatePersonDTO) {

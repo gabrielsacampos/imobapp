@@ -1,87 +1,43 @@
-import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
-import { PrismaService } from 'src/prisma-client/prisma.service';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePropertyDTO } from './dtos/create-property.dtos';
-import { PropertyCreateDTO } from './propertiesCreate.dtos';
-
-import { PropertiesUpdateDTO } from './propertiesUpdate.dtos';
+import { PropertiesRepository } from './properties.repository';
 
 @Injectable()
-export class PropertiesService {
-  constructor(private prisma: PrismaService) {}
+export class PropertiesService implements Partial<PropertiesService> {
+  constructor(private readonly propertiesRepository: PropertiesRepository) {}
 
-  async create(data: PropertyCreateDTO) {
-    const existsIdProperty = await this.prisma.property.findUnique({
-      where: { id_imobzi: data.id_imobzi },
-      include: { building: { select: { name: true } } },
-    });
+  async create(data: CreatePropertyDTO) {
+    try {
+      const existingProperty = await this.findById(data.id_imobzi);
+      if (existingProperty) throw new NotFoundException(`Property with id ${data.id_imobzi} already exists`);
 
-    if (existsIdProperty) {
-      throw new NotAcceptableException(
-        `ID: ${data.id_imobzi} already registered to property: ${existsIdProperty.unity} - ${existsIdProperty.building.name} `,
-      );
+      return await this.propertiesRepository.create(data);
+    } catch (error) {
+      throw new Error(error);
     }
-
-    await this.prisma.property.create({ data: { ...data, owners: { createMany: { data: data.owners } } } });
-    return { message: `Property #${data.id_imobzi} created` };
   }
 
   async findAll() {
-    return await this.prisma.property.findMany({
-      include: {
-        building: {
-          select: {
-            name: true,
-          },
-        },
-      },
-    });
+    try {
+      return this.propertiesRepository.findAll();
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   async findById(id_imobzi: string) {
-    const found = await this.prisma.property.findUnique({
-      where: { id_imobzi },
-      include: {
-        building: {
-          select: { name: true },
-        },
-      },
-    });
-    if (!found) {
-      throw new NotFoundException(`ID: ${id_imobzi} not found at properties`);
+    try {
+      return await this.propertiesRepository.findById(id_imobzi);
+    } catch (error) {
+      throw new Error(error);
     }
-    return found;
-  }
-
-  async update(id_imobzi: string, data: PropertiesUpdateDTO) {
-    await this.prisma.property.update({
-      where: { id_imobzi },
-      data: {
-        ...data,
-        owners: {
-          deleteMany: [{ id_property_imobzi: id_imobzi }],
-          createMany: { data: data.owners },
-        },
-      },
-    });
-    return { message: `Property #${id_imobzi} updated` };
   }
 
   async upsert(data: CreatePropertyDTO) {
-    await this.prisma.property.upsert({
-      where: {
-        id_imobzi: data.id_imobzi,
-      },
-      update: {
-        ...data,
-        owners: {
-          deleteMany: {},
-          createMany: { data: data.owners },
-        },
-      },
-      create: {
-        ...data,
-        owners: { createMany: { data: data.owners } },
-      },
-    });
+    try {
+      await this.propertiesRepository.upsert(data);
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 }

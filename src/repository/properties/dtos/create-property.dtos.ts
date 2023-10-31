@@ -1,8 +1,8 @@
 import { NotAcceptableException } from '@nestjs/common';
 import { Type } from 'class-transformer';
 import { IsNotEmpty, ValidateIf, ValidateNested } from 'class-validator';
+import { CreateOwnerDto } from 'src/repository/owners/dto/create-owner.dto';
 import { Property } from '../entities/property.entity';
-import { OwnersCreateDTO } from '../owners/OwnerCreate.dtos';
 
 export class CreatePropertyDTO extends Property {
   @IsNotEmpty()
@@ -33,7 +33,7 @@ export class CreatePropertyDTO extends Property {
   block?: string;
 
   @ValidateIf((o) => {
-    const sumShare = o.owners.reduce((acc: number, curr: OwnersCreateDTO) => {
+    const sumShare = o.owners.reduce((acc: number, curr: CreateOwnerDto) => {
       acc += curr.share;
       return acc;
     }, 0);
@@ -51,6 +51,6 @@ export class CreatePropertyDTO extends Property {
     return true;
   })
   @ValidateNested()
-  @Type(() => OwnersCreateDTO)
-  owners: OwnersCreateDTO[];
+  @Type(() => CreateOwnerDto)
+  owners: CreateOwnerDto[];
 }

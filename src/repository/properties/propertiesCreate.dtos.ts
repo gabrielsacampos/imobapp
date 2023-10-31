@@ -1,9 +1,10 @@
 import { NotAcceptableException } from '@nestjs/common';
 import { Type } from 'class-transformer';
 import { IsNotEmpty, ValidateIf, ValidateNested } from 'class-validator';
+import { Property } from './entities/property.entity';
 import { OwnersCreateDTO } from './owners/OwnerCreate.dtos';
 
-export class PropertyCreateDTO {
+export class CreatePropertyDTO extends Property {
   @IsNotEmpty()
   id_imobzi: string;
 
