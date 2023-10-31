@@ -1,79 +1,43 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from 'src/prisma-client/prisma.service';
+import { Injectable, NotAcceptableException } from '@nestjs/common';
 import { CreatePersonDTO } from './dtos/create-person.dtos';
-import { UpdatePersonDTO } from './dtos/update-person.dtos';
+import { Person } from './entities/person.entity';
+import { PeopleRepository } from './people.repository';
 
 @Injectable()
-export class PeopleService {
-  constructor(private prisma: PrismaService) {}
+export class PeopleService implements Partial<PeopleRepository> {
+  constructor(private readonly peopleRepository: PeopleRepository) {}
 
-  async create(data: CreatePersonDTO) {
-    const existsIdPerson = await this.prisma.person.findFirst({
-      where: { id_imobzi: data.id_imobzi },
-    });
-
-    if (existsIdPerson) {
-      throw new NotFoundException(`ID: ${existsIdPerson.id} already registered to person: ${existsIdPerson.fullname}`);
-    }
-
-    const existsCpfPerson = await this.prisma.person.findFirst({
-      where: {
-        cpf: data.cpf,
-      },
-    });
-
-    if (existsCpfPerson) {
-      throw new NotFoundException(
-        `CPF: ${existsIdPerson.cpf} already registered to person: ${existsIdPerson.fullname}`,
-      );
-    }
-
-    return this.prisma.person.create({ data });
-  }
-
-  async findAll() {
-    const arrayPeople = await this.prisma.person.findMany();
-    return arrayPeople.map((element) => {
-      const id = element.id.toString();
-      delete element.id;
-      return { ...element, id };
-    });
-  }
-
-  async findById(id_imobzi: string) {
-    const found = await this.prisma.person.findUnique({
-      where: { id_imobzi },
-    });
-
-    if (!found) {
-      throw new NotFoundException(`ID: ${id_imobzi} not found at people`);
-    }
-    return found;
-  }
-
-  async update(id_imobzi: string, data: UpdatePersonDTO) {
-    const personExists = await this.prisma.person.findFirst({
-      where: { id_imobzi },
-    });
-
-    if (!personExists) {
-      throw new NotFoundException(`ID: ${id_imobzi} does not exists at People`);
-    }
-
-    return await this.prisma.person.update({ where: { id_imobzi }, data });
-  }
-
-  async upsert(data: CreatePersonDTO): Promise<void> {
+  async findExistingCPF(cpf: string) {
     try {
-      await this.prisma.person.upsert({
-        where: {
-          id_imobzi: data.id_imobzi,
-        },
-        update: data,
-        create: data,
-      });
+      return this.peopleRepository.findExistingCPF(cpf);
     } catch (error) {
       throw new Error(error);
     }
+  }
+
+  async findById(id_imobzi: string) {
+    try {
+      return await this.peopleRepository.findById(id_imobzi);
+    } catch (error) {
+      throw new Error();
+    }
+  }
+
+  async create(data: CreatePersonDTO): Promise<Person> {
+    const existingPerson = await this.findById(data.id_imobzi);
+    const existingCPF = await this.findExistingCPF(data.cpf);
+
+    if (existingPerson) throw new NotAcceptableException(`Person id_imobzi: ${data.id_imobzi} already exists`);
+    if (existingCPF) throw new NotAcceptableException(`Person cpf: ${data.cpf} already exists`);
+
+    return this.peopleRepository.create(data);
+  }
+
+  async findAll(): Promise<Person[]> {
+    return await this.peopleRepository.findAll();
+  }
+
+  async upsert(data: CreatePersonDTO): Promise<Person> {
+    return await this.peopleRepository.upsert(data);
   }
 }

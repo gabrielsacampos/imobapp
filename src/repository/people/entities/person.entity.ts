@@ -16,4 +16,6 @@ export class Person {
   pets?: number;
   kind_of_pet?: string;
   anual_revenue?: number;
+  created_at?: Date;
+  updated_at?: Date;
 }
