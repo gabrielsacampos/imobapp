@@ -8,4 +8,6 @@ export class Organization {
   phone: string;
   email: string;
   address?: string;
+  created_at?: Date;
+  updated_at?: Date;
 }

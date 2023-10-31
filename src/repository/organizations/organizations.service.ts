@@ -1,88 +1,44 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from 'src/prisma-client/prisma.service';
+import { Injectable, NotAcceptableException } from '@nestjs/common';
 import { CreateOrganizationDTO } from './dtos/create-organization.dtos';
-import { UpdateOrganizationDTO } from './dtos/update-organization.dtos';
+import { Organization } from './entities/organization.entity';
+import { OrganizationsRepository } from './organizations.repository';
 
 @Injectable()
-export class OrganizationsService {
-  constructor(private prisma: PrismaService) {}
+export class OrganizationsService implements Partial<OrganizationsRepository> {
+  constructor(private readonly organizationsRepository: OrganizationsRepository) {}
 
-  async create(data: CreateOrganizationDTO) {
+  async findExistingCNPJ(cnpj: string): Promise<Organization> {
     try {
-      const existsIdOrganization = await this.prisma.organization.findFirst({
-        where: { id_imobzi: data.id_imobzi },
-      });
-
-      if (existsIdOrganization) {
-        throw new NotFoundException(
-          `ID: ${data.id_imobzi} already registered at company: ${existsIdOrganization.name}`,
-        );
-      }
-
-      const existsCNPJOrganiation = await this.prisma.organization.findFirst({
-        where: {
-          cnpj: data.cnpj,
-        },
-      });
-
-      if (existsCNPJOrganiation) {
-        throw new NotFoundException(`CNPJ: ${data.cnpj} already registered at company: ${existsCNPJOrganiation.name}`);
-      }
-
-      return await this.prisma.organization.create({ data });
+      return this.organizationsRepository.findExistingCNPJ(cnpj);
     } catch (error) {
       throw new Error(error);
     }
   }
 
-  async findById(id_imobzi: string) {
+  async create(data: CreateOrganizationDTO): Promise<Organization> {
     try {
-      const found = await this.prisma.organization.findUnique({
-        where: { id_imobzi },
-      });
-
-      if (!found) {
-        throw new NotFoundException(`ID: ${id_imobzi} not found at organizations`);
-      }
-      return found;
+      const findExistingCNPJ = await this.findExistingCNPJ(data.cnpj);
+      if (findExistingCNPJ)
+        throw new NotAcceptableException(`CNPJ ${data.cnpj} already exisits at company: ${findExistingCNPJ.name}`);
+      return this.organizationsRepository.create(data);
     } catch (error) {
       throw new Error(error);
     }
   }
 
-  async findAll() {
+  async upsert(data: CreateOrganizationDTO): Promise<Organization> {
     try {
-      return await this.prisma.organization.findMany();
+      return this.organizationsRepository.upsert(data);
     } catch (error) {
       throw new Error(error);
     }
   }
 
-  async update(id_imobzi: string, data: UpdateOrganizationDTO) {
-    try {
-      const found = await this.prisma.organization.findFirst({
-        where: { id_imobzi },
-      });
-
-      if (!found) {
-        throw new NotFoundException(`ID: ${id_imobzi} not found at organization`);
-      }
-
-      return await this.prisma.organization.update({ where: { id_imobzi }, data });
-    } catch (error) {
-      throw new Error(error);
-    }
+  async findById(id_imobzi: string): Promise<Organization> {
+    return this.organizationsRepository.findById(id_imobzi);
   }
 
-  async upsert(data: CreateOrganizationDTO) {
-    try {
-      await this.prisma.organization.upsert({
-        where: { id_imobzi: data.id_imobzi },
-        create: data,
-        update: data,
-      });
-    } catch (error) {
-      throw new Error(error);
-    }
+  async findAll(): Promise<Organization[]> {
+    return this.organizationsRepository.findAll();
   }
 }

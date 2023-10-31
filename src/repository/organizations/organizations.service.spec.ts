@@ -1,139 +1,95 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PrismaService } from 'src/prisma-client/prisma.service';
+import { InMemoryOrganizationsRepository } from '../../../test/repositories/inMemoryOrganizationsRepository/inMemoryOrganizationsRepository';
+import { inMemoryOrganizationsRepositoryMock } from '../../../test/repositories/inMemoryOrganizationsRepository/inMemoryOrganizationsRepository.mock';
+import { OrganizationsRepository } from './organizations.repository';
 import { OrganizationsService } from './organizations.service';
 import { CreateOrganizationDTO } from './dtos/create-organization.dtos';
-import { Organization } from './entities/organization.entity';
-import { UpdateOrganizationDTO } from './dtos/update-organization.dtos';
-
-const organizationsOnDbMock: Partial<Organization[]> = [
-  {
-    cnpj: '1232434-09',
-    email: 'someemail@gmail.com',
-    id_imobzi: '1234',
-    id_person_representative: '9876554',
-    name: 'The Company',
-    phone: '21 00987-9876',
-    representative_type: 'Adm',
-    address: 'The street',
-  },
-  {
-    cnpj: '1232542-09',
-    email: 'onemail@gmail.com',
-    id_imobzi: '10984',
-    id_person_representative: '91236554',
-    name: 'The Co.',
-    phone: '21 00222-9876',
-    representative_type: 'Adm',
-    address: 'Avenue',
-  },
-];
-
-const existsOrganization: CreateOrganizationDTO = {
-  cnpj: '1232542-09',
-  email: 'onemail@gmail.com',
-  id_imobzi: '10984',
-  id_person_representative: '91236554',
-  name: 'The Co.',
-  phone: '21 00222-9876',
-  representative_type: 'Adm',
-  address: 'Avenue',
-};
-
-const newOrganization: CreateOrganizationDTO = {
-  cnpj: '123999-09',
-  email: 'otheronw@gmail.com',
-  id_imobzi: '10984',
-  id_person_representative: '91236554',
-  name: 'The Other.',
-  phone: '21 00222-1176',
-  representative_type: 'Adm',
-  address: 'Avenue',
-};
 
 describe('OrganizationsService', () => {
   let service: OrganizationsService;
-  let prismaMock: {
-    organization: {
-      findFirst: jest.Mock;
-      findMany: jest.Mock;
-      create: jest.Mock;
-      update: jest.Mock;
-      upsert: jest.Mock;
-      $queryRaw: jest.Mock;
-      findUnique: jest.Mock;
-    };
-  };
+  let inMemoryOrganizationsRepository: InMemoryOrganizationsRepository;
 
+  // ignore error from others methods to do not break test
+  const skipeNoNeededErrors = () => {
+    const spyFindById = jest.spyOn(inMemoryOrganizationsRepository, 'findById');
+    spyFindById.mockReturnValue(false as any);
+    const spyFindExistingCNPJ = jest.spyOn(inMemoryOrganizationsRepository, 'findExistingCNPJ');
+    spyFindExistingCNPJ.mockReturnValue(false as any);
+  };
   beforeEach(async () => {
-    prismaMock = {
-      organization: {
-        findUnique: jest.fn(),
-        findFirst: jest.fn(),
-        findMany: jest.fn(),
-        create: jest.fn(),
-        update: jest.fn(),
-        upsert: jest.fn(),
-        $queryRaw: jest.fn(),
-      },
-    };
+    inMemoryOrganizationsRepository = new InMemoryOrganizationsRepository();
 
     const module: TestingModule = await Test.createTestingModule({
-      providers: [OrganizationsService, { provide: PrismaService, useValue: prismaMock }],
+      providers: [
+        OrganizationsService,
+        { provide: OrganizationsRepository, useValue: inMemoryOrganizationsRepository },
+      ],
     }).compile();
 
     service = module.get<OrganizationsService>(OrganizationsService);
   });
 
-  test('service should be defined', () => {
+  it('service should be defined', () => {
     expect(service).toBeDefined();
   });
 
-  test('service.create > should throw error if organization already exists', async () => {
-    prismaMock.organization.findFirst.mockResolvedValue({});
-    try {
-      await service.create(existsOrganization);
-    } catch (error) {
-      expect(error).toBeDefined();
-    }
+  it('findAll > should return array of organizations', async () => {
+    const result = await service.findAll();
+    expect(result).toBe(inMemoryOrganizationsRepositoryMock);
   });
 
-  test('service.create > should create a new organization and return it', async () => {
-    prismaMock.organization.create.mockResolvedValue(newOrganization);
-    const result = await service.create(newOrganization);
-    expect(result).toBe(newOrganization);
+  it('findUnique > existgin id_imobzi should return a organization', async () => {
+    const randomPersonToTest = inMemoryOrganizationsRepositoryMock[4];
+    const randomPersonId = randomPersonToTest.id_imobzi;
+    const result = await service.findById(randomPersonId);
+    const organization = inMemoryOrganizationsRepositoryMock.find(
+      (organization) => organization.id_imobzi === randomPersonId,
+    );
+    expect(result).toBe(organization);
   });
 
-  test('service.findAll > should call prisma.findAll()', async () => {
-    prismaMock.organization.findMany.mockResolvedValue([]);
-    await service.findAll();
-    expect(prismaMock.organization.findMany).toHaveBeenCalled();
+  it('findUnique > NOT exsting id_imobzi should NOT return a organization', async () => {
+    await expect(service.findById('10')).rejects.toThrow();
   });
 
-  test('service.findById > should call prisma findUnique', async () => {
-    prismaMock.organization.findUnique.mockResolvedValue({});
-    await service.findById('abc');
-    expect(prismaMock.organization.findUnique).toHaveBeenCalled();
+  it('findExistingCNPJ > existgin cpf should return a organization', async () => {
+    const randomPersonToTest = inMemoryOrganizationsRepositoryMock[4];
+    const randomPersonCPF = randomPersonToTest.cnpj;
+    const organization = inMemoryOrganizationsRepositoryMock.find(
+      (organization) => organization.cnpj === randomPersonCPF,
+    );
+    const result = await service.findExistingCNPJ(randomPersonCPF);
+    expect(result).toBe(organization);
   });
 
-  test('service.update > should throw error if organization do not exists', async () => {
-    prismaMock.organization.findFirst.mockResolvedValue(null);
-    try {
-      await service.update(existsOrganization.id_imobzi, existsOrganization);
-    } catch (error) {
-      expect(error).toBeDefined();
-    }
-  });
-
-  test('service.update > should update organization and return it', async () => {
-    const updatedOrganization: UpdateOrganizationDTO = {
-      ...organizationsOnDbMock[0],
+  it('create > should create and return the new organization', async () => {
+    const newPerson: CreateOrganizationDTO = {
+      id_imobzi: '000000000000',
+      name: 'some name',
+      id_person_representative: '1231234',
+      cnpj: '12.000.222.00-00',
+      representative_type: '',
+      phone: '',
+      email: '',
     };
-    updatedOrganization.email = 'newemail@gmail.com';
 
-    prismaMock.organization.findFirst.mockResolvedValue(organizationsOnDbMock[0]);
-    prismaMock.organization.update.mockResolvedValue(updatedOrganization);
+    skipeNoNeededErrors();
+    await expect(service.create(newPerson)).resolves.not.toThrow();
+    expect(inMemoryOrganizationsRepository.items).toEqual(expect.arrayContaining([expect.objectContaining(newPerson)]));
+  });
 
-    const result = await service.update(existsOrganization.id_imobzi, updatedOrganization);
-    expect(result).toEqual(updatedOrganization);
+  it('create > exsting id_imobzi || cpf should NOT create a organization', async () => {
+    const randomPersonToTest = inMemoryOrganizationsRepositoryMock[4];
+    await expect(service.create(randomPersonToTest)).rejects.toThrow();
+  });
+
+  it('upsert > create organization or update if not exists', async () => {
+    skipeNoNeededErrors();
+    const randomPersonToTest = inMemoryOrganizationsRepositoryMock[4];
+    randomPersonToTest.email = 'thaisnew@gmail.com';
+    await expect(service.upsert(randomPersonToTest)).resolves.not.toThrow();
+    expect(inMemoryOrganizationsRepository.items).toEqual(
+      expect.arrayContaining([expect.objectContaining(randomPersonToTest)]),
+    );
   });
 });
