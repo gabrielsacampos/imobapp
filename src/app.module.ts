@@ -12,9 +12,12 @@ import { UsersModule } from './repository/users/users.module';
 import { SharedModule } from './shared.module';
 import { HttpErrorFilter } from './shared/http-error.filter';
 import { LoggingInterceptor } from './shared/loggin.interceptor';
+import { MongooseModule } from '@nestjs/mongoose';
+import { InvoiceItemsModule } from './repository/invoice_items/invoice_items.module';
 
 @Module({
   imports: [
+    MongooseModule.forRoot('mongodb://localhost/nest'),
     ImobziModule,
     SharedModule,
     GranatumModule,
@@ -23,6 +26,7 @@ import { LoggingInterceptor } from './shared/loggin.interceptor';
     QueuesModule,
     QueueGranatumModule,
     QueuesModule,
+    InvoiceItemsModule,
   ],
   controllers: [AppController],
   providers: [
