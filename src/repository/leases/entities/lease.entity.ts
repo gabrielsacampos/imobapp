@@ -1,4 +1,5 @@
 export class Lease {
+  id?: number;
   id_imobzi: string;
   status: string;
   code_imobzi?: string;
