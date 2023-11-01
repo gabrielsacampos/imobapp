@@ -23,7 +23,7 @@ describe('OrganizationsController', () => {
     expect(controller).toBeDefined();
   });
 
-  it('should call create function ', async () => {
+  it('should be defined and call create function ', async () => {
     //mock
     const spy = jest.spyOn(organizationsRepository, 'create');
     spy.mockResolvedValue(true as any);
@@ -33,7 +33,7 @@ describe('OrganizationsController', () => {
     expect(organizationsRepository.create).toHaveBeenCalled();
   });
 
-  it('should call upsert function', async () => {
+  it('should be defined and call upsert function', async () => {
     //mock
     const spy = jest.spyOn(organizationsRepository, 'upsert');
     spy.mockResolvedValue(true as any);
@@ -43,7 +43,7 @@ describe('OrganizationsController', () => {
     expect(organizationsRepository.upsert).toHaveBeenCalled();
   });
 
-  it('should call function  ', async () => {
+  it('should be defined and call function  ', async () => {
     //mock
     const spy = jest.spyOn(organizationsRepository, 'findAll');
     spy.mockResolvedValue(true as any);

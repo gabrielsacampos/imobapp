@@ -1,29 +1,44 @@
 import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
-import { BuildingsService } from './buildings.service';
+import { BuildingsRepository } from './buildings.repository';
 import { CreateBuildingDTO } from './dtos/create-building.dtos';
-import { UpdateBuildingDTO } from './dtos/update-building.dtos';
 
 @Controller('buildings')
 export class BuildingsController {
-  constructor(private readonly buildingsService: BuildingsService) {}
+  constructor(private readonly buildingsRepository: BuildingsRepository) {}
 
   @Get()
   async findAll() {
-    return await this.buildingsService.findAll();
+    try {
+      return await this.buildingsRepository.findAll();
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   @Get(':id')
   async findById(@Param('id') id: string) {
-    return await this.buildingsService.findById(id);
+    try {
+      return await this.buildingsRepository.findById(id);
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   @Post()
   async create(@Body() data: CreateBuildingDTO) {
-    return await this.buildingsService.create(data);
+    try {
+      return await this.buildingsRepository.create(data);
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() data: UpdateBuildingDTO) {
-    return await this.buildingsService.update(id, data);
+  async upsert(@Param('id') id: string, @Body() data: CreateBuildingDTO) {
+    try {
+      return await this.buildingsRepository.upsert(data, id);
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 }
