@@ -1,4 +1,5 @@
 export class Invoice {
+  id?: number;
   id_imobzi: string;
   status: string;
   reference_start_at?: string;

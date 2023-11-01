@@ -1,28 +1,28 @@
 import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
-import { InvoicesService } from './invoices.service';
 import { CreateInvoiceDTO } from './dtos/create-invoice.dtos';
+import { InvoicesRepository } from './invoices.repository';
 
 @Controller('invoices')
 export class InvoicesController {
-  constructor(private readonly invoicesService: InvoicesService) {}
+  constructor(private readonly invoicesRepository: InvoicesRepository) {}
 
   @Post()
   async create(@Body() data: CreateInvoiceDTO) {
-    return await this.invoicesService.create(data);
+    return await this.invoicesRepository.create(data);
   }
 
   @Get()
   async findAll() {
-    return await this.invoicesService.findAll();
+    return await this.invoicesRepository.findAll();
   }
 
   @Get(':id')
   async findById(@Param('id') id: string) {
-    return await this.invoicesService.findById(id);
+    return await this.invoicesRepository.findById(id);
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() data: CreateInvoiceDTO) {
-    return await this.invoicesService.update(id, data);
+  async upsert(@Body() data: CreateInvoiceDTO) {
+    return await this.invoicesRepository.upsert(data);
   }
 }

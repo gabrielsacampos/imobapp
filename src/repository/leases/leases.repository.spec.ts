@@ -27,7 +27,7 @@ describe('LeasesRepository', () => {
     expect(result).toBe(inMemoryLeasesRepositoryMock);
   });
 
-  it('findUnique > existgin id_imobzi should return a lease', async () => {
+  it('findUnique > existing id_imobzi should return a lease', async () => {
     const randomLeaseToTest = inMemoryLeasesRepositoryMock[4];
     const randomPersonId = randomLeaseToTest.id_imobzi;
     const result = await repository.findById(randomPersonId);
@@ -48,7 +48,7 @@ describe('LeasesRepository', () => {
   });
 
   it('create > should create and return the new lease', async () => {
-    const newPerson: CreateLeaseDTO = {
+    const newLease: CreateLeaseDTO = {
       id_imobzi: '',
       duration: 0,
       fee: 0,
@@ -67,8 +67,8 @@ describe('LeasesRepository', () => {
       lease_items: [],
     };
 
-    await expect(repository.create(newPerson)).resolves.not.toThrow();
-    expect(inMemoryLeasesRepository.items).toEqual(expect.arrayContaining([expect.objectContaining(newPerson)]));
+    await expect(repository.create(newLease)).resolves.not.toThrow();
+    expect(inMemoryLeasesRepository.items).toEqual(expect.arrayContaining([expect.objectContaining(newLease)]));
   });
 
   it('upsert > create lease or update if not exists', async () => {
