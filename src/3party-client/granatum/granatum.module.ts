@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { RepositoryModule } from 'src/repository/repository.module';
 import { SharedModule } from '../../shared.module';
 import { GranatumAccountsModule } from './granatum-accounts/granatum-accounts.module';
 import { GranatumAccountsService } from './granatum-accounts/granatum-accounts.service';
@@ -24,7 +23,6 @@ import { GranatumService } from './granatum.service';
     GranatumCostCenterModule,
     GranatumClientsModule,
     GranatumSupliersModule,
-    RepositoryModule,
   ],
   controllers: [GranatumController],
   providers: [

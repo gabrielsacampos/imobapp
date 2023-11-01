@@ -31,18 +31,18 @@ export class InMemoryLeasesRepository implements Partial<LeasesRepository> {
   }
 
   async upsert(data: CreateLeaseDTO): Promise<Lease> {
-    const existingOrganizationIndex = this.items.findIndex((person) => person.id_imobzi === data.id_imobzi);
+    const existingLeaseIndex = this.items.findIndex((lease) => lease.id_imobzi === data.id_imobzi);
 
-    if (existingOrganizationIndex === -1) {
-      const personToCreate = data;
-      personToCreate.id = crypto.randomInt(1, 1000);
-      this.create(personToCreate);
-      return personToCreate;
+    if (existingLeaseIndex === -1) {
+      const leaseToCreate = data;
+      leaseToCreate.id = crypto.randomInt(1, 1000);
+      this.create(leaseToCreate);
+      return leaseToCreate;
     } else {
-      const existingOrganization = this.items[existingOrganizationIndex];
-      const existingOrganizationUpdated = data;
-      this.items[existingOrganizationIndex] = existingOrganizationUpdated;
-      return existingOrganization;
+      const existingLease = this.items[existingLeaseIndex];
+      const existingLeaseUpdated = data;
+      this.items[existingLeaseIndex] = existingLeaseUpdated;
+      return existingLease;
     }
   }
 }

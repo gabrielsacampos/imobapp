@@ -27,7 +27,7 @@ export class InMemoryPropertiesRepository implements Partial<PropertiesRepositor
 
   async findById(id_imobzi: string): Promise<Property> {
     try {
-      const found = this.items.find((property) => property.id_imobzi === id_imobzi);
+      const found = this.items.find((prop) => prop.id_imobzi === id_imobzi);
       if (!found) {
         throw new NotFoundException(`Person id_imozbi: ${id_imobzi} not found`);
       }
@@ -39,16 +39,16 @@ export class InMemoryPropertiesRepository implements Partial<PropertiesRepositor
   }
 
   async upsert(data: CreatePropertyDTO): Promise<Property> {
-    const existingPersonIndex = this.items.findIndex((property) => property.id_imobzi === data.id_imobzi);
+    const existingPropertyIndex = this.items.findIndex((prop) => prop.id_imobzi === data.id_imobzi);
 
-    if (existingPersonIndex === -1) {
-      const personToCreate = data;
-      return this.create(personToCreate);
+    if (existingPropertyIndex === -1) {
+      const propertyToCreate = data;
+      return this.create(propertyToCreate);
     } else {
-      const existingPerson = this.items[existingPersonIndex];
-      const existingPersonUpdated = data;
-      this.items[existingPersonIndex] = existingPersonUpdated;
-      return existingPerson;
+      const existingProperty = this.items[existingPropertyIndex];
+      const existingPropertyUpdated = data;
+      this.items[existingPropertyIndex] = existingPropertyUpdated;
+      return existingProperty;
     }
   }
 }

@@ -47,8 +47,9 @@ export class QueueImobziConsumer {
   async updateBuildings(job: Job<BuildingDTO>) {
     try {
       const building = job.data;
+      const id_imobzi = building.db_id.toString();
       await new Promise((resolve) => setTimeout(resolve, 5000));
-      await this.imobziService.updateBuilding(building);
+      await this.imobziService.updateBuilding(building, id_imobzi);
     } catch (error) {
       throw new Error(error);
     }

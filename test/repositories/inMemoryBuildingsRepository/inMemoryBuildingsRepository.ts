@@ -31,18 +31,18 @@ export class InMemoryBuildingsRepository implements Partial<BuildingsRepository>
   }
 
   async upsert(data: CreateBuildingDTO): Promise<Building> {
-    const existingOrganizationIndex = this.items.findIndex((person) => person.id_imobzi === data.id_imobzi);
+    const existingBuildingIndex = this.items.findIndex((building) => building.id_imobzi === data.id_imobzi);
 
-    if (existingOrganizationIndex === -1) {
+    if (existingBuildingIndex === -1) {
       const buildingToCreate = data;
       buildingToCreate.id = crypto.randomInt(1, 1000);
       this.create(buildingToCreate);
       return buildingToCreate;
     } else {
-      const existingOrganization = this.items[existingOrganizationIndex];
-      const existingOrganizationUpdated = data;
-      this.items[existingOrganizationIndex] = existingOrganizationUpdated;
-      return existingOrganization;
+      const existingBuilding = this.items[existingBuildingIndex];
+      const existingBuildingUpdated = data;
+      this.items[existingBuildingIndex] = existingBuildingUpdated;
+      return existingBuilding;
     }
   }
 }

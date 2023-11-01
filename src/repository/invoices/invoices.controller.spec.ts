@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from 'src/prisma-client/prisma.service';
-import { InMemoryInvoicesRepository } from '../../../test/repositories/inMemoryRepositoryInvoices/inMemoryInvoicesRepository';
-import { inMemoryInvoicesRepositoryMock } from '../../../test/repositories/inMemoryRepositoryInvoices/inMemoryRepositoryInvoices.mock';
+import { InMemoryInvoicesRepository } from '../../../test/repositories/inMemoryInvoicesRepository/inMemoryInvoicesRepository';
+import { inMemoryInvoicesRepositoryMock } from '../../../test/repositories/inMemoryInvoicesRepository/inMemoryRepositoryInvoices.mock';
 import { InvoicesController } from './invoices.controller';
 import { InvoicesRepository } from './invoices.repository';
 import { InvoicesService } from './invoices.service';

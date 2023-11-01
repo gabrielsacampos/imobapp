@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
-import { RepositoryModule } from 'src/repository/repository.module';
 import { SharedModule } from 'src/shared.module';
 import { ImobziBuildingsModule } from './imobzi-buildings/imobziBuildings.module';
 import { ImobziBuildingsService } from './imobzi-buildings/imobziBuildings.service';
@@ -29,7 +28,6 @@ import { ImobziService } from './imobzi.service';
     ImobziPropertiesModule,
     ImobziLeasesModule,
     ImobziInvoicesModule,
-    RepositoryModule,
   ],
   controllers: [ImobziController],
   providers: [

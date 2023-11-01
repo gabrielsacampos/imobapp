@@ -23,7 +23,7 @@ export class InMemoryOrganizationsRepository implements Partial<OrganizationsRep
   }
 
   async findExistingCNPJ(cnpj: string): Promise<Organization> {
-    const found = this.items.find((person) => person.cnpj === cnpj);
+    const found = this.items.find((org) => org.cnpj === cnpj);
     if (!found) {
       throw new NotFoundException(`CNPJ: ${cnpj} not found at organization`);
     }
@@ -31,7 +31,7 @@ export class InMemoryOrganizationsRepository implements Partial<OrganizationsRep
   }
 
   async findById(id_imobzi: string) {
-    const found = this.items.find((person) => person.id_imobzi === id_imobzi);
+    const found = this.items.find((org) => org.id_imobzi === id_imobzi);
     if (!found) {
       throw new NotFoundException(`ID: ${id_imobzi} not found at organization`);
     }
@@ -39,13 +39,13 @@ export class InMemoryOrganizationsRepository implements Partial<OrganizationsRep
   }
 
   async upsert(data: CreateOrganizationDTO) {
-    const existingOrganizationIndex = this.items.findIndex((person) => person.id_imobzi === data.id_imobzi);
+    const existingOrganizationIndex = this.items.findIndex((org) => org.id_imobzi === data.id_imobzi);
 
     if (existingOrganizationIndex === -1) {
-      const personToCreate = data;
-      personToCreate.id = crypto.randomInt(1, 1000);
-      this.create(personToCreate);
-      return personToCreate;
+      const organnizationToCreate = data;
+      organnizationToCreate.id = crypto.randomInt(1, 1000);
+      this.create(organnizationToCreate);
+      return organnizationToCreate;
     } else {
       const existingOrganization = this.items[existingOrganizationIndex];
       const existingOrganizationUpdated = data;
@@ -55,7 +55,7 @@ export class InMemoryOrganizationsRepository implements Partial<OrganizationsRep
   }
 
   async update(id_imobzi: string, data: CreateOrganizationDTO) {
-    const existingOrganizationIndex = this.items.findIndex((person) => person.id_imobzi === id_imobzi);
+    const existingOrganizationIndex = this.items.findIndex((org) => org.id_imobzi === id_imobzi);
 
     if (existingOrganizationIndex === -1) {
       throw new Error(`Organization ID_IMOBZI ${id_imobzi} not found.`);

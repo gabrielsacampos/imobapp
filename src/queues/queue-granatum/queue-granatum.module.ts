@@ -9,14 +9,12 @@ import { QueueGranatumService } from './queue-granatum.service';
 import { QueueGranatumConsumer } from './queue-granatum.consumer';
 import { QueueGranatumProducer } from './queue-granatum.producer';
 import { GranatumModule } from 'src/3party-client/granatum/granatum.module';
-import { RepositoryModule } from 'src/repository/repository.module';
 import { GranatumService } from 'src/3party-client/granatum/granatum.service';
 import { InvoicesService } from 'src/repository/invoices/invoices.service';
 
 @Module({
   imports: [
     GranatumModule,
-    RepositoryModule,
     ScheduleModule.forRoot(),
     BullModule.forRoot({
       url: process.env.redis_url,

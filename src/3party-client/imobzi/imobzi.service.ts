@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
+import { BuildingsController } from 'src/repository/buildings/buildings.controller';
 import { BuildingsService } from 'src/repository/buildings/buildings.service';
+import { CreateBuildingDTO } from 'src/repository/buildings/dtos/create-building.dtos';
 import { CreateInvoiceDTO } from 'src/repository/invoices/dtos/create-invoice.dtos';
 import { CreateInvoiceItemDTO } from 'src/repository/invoices/invoice-items/dtos/create-invoice.dtos';
-import { LeasesService } from 'src/repository/leases/leases.service';
+import { LeasesController } from 'src/repository/leases/leases.controller';
 import { OrganizationsController } from 'src/repository/organizations/organizations.controller';
 import { PeopleController } from 'src/repository/people/people.controller';
 import { PropertiesController } from 'src/repository/properties/properties.controller';
@@ -21,10 +23,10 @@ import { ImobziPropertiesService } from './imobzi-properties/imobziProperties.se
 @Injectable()
 export class ImobziService {
   constructor(
-    private readonly leasesService: LeasesService,
+    private readonly leasesController: LeasesController,
     private readonly propertiesController: PropertiesController,
     private readonly organizationsController: OrganizationsController,
-    private readonly buildingsService: BuildingsService,
+    private readonly buildingsController: BuildingsController,
     private readonly peopleController: PeopleController,
     private readonly imobziPeopleService: ImobziPeopleService,
     private readonly imobziOrganizationsService: ImobziOrganizationsService,
@@ -53,10 +55,10 @@ export class ImobziService {
     }
   }
 
-  async updateBuilding(buildingData: BuildingDTO) {
+  async updateBuilding(buildingData: BuildingDTO, id_imobzi: string) {
     try {
       const buildingFromImobzi = await this.imobziBuildingsService.getRequiredBuildingDataToDb(buildingData);
-      await this.buildingsService.upsert(buildingFromImobzi);
+      await this.buildingsController.upsert(id_imobzi, buildingFromImobzi);
     } catch (error) {
       throw new Error(error.message);
     }
@@ -74,7 +76,7 @@ export class ImobziService {
   async updateLease(leaseData: LeaseDTO) {
     try {
       const leaseFromImobzi = await this.imobziLeasesService.getRequiredLeaseDataToDb(leaseData.db_id.toString());
-      await this.leasesService.upsert(leaseFromImobzi);
+      await this.leasesController.upsert(leaseFromImobzi);
     } catch (error) {
       throw new Error(error);
     }
