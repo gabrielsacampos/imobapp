@@ -11,7 +11,7 @@ import { SharedModule } from 'src/shared.module';
 import { ImobziBuildingsModule } from './imobzi-buildings/imobziBuildings.module';
 import { ImobziBuildingsService } from './imobzi-buildings/imobziBuildings.service';
 import { ImobziContactsModule } from './imobzi-contacts/imobziContacts.module';
-import { ImobziContactsService } from './imobzi-contacts/imobziContacts.service';
+import { ImobziContactsService } from './imobzi-contacts/imobziContacts.repository';
 import { ImobziInvoicesModule } from './imobzi-invoices/imobziInvoices.module';
 import { ImobziInvoicesService } from './imobzi-invoices/imobziInvoices.service';
 import { ImobziLeasesModule } from './imobzi-leases/imobziLeases.module';

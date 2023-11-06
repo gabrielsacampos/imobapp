@@ -1,9 +1,9 @@
 import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { ImmutableInvoice, InvoiceComponents } from 'src/3party-client/granatum/dtos/granatum-service.dtos';
 import { PrismaService } from 'src/prisma-client/prisma.service';
+import { CreateInvoiceItemDto } from '../invoice_items/dto/create-invoice_item.dto';
 import { CreateInvoiceDTO } from './dtos/create-invoice.dtos';
 import { Invoice } from './entities/invoice.entity';
-import { CreateInvoiceItemDTO } from './invoice-items/dtos/create-invoice.dtos';
 
 @Injectable()
 export class InvoicesService {
@@ -19,7 +19,7 @@ export class InvoicesService {
         throw new NotAcceptableException(`Invoice ${data.id_imobzi} already exists`);
       }
 
-      const items: CreateInvoiceItemDTO[] = data.items;
+      const items: CreateInvoiceItemDto[] = data.items;
       delete data.items;
 
       const createdInvoice = await this.prisma.invoice.create({

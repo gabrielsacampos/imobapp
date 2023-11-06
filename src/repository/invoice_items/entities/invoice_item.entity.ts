@@ -1,6 +1,6 @@
 export class InvoiceItem {
   id?: string;
-  id_imobzi: string;
+  id_imobzi?: string;
   id_invoice_imobzi: string;
   until_due_date: boolean;
   item_type?: string;

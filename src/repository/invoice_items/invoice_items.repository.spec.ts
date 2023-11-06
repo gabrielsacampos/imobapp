@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { InMemoryInvoiceItemsRepository } from '../../../test/repositories/inMemoryInvoiceItemsRepository/inMemoryInvoiceItemsRepository';
+import { InMemoryInvoiceItemsRepository } from '../../../test/server-repositories/inMemoryInvoiceItemsRepository/inMemoryInvoiceItemsRepository';
 import { InvoiceItemsRepository } from './invoice_items.repository';
 
 describe('InvoiceItemsRepository', () => {

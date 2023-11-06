@@ -53,7 +53,7 @@ export class BuildingsRepository {
     }
   }
 
-  async upsert(data: CreateBuildingDTO, id_imobzi: string): Promise<Building> {
+  async upsert(data: CreateBuildingDTO): Promise<Building> {
     try {
       return await this.prisma.building.upsert({
         where: { id_imobzi },

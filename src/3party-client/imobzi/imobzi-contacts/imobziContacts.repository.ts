@@ -4,7 +4,7 @@ import { ContactDTO, ImobziContactsDTO } from './imobziContacts.dtos';
 import { imobziUrls, imobziParams } from '../imobzi-urls-params/imobzi.urls';
 
 @Injectable()
-export class ImobziContactsService {
+export class ImobziContactsRepository {
   constructor(private readonly httpService: HttpService) {}
 
   async getAllContacts(): Promise<ContactDTO[]> {

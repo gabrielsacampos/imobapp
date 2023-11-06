@@ -2,13 +2,11 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { FetchDb } from './queue-granatum/interfaces/imobziQueue.interface';
 import { QueueImobziService } from './queue-imobzi/queue-imobzi.service';
 import { StoreDb } from './queue-imobzi/interfaces/imobziQueue.interface';
-import { QueuesService } from './queues.service';
 import { QueueGranatumService } from './queue-granatum/queue-granatum.service';
 
 @Controller('queues')
 export class QueuesController {
   constructor(
-    private readonly queuesService: QueuesService,
     private readonly queueImobziService: QueueImobziService,
     private readonly queueGranatumService: QueueGranatumService,
   ) {}

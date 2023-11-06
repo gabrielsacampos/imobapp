@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from 'src/prisma-client/prisma.service';
 import { SharedModule } from '../shared.module';
 import { ImobziBuildingsService } from './imobzi-buildings/imobziBuildings.service';
-import { ImobziContactsService } from './imobzi-contacts/ImobziContacts.service';
+import { ImobziContactsService } from './imobzi-contacts/imobziContacts.repository';
 import { ImobziLeasesService } from './imobzi-leases/imobziLeases.service';
 import { ImobziOrganizationsService } from './imobzi-organizations/imobziOrganizations.service';
 import { ImobziPeopleService } from './imobzi-people/imobziPeople.service';

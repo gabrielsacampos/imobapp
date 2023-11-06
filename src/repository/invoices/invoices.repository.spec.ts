@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { inMemoryInvoicesRepositoryMock } from '../../../test/repositories/inMemoryInvoicesRepository/inMemoryRepositoryInvoices.mock';
-import { InMemoryInvoicesRepository } from '../../../test/repositories/inMemoryInvoicesRepository/inMemoryInvoicesRepository';
+import { inMemoryInvoicesRepositoryMock } from '../../../test/server-repositories/inMemoryInvoicesRepository/inMemoryRepositoryInvoices.mock';
+import { InMemoryInvoicesRepository } from '../../../test/server-repositories/inMemoryInvoicesRepository/inMemoryInvoicesRepository';
 import { CreateInvoiceDTO } from './dtos/create-invoice.dtos';
 import { InvoicesRepository } from './invoices.repository';
 

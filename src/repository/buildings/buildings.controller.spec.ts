@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { InMemoryBuildingsRepository } from '../../../test/repositories/inMemoryBuildingsRepository/inMemoryBuildingsRepository';
-import { inMemoryBuildingsRepositoryMock } from '../../../test/repositories/inMemoryBuildingsRepository/inMemoryBuildingsRepository.mock';
+import { InMemoryBuildingsRepository } from '../../../test/server-repositories/inMemoryBuildingsRepository/inMemoryBuildingsRepository';
+import { inMemoryBuildingsRepositoryMock } from '../../../test/server-repositories/inMemoryBuildingsRepository/inMemoryBuildingsRepository.mock';
 import { BuildingsController } from './buildings.controller';
 import { BuildingsRepository } from './buildings.repository';
 import { BuildingsService } from './buildings.service';
