@@ -22,7 +22,9 @@ describe('ImobziBuildingService', () => {
   });
 
   test('getRequiredBuildingDataToDb should format response data to have db required properties', () => {
-    const result = service.getRequiredBuildingDataToDb(anImobziBuildings[0]);
-    expect(result).toEqual(expect.objectContaining(new CreateBuildingDTO()));
+    const result: CreateBuildingDTO = service.getRequiredBuildingDataToDb(anImobziBuildings[0]);
+    for (const item in result) {
+      expect(result[item]).toBeDefined();
+    }
   });
 });

@@ -12,7 +12,7 @@ import { ContactDTO } from './imobzi-contacts/imobziContacts.dtos';
 import { InvoicesDTO } from './imobzi-invoices/imobziInvoices.dtos';
 import { ImobziInvoicesService } from './imobzi-invoices/imobziInvoices.service';
 import { LeaseDTO } from './imobzi-leases/imobziLeases.dtos';
-import { ImobziLeasesService } from './imobzi-leases/imobziLeases.service';
+import { ImobziLeasesService } from './imobzi-leases/imobziLeases.repository';
 import { ImobziOrganizationsService } from './imobzi-organizations/imobziOrganizations.service';
 import { ImobziPeopleService } from './imobzi-people/imobziPeople.service';
 import { PropertyDTO } from './imobzi-properties/imobziProperties.dtos';

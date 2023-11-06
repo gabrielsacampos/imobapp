@@ -1,64 +1,61 @@
-export interface ImobziLeaseDetailsDTO {
-  files: any[];
-  receipt_method: string;
+export class ImobziLeaseDetailsDTO {
+  receipt_method?: string;
   code: string;
-  next_invoice_end_at: string;
-  guaranteed: boolean;
-  last_annual_readjustment_at: string;
-  next_invoice_due_date: string;
+  next_invoice_end_at?: string;
+  guaranteed?: boolean;
+  last_annual_readjustment_at?: string;
+  next_invoice_due_date?: string;
   updated_at: string;
   beneficiaries: ImobziLeaseBeneficiaryDTO[];
-  lease_type: string;
+  lease_type?: string;
   value: number;
   duration: number;
-  interest_percent_late_payment: number;
-  daily_value: number;
-  next_invoice_value: number;
+  interest_percent_late_payment?: number;
+  daily_value?: number;
+  next_invoice_value?: number;
   management_fee: ManagementFee;
-  guarantee: Guarantee;
-  has_invoice: boolean;
-  billing_mode: string;
-  notification: Notification;
-  irrf_management_fee_discount: boolean;
-  next_invoice_start_at: string;
-  indeterminate: boolean;
+  guarantee?: Guarantee;
+  has_invoice?: boolean;
+  billing_mode?: string;
+  notification?: Notification;
+  irrf_management_fee_discount?: boolean;
+  next_invoice_start_at?: string;
+  indeterminate?: boolean;
   tenants: Tenant[];
-  onlending: Onlending;
-  source: string;
-  nota_fiscal: boolean;
-  create_onlending_item: boolean;
-  agreements: any[];
-  onlending_charge: boolean;
-  deal_key: any;
-  vacation_rental_receipt_option: VacationRentalReceiptOption;
+  onlending?: Onlending;
+  source?: string;
+  nota_fiscal?: boolean;
+  create_onlending_item?: boolean;
+  agreements?: any[];
+  onlending_charge?: boolean;
   status: string;
   db_id: number;
-  start_at: string;
-  insurances: Insurance[];
-  checklist: Checklist[];
-  next_invoice_generate_days_before: number;
-  first_rental_in_next_invoice: boolean;
-  irrf: boolean;
-  in_progress: boolean;
-  duration_type: string;
-  first_rental_installment: any[];
-  fine_charge: boolean;
-  next_invoice_generate_in: string;
-  include_in_dimob: boolean;
-  fine_percent_late_payment: number;
+  start_at?: string;
+  insurances?: Insurance[];
+  checklist?: Checklist[];
+  next_invoice_generate_days_before?: number;
+  first_rental_in_next_invoice?: boolean;
+  irrf?: boolean;
+  in_progress?: boolean;
+  duration_type?: string;
+  first_rental_installment?: any[];
+  fine_charge?: boolean;
+  next_invoice_generate_in?: string;
+  include_in_dimob?: boolean;
+  fine_percent_late_payment?: number;
   items: ImobziLeaseItemDTO[];
   created_at: string;
   end_at: string;
-  guarantee_amount_months: number;
-  annual_readjustment: AnnualReadjustment;
-  termination: any;
-  interest_charge: boolean;
-  property: Property;
-  initial_value: number;
-  due_day: string;
+  guarantee_amount_months?: number;
+  annual_readjustment?: AnnualReadjustment;
+  termination?: any;
+  interest_charge?: boolean;
+  property?: Property;
+  initial_value?: number;
+  due_day?: string;
 }
 
-export interface ImobziLeaseBeneficiaryDTO {
+export class ImobziLeaseBeneficiaryDTO {
   code?: string;
   neighborhood?: string;
   landlord_account_id?: string;
@@ -83,6 +80,7 @@ export interface ImobziLeaseBeneficiaryDTO {
   type?: string;
   email?: string;
   cnpj?: string;
+  cpf?: string;
   db_id?: number;
   tags?: string[];
   municipal_registration?: string;
@@ -108,20 +106,20 @@ export interface ImobziLeaseBeneficiaryDTO {
   trading_name?: string;
 }
 
-export interface Pix {
+export class Pix {
   default: boolean;
   pix_key_type: string;
   pix_key: string;
 }
 
-export interface Phone {
+export class Phone {
   type: string;
   number: string;
   country_code: any;
   alpha2Code: string;
 }
 
-export interface ManagementFee {
+export class ManagementFee {
   first_rent_percent?: number;
   management_type?: string;
   percent?: number;
@@ -129,7 +127,7 @@ export interface ManagementFee {
   first_rent_value?: number;
 }
 
-export interface Guarantee {
+export class Guarantee {
   start_at?: string;
   guarantee_type?: string;
   sponsors?: Sponsor[];
@@ -139,7 +137,7 @@ export interface Guarantee {
   details?: Details;
 }
 
-export interface Sponsor {
+export class Sponsor {
   code: string;
   neighborhood: string;
   review_pending: boolean;
@@ -185,14 +183,14 @@ export interface Sponsor {
   fullname: string;
 }
 
-export interface Phone2 {
+export class Phone2 {
   type: string;
   number: string;
   country_code: string;
   alpha2Code: string;
 }
 
-export interface Sponsor2 {
+export class Sponsor2 {
   code?: string;
   neighborhood?: string;
   review_pending?: boolean;
@@ -238,20 +236,20 @@ export interface Sponsor2 {
   fullname?: string;
 }
 
-export interface Phone3 {
+export class Phone3 {
   type: string;
   number: string;
   country_code: string;
   alpha2Code: string;
 }
 
-export interface Details {
+export class Details {
   bail_type?: string;
   value?: number;
   description?: string;
 }
 
-export interface Notification {
+export class Notification {
   send_guarantee_closeduedate_to_tenant: boolean;
   send_notification_readjustment: boolean;
   send_whatsapp_notification_readjustment: boolean;
@@ -264,7 +262,7 @@ export interface Notification {
   send_invoice_to_tenant_whatsapp: boolean;
 }
 
-export interface Tenant {
+export class Tenant {
   code?: string;
   neighborhood?: string;
   review_pending?: boolean;
@@ -311,14 +309,14 @@ export interface Tenant {
   fullname?: string;
 }
 
-export interface Phone4 {
+export class Phone4 {
   type: string;
   number: string;
   country_code: string;
   alpha2Code: string;
 }
 
-export interface Onlending {
+export class Onlending {
   fixed_day: string;
   amount_days: number;
   onlending_mode: string;
@@ -326,12 +324,12 @@ export interface Onlending {
   onlending_type: string;
 }
 
-export interface VacationRentalReceiptOption {
+export class VacationRentalReceiptOption {
   installments: any[];
   method: string;
 }
 
-export interface Insurance {
+export class Insurance {
   status: string;
   start_at: string;
   description: string;
@@ -347,7 +345,7 @@ export interface Insurance {
   base_value: number;
 }
 
-export interface Checklist {
+export class Checklist {
   details: any;
   checked: boolean;
   description: string;
@@ -355,9 +353,9 @@ export interface Checklist {
   order: number;
 }
 
-export interface ImobziLeaseItemDTO {
+export class ImobziLeaseItemDTO {
   landlords: any[];
-  due_date: Date;
+  due_date: string;
   repeat_total: number;
   description: string;
   bar_code: string;
@@ -374,12 +372,12 @@ export interface ImobziLeaseItemDTO {
   start_date: string;
 }
 
-export interface AnnualReadjustment {
+export class AnnualReadjustment {
   db_id: string;
   name: string;
 }
 
-export interface Property {
+export class Property {
   city?: string;
   owners?: Owner[];
   code?: string;
@@ -394,7 +392,7 @@ export interface Property {
   property_type?: string;
 }
 
-export interface Owner {
+export class Owner {
   code: string;
   neighborhood: string;
   landlord_account_id: string;
@@ -442,24 +440,24 @@ export interface Owner {
   trading_name: string;
 }
 
-export interface Pix2 {
+export class Pix2 {
   default: boolean;
   pix_key_type: string;
   pix_key: string;
 }
 
-export interface Phone5 {
+export class Phone5 {
   type: string;
   number: string;
   country_code: any;
   alpha2Code: string;
 }
 
-export interface Fields {
+export class Fields {
   additional_values: AdditionalValue[][];
 }
 
-export interface AdditionalValue {
+export class AdditionalValue {
   default: boolean;
   group_position: number;
   required: boolean;
@@ -472,7 +470,7 @@ export interface AdditionalValue {
   group_name: string;
 }
 
-export interface Configuration {
+export class Configuration {
   typecommercial: boolean;
   multiple: boolean;
   typeresidential: boolean;
@@ -491,7 +489,7 @@ export interface Configuration {
   description: string;
 }
 
-export interface CoverPhoto {
+export class CoverPhoto {
   url: string;
   db_id: number;
 }

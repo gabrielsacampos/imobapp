@@ -73,29 +73,36 @@ export class ImobziLeasesService {
     });
   }
 
-  async getRequiredLeaseDataToDb(id_imobzi: string): Promise<CreateLeaseDTO> {
+  async getRequiredLeaseDataToDb(leaseFullData: ImobziLeaseDetailsDTO): Promise<CreateLeaseDTO> {
     try {
-      const { data } = await this.httpService.axiosRef.get<ImobziLeaseDetailsDTO>(
-        imobziUrls.urlLeaseDetails(id_imobzi),
-        imobziParams,
-      );
-
-      const id_annual_readjustment_imobzi = data.annual_readjustment?.db_id.toString();
-      const id_property_imobzi = data.property.db_id.toString();
-      const guarantee_type = data.guarantee?.guarantee_type;
-      const guarantee_value = data.guarantee?.details?.value;
+      const id_imobzi = leaseFullData.db_id.toString();
+      const id_annual_readjustment_imobzi = leaseFullData.annual_readjustment?.db_id.toString();
+      const id_property_imobzi = leaseFullData.property.db_id.toString();
+      const guarantee_type = leaseFullData.guarantee?.guarantee_type;
+      const guarantee_value = leaseFullData.guarantee?.details?.value;
       const id_main_guarantor_imobzi =
-        data.guarantee?.guarantee_type === 'guarantor' ? data.guarantee.sponsor.db_id.toString() : null;
+        leaseFullData.guarantee?.guarantee_type === 'guarantor'
+          ? leaseFullData.guarantee.sponsor.db_id.toString()
+          : null;
       const id_tenant_organization_imobzi =
-        data.tenants[0].type === 'organization' ? data.tenants[0].db_id.toString() : null;
-      const id_tenant_person_imobzi = data.tenants[0].type === 'person' ? data.tenants[0].db_id.toString() : null;
-      const fee = data.management_fee.percent;
-      const updated_at = new Date(data.updated_at);
-      const start_at = new Date(data.start_at);
-      const { status, value: lease_value, duration, irrf, indeterminate, code: code_imobzi, include_in_dimob } = data;
+        leaseFullData.tenants[0].type === 'organization' ? leaseFullData.tenants[0].db_id.toString() : null;
+      const id_tenant_person_imobzi =
+        leaseFullData.tenants[0].type === 'person' ? leaseFullData.tenants[0].db_id.toString() : null;
+      const fee = leaseFullData.management_fee.percent;
+      const updated_at = new Date(leaseFullData.updated_at);
+      const start_at = new Date(leaseFullData.start_at);
+      const {
+        status,
+        value: lease_value,
+        duration,
+        irrf,
+        indeterminate,
+        code: code_imobzi,
+        include_in_dimob,
+      } = leaseFullData;
 
-      const beneficiaries = this.getRequiredLeaseBeneficiariesDataToDb(data.beneficiaries);
-      const lease_items = this.getRequiredLeaseItemsDataToDb(data.items);
+      const beneficiaries = this.getRequiredLeaseBeneficiariesDataToDb(leaseFullData.beneficiaries);
+      const lease_items = this.getRequiredLeaseItemsDataToDb(leaseFullData.items);
       return {
         beneficiaries,
         updated_at,
@@ -119,6 +126,7 @@ export class ImobziLeasesService {
         lease_items,
       };
     } catch (error) {
+      console.log(error);
       throw new Error(error);
     }
   }

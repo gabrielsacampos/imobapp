@@ -4,7 +4,7 @@ import { SharedModule } from 'src/shared.module';
 import { ImobziInvoicesRepository } from './imobziInvoices.repository';
 import { CreateInvoiceDTO } from '../../../../src/repository/invoices/dtos/create-invoice.dtos';
 import { imobziInvoicesMock } from '../../../../test/3rdParty-repositories/imobzi-repositories/invoices/imobziInvoices.mock';
-import { RequiredPropsImobziInvoice } from './dto/required-props-invoicesItems.dtos';
+import { CreateInvoiceItemDto } from 'src/repository/invoice_items/dto/create-invoice_item.dto';
 
 describe('ImobziInvoicesService', () => {
   let service: ImobziInvoicesService;
@@ -24,8 +24,14 @@ describe('ImobziInvoicesService', () => {
 
   test('getRequiredInvoicesITemsDataToDb should format data from imobzi and return an object with required properties', async () => {
     const invoiceTest = imobziInvoicesMock[0];
-    const result = service.getRequiredInvoiceItemsDataToDb(invoiceTest.items, invoiceTest.invoice_id);
-    expect(result).toEqual(expect.objectContaining(new RequiredPropsImobziInvoice()));
+    const result: CreateInvoiceItemDto[] = service.getRequiredInvoiceItemsDataToDb(
+      invoiceTest.items,
+      invoiceTest.invoice_id,
+    );
+
+    for (const item in result) {
+      expect(result[item]).toBeDefined();
+    }
   });
 
   test('getAnInvoiceRequiredData should get from Imobzi API the full data from invoice and return only required data to store on DB', async () => {

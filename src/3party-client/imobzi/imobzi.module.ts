@@ -15,7 +15,7 @@ import { ImobziContactsService } from './imobzi-contacts/imobziContacts.reposito
 import { ImobziInvoicesModule } from './imobzi-invoices/imobziInvoices.module';
 import { ImobziInvoicesService } from './imobzi-invoices/imobziInvoices.service';
 import { ImobziLeasesModule } from './imobzi-leases/imobziLeases.module';
-import { ImobziLeasesService } from './imobzi-leases/imobziLeases.service';
+import { ImobziLeasesService } from './imobzi-leases/imobziLeases.repository';
 import { ImobziOrganizationsModule } from './imobzi-organizations/imobziOrganizations.module';
 import { ImobziPeopleModule } from './imobzi-people/imobziPeople.module';
 import { ImobziPropertiesModule } from './imobzi-properties/imobziProperties.module';

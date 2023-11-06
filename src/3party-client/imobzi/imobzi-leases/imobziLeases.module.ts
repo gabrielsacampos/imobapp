@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { SharedModule } from 'src/shared.module';
-import { ImobziLeasesService } from './imobziLeases.service';
+import { ImobziLeasesService } from './imobziLeases.repository';
 
 @Module({
   imports: [SharedModule],

@@ -31,7 +31,7 @@ describe('ImobziContactsRepository', () => {
   test('repository should be defined', () => {
     expect(repository).toBeDefined();
   });
-  test('getAllContacts', async () => {
+  test('getAllContacts should handle with pagination and return array of all contacts', async () => {
     httpServiceMock.axiosRef.get.mockImplementation((url) => {
       if (url === `https://api.imobzi.app/v1/contacts?cursor=`) {
         return Promise.resolve({ data: imobziContactsPagination.page1 });
