@@ -1,11 +1,9 @@
 import { HttpService } from '@nestjs/axios';
 import { Test, TestingModule } from '@nestjs/testing';
-import { CreateInvoiceDTO } from 'src/repository/invoices/dtos/create-invoice.dtos';
 import {
-  imobziPaginationMock,
   imobziInvoicesMock,
+  imobziPaginationMock,
 } from '../../../../test/3rdParty-repositories/imobzi-repositories/invoices/imobziInvoices.mock';
-import { RequiredPropsImobziInvoice } from './dto/required-props-invoicesItems.dtos';
 import { ImobziInvoicesRepository } from './imobziInvoices.repository';
 
 describe('ImobziInvoicesRepository', () => {
@@ -37,15 +35,7 @@ describe('ImobziInvoicesRepository', () => {
     expect(result).toEqual([...imobziPaginationMock.page1.invoices, ...imobziPaginationMock.page2.invoices]);
   });
 
-  test('getRequiredInvoicesITemsDataToDb should format data from imobzi and return an object with required properties', async () => {
-    const invoiceTest = imobziInvoicesMock[0];
-    const result = repository.getRequiredInvoiceItemsDataToDb(invoiceTest.items, invoiceTest.invoice_id);
-    for (const item of result) {
-      expect(item).toEqual(expect.objectContaining(new RequiredPropsImobziInvoice()));
-    }
-  });
-
-  test('getAnInvoiceRequiredData should get from Imobzi API the full data from invoice and return only required data to store on DB', async () => {
+  test('getAnInvoiceFullData should return the full data response from required invoiceon imobzi API', async () => {
     const invoiceTest = imobziInvoicesMock[4];
 
     httpServiceMock.axiosRef.get.mockImplementation((url) => {
@@ -60,7 +50,7 @@ describe('ImobziInvoicesRepository', () => {
       }
     });
 
-    const result = repository.getAnInvoiceRequiredData(invoiceTest.invoice_id);
-    expect(result).toEqual(expect.objectContaining(new CreateInvoiceDTO()));
+    const result = await repository.getAnInvoiceFullData(invoiceTest.invoice_id);
+    expect(result).toEqual(invoiceTest);
   });
 });
