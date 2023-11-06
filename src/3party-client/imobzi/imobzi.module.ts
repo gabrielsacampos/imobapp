@@ -1,5 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
+import { BuildingsModule } from 'src/repository/buildings/buildings.module';
+import { LeasesModule } from 'src/repository/leases/leases.module';
+import { OrganizationsController } from 'src/repository/organizations/organizations.controller';
+import { OrganizationsModule } from 'src/repository/organizations/organizations.module';
+import { PeopleModule } from 'src/repository/people/people.module';
+import { PropertiesModule } from 'src/repository/properties/properties.module';
+import { RepositoryModule } from 'src/repository/repository.module';
 import { SharedModule } from 'src/shared.module';
 import { ImobziBuildingsModule } from './imobzi-buildings/imobziBuildings.module';
 import { ImobziBuildingsService } from './imobzi-buildings/imobziBuildings.service';
@@ -19,6 +26,7 @@ import { ImobziService } from './imobzi.service';
 
 @Module({
   imports: [
+    RepositoryModule,
     SharedModule,
     ScheduleModule.forRoot(),
     ImobziBuildingsModule,

@@ -1,9 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { BuildingsController } from 'src/repository/buildings/buildings.controller';
-import { BuildingsService } from 'src/repository/buildings/buildings.service';
-import { CreateBuildingDTO } from 'src/repository/buildings/dtos/create-building.dtos';
 import { CreateInvoiceDTO } from 'src/repository/invoices/dtos/create-invoice.dtos';
-import { CreateInvoiceItemDTO } from 'src/repository/invoices/invoice-items/dtos/create-invoice.dtos';
+import { CreateInvoiceItemDto } from 'src/repository/invoice_items/dto/create-invoice_item.dto';
 import { LeasesController } from 'src/repository/leases/leases.controller';
 import { OrganizationsController } from 'src/repository/organizations/organizations.controller';
 import { PeopleController } from 'src/repository/people/people.controller';
@@ -41,7 +39,7 @@ export class ImobziService {
       const personFromImobzi = await this.imobziPeopleService.getRequiredPersonDataToDb(contactData.contact_id);
       await this.peopleController.upsert(personFromImobzi);
     } catch (error) {
-      throw new Error(error.message);
+      throw new Error(error);
     }
   }
   async updateOrganization(contactData: ContactDTO) {
@@ -51,7 +49,7 @@ export class ImobziService {
       );
       await this.organizationsController.upsert(organizationFromImobzi);
     } catch (error) {
-      throw new Error(error.message);
+      throw new Error(error);
     }
   }
 
@@ -60,7 +58,7 @@ export class ImobziService {
       const buildingFromImobzi = await this.imobziBuildingsService.getRequiredBuildingDataToDb(buildingData);
       await this.buildingsController.upsert(id_imobzi, buildingFromImobzi);
     } catch (error) {
-      throw new Error(error.message);
+      throw new Error(error);
     }
   }
 
@@ -69,7 +67,7 @@ export class ImobziService {
       const propertyFromImobzi = await this.imobziPropertiesService.getRequiredPropertyDataToDb(property.db_id);
       await this.propertiesController.upsert(propertyFromImobzi);
     } catch (error) {
-      throw new Error(error.message);
+      throw new Error(error);
     }
   }
 
@@ -86,7 +84,7 @@ export class ImobziService {
     try {
       const invoiceFromImobzi = await this.imobziInvoicesService.getRequiredInvoicesDataToDb(invoiceData.invoice_id);
 
-      const interestItem: CreateInvoiceItemDTO = {
+      const interestItem: CreateInvoiceItemDto = {
         id_invoice_imobzi: invoiceData.invoice_id,
         until_due_date: false,
         item_type: null,
@@ -98,7 +96,7 @@ export class ImobziService {
         value: invoiceFromImobzi.interest_value,
       };
 
-      const bankFeeItem: CreateInvoiceItemDTO = {
+      const bankFeeItem: CreateInvoiceItemDto = {
         id_invoice_imobzi: invoiceData.invoice_id,
         until_due_date: false,
         item_type: null,

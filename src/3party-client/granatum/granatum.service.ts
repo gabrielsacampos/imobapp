@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { InvoicesService } from 'src/repository/invoices/invoices.service';
+import { InvoicesController } from 'src/repository/invoices/invoices.controller';
 import { GroupedInvoiceComponents, InvoiceComponents } from './dtos/granatum-service.dtos';
 
 @Injectable()
 export class GranatumService {
-  constructor(private readonly invoicesService: InvoicesService) {}
+  constructor(private readonly invoicesService: InvoicesController) {}
 
   groupInvoices(items: InvoiceComponents[]): GroupedInvoiceComponents[] {
     const groupedItems = items.reduce((acc, curr) => {

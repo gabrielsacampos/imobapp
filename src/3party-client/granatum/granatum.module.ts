@@ -1,4 +1,6 @@
 import { Module } from '@nestjs/common';
+import { InvoicesController } from 'src/repository/invoices/invoices.controller';
+import { InvoicesModule } from 'src/repository/invoices/invoices.module';
 import { SharedModule } from '../../shared.module';
 import { GranatumAccountsModule } from './granatum-accounts/granatum-accounts.module';
 import { GranatumAccountsService } from './granatum-accounts/granatum-accounts.service';
@@ -23,9 +25,11 @@ import { GranatumService } from './granatum.service';
     GranatumCostCenterModule,
     GranatumClientsModule,
     GranatumSupliersModule,
+    InvoicesModule,
   ],
   controllers: [GranatumController],
   providers: [
+    InvoicesController,
     GranatumService,
     GranatumTransactionsService,
     GranatumCategoriesService,
@@ -33,6 +37,7 @@ import { GranatumService } from './granatum.service';
     GranatumCostCenterService,
     GranatumClientsService,
     GranatumSupliersModule,
+    InvoicesController,
   ],
   exports: [
     GranatumService,
