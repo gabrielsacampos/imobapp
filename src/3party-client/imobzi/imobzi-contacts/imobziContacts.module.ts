@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { SharedModule } from 'src/shared.module';
-import { ImobziContactsService } from './imobziContacts.repository';
+import { ImobziContactsRepository } from './imobziContacts.repository';
 
 @Module({
   imports: [SharedModule],
-  providers: [ImobziContactsService],
-  exports: [ImobziContactsService],
+  providers: [ImobziContactsRepository],
+  exports: [ImobziContactsRepository],
 })
 export class ImobziContactsModule {}

@@ -28,7 +28,7 @@ export class ImobziInvoicesRepository {
     }
   }
 
-  async getAnInvoiceFullData(idImobzi: string): Promise<AnImobziInvoiceDTO> {
+  async getInvoiceFullData(idImobzi: string): Promise<AnImobziInvoiceDTO> {
     try {
       const { data } = await this.httpService.axiosRef.get<AnImobziInvoiceDTO>(
         imobziUrls.urlInvoiceDetail(idImobzi),

@@ -1,30 +1,25 @@
-import { HttpService } from '@nestjs/axios';
-import { Inject, Injectable, Logger } from '@nestjs/common';
-import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
-import { GroupPersonal } from './imobziPeople.dtos';
-import { imobziUrls, imobziParams } from '../imobzi-urls-params/imobzi.urls';
+import { Injectable } from '@nestjs/common';
 import { CreatePersonDTO } from 'src/repository/people/dtos/create-person.dtos';
+import { GroupPersonal } from './dtos/imobziPeople.dtos';
+import { ImobziPeopleRepository } from './imobziPeople.repository';
 
 @Injectable()
 export class ImobziPeopleService {
-  constructor(
-    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
-    private readonly httpService: HttpService,
-  ) {}
+  constructor(private readonly imobziPeopleRepository: ImobziPeopleRepository) {}
 
-  async getRequiredPersonDataToDb(id_imobzi: string): Promise<CreatePersonDTO> {
+  async getRequiredPersonDataToDb(idPerson: string): Promise<CreatePersonDTO> {
     try {
-      const { data } = await this.httpService.axiosRef.get(imobziUrls.urlPersonDetails(id_imobzi), imobziParams);
-
-      const phone = data.phone?.number;
-      const { fullname, email, code: code_imobzi } = data;
+      const personFullData = await this.imobziPeopleRepository.getPersonFullData(idPerson);
+      const id_imobzi = personFullData.db_id.toString();
+      const phone = personFullData.phone?.number;
+      const { fullname, email, code: code_imobzi } = personFullData;
 
       let marital_status: string;
       let gender: any;
       let profession: any;
       let cpf: string;
 
-      for (const item of data.fields.group_personal) {
+      for (const item of personFullData.fields.group_personal) {
         const foundItem = item.find((item: GroupPersonal) => {
           return item.field_id === 'cpf';
         });
@@ -34,7 +29,7 @@ export class ImobziPeopleService {
         }
       }
 
-      for (const item of data.fields.group_personal) {
+      for (const item of personFullData.fields.group_personal) {
         const foundItem = item.find((item: GroupPersonal) => {
           return item.field_id === 'marital_status';
         });
@@ -44,7 +39,7 @@ export class ImobziPeopleService {
         }
       }
 
-      for (const item of data.fields.group_personal) {
+      for (const item of personFullData.fields.group_personal) {
         const foundItem = item.find((item: GroupPersonal) => {
           return item.field_id === 'gender';
         });
@@ -54,7 +49,7 @@ export class ImobziPeopleService {
         }
       }
 
-      for (const item of data.fields.group_personal) {
+      for (const item of personFullData.fields.group_personal) {
         const foundItem = item.find((item: GroupPersonal) => {
           return item.field_id === 'profession';
         });

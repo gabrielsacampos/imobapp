@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { imobziParams, imobziUrls } from '../imobzi-urls-params/imobzi.urls';
-import { BuildingDTO } from './imobziBuildings.dtos';
+import { BuildingDTO } from './dtos/imobziBuildings.dtos';
 
 @Injectable()
 export class ImobziBuildingsRepository {

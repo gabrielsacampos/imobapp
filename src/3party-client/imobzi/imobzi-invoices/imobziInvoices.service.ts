@@ -3,9 +3,11 @@ import { dateFunctions } from 'src/my-usefull-functions/date.functions';
 import { CreateInvoiceDTO } from 'src/repository/invoices/dtos/create-invoice.dtos';
 import { CreateInvoiceItemDto } from 'src/repository/invoice_items/dto/create-invoice_item.dto';
 import { AnImobziInvoiceDTO, ImobziInvoiceItem } from './dto/an-imobzi-invoice.dtos';
+import { ImobziInvoicesRepository } from './imobziInvoices.repository';
 
 @Injectable()
 export class ImobziInvoicesService {
+  constructor(private readonly imobziInvoicesRepository: ImobziInvoicesRepository) {}
   getRequiredInvoiceItemsDataToDb(invoiceItems: ImobziInvoiceItem[], idImobzi: string): CreateInvoiceItemDto[] {
     return invoiceItems.map((item) => {
       const {
@@ -35,61 +37,66 @@ export class ImobziInvoicesService {
     });
   }
 
-  getAnInvoiceRequiredData(invoiceFullData: AnImobziInvoiceDTO): CreateInvoiceDTO {
-    const idImobzi = invoiceFullData.invoice_id;
-    const id_lease_imobzi = invoiceFullData.lease?.db_id.toString();
-    const management_fee = invoiceFullData.onlendings_and_fees?.management_fee_value;
-    const account_credit = invoiceFullData.account?.name;
-    const onlending_value = invoiceFullData.onlendings_and_fees?.predicted_onlending_value;
-    const paidAtString = invoiceFullData.paid_at;
-    const creditAtString = paidAtString ? dateFunctions.defineCreditDate(paidAtString) : null; //function handle and returns date as string
+  async getInvoiceRequiredData(idInvoice: string): Promise<CreateInvoiceDTO> {
+    try {
+      const invoiceFullData: AnImobziInvoiceDTO = await this.imobziInvoicesRepository.getInvoiceFullData(idInvoice);
+      const idImobzi = invoiceFullData.invoice_id;
+      const id_lease_imobzi = invoiceFullData.lease?.db_id.toString();
+      const management_fee = invoiceFullData.onlendings_and_fees?.management_fee_value;
+      const account_credit = invoiceFullData.account?.name;
+      const onlending_value = invoiceFullData.onlendings_and_fees?.predicted_onlending_value;
+      const paidAtString = invoiceFullData.paid_at;
+      const creditAtString = paidAtString ? dateFunctions.defineCreditDate(paidAtString) : null; //function handle and returns date as string
 
-    // Requireds as Date ISO
-    const due_date = new Date(invoiceFullData.due_date);
-    const paid_at = paidAtString ? new Date(paidAtString) : null; // db requires as Date format
-    const credit_at = creditAtString ? new Date(creditAtString) : null;
-    const itemsWithInvoicesIds = invoiceFullData.items.map((item) => {
-      return { ...item, id_invoice_imobzi: idImobzi };
-    });
+      // Requireds as Date ISO
+      const due_date = new Date(invoiceFullData.due_date);
+      const paid_at = paidAtString ? new Date(paidAtString) : null; // db requires as Date format
+      const credit_at = creditAtString ? new Date(creditAtString) : null;
+      const itemsWithInvoicesIds = invoiceFullData.items.map((item) => {
+        return { ...item, id_invoice_imobzi: idImobzi };
+      });
 
-    const invoiceItems: CreateInvoiceItemDto[] = this.getRequiredInvoiceItemsDataToDb(itemsWithInvoicesIds, idImobzi);
+      const invoiceItems: CreateInvoiceItemDto[] = this.getRequiredInvoiceItemsDataToDb(itemsWithInvoicesIds, idImobzi);
 
-    const {
-      invoice_id: id_imobzi,
-      status,
-      reference_start_at,
-      reference_end_at,
-      invoice_url,
-      barcode,
-      bank_slip_id,
-      bank_slip_url,
-      total_value,
-      interest_value,
-      invoice_paid_manual: paid_manual,
-      charge_fee_value: bank_fee_value,
-    } = invoiceFullData;
+      const {
+        invoice_id: id_imobzi,
+        status,
+        reference_start_at,
+        reference_end_at,
+        invoice_url,
+        barcode,
+        bank_slip_id,
+        bank_slip_url,
+        total_value,
+        interest_value,
+        invoice_paid_manual: paid_manual,
+        charge_fee_value: bank_fee_value,
+      } = invoiceFullData;
 
-    return {
-      id_imobzi,
-      status,
-      reference_start_at,
-      reference_end_at,
-      due_date,
-      invoice_url,
-      barcode,
-      bank_slip_id,
-      bank_slip_url,
-      total_value,
-      interest_value,
-      paid_at,
-      credit_at,
-      paid_manual,
-      bank_fee_value,
-      account_credit,
-      onlending_value,
-      management_fee,
-      id_lease_imobzi,
-      invoiceItems,
-    };
+      return {
+        id_imobzi,
+        status,
+        reference_start_at,
+        reference_end_at,
+        due_date,
+        invoice_url,
+        barcode,
+        bank_slip_id,
+        bank_slip_url,
+        total_value,
+        interest_value,
+        paid_at,
+        credit_at,
+        paid_manual,
+        bank_fee_value,
+        account_credit,
+        onlending_value,
+        management_fee,
+        id_lease_imobzi,
+        invoiceItems,
+      };
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 }

@@ -3,16 +3,18 @@ import { ImobziInvoicesService } from './imobziInvoices.service';
 import { SharedModule } from 'src/shared.module';
 import { ImobziInvoicesRepository } from './imobziInvoices.repository';
 import { CreateInvoiceDTO } from '../../../../src/repository/invoices/dtos/create-invoice.dtos';
-import { imobziInvoicesMock } from '../../../../test/3rdParty-repositories/imobzi-repositories/invoices/imobziInvoices.mock';
+import { ImobziInvoicesMock } from '../../../../test/3rdParty-repositories/imobzi-repositories/invoices/imobziInvoices.mock';
 import { CreateInvoiceItemDto } from 'src/repository/invoice_items/dto/create-invoice_item.dto';
 
 describe('ImobziInvoicesService', () => {
   let service: ImobziInvoicesService;
+  let invoicesMock: ImobziInvoicesMock;
 
   beforeEach(async () => {
+    invoicesMock = new ImobziInvoicesMock();
     const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [SharedModule],
-      providers: [ImobziInvoicesService, ImobziInvoicesRepository],
+      providers: [ImobziInvoicesService, { provide: ImobziInvoicesRepository, useValue: invoicesMock }],
     }).compile();
 
     service = moduleRef.get<ImobziInvoicesService>(ImobziInvoicesService);
@@ -23,7 +25,8 @@ describe('ImobziInvoicesService', () => {
   });
 
   test('getRequiredInvoicesITemsDataToDb should format data from imobzi and return an object with required properties', async () => {
-    const invoiceTest = imobziInvoicesMock[0];
+    const invoices = invoicesMock.invoicesFullData;
+    const invoiceTest = invoices[0];
     const result: CreateInvoiceItemDto[] = service.getRequiredInvoiceItemsDataToDb(
       invoiceTest.items,
       invoiceTest.invoice_id,
@@ -35,8 +38,11 @@ describe('ImobziInvoicesService', () => {
   });
 
   test('getAnInvoiceRequiredData should get from Imobzi API the full data from invoice and return only required data to store on DB', async () => {
-    const invoiceTest = imobziInvoicesMock[4];
-    const result = service.getAnInvoiceRequiredData(invoiceTest);
-    expect(result).toEqual(expect.objectContaining(new CreateInvoiceDTO()));
+    const invoices = invoicesMock.invoicesFullData;
+    const invoiceTest = invoices[4];
+    const result: CreateInvoiceDTO = await service.getInvoiceRequiredData(invoiceTest.invoice_id);
+    for (const prop in result) {
+      expect(result[prop]).toBeDefined();
+    }
   });
 });

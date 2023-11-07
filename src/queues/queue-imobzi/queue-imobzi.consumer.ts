@@ -1,10 +1,10 @@
 import { Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
-import { BuildingDTO } from 'src/3party-client/imobzi/imobzi-buildings/imobziBuildings.dtos';
-import { ContactDTO } from 'src/3party-client/imobzi/imobzi-contacts/imobziContacts.dtos';
+import { BuildingDTO } from 'src/3party-client/imobzi/imobzi-buildings/dtos/imobziBuildings.dtos';
+import { ContactDTO } from 'src/3party-client/imobzi/imobzi-contacts/dtos/imobziContacts.dtos';
 import { InvoicesDTO } from 'src/3party-client/imobzi/imobzi-invoices/imobziInvoices.dtos';
-import { LeaseDTO } from 'src/3party-client/imobzi/imobzi-leases/imobziLeases.dtos';
-import { PropertyDTO } from 'src/3party-client/imobzi/imobzi-properties/imobziProperties.dtos';
+import { LeaseDTO } from 'src/3party-client/imobzi/imobzi-leases/dtos/imobziLeases.dtos';
+import { PropertyDTO } from 'src/3party-client/imobzi/imobzi-properties/dtos/imobziProperties.dtos';
 import { ImobziService } from 'src/3party-client/imobzi/imobzi.service';
 import { InvoicesService } from 'src/repository/invoices/invoices.service';
 

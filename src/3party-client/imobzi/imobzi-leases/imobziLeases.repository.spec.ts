@@ -1,20 +1,19 @@
 import { HttpService } from '@nestjs/axios';
 import { Test, TestingModule } from '@nestjs/testing';
 import { SharedModule } from 'src/shared.module';
-import {
-  imobziLeaseMock,
-  imobziLeasesPagination,
-} from '../../../../test/3rdParty-repositories/imobzi-repositories/leases/imobziLease.mock';
+import { ImobziLeasesMock } from '../../../../test/3rdParty-repositories/imobzi-repositories/leases/imobziLease.mock';
 import { ImobziLeasesRepository } from './imobziLeases.repository';
 
 describe('ImobziLeasesRepository', () => {
   let repository: ImobziLeasesRepository;
   let httpServiceMock: { axiosRef: { get: jest.Mock } };
+  let leasesMock: ImobziLeasesMock;
 
   beforeEach(async () => {
     httpServiceMock = {
       axiosRef: { get: jest.fn() },
     };
+    leasesMock = new ImobziLeasesMock();
 
     const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [SharedModule],
@@ -35,21 +34,23 @@ describe('ImobziLeasesRepository', () => {
   });
 
   test('getAllLeasesFromImobzi should handle with pagination and return array of all leases', async () => {
+    const pagination = leasesMock.pagination;
     httpServiceMock.axiosRef.get.mockImplementation((url: string) => {
       if (url === 'https://api.imobzi.app/v1/leases?smart_list=all&cursor=') {
-        return Promise.resolve({ data: imobziLeasesPagination.page1 });
+        return Promise.resolve({ data: pagination.page1 });
       } else if (url === 'https://api.imobzi.app/v1/leases?smart_list=all&cursor=abc') {
-        return Promise.resolve({ data: imobziLeasesPagination.page2 });
+        return Promise.resolve({ data: pagination.page2 });
       } else {
         throw new Error(`verify the url: ${url} and try again`);
       }
     });
     const result = await repository.getAllLeasesFromImobzi();
-    expect(result).toEqual([...imobziLeasesPagination.page1.leases, ...imobziLeasesPagination.page2.leases]);
+    expect(result).toEqual([...pagination.page1.leases, ...pagination.page2.leases]);
   });
 
   test('getLeaseFullData should return full data from lease on Imobzi API', async () => {
-    const leaseTest = imobziLeaseMock[0];
+    const leases = leasesMock.allLeasesFullData;
+    const leaseTest = leases[0];
     const idString = leaseTest.db_id.toString();
 
     httpServiceMock.axiosRef.get.mockImplementation((url: string) => {

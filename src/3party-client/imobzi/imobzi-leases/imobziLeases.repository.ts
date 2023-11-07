@@ -1,8 +1,8 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { imobziParams, imobziUrls } from '../imobzi-urls-params/imobzi.urls';
-import { ImobziLeasesDTO, LeaseDTO } from './imobziLeases.dtos';
-import { ImobziLeaseDetailsDTO } from './imobziLeasesDetails.dtos';
+import { ImobziLeasesDTO, LeaseDTO } from './dtos/imobziLeases.dtos';
+import { ImobziLeaseDetailsDTO } from './dtos/imobziLeasesDetails.dtos';
 
 @Injectable()
 export class ImobziLeasesRepository {

@@ -6,16 +6,16 @@ import { LeasesController } from 'src/repository/leases/leases.controller';
 import { OrganizationsController } from 'src/repository/organizations/organizations.controller';
 import { PeopleController } from 'src/repository/people/people.controller';
 import { PropertiesController } from 'src/repository/properties/properties.controller';
-import { BuildingDTO } from './imobzi-buildings/imobziBuildings.dtos';
+import { BuildingDTO } from './imobzi-buildings/dtos/imobziBuildings.dtos';
 import { ImobziBuildingsService } from './imobzi-buildings/imobziBuildings.service';
-import { ContactDTO } from './imobzi-contacts/imobziContacts.dtos';
+import { ContactDTO } from './imobzi-contacts/dtos/imobziContacts.dtos';
 import { InvoicesDTO } from './imobzi-invoices/imobziInvoices.dtos';
 import { ImobziInvoicesService } from './imobzi-invoices/imobziInvoices.service';
-import { LeaseDTO } from './imobzi-leases/imobziLeases.dtos';
+import { LeaseDTO } from './imobzi-leases/dtos/imobziLeases.dtos';
 import { ImobziLeasesService } from './imobzi-leases/imobziLeases.repository';
-import { ImobziOrganizationsService } from './imobzi-organizations/imobziOrganizations.service';
-import { ImobziPeopleService } from './imobzi-people/imobziPeople.service';
-import { PropertyDTO } from './imobzi-properties/imobziProperties.dtos';
+import { ImobziOrganizationsService } from './imobzi-organizations/imobziOrganizations.reposiotry';
+import { ImobziPeopleService } from './imobzi-people/imobziPeople.repository';
+import { PropertyDTO } from './imobzi-properties/dtos/imobziProperties.dtos';
 import { ImobziPropertiesService } from './imobzi-properties/imobziProperties.service';
 
 @Injectable()

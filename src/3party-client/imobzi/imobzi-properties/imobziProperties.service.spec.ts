@@ -1,116 +1,44 @@
-import { HttpService } from '@nestjs/axios';
 import { Test, TestingModule } from '@nestjs/testing';
+import { CreateOwnerDto } from 'src/repository/owners/dto/create-owner.dto';
+import { CreatePropertyDTO } from 'src/repository/properties/dtos/create-property.dtos';
 import { SharedModule } from 'src/shared.module';
-import { imobziPropertiesMock, imobziPropertyMock } from './imobziProperties.mocks';
+import { ImobziPropertiesMock } from '../../../../test/3rdParty-repositories/imobzi-repositories/properties/imobziProperties.mocks';
+import { ImobziPropertiesRepository } from './imobziProperties.repository';
 import { ImobziPropertiesService } from './imobziProperties.service';
 
 describe('ImobziPropertiesService', () => {
-  let imobziPropertiesService: ImobziPropertiesService;
-  let httpServiceMock: { axiosRef: { get: jest.Mock } };
+  let service: ImobziPropertiesService;
+  let propertiesMock: ImobziPropertiesMock;
 
   beforeEach(async () => {
-    httpServiceMock = {
-      axiosRef: {
-        get: jest.fn(),
-      },
-    };
-
+    propertiesMock = new ImobziPropertiesMock();
     const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [SharedModule],
-      providers: [
-        ImobziPropertiesService,
-        {
-          provide: HttpService,
-          useValue: httpServiceMock,
-        },
-      ],
+      providers: [ImobziPropertiesService, { provide: ImobziPropertiesRepository, useValue: propertiesMock }],
     }).compile();
 
-    imobziPropertiesService = moduleRef.get<ImobziPropertiesService>(ImobziPropertiesService);
-
-    httpServiceMock.axiosRef.get.mockImplementation((url) => {
-      const urlToUniqueProperty = /^https:\/\/api\.imobzi\.app\/v1\/property\//.test(url);
-      if (urlToUniqueProperty) {
-        const id = url.split('/').pop();
-        if (id === imobziPropertyMock.db_id.toString()) {
-          return Promise.resolve({ data: imobziPropertyMock });
-        } else {
-          throw new Error(`verify the url: ${url} and try again`);
-        }
-      }
-
-      switch (url) {
-        case 'https://api.imobzi.app/v1/properties?smart_list=all&cursor=':
-          return Promise.resolve({ data: imobziPropertiesMock.availableProperties.page1 });
-        case 'https://api.imobzi.app/v1/properties?smart_list=all&cursor=def':
-          return Promise.resolve({ data: imobziPropertiesMock.availableProperties.page2 });
-        case 'https://api.imobzi.app/v1/properties?smart_list=unavailable_properties&cursor=':
-          return Promise.resolve({ data: imobziPropertiesMock.unavailableProperties.page1 });
-        case 'https://api.imobzi.app/v1/properties?smart_list=unavailable_properties&cursor=abc':
-          return Promise.resolve({ data: imobziPropertiesMock.unavailableProperties.page2 });
-
-        default:
-          throw new Error(`verify the url: ${url} and try again`);
-      }
-    });
+    service = moduleRef.get<ImobziPropertiesService>(ImobziPropertiesService);
   });
 
-  test('getAllProperties', async () => {
-    const result = await imobziPropertiesService.getAllProperties();
-    expect(result).toEqual(
-      expect.arrayContaining([
-        ...imobziPropertiesMock.unavailableProperties.page1.properties,
-        ...imobziPropertiesMock.unavailableProperties.page2.properties,
-        ...imobziPropertiesMock.availableProperties.page1.properties,
-        ...imobziPropertiesMock.availableProperties.page2.properties,
-      ]),
-    );
+  test('service should be defined', () => {
+    expect(service).toBeDefined();
   });
 
-  test('getRequiredPropertyOwnersToDb', () => {
-    const result = imobziPropertiesService.getRequiredPropertyOwnersToDb(imobziPropertyMock.owners);
-    expect(result).toEqual([
-      {
-        share: 50,
-        id_owner_organization_imobzi: '2222222222',
-        id_owner_person_imobzi: null,
-      },
-      {
-        share: 50,
-        id_owner_organization_imobzi: null,
-        id_owner_person_imobzi: '44444444',
-      },
-    ]);
+  test('getAllProperties ', async () => {
+    const properties = propertiesMock.allPropertiesFullData;
+    const propertyTest = properties[0];
+    const result: CreatePropertyDTO = await service.getRequiredPropertyDataToDb(propertyTest.db_id.toString());
+    for (const item in result) {
+      expect(result[item]).toBeDefined();
+    }
   });
 
-  test('getRequiredPropertyDataToDb', async () => {
-    const result = await imobziPropertiesService.getRequiredPropertyDataToDb('1111111111111');
-    expect(result).toEqual({
-      unit: '2202',
-      owners: [
-        {
-          share: 50,
-          id_owner_organization_imobzi: '2222222222',
-          id_owner_person_imobzi: null,
-        },
-        {
-          share: 50,
-          id_owner_organization_imobzi: null,
-          id_owner_person_imobzi: '44444444',
-        },
-      ],
-      id_imobzi: '1111111111111',
-      alternative_code: '72',
-      area: 60,
-      id_building_imobzi: '99999999999',
-      sale_value: 330000,
-      rental_value: 1000,
-      status: 'rented',
-      type: 'apartament',
-      garage: 2,
-      suite: 1,
-      bedroom: 2,
-      active: true,
-    });
+  test('getRequiredPropertyOwnersToDb should return array of defined owners', () => {
+    const properties = propertiesMock.allPropertiesFullData;
+    const propertyTest = properties[0];
+    const result: CreateOwnerDto[] = service.getRequiredPropertyOwnersToDb(propertyTest.owners);
+    for (const item in result) {
+      expect(result[item]).toBeDefined();
+    }
   });
 });

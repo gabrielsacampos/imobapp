@@ -1,34 +1,13 @@
-import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { CreateLeaseDTO } from 'src/repository/leases/dtos/create-lease.dtos';
 import { BeneficiariesCreateDTO } from 'src/repository/leases/lease-beneficiaries/lease-beneficiaries.dtos';
 import { LeaseItemsCreateDTO } from 'src/repository/leases/lease-items/leaseItemsCreate.dtos';
-import { imobziParams, imobziUrls } from '../imobzi-urls-params/imobzi.urls';
-import { ImobziLeasesDTO, LeaseDTO } from './imobziLeases.dtos';
-import { ImobziLeaseBeneficiaryDTO, ImobziLeaseDetailsDTO, ImobziLeaseItemDTO } from './imobziLeasesDetails.dtos';
+import { ImobziLeaseBeneficiaryDTO, ImobziLeaseDetailsDTO, ImobziLeaseItemDTO } from './dtos/imobziLeasesDetails.dtos';
+import { ImobziLeasesRepository } from './imobziLeases.repository';
 
 @Injectable()
 export class ImobziLeasesService {
-  constructor(private readonly httpService: HttpService) {}
-
-  async getAllLeasesFromImobzi(): Promise<LeaseDTO[]> {
-    try {
-      const allLeases = [];
-      let cursor = '';
-      do {
-        const { data } = await this.httpService.axiosRef.get<ImobziLeasesDTO>(
-          imobziUrls.urlAllLeases(cursor),
-          imobziParams,
-        );
-        allLeases.push(...data.leases);
-        cursor = data.cursor;
-      } while (cursor);
-
-      return allLeases;
-    } catch (error) {
-      throw new Error(error);
-    }
-  }
+  constructor(private readonly imobziLeasesRepository: ImobziLeasesRepository) {}
 
   getRequiredLeaseBeneficiariesDataToDb(leaseBeneficiaries: ImobziLeaseBeneficiaryDTO[]): BeneficiariesCreateDTO[] {
     return leaseBeneficiaries.map((beneficiary) => {
@@ -73,8 +52,9 @@ export class ImobziLeasesService {
     });
   }
 
-  async getRequiredLeaseDataToDb(leaseFullData: ImobziLeaseDetailsDTO): Promise<CreateLeaseDTO> {
+  async getRequiredLeaseDataToDb(idLease: string): Promise<CreateLeaseDTO> {
     try {
+      const leaseFullData: ImobziLeaseDetailsDTO = await this.imobziLeasesRepository.getLeaseFullData(idLease);
       const id_imobzi = leaseFullData.db_id.toString();
       const id_annual_readjustment_imobzi = leaseFullData.annual_readjustment?.db_id.toString();
       const id_property_imobzi = leaseFullData.property.db_id.toString();

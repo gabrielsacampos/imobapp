@@ -1,46 +1,12 @@
-import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { CreateOwnerDto } from 'src/repository/owners/dto/create-owner.dto';
 import { CreatePropertyDTO } from 'src/repository/properties/dtos/create-property.dtos';
-
-import { imobziParams, imobziUrls } from '../imobzi-urls-params/imobzi.urls';
-import { ImobziPropertiesDTO } from './imobziProperties.dtos';
-import { ImobziPropertyOwnerDTO } from './imobziPropertyDetails.dtos';
+import { ImobziPropertyOwnerDTO } from './dtos/imobziPropertyDetails.dtos';
+import { ImobziPropertiesRepository } from './imobziProperties.repository';
 
 @Injectable()
 export class ImobziPropertiesService {
-  constructor(private readonly httpService: HttpService) {}
-
-  async getAllProperties(): Promise<any> {
-    try {
-      const allProperties = [];
-
-      let cursor = '';
-      do {
-        const { data } = await this.httpService.axiosRef.get<ImobziPropertiesDTO>(
-          imobziUrls.urlProperties('all', cursor),
-          imobziParams,
-        );
-        allProperties.push(...data.properties);
-        cursor = data.cursor;
-      } while (cursor);
-
-      cursor = '';
-      do {
-        const { data } = await this.httpService.axiosRef.get<ImobziPropertiesDTO>(
-          imobziUrls.urlProperties('unavailable_properties', cursor),
-          imobziParams,
-        );
-        allProperties.push(...data.properties);
-        cursor = data.cursor;
-      } while (cursor);
-
-      return allProperties;
-    } catch (error) {
-      throw new Error(error);
-    }
-  }
-
+  constructor(private readonly imobziPropertiesRepository: ImobziPropertiesRepository) {}
   getRequiredPropertyOwnersToDb(owners: Partial<ImobziPropertyOwnerDTO>[]): CreateOwnerDto[] {
     return owners.map((owner) => {
       let id_owner_person_imobzi: string;
@@ -58,11 +24,12 @@ export class ImobziPropertiesService {
     });
   }
 
-  async getRequiredPropertyDataToDb(id_imobzi: string): Promise<CreatePropertyDTO> {
+  async getRequiredPropertyDataToDb(idProperty: string): Promise<CreatePropertyDTO> {
     try {
-      const { data } = await this.httpService.axiosRef.get(imobziUrls.urlPropertyDetails(id_imobzi), imobziParams);
-      const unity = data.property_unity?.toString();
-      const id_building_imobzi = data.building_id ? data.building_id.toString() : null;
+      const propertyFullData = await this.imobziPropertiesRepository.getPropertyFullData(idProperty);
+      const id_imobzi = propertyFullData.db_id.toString();
+      const unity = propertyFullData.property_unity?.toString();
+      const id_building_imobzi = propertyFullData.building_id ? propertyFullData.building_id.toString() : null;
 
       const {
         property_block: block,
@@ -76,9 +43,9 @@ export class ImobziPropertiesService {
         suite,
         bedroom,
         active,
-      } = data;
+      } = propertyFullData;
 
-      const owners = this.getRequiredPropertyOwnersToDb(data.owners);
+      const owners = this.getRequiredPropertyOwnersToDb(propertyFullData.owners);
 
       return {
         block,

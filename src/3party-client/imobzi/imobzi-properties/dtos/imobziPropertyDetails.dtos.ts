@@ -98,16 +98,12 @@ export interface CoverPhotoPrivate {
 }
 
 export interface ImobziPropertyOwnerDTO {
-  bank_data: BankData;
   code: string;
   name: string;
-  phones: Phone[];
-  profile_image_url: any;
   id: number;
   rate: any;
   percentage: number;
   type: string;
-  email: string[];
 }
 
 export interface BankData {

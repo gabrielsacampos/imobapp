@@ -1,6 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { ContactDTO, ImobziContactsDTO } from './imobziContacts.dtos';
+import { ContactDTO, ImobziContactsDTO } from './dtos/imobziContacts.dtos';
 import { imobziUrls, imobziParams } from '../imobzi-urls-params/imobzi.urls';
 
 @Injectable()
