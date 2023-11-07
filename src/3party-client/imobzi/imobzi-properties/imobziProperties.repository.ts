@@ -8,7 +8,7 @@ import { ImobziPropertyDetailsDTO } from './dtos/imobziPropertyDetails.dtos';
 export class ImobziPropertiesRepository {
   constructor(private readonly httpService: HttpService) {}
 
-  async getAllProperties(): Promise<any> {
+  async getAll(): Promise<any> {
     try {
       const allProperties = [];
 
@@ -38,7 +38,7 @@ export class ImobziPropertiesRepository {
     }
   }
 
-  async getPropertyFullData(id_imobzi: string): Promise<ImobziPropertyDetailsDTO> {
+  async getFullData(id_imobzi: string): Promise<ImobziPropertyDetailsDTO> {
     const { data } = await this.httpService.axiosRef.get(imobziUrls.urlPropertyDetails(id_imobzi), imobziParams);
     return data;
   }

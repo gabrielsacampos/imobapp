@@ -44,7 +44,7 @@ describe('ImobziContactsRepository', () => {
         return Promise.reject(new Error(`Error on Url: ${url}`));
       }
     });
-    const result = await repository.getAllContacts();
+    const result = await repository.getAll();
     expect(result).toEqual([...pagination.page1.contacts, ...pagination.page2.contacts]);
   });
 });

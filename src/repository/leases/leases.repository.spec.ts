@@ -74,9 +74,9 @@ describe('LeasesRepository', () => {
   it('update > create lease or update if not exists', async () => {
     const randomLeaseToTest = inMemoryLeasesRepositoryMock[4];
     randomLeaseToTest.code_imobzi = 'xxx';
-    const beneficiaries = [];
-    const lease_items = [];
-    await expect(repository.update({ ...randomLeaseToTest, beneficiaries, lease_items })).resolves.not.toThrow();
+    const id_imobzi = randomLeaseToTest.id_imobzi;
+
+    await expect(repository.update(id_imobzi, randomLeaseToTest)).resolves.not.toThrow();
     expect(inMemoryLeasesRepository.items).toEqual(
       expect.arrayContaining([expect.objectContaining(randomLeaseToTest)]),
     );

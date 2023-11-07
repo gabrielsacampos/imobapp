@@ -62,7 +62,7 @@ export class LeasesRepository {
     }
   }
 
-  async update(data: CreateLeaseDTO): Promise<Lease> {
+  async update(id_imobzi: string, data: CreateLeaseDTO): Promise<Lease> {
     try {
       const beneficiaries = data.beneficiaries;
       delete data.beneficiaries;
@@ -71,7 +71,7 @@ export class LeasesRepository {
 
       return await this.prisma.lease.update({
         where: {
-          id_imobzi: data.id_imobzi,
+          id_imobzi,
         },
         data: {
           ...data,

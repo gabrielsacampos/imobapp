@@ -4,6 +4,7 @@ import { NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { inMemoryOrganizationsRepositoryMock } from './inMemoryOrganizationsRepository.mock';
 import { Organization } from 'src/repository/organizations/entities/organization.entity';
 import { OrganizationsRepository } from 'src/repository/organizations/organizations.repository';
+import { UpdateOrganizationDTO } from 'src/repository/organizations/dtos/update-organization.dtos';
 
 export class InMemoryOrganizationsRepository implements Partial<OrganizationsRepository> {
   public items: Organization[] = inMemoryOrganizationsRepositoryMock;
@@ -38,32 +39,15 @@ export class InMemoryOrganizationsRepository implements Partial<OrganizationsRep
     return found;
   }
 
-  async upsert(data: CreateOrganizationDTO) {
-    const existingOrganizationIndex = this.items.findIndex((org) => org.id_imobzi === data.id_imobzi);
+  async update(id_imobzi: string, data: UpdateOrganizationDTO): Promise<Organization> {
+    const existingOrgIndex = this.items.findIndex((org) => org.id_imobzi === id_imobzi);
+    const existingOrg = this.items.find((org) => org.id_imobzi === id_imobzi);
 
-    if (existingOrganizationIndex === -1) {
-      const organnizationToCreate = data;
-      organnizationToCreate.id = crypto.randomInt(1, 1000);
-      this.create(organnizationToCreate);
-      return organnizationToCreate;
-    } else {
-      const existingOrganization = this.items[existingOrganizationIndex];
-      const existingOrganizationUpdated = data;
-      this.items[existingOrganizationIndex] = existingOrganizationUpdated;
-      return existingOrganization;
-    }
-  }
-
-  async update(id_imobzi: string, data: CreateOrganizationDTO) {
-    const existingOrganizationIndex = this.items.findIndex((org) => org.id_imobzi === id_imobzi);
-
-    if (existingOrganizationIndex === -1) {
+    if (existingOrgIndex === -1) {
       throw new Error(`Organization ID_IMOBZI ${id_imobzi} not found.`);
-    } else {
-      const existingOrganization = this.items[existingOrganizationIndex];
-      const existingOrganizationUpdated = data;
-      this.items[existingOrganizationIndex] = existingOrganizationUpdated;
-      return existingOrganization;
     }
+
+    this.items[existingOrgIndex] = { id_imobzi: existingOrg.id_imobzi, ...data };
+    return data;
   }
 }

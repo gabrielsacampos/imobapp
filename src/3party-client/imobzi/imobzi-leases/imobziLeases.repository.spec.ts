@@ -44,7 +44,7 @@ describe('ImobziLeasesRepository', () => {
         throw new Error(`verify the url: ${url} and try again`);
       }
     });
-    const result = await repository.getAllLeasesFromImobzi();
+    const result = await repository.getAll();
     expect(result).toEqual([...pagination.page1.leases, ...pagination.page2.leases]);
   });
 
@@ -64,7 +64,7 @@ describe('ImobziLeasesRepository', () => {
         }
       }
     });
-    const result = await repository.getLeaseFullData(idString);
+    const result = await repository.getFullData(idString);
     expect(result).toEqual(leaseTest);
   });
 });

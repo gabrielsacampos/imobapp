@@ -53,7 +53,7 @@ describe('ImobziPropertiesRepository', () => {
           throw new Error(`verify the url: ${url} and try again`);
       }
     });
-    const result = await repository.getAllProperties();
+    const result = await repository.getAll();
     expect(result).toEqual(
       expect.arrayContaining([
         ...pagination.unavailableProperties.page1.properties,
@@ -81,7 +81,7 @@ describe('ImobziPropertiesRepository', () => {
     });
 
     const idString = propertyTest.db_id.toString();
-    const result: ImobziPropertyDetailsDTO = await repository.getPropertyFullData(idString);
+    const result: ImobziPropertyDetailsDTO = await repository.getFullData(idString);
     expect(result).toEqual(propertyTest);
   });
 });

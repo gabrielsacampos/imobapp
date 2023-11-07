@@ -8,7 +8,7 @@ import { ImobziLeaseDetailsDTO } from './dtos/imobziLeasesDetails.dtos';
 export class ImobziLeasesRepository {
   constructor(private readonly httpService: HttpService) {}
 
-  async getAllLeasesFromImobzi(): Promise<LeaseDTO[]> {
+  async getAll(): Promise<LeaseDTO[]> {
     try {
       const allLeases = [];
       let cursor = '';
@@ -28,7 +28,7 @@ export class ImobziLeasesRepository {
     }
   }
 
-  async getLeaseFullData(id_imobzi: string): Promise<ImobziLeaseDetailsDTO> {
+  async getFullData(id_imobzi: string): Promise<ImobziLeaseDetailsDTO> {
     try {
       const { data } = await this.httpService.axiosRef.get<ImobziLeaseDetailsDTO>(
         imobziUrls.urlLeaseDetails(id_imobzi),

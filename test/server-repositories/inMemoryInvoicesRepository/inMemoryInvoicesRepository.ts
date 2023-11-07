@@ -1,9 +1,9 @@
 import { NotAcceptableException, NotFoundException } from '@nestjs/common';
+import * as crypto from 'node:crypto';
 import { CreateInvoiceDTO } from 'src/repository/invoices/dtos/create-invoice.dtos';
 import { Invoice } from 'src/repository/invoices/entities/invoice.entity';
 import { InvoicesRepository } from 'src/repository/invoices/invoices.repository';
 import { inMemoryInvoicesRepositoryMock } from './inMemoryRepositoryInvoices.mock';
-import * as crypto from 'node:crypto';
 
 export class InMemoryInvoicesRepository implements Partial<InvoicesRepository> {
   items: Invoice[] = inMemoryInvoicesRepositoryMock;
@@ -18,6 +18,7 @@ export class InMemoryInvoicesRepository implements Partial<InvoicesRepository> {
     this.items.push(data);
     return data;
   }
+
   async findAll(): Promise<Invoice[]> {
     return this.items;
   }
@@ -30,19 +31,15 @@ export class InMemoryInvoicesRepository implements Partial<InvoicesRepository> {
     return found;
   }
 
-  async upsert(data: CreateInvoiceDTO): Promise<Invoice> {
-    const existingInvoiceIndex = this.items.findIndex((invoice) => invoice.id_imobzi === data.id_imobzi);
+  async update(id_imobzi: string, data: CreateInvoiceDTO): Promise<Invoice> {
+    const foundIndex = this.items.findIndex((invoice) => invoice.id_imobzi === id_imobzi);
+    const foundInvoice = this.items.find((invoice) => invoice.id_imobzi === id_imobzi);
 
-    if (existingInvoiceIndex === -1) {
-      const invoiceToCreate = data;
-      invoiceToCreate.id = crypto.randomInt(1, 1000);
-      this.create(invoiceToCreate);
-      return invoiceToCreate;
-    } else {
-      const existingInvoice = this.items[existingInvoiceIndex];
-      const existingInvoicenUpdated = data;
-      this.items[existingInvoiceIndex] = existingInvoicenUpdated;
-      return existingInvoice;
+    if (foundIndex === -1) {
+      throw new NotFoundException(`ID: ${id_imobzi} not found at leases`);
     }
+
+    this.items[foundIndex] = { id: foundInvoice.id, ...data };
+    return data;
   }
 }

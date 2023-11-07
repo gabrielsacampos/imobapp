@@ -12,7 +12,7 @@ export class ImobziInvoicesMock {
     },
   };
 
-  async getInvoiceFullData(idInvoice: string): Promise<AnImobziInvoiceDTO> {
+  async getFullData(idInvoice: string): Promise<AnImobziInvoiceDTO> {
     return this.invoicesFullData.find((invoice) => invoice.invoice_id === idInvoice);
   }
 

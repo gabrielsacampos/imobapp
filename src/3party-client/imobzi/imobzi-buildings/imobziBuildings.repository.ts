@@ -7,7 +7,7 @@ import { BuildingDTO } from './dtos/imobziBuildings.dtos';
 export class ImobziBuildingsRepository {
   constructor(private readonly httpService: HttpService) {}
 
-  async getAllBuildings(): Promise<BuildingDTO[]> {
+  async getAll(): Promise<BuildingDTO[]> {
     try {
       const allBuildings: BuildingDTO[] = [];
 

@@ -40,7 +40,7 @@ describe('ImobziBuildingRepository', () => {
           throw new Error(`verify the url: ${url} and try again`);
       }
     });
-    const result = await repository.getAllBuildings();
+    const result = await repository.getAll();
     expect(result).toEqual([...pagination.page1.properties, ...pagination.page2.properties]);
   });
 });

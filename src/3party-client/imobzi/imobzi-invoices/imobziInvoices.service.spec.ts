@@ -40,7 +40,7 @@ describe('ImobziInvoicesService', () => {
   test('getAnInvoiceRequiredData should get from Imobzi API the full data from invoice and return only required data to store on DB', async () => {
     const invoices = invoicesMock.invoicesFullData;
     const invoiceTest = invoices[4];
-    const result: CreateInvoiceDTO = await service.getInvoiceRequiredData(invoiceTest.invoice_id);
+    const result: CreateInvoiceDTO = await service.getRequiredData(invoiceTest.invoice_id);
     for (const prop in result) {
       expect(result[prop]).toBeDefined();
     }

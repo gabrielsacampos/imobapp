@@ -1,6 +1,7 @@
+import { CreatePropertyDTO } from 'src/repository/properties/dtos/create-property.dtos';
 import { Property } from 'src/repository/properties/entities/property.entity';
 
-export const inMemoryPropertiesRepositoryMock: Property[] = [
+export const inMemoryPropertiesRepositoryMock: CreatePropertyDTO[] = [
   {
     id_imobzi: 'prop1',
     unity: '101A',
@@ -15,6 +16,7 @@ export const inMemoryPropertiesRepositoryMock: Property[] = [
     rental_value: 2000,
     sale_value: 300000,
     alternative_code: 'ABC123',
+    owners: [],
   },
   {
     id_imobzi: 'prop2',
@@ -30,6 +32,7 @@ export const inMemoryPropertiesRepositoryMock: Property[] = [
     rental_value: 2500,
     sale_value: 350000,
     alternative_code: 'DEF456',
+    owners: [],
   },
   {
     id_imobzi: 'prop3',
@@ -45,6 +48,7 @@ export const inMemoryPropertiesRepositoryMock: Property[] = [
     rental_value: 3000,
     sale_value: 450000,
     alternative_code: 'GHI789',
+    owners: [],
   },
   {
     id_imobzi: 'prop4',
@@ -60,6 +64,7 @@ export const inMemoryPropertiesRepositoryMock: Property[] = [
     rental_value: 1500,
     sale_value: 200000,
     alternative_code: 'JKL012',
+    owners: [],
   },
   {
     id_imobzi: 'prop5',
@@ -75,6 +80,7 @@ export const inMemoryPropertiesRepositoryMock: Property[] = [
     rental_value: 1800,
     sale_value: 250000,
     alternative_code: 'MNO345',
+    owners: [],
   },
   {
     id_imobzi: 'prop6',
@@ -90,6 +96,7 @@ export const inMemoryPropertiesRepositoryMock: Property[] = [
     rental_value: 4000,
     sale_value: 550000,
     alternative_code: 'PQR678',
+    owners: [],
   },
   {
     id_imobzi: 'prop7',
@@ -105,6 +112,7 @@ export const inMemoryPropertiesRepositoryMock: Property[] = [
     rental_value: 2300,
     sale_value: 320000,
     alternative_code: 'STU901',
+    owners: [],
   },
   {
     id_imobzi: 'prop8',
@@ -120,6 +128,7 @@ export const inMemoryPropertiesRepositoryMock: Property[] = [
     rental_value: 5000,
     sale_value: 700000,
     alternative_code: 'VWX234',
+    owners: [],
   },
   {
     id_imobzi: 'prop9',
@@ -135,6 +144,7 @@ export const inMemoryPropertiesRepositoryMock: Property[] = [
     rental_value: 2200,
     sale_value: 310000,
     alternative_code: 'YZ0123',
+    owners: [],
   },
   {
     id_imobzi: 'prop10',
@@ -150,5 +160,6 @@ export const inMemoryPropertiesRepositoryMock: Property[] = [
     rental_value: 2600,
     sale_value: 370000,
     alternative_code: '456XYZ',
+    owners: [],
   },
 ];

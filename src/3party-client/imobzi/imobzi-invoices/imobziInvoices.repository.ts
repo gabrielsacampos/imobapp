@@ -8,7 +8,7 @@ import { AnImobziInvoiceDTO } from './dto/an-imobzi-invoice.dtos';
 export class ImobziInvoicesRepository {
   constructor(private readonly httpService: HttpService) {}
 
-  async getAllInvoicesFromImobzi(): Promise<AllImobziInvoiceDTO[]> {
+  async getAll(): Promise<AllImobziInvoiceDTO[]> {
     try {
       let page = 1;
       const allInvoices: AllImobziInvoiceDTO[] = [];
@@ -28,7 +28,7 @@ export class ImobziInvoicesRepository {
     }
   }
 
-  async getInvoiceFullData(idImobzi: string): Promise<AnImobziInvoiceDTO> {
+  async getFullData(idImobzi: string): Promise<AnImobziInvoiceDTO> {
     try {
       const { data } = await this.httpService.axiosRef.get<AnImobziInvoiceDTO>(
         imobziUrls.urlInvoiceDetail(idImobzi),

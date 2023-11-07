@@ -37,8 +37,10 @@ export class ImobziInvoicesService {
     });
   }
 
-  async getInvoiceRequiredData(idInvoice: string): Promise<CreateInvoiceDTO> {
-    const invoiceFullData: AnImobziInvoiceDTO = await this.imobziInvoicesRepository.getInvoiceFullData(idInvoice);
+  async getRequiredData(idInvoice: string): Promise<CreateInvoiceDTO> {
+    const invoiceMainData: any = {};
+
+    const invoiceFullData: AnImobziInvoiceDTO = await this.imobziInvoicesRepository.getFullData(idInvoice);
     const idImobzi = invoiceFullData.invoice_id;
     const id_lease_imobzi = invoiceFullData.lease?.db_id.toString();
     const management_fee = invoiceFullData.onlendings_and_fees?.management_fee_value;
@@ -55,7 +57,41 @@ export class ImobziInvoicesService {
       return { ...item, id_invoice_imobzi: idImobzi };
     });
 
-    const invoiceItems: CreateInvoiceItemDto[] = this.getRequiredInvoiceItemsDataToDb(itemsWithInvoicesIds, idImobzi);
+    const interestItem: CreateInvoiceItemDto = {
+      id_invoice_imobzi: invoiceFullData.invoice_id,
+      until_due_date: false,
+      item_type: null,
+      id_imobzi: idInvoice,
+      description: 'Juros',
+      behavior: 'charge_tenant_and_onlend',
+      include_in_dimob: true,
+      charge_management_fee: true,
+      value: invoiceFullData.interest_value,
+    };
+
+    const bankFeeItem: CreateInvoiceItemDto = {
+      id_invoice_imobzi: invoiceFullData.invoice_id,
+      until_due_date: false,
+      item_type: null,
+      id_imobzi: `${idImobzi}-bank-fee`,
+      description: 'Taxa de Boleto',
+      behavior: 'bank_withheld',
+      include_in_dimob: false,
+      charge_management_fee: false,
+      value: 0 - invoiceFullData.charge_fee_value,
+    };
+
+    delete invoiceFullData.interest_value;
+    delete invoiceFullData.charge_fee_value;
+
+    invoiceMainData.invoiceItems = this.getRequiredInvoiceItemsDataToDb(itemsWithInvoicesIds, idImobzi);
+    if (interestItem.value !== 0) {
+      invoiceMainData.invoiceItems.push(interestItem);
+    }
+
+    if (bankFeeItem.value !== 0) {
+      invoiceMainData.invoiceItems.push(bankFeeItem);
+    }
 
     const {
       invoice_id: id_imobzi,
@@ -68,10 +104,10 @@ export class ImobziInvoicesService {
       bank_slip_url,
       total_value,
       invoice_paid_manual: paid_manual,
-      charge_fee_value: bank_fee_value,
     } = invoiceFullData;
 
     return {
+      ...invoiceMainData,
       id_imobzi,
       status,
       reference_start_at,
@@ -85,12 +121,10 @@ export class ImobziInvoicesService {
       paid_at,
       credit_at,
       paid_manual,
-      bank_fee_value,
       account_credit,
       onlending_value,
       management_fee,
       id_lease_imobzi,
-      invoiceItems,
     };
   }
 }

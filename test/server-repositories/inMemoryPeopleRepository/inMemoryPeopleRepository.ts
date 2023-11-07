@@ -51,21 +51,7 @@ export class InMemoryPeopleRepository implements Partial<PeopleRepository> {
     }
   }
 
-  async upsert(data: CreatePersonDTO) {
-    const existingPersonIndex = this.items.findIndex((person) => person.id_imobzi === data.id_imobzi);
-
-    if (existingPersonIndex === -1) {
-      const personToCreate = data;
-      return this.create(personToCreate);
-    } else {
-      const existingPerson = this.items[existingPersonIndex];
-      const existingPersonUpdated = data;
-      this.items[existingPersonIndex] = existingPersonUpdated;
-      return existingPerson;
-    }
-  }
-
-  async update(id_imobzi: string, data: CreatePersonDTO) {
+  async update(id_imobzi: string, data: CreatePersonDTO): Promise<Person> {
     const existingPersonIndex = this.items.findIndex((person) => person.id_imobzi === id_imobzi);
 
     if (existingPersonIndex === -1) {

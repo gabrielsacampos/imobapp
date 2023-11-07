@@ -4,6 +4,7 @@ import { CreateBuildingDTO } from 'src/repository/buildings/dtos/create-building
 import { Building } from 'src/repository/buildings/entities/building.entity';
 import { inMemoryBuildingsRepositoryMock } from './inMemoryBuildingsRepository.mock';
 import * as crypto from 'node:crypto';
+import { UpdateBuildingDTO } from 'src/repository/buildings/dtos/update-building.dtos';
 
 export class InMemoryBuildingsRepository implements Partial<BuildingsRepository> {
   items: Building[] = inMemoryBuildingsRepositoryMock;
@@ -30,19 +31,20 @@ export class InMemoryBuildingsRepository implements Partial<BuildingsRepository>
     return found;
   }
 
-  async upsert(data: CreateBuildingDTO): Promise<Building> {
-    const existingBuildingIndex = this.items.findIndex((building) => building.id_imobzi === data.id_imobzi);
+  async update(id_imobzi: string, data: UpdateBuildingDTO): Promise<UpdateBuildingDTO> {
+    const foundIndex = this.items.findIndex((building) => {
+      return building.id_imobzi === id_imobzi;
+    });
 
-    if (existingBuildingIndex === -1) {
-      const buildingToCreate = data;
-      buildingToCreate.id = crypto.randomInt(1, 1000);
-      this.create(buildingToCreate);
-      return buildingToCreate;
-    } else {
-      const existingBuilding = this.items[existingBuildingIndex];
-      const existingBuildingUpdated = data;
-      this.items[existingBuildingIndex] = existingBuildingUpdated;
-      return existingBuilding;
+    const foundBuilding = this.items.find((building) => {
+      return building.id_imobzi === id_imobzi;
+    });
+
+    if (foundIndex === -1) {
+      throw new NotFoundException(`ID: ${id_imobzi} not found at buildings`);
     }
+
+    this.items[foundIndex] = { id: foundBuilding.id, ...data };
+    return data;
   }
 }

@@ -120,7 +120,7 @@ export class ImobziPropertiesMock {
       key_id: '',
     },
   ];
-  async getPropertyFullData(idProperty: string): Promise<ImobziPropertyDetailsDTO> {
+  async getFullData(idProperty: string): Promise<ImobziPropertyDetailsDTO> {
     return this.allPropertiesFullData.find((property) => property.db_id.toString() === idProperty);
   }
 }

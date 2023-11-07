@@ -10,6 +10,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 1,
     invoice_url: 'invoice_url_1',
     total_value: 100,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_2',
@@ -19,6 +20,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 2,
     invoice_url: 'invoice_url_2',
     total_value: 200,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_3',
@@ -28,6 +30,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 3,
     invoice_url: 'invoice_url_3',
     total_value: 300,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_4',
@@ -37,6 +40,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 4,
     invoice_url: 'invoice_url_4',
     total_value: 400,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_5',
@@ -46,6 +50,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 5,
     invoice_url: 'invoice_url_5',
     total_value: 500,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_6',
@@ -55,6 +60,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 6,
     invoice_url: 'invoice_url_6',
     total_value: 600,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_7',
@@ -64,6 +70,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 7,
     invoice_url: 'invoice_url_7',
     total_value: 700,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_8',
@@ -73,6 +80,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 8,
     invoice_url: 'invoice_url_8',
     total_value: 800,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_9',
@@ -82,6 +90,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 9,
     invoice_url: 'invoice_url_9',
     total_value: 900,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_10',
@@ -91,6 +100,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 10,
     invoice_url: 'invoice_url_10',
     total_value: 1000,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_11',
@@ -100,6 +110,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 11,
     invoice_url: 'invoice_url_11',
     total_value: 1100,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_12',
@@ -109,6 +120,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 12,
     invoice_url: 'invoice_url_12',
     total_value: 1200,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_13',
@@ -118,6 +130,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 13,
     invoice_url: 'invoice_url_13',
     total_value: 1300,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_14',
@@ -127,6 +140,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 14,
     invoice_url: 'invoice_url_14',
     total_value: 1400,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_15',
@@ -136,6 +150,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 15,
     invoice_url: 'invoice_url_15',
     total_value: 1500,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_16',
@@ -145,6 +160,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 16,
     invoice_url: 'invoice_url_16',
     total_value: 1600,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_17',
@@ -154,6 +170,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 17,
     invoice_url: 'invoice_url_17',
     total_value: 1700,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_18',
@@ -163,6 +180,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 18,
     invoice_url: 'invoice_url_18',
     total_value: 1800,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_19',
@@ -172,6 +190,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 19,
     invoice_url: 'invoice_url_19',
     total_value: 1900,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_20',
@@ -181,6 +200,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 20,
     invoice_url: 'invoice_url_20',
     total_value: 2000,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_21',
@@ -190,6 +210,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 21,
     invoice_url: 'invoice_url_21',
     total_value: 2100,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_22',
@@ -199,6 +220,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 22,
     invoice_url: 'invoice_url_22',
     total_value: 2200,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_23',
@@ -208,6 +230,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 23,
     invoice_url: 'invoice_url_23',
     total_value: 2300,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_24',
@@ -217,6 +240,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 24,
     invoice_url: 'invoice_url_24',
     total_value: 2400,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_25',
@@ -226,6 +250,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 25,
     invoice_url: 'invoice_url_25',
     total_value: 2500,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_26',
@@ -235,6 +260,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 26,
     invoice_url: 'invoice_url_26',
     total_value: 2600,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_27',
@@ -244,6 +270,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 27,
     invoice_url: 'invoice_url_27',
     total_value: 2700,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_28',
@@ -253,6 +280,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 28,
     invoice_url: 'invoice_url_28',
     total_value: 2800,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_29',
@@ -262,6 +290,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 29,
     invoice_url: 'invoice_url_29',
     total_value: 2900,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_30',
@@ -271,6 +300,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 30,
     invoice_url: 'invoice_url_30',
     total_value: 3000,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_31',
@@ -280,6 +310,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 31,
     invoice_url: 'invoice_url_31',
     total_value: 3100,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_32',
@@ -289,6 +320,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 32,
     invoice_url: 'invoice_url_32',
     total_value: 3200,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_33',
@@ -298,6 +330,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 33,
     invoice_url: 'invoice_url_33',
     total_value: 3300,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_34',
@@ -307,6 +340,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 34,
     invoice_url: 'invoice_url_34',
     total_value: 3400,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_35',
@@ -316,6 +350,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 35,
     invoice_url: 'invoice_url_35',
     total_value: 3500,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_36',
@@ -325,6 +360,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 36,
     invoice_url: 'invoice_url_36',
     total_value: 3600,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_37',
@@ -334,6 +370,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 37,
     invoice_url: 'invoice_url_37',
     total_value: 3700,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_38',
@@ -343,6 +380,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 38,
     invoice_url: 'invoice_url_38',
     total_value: 3800,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_39',
@@ -352,6 +390,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 39,
     invoice_url: 'invoice_url_39',
     total_value: 3900,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_40',
@@ -361,6 +400,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 40,
     invoice_url: 'invoice_url_40',
     total_value: 4000,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_41',
@@ -370,6 +410,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 41,
     invoice_url: 'invoice_url_41',
     total_value: 4100,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_42',
@@ -379,6 +420,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 42,
     invoice_url: 'invoice_url_42',
     total_value: 4200,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_43',
@@ -388,6 +430,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 43,
     invoice_url: 'invoice_url_43',
     total_value: 4300,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_44',
@@ -397,6 +440,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 44,
     invoice_url: 'invoice_url_44',
     total_value: 4400,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_45',
@@ -406,6 +450,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 45,
     invoice_url: 'invoice_url_45',
     total_value: 4500,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_46',
@@ -415,6 +460,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 46,
     invoice_url: 'invoice_url_46',
     total_value: 4600,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_47',
@@ -424,6 +470,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 47,
     invoice_url: 'invoice_url_47',
     total_value: 4700,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_48',
@@ -433,6 +480,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 48,
     invoice_url: 'invoice_url_48',
     total_value: 4800,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_49',
@@ -442,6 +490,7 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 49,
     invoice_url: 'invoice_url_49',
     total_value: 4900,
+    invoiceItems: [],
   },
   {
     id_imobzi: 'id_imobzi_50',
@@ -451,5 +500,6 @@ export const inMemoryInvoicesRepositoryMock: Invoice[] = [
     management_fee: 50,
     invoice_url: 'invoice_url_50',
     total_value: 5000,
+    invoiceItems: [],
   },
 ];

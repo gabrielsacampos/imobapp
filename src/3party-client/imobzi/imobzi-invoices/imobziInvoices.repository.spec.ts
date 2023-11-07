@@ -32,7 +32,7 @@ describe('ImobziInvoicesRepository', () => {
           throw new Error(`verify the url: ${url} and try again`);
       }
     });
-    const result = await repository.getAllInvoicesFromImobzi();
+    const result = await repository.getAll();
     expect(result).toEqual([...pagination.page1.invoices, ...pagination.page2.invoices]);
   });
 
@@ -52,7 +52,7 @@ describe('ImobziInvoicesRepository', () => {
       }
     });
 
-    const result = await repository.getInvoiceFullData(invoiceTest.invoice_id);
+    const result = await repository.getFullData(invoiceTest.invoice_id);
     expect(result).toEqual(invoiceTest);
   });
 });

@@ -26,7 +26,7 @@ describe('ImobziBuildingService', () => {
   test('getRequiredBuildingDataToDb should format response data to have db required properties', async () => {
     const buildings = buildingMock.allBuildings;
     const buildingTest = buildings[0];
-    const result: CreateBuildingDTO = service.getRequiredBuildingDataToDb(buildingTest);
+    const result: CreateBuildingDTO = service.getRequiredData(buildingTest);
 
     for (const prop in result) {
       expect(result[prop]).toBeDefined();

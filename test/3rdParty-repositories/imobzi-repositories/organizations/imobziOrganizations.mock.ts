@@ -167,7 +167,7 @@ export class ImobziOrganizationsMock {
     },
   ];
 
-  async getOrgFullData(idOrg: string): Promise<ImobziOrganizationDTO> {
+  async getFullData(idOrg: string): Promise<ImobziOrganizationDTO> {
     return this.allOrganizationsFullData.find((org) => org.db_id.toString() === idOrg);
   }
 }

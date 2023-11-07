@@ -57,7 +57,7 @@ describe('ImobziLeasesService', () => {
   test('getRequiredLeaseDataToDb should format items data from lease and return values ready to store on DB', async () => {
     const leases = leasesMock.allLeasesFullData;
     const leaseTest = leases[0];
-    const result: CreateLeaseDTO = await service.getRequiredLeaseDataToDb(leaseTest.db_id.toString());
+    const result: CreateLeaseDTO = await service.getRequiredData(leaseTest.db_id.toString());
 
     for (const item in result) {
       expect(result[item]).toBeDefined();

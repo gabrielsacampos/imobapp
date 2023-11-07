@@ -7,7 +7,7 @@ import { imobziUrls, imobziParams } from '../imobzi-urls-params/imobzi.urls';
 export class ImobziContactsRepository {
   constructor(private readonly httpService: HttpService) {}
 
-  async getAllContacts(): Promise<ContactDTO[]> {
+  async getAll(): Promise<ContactDTO[]> {
     try {
       let newCursor = '';
       const allContacts = [];

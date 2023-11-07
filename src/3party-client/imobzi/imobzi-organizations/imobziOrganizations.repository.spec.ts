@@ -45,7 +45,7 @@ describe('ImobziOrganizationsRepository', () => {
         return Promise.reject(`id ${id} not found at organiations`);
       }
     });
-    const result: ImobziOrganizationDTO = await repository.getOrgFullData(orgTest.db_id.toString());
+    const result: ImobziOrganizationDTO = await repository.getFullData(orgTest.db_id.toString());
     expect(result).toEqual(orgTest);
   });
 });

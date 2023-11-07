@@ -42,7 +42,7 @@ describe('ImobziPeopleRepository', () => {
         return Promise.reject(`id ${id} not found at organiations`);
       }
     });
-    const result = await repository.getPersonFullData('123412421234');
+    const result = await repository.getFullData('123412421234');
     expect(result).toEqual(personTest);
   });
 });

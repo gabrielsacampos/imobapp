@@ -26,7 +26,7 @@ describe('ImobziOrganizationsService', () => {
   test('getRequiredOrganizationDataToDb should return organization main data to store into db', async () => {
     const organizations = organizationsMock.allOrganizationsFullData;
     const orgTest = organizations[0];
-    const result: CreateOrganizationDTO = await service.getRequiredOrganizationDataToDb(orgTest.db_id.toString());
+    const result: CreateOrganizationDTO = await service.getRequiredData(orgTest.db_id.toString());
     for (const item in result) {
       expect(result[item]).toBeDefined();
     }

@@ -6,6 +6,8 @@ import { Invoice } from '../entities/invoice.entity';
 
 export class CreateInvoiceDTO implements Invoice {
   id?: number;
+  interest_value?: number;
+
   @ApiProperty({
     description: 'invoice id from imobzi',
     example: '12huh8377dbgs81734cgd',

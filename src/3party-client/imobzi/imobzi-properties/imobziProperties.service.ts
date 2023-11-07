@@ -24,8 +24,8 @@ export class ImobziPropertiesService {
     });
   }
 
-  async getRequiredPropertyDataToDb(idProperty: string): Promise<CreatePropertyDTO> {
-    const propertyFullData = await this.imobziPropertiesRepository.getPropertyFullData(idProperty);
+  async getRequiredData(idProperty: string): Promise<CreatePropertyDTO> {
+    const propertyFullData = await this.imobziPropertiesRepository.getFullData(idProperty);
     const id_imobzi = propertyFullData.db_id.toString();
     const unity = propertyFullData.property_unity?.toString();
     const id_building_imobzi = propertyFullData.building_id ? propertyFullData.building_id.toString() : null;

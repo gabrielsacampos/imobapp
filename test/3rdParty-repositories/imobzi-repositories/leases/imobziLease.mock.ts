@@ -96,7 +96,7 @@ export class ImobziLeasesMock {
     },
   ];
 
-  async getLeaseFullData(idLease: string): Promise<ImobziLeaseDetailsDTO> {
+  async getFullData(idLease: string): Promise<ImobziLeaseDetailsDTO> {
     return this.allLeasesFullData.find((lease) => lease.db_id.toString() === idLease);
   }
 }

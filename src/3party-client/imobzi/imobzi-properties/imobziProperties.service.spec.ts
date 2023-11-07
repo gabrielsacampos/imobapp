@@ -27,7 +27,7 @@ describe('ImobziPropertiesService', () => {
   test('getAllProperties ', async () => {
     const properties = propertiesMock.allPropertiesFullData;
     const propertyTest = properties[0];
-    const result: CreatePropertyDTO = await service.getRequiredPropertyDataToDb(propertyTest.db_id.toString());
+    const result: CreatePropertyDTO = await service.getRequiredData(propertyTest.db_id.toString());
     for (const item in result) {
       expect(result[item]).toBeDefined();
     }

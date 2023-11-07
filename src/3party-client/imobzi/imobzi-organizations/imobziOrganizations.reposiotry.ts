@@ -7,7 +7,7 @@ import { ImobziOrganizationDTO } from './dtos/imobziOrganizations.dtos';
 export class ImobziOrganizationsRepository {
   constructor(private readonly httpService: HttpService) {}
 
-  async getOrgFullData(id_imobzi: string): Promise<ImobziOrganizationDTO> {
+  async getFullData(id_imobzi: string): Promise<ImobziOrganizationDTO> {
     try {
       const { data } = await this.httpService.axiosRef.get(imobziUrls.urlOrganizationDetails(id_imobzi), imobziParams);
 

@@ -52,9 +52,9 @@ export class ImobziLeasesService {
     });
   }
 
-  async getRequiredLeaseDataToDb(idLease: string): Promise<CreateLeaseDTO> {
+  async getRequiredData(idLease: string): Promise<CreateLeaseDTO> {
     try {
-      const leaseFullData: ImobziLeaseDetailsDTO = await this.imobziLeasesRepository.getLeaseFullData(idLease);
+      const leaseFullData: ImobziLeaseDetailsDTO = await this.imobziLeasesRepository.getFullData(idLease);
       const id_imobzi = leaseFullData.db_id.toString();
       const id_annual_readjustment_imobzi = leaseFullData.annual_readjustment?.db_id.toString();
       const id_property_imobzi = leaseFullData.property.db_id.toString();

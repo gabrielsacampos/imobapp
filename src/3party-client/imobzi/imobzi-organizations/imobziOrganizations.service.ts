@@ -7,8 +7,8 @@ import { ImobziOrganizationsRepository } from './imobziOrganizations.reposiotry'
 export class ImobziOrganizationsService {
   constructor(private readonly imobziOrganizationsRepository: ImobziOrganizationsRepository) {}
 
-  async getRequiredOrganizationDataToDb(idOrg: string): Promise<CreateOrganizationDTO> {
-    const orgFullData: ImobziOrganizationDTO = await this.imobziOrganizationsRepository.getOrgFullData(idOrg);
+  async getRequiredData(idOrg: string): Promise<CreateOrganizationDTO> {
+    const orgFullData: ImobziOrganizationDTO = await this.imobziOrganizationsRepository.getFullData(idOrg);
     const id_imobzi = orgFullData.db_id.toString();
     let address: any;
     let cnpj: any;

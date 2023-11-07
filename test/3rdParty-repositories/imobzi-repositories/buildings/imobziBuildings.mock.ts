@@ -5,7 +5,7 @@ export class ImobziBuildingsMock {
     page1: { cursor: 'abc', properties: [{ db_id: 111111 }, { db_id: 2222222 }] },
     page2: { cursor: null, properties: [{ db_id: 333333 }, { db_id: 4444444 }] },
   };
-  items: BuildingDTO[] = [
+  allBuildings: BuildingDTO[] = [
     {
       address: '123 Main St',
       city: 'New York',
@@ -79,6 +79,6 @@ export class ImobziBuildingsMock {
   ];
 
   async getAllBuildings(): Promise<BuildingDTO[]> {
-    return this.items;
+    return this.allBuildings;
   }
 }

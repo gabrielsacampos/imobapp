@@ -1070,7 +1070,7 @@ export const inMemoryInvoiceItemsRepositoryMock: InvoiceItem[] = [
   },
   {
     id_imobzi: 'id_imobzi_82',
-    id_invoice_imobzi: inMemoryInvoicesRepositoryMock[54].id_imobzi,
+    id_invoice_imobzi: inMemoryInvoicesRepositoryMock[2].id_imobzi,
     until_due_date: true,
     item_type: 'type2',
     description: 'Description 82',
@@ -1083,7 +1083,7 @@ export const inMemoryInvoiceItemsRepositoryMock: InvoiceItem[] = [
   },
   {
     id_imobzi: 'id_imobzi_83',
-    id_invoice_imobzi: inMemoryInvoicesRepositoryMock[54].id_imobzi,
+    id_invoice_imobzi: inMemoryInvoicesRepositoryMock[4].id_imobzi,
     until_due_date: false,
     item_type: 'type2',
     description: 'Description 83',
@@ -1096,7 +1096,7 @@ export const inMemoryInvoiceItemsRepositoryMock: InvoiceItem[] = [
   },
   {
     id_imobzi: 'id_imobzi_84',
-    id_invoice_imobzi: inMemoryInvoicesRepositoryMock[54].id_imobzi,
+    id_invoice_imobzi: inMemoryInvoicesRepositoryMock[23].id_imobzi,
     until_due_date: true,
     item_type: 'type1',
     description: 'Description 84',
@@ -1109,7 +1109,7 @@ export const inMemoryInvoiceItemsRepositoryMock: InvoiceItem[] = [
   },
   {
     id_imobzi: 'id_imobzi_85',
-    id_invoice_imobzi: inMemoryInvoicesRepositoryMock[54].id_imobzi,
+    id_invoice_imobzi: inMemoryInvoicesRepositoryMock[11].id_imobzi,
     until_due_date: false,
     item_type: 'type2',
     description: 'Description 85',
@@ -1122,7 +1122,7 @@ export const inMemoryInvoiceItemsRepositoryMock: InvoiceItem[] = [
   },
   {
     id_imobzi: 'id_imobzi_86',
-    id_invoice_imobzi: inMemoryInvoicesRepositoryMock[54].id_imobzi,
+    id_invoice_imobzi: inMemoryInvoicesRepositoryMock[8].id_imobzi,
     until_due_date: true,
     item_type: 'type2',
     description: 'Description 86',
@@ -1135,7 +1135,7 @@ export const inMemoryInvoiceItemsRepositoryMock: InvoiceItem[] = [
   },
   {
     id_imobzi: 'id_imobzi_87',
-    id_invoice_imobzi: inMemoryInvoicesRepositoryMock[54].id_imobzi,
+    id_invoice_imobzi: inMemoryInvoicesRepositoryMock[9].id_imobzi,
     until_due_date: false,
     item_type: 'type1',
     description: 'Description 87',
@@ -1148,7 +1148,7 @@ export const inMemoryInvoiceItemsRepositoryMock: InvoiceItem[] = [
   },
   {
     id_imobzi: 'id_imobzi_88',
-    id_invoice_imobzi: inMemoryInvoicesRepositoryMock[54].id_imobzi,
+    id_invoice_imobzi: inMemoryInvoicesRepositoryMock[3].id_imobzi,
     until_due_date: true,
     item_type: 'type2',
     description: 'Description 88',
@@ -1161,7 +1161,7 @@ export const inMemoryInvoiceItemsRepositoryMock: InvoiceItem[] = [
   },
   {
     id_imobzi: 'id_imobzi_89',
-    id_invoice_imobzi: inMemoryInvoicesRepositoryMock[54].id_imobzi,
+    id_invoice_imobzi: inMemoryInvoicesRepositoryMock[2].id_imobzi,
     until_due_date: false,
     item_type: 'type2',
     description: 'Description 89',
@@ -1174,7 +1174,7 @@ export const inMemoryInvoiceItemsRepositoryMock: InvoiceItem[] = [
   },
   {
     id_imobzi: 'id_imobzi_90',
-    id_invoice_imobzi: inMemoryInvoicesRepositoryMock[54].id_imobzi,
+    id_invoice_imobzi: inMemoryInvoicesRepositoryMock[23].id_imobzi,
     until_due_date: true,
     item_type: 'type1',
     description: 'Description 90',
@@ -1187,7 +1187,7 @@ export const inMemoryInvoiceItemsRepositoryMock: InvoiceItem[] = [
   },
   {
     id_imobzi: 'id_imobzi_91',
-    id_invoice_imobzi: inMemoryInvoicesRepositoryMock[54].id_imobzi,
+    id_invoice_imobzi: inMemoryInvoicesRepositoryMock[3].id_imobzi,
     until_due_date: false,
     item_type: 'type2',
     description: 'Description 91',
@@ -1200,7 +1200,7 @@ export const inMemoryInvoiceItemsRepositoryMock: InvoiceItem[] = [
   },
   {
     id_imobzi: 'id_imobzi_92',
-    id_invoice_imobzi: inMemoryInvoicesRepositoryMock[54].id_imobzi,
+    id_invoice_imobzi: inMemoryInvoicesRepositoryMock[7].id_imobzi,
     until_due_date: true,
     item_type: 'type2',
     description: 'Description 92',
@@ -1213,7 +1213,7 @@ export const inMemoryInvoiceItemsRepositoryMock: InvoiceItem[] = [
   },
   {
     id_imobzi: 'id_imobzi_93',
-    id_invoice_imobzi: inMemoryInvoicesRepositoryMock[54].id_imobzi,
+    id_invoice_imobzi: inMemoryInvoicesRepositoryMock[5].id_imobzi,
     until_due_date: false,
     item_type: 'type1',
     description: 'Description 93',

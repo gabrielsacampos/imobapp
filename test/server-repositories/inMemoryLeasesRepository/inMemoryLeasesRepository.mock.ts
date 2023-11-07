@@ -1,8 +1,9 @@
+import { CreateLeaseDTO } from 'src/repository/leases/dtos/create-lease.dtos';
 import { inMemoryOrganizationsRepositoryMock } from '../inMemoryOrganizationsRepository/inMemoryOrganizationsRepository.mock';
 import { inMemoryPeopleRepositoryMock } from '../inMemoryPeopleRepository/inMemoryPeopleRepository.mocks';
 import { inMemoryPropertiesRepositoryMock } from '../inMemoryPropertiesRepository/inMemoryPropertiesRepository.mock';
 
-export const inMemoryLeasesRepositoryMock = [
+export const inMemoryLeasesRepositoryMock: CreateLeaseDTO[] = [
   {
     id: 1,
     id_imobzi: 'ABC123',
@@ -22,6 +23,8 @@ export const inMemoryLeasesRepositoryMock = [
     include_in_dimob: true,
     indeterminate: false,
     lease_value: 1500,
+    beneficiaries: [],
+    lease_items: [],
   },
   {
     id: 2,
@@ -42,6 +45,8 @@ export const inMemoryLeasesRepositoryMock = [
     include_in_dimob: true,
     indeterminate: true,
     lease_value: 1800,
+    beneficiaries: [],
+    lease_items: [],
   },
   {
     id: 3,
@@ -62,6 +67,8 @@ export const inMemoryLeasesRepositoryMock = [
     include_in_dimob: false,
     indeterminate: false,
     lease_value: 1000,
+    beneficiaries: [],
+    lease_items: [],
   },
   {
     id: 4,
@@ -82,6 +89,8 @@ export const inMemoryLeasesRepositoryMock = [
     include_in_dimob: true,
     indeterminate: true,
     lease_value: 2200,
+    beneficiaries: [],
+    lease_items: [],
   },
   {
     id: 5,
@@ -102,6 +111,8 @@ export const inMemoryLeasesRepositoryMock = [
     include_in_dimob: true,
     indeterminate: false,
     lease_value: 1300,
+    beneficiaries: [],
+    lease_items: [],
   },
   {
     id: 6,
@@ -122,6 +133,8 @@ export const inMemoryLeasesRepositoryMock = [
     include_in_dimob: true,
     indeterminate: true,
     lease_value: 1600,
+    beneficiaries: [],
+    lease_items: [],
   },
   {
     id: 7,
@@ -142,6 +155,8 @@ export const inMemoryLeasesRepositoryMock = [
     include_in_dimob: false,
     indeterminate: false,
     lease_value: 1200,
+    beneficiaries: [],
+    lease_items: [],
   },
   {
     id: 8,
@@ -162,5 +177,7 @@ export const inMemoryLeasesRepositoryMock = [
     include_in_dimob: true,
     indeterminate: true,
     lease_value: 1700,
+    beneficiaries: [],
+    lease_items: [],
   },
 ];

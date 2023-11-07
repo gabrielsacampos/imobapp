@@ -38,8 +38,9 @@ describe('LeasesController', () => {
     const spy = jest.spyOn(repository, 'update');
     spy.mockResolvedValue(true as any);
 
+    const leaseTest = inMemoryLeasesRepositoryMock[0];
     //call
-    await controller.update({ ...inMemoryLeasesRepositoryMock[0], beneficiaries: [], lease_items: [] });
+    await controller.update(leaseTest.id_imobzi, leaseTest);
     expect(repository.update).toHaveBeenCalled();
   });
 

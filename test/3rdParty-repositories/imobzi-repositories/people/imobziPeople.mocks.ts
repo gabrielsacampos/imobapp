@@ -1,6 +1,10 @@
 import { ImobziPersonDTO } from '../../../../src/3party-client/imobzi/imobzi-people/dtos/imobziPeople.dtos';
 
 export class ImobziPeopleMock {
+  async getFullData(idPerson: string): Promise<ImobziPersonDTO> {
+    return this.allPeopleFullData.find((person) => person.db_id.toString() === idPerson);
+  }
+
   allPeopleFullData: ImobziPersonDTO[] = [
     {
       db_id: 123412421234,
@@ -49,8 +53,4 @@ export class ImobziPeopleMock {
       media_sources: [],
     },
   ];
-
-  async getPersonFullData(idPerson: string): Promise<ImobziPersonDTO> {
-    return this.allPeopleFullData.find((person) => person.db_id.toString() === idPerson);
-  }
 }

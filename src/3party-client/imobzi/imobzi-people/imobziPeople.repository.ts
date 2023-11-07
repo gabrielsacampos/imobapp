@@ -7,7 +7,7 @@ import { ImobziPersonDTO } from './dtos/imobziPeople.dtos';
 export class ImobziPeopleRepository {
   constructor(private readonly httpService: HttpService) {}
 
-  async getPersonFullData(id_imobzi: string): Promise<ImobziPersonDTO> {
+  async getFullData(id_imobzi: string): Promise<ImobziPersonDTO> {
     try {
       const { data } = await this.httpService.axiosRef.get(imobziUrls.urlPersonDetails(id_imobzi), imobziParams);
 

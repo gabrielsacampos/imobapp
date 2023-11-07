@@ -7,8 +7,8 @@ import { ImobziPeopleRepository } from './imobziPeople.repository';
 export class ImobziPeopleService {
   constructor(private readonly imobziPeopleRepository: ImobziPeopleRepository) {}
 
-  async getRequiredPersonDataToDb(idPerson: string): Promise<CreatePersonDTO> {
-    const personFullData = await this.imobziPeopleRepository.getPersonFullData(idPerson);
+  async getRequiredData(idPerson: string): Promise<CreatePersonDTO> {
+    const personFullData = await this.imobziPeopleRepository.getFullData(idPerson);
     const id_imobzi = personFullData.db_id.toString();
     const phone = personFullData.phone?.number;
     const { fullname, email, code: code_imobzi } = personFullData;

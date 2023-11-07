@@ -30,19 +30,15 @@ export class InMemoryLeasesRepository implements Partial<LeasesRepository> {
     return found;
   }
 
-  async upsert(data: CreateLeaseDTO): Promise<Lease> {
-    const existingLeaseIndex = this.items.findIndex((lease) => lease.id_imobzi === data.id_imobzi);
+  async update(id_imobzi: string, data: CreateLeaseDTO): Promise<Lease> {
+    const existingLeaseIndex = this.items.findIndex((lease) => lease.id_imobzi === id_imobzi);
+    const existingLease = this.items.find((lease) => lease.id_imobzi === id_imobzi);
 
-    if (existingLeaseIndex === -1) {
-      const leaseToCreate = data;
-      leaseToCreate.id = crypto.randomInt(1, 1000);
-      this.create(leaseToCreate);
-      return leaseToCreate;
-    } else {
-      const existingLease = this.items[existingLeaseIndex];
-      const existingLeaseUpdated = data;
-      this.items[existingLeaseIndex] = existingLeaseUpdated;
-      return existingLease;
+    if (!existingLease) {
+      throw new NotFoundException(`ID: ${id_imobzi} not found at leases`);
     }
+
+    this.items[existingLeaseIndex] = { id: existingLease.id, ...data };
+    return data;
   }
 }

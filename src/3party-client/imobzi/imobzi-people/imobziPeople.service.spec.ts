@@ -22,7 +22,7 @@ describe('ImobziPeopleRepository', () => {
   test('getPersonDataToDb', async () => {
     const people = peopleMock.allPeopleFullData;
     const personTest = people[0];
-    const result: CreatePersonDTO = await service.getRequiredPersonDataToDb(personTest.db_id.toString());
+    const result: CreatePersonDTO = await service.getRequiredData(personTest.db_id.toString());
     for (const item in result) {
       expect(result[item]).toBeDefined();
     }
