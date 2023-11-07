@@ -7,7 +7,7 @@ import { PeopleService } from './people/people.service';
 import { PropertiesService } from './properties/properties.service';
 
 @Injectable()
-export class RepositoryServices {
+export class RepositoryService {
   constructor(
     private readonly peopleService: PeopleService,
     private readonly organizationsService: OrganizationsService,

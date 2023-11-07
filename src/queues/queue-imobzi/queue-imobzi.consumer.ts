@@ -8,12 +8,11 @@ import { PropertyDTO } from 'src/3party-client/imobzi/imobzi-properties/dtos/imo
 import { ImobziService } from 'src/3party-client/imobzi/imobzi.service';
 import { CreateBuildingDTO } from 'src/repository/buildings/dtos/create-building.dtos';
 import { CreateInvoiceDTO } from 'src/repository/invoices/dtos/create-invoice.dtos';
-import { InvoicesService } from 'src/repository/invoices/invoices.service';
 import { CreateLeaseDTO } from 'src/repository/leases/dtos/create-lease.dtos';
 import { CreateOrganizationDTO } from 'src/repository/organizations/dtos/create-organization.dtos';
 import { CreatePersonDTO } from 'src/repository/people/dtos/create-person.dtos';
 import { CreatePropertyDTO } from 'src/repository/properties/dtos/create-property.dtos';
-import { RepositoryService } from 'src/repository/repository.services';
+import { RepositoryService } from 'src/repository/repository.service';
 
 @Processor('ImobziQueue')
 export class QueueImobziConsumer {
@@ -54,7 +53,7 @@ export class QueueImobziConsumer {
   async updateBuildings(job: Job<BuildingDTO>) {
     try {
       const building = job.data;
-      const formatedBuilding: CreateBuildingDTO = await this.imobziService.organization.getRequiredData(building);
+      const formatedBuilding: CreateBuildingDTO = this.imobziService.building.getRequiredData(building);
       await this.repositoryService.buildings.upsert(formatedBuilding);
 
       await new Promise((resolve) => setTimeout(resolve, 5000));

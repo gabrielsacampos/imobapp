@@ -1,20 +1,26 @@
 import { InjectQueue } from '@nestjs/bull';
 import { Injectable } from '@nestjs/common';
 import { Queue } from 'bull';
-import { ImobziRepositories } from 'src/3party-client/imobzi/imobzi.repositories';
-import { RepositoryServices } from 'src/repository/repository.services';
+import { BuildingDTO } from 'src/3party-client/imobzi/imobzi-buildings/dtos/imobziBuildings.dtos';
+import { ContactDTO } from 'src/3party-client/imobzi/imobzi-contacts/dtos/imobziContacts.dtos';
+import { AnImobziInvoiceDTO } from 'src/3party-client/imobzi/imobzi-invoices/dto/an-imobzi-invoice.dtos';
+import { LeaseDTO } from 'src/3party-client/imobzi/imobzi-leases/dtos/imobziLeases.dtos';
+import { PropertyDTO } from 'src/3party-client/imobzi/imobzi-properties/dtos/imobziProperties.dtos';
+import { ImobziRepository } from 'src/3party-client/imobzi/imobzi.repository';
+import { RepositoryService } from 'src/repository/repository.service';
 
 @Injectable()
 export class QueueImobziProducer {
   constructor(
     @InjectQueue('ImobziQueue') private readonly imobziQueue: Queue,
     private readonly imobziRepository: ImobziRepository,
-    private readonly repositoryServices: RepositoryServices,
+    private readonly repositoryServices: RepositoryService,
   ) {}
+
   contacts = {
     async produce() {
       try {
-        const allContacts = await this.imobziRepository.contact.getAll();
+        const allContacts: ContactDTO[] = await this.imobziRepository.contact.getAll();
 
         const people = allContacts.filter((contact) => contact.contact_type === 'person');
         const organiations = allContacts.filter((contact) => contact.contact_type === 'organization');
@@ -43,7 +49,7 @@ export class QueueImobziProducer {
   buildings = {
     async produce() {
       try {
-        const allBuildings = await this.imobziRepository.building.getAll();
+        const allBuildings: BuildingDTO[] = await this.imobziRepository.building.getAll();
 
         for (const building of allBuildings) {
           await this.imobziQueue.add('updateBuildings', building, {
@@ -61,7 +67,7 @@ export class QueueImobziProducer {
   properties = {
     async produce() {
       try {
-        const allProperties = await this.imobziRepository.property.getAll();
+        const allProperties: PropertyDTO[] = await this.imobziRepository.property.getAll();
 
         for (const property of allProperties) {
           await this.imobziQueue.add('updateProperties', property, {
@@ -79,7 +85,7 @@ export class QueueImobziProducer {
   leases = {
     async produce() {
       try {
-        const allLeases = await this.imobziRepository.lease.getAll();
+        const allLeases: LeaseDTO[] = await this.imobziRepository.lease.getAll();
 
         for (const lease of allLeases) {
           await this.imobziQueue.add('updateLeases', lease, {
@@ -97,7 +103,7 @@ export class QueueImobziProducer {
   invoices = {
     async produce() {
       try {
-        const allInvoices = await this.imobziRepository.invoice.getAll();
+        const allInvoices: AnImobziInvoiceDTO[] = await this.imobziRepository.invoice.getAll();
         const immutableInvoices = await this.repositoryService.invoices.inmutableInvoices();
         const immutableInvoicesIds = immutableInvoices.map((invoice) => invoice.invoice_id);
         const invoicesToUpsert = allInvoices.filter((invoice) => {

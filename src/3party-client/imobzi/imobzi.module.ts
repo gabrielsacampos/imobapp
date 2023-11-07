@@ -15,6 +15,7 @@ import { ImobziPeopleModule } from './imobzi-people/imobziPeople.module';
 import { ImobziPropertiesModule } from './imobzi-properties/imobziProperties.module';
 import { ImobziPropertiesService } from './imobzi-properties/imobziProperties.service';
 import { ImobziController } from './imobzi.controllers';
+import { ImobziRepository } from './imobzi.repository';
 import { ImobziService } from './imobzi.service';
 
 @Module({
@@ -38,6 +39,7 @@ import { ImobziService } from './imobzi.service';
     ImobziPropertiesService,
     ImobziLeasesService,
     ImobziInvoicesService,
+    ImobziRepository,
   ],
   exports: [
     ImobziService,
@@ -46,6 +48,7 @@ import { ImobziService } from './imobzi.service';
     ImobziPropertiesService,
     ImobziLeasesService,
     ImobziInvoicesService,
+    ImobziRepository,
   ],
 })
 export class ImobziModule {}

@@ -9,11 +9,13 @@ import { BullModule } from '@nestjs/bull';
 import { ExpressAdapter } from '@bull-board/express';
 import { ImobziModule } from 'src/3party-client/imobzi/imobzi.module';
 import { InvoicesModule } from 'src/repository/invoices/invoices.module';
+import { RepositoryModule } from 'src/repository/repository.module';
 
 @Module({
   imports: [
     InvoicesModule,
     ImobziModule,
+    RepositoryModule,
     BullModule.forRoot({
       url: process.env.redis_url,
     }),

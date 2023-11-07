@@ -6,7 +6,7 @@ import { LeasesRepository } from './leases.repository';
 
 @Module({
   controllers: [LeasesController],
-  providers: [LeasesService, LeasesController, PrismaService, LeasesRepository, LeasesController],
-  exports: [LeasesController],
+  providers: [LeasesService, PrismaService, LeasesRepository],
+  exports: [LeasesService, LeasesRepository],
 })
 export class LeasesModule {}

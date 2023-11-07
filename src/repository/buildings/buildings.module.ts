@@ -6,7 +6,7 @@ import { BuildingsRepository } from './buildings.repository';
 
 @Module({
   controllers: [BuildingsController],
-  providers: [BuildingsService, PrismaService, BuildingsController, BuildingsRepository],
-  exports: [BuildingsService, BuildingsController],
+  providers: [BuildingsService, PrismaService, BuildingsRepository],
+  exports: [BuildingsService, BuildingsRepository],
 })
 export class BuildingsModule {}
