@@ -1,28 +1,28 @@
 import { InjectQueue } from '@nestjs/bull';
 import { Injectable } from '@nestjs/common';
 import { Queue } from 'bull';
-import { InvoicesService } from 'src/repository/invoices/invoices.service';
-import { ImobziBuildingsService } from 'src/3party-client/imobzi/imobzi-buildings/imobziBuildings.service';
-import { ImobziContactsService } from 'src/3party-client/imobzi/imobzi-contacts/imobziContacts.repository';
-import { ImobziInvoicesService } from 'src/3party-client/imobzi/imobzi-invoices/imobziInvoices.service';
-import { ImobziLeasesService } from 'src/3party-client/imobzi/imobzi-leases/imobziLeases.repository';
-import { ImobziPropertiesService } from 'src/3party-client/imobzi/imobzi-properties/imobziProperties.service';
+import { ImobziBuildingsRepository } from 'src/3party-client/imobzi/imobzi-buildings/imobziBuildings.repository';
+import { ImobziContactsRepository } from 'src/3party-client/imobzi/imobzi-contacts/imobziContacts.repository';
+import { ImobziInvoicesRepository } from 'src/3party-client/imobzi/imobzi-invoices/imobziInvoices.repository';
+import { ImobziLeasesRepository } from 'src/3party-client/imobzi/imobzi-leases/imobziLeases.repository';
+import { ImobziPropertiesRepository } from 'src/3party-client/imobzi/imobzi-properties/imobziProperties.repository';
+import { InvoicesRepository } from 'src/repository/invoices/invoices.repository';
 
 @Injectable()
 export class QueueImobziProducer {
   constructor(
     @InjectQueue('ImobziQueue') private readonly imobziQueue: Queue,
-    private readonly imobziContactsService: ImobziContactsService,
-    private readonly imobziBuildingsService: ImobziBuildingsService,
-    private readonly imobziPropertiesService: ImobziPropertiesService,
-    private readonly imobziLeasesService: ImobziLeasesService,
-    private readonly imobziInvoicesService: ImobziInvoicesService,
-    private readonly invoicesService: InvoicesService,
+    private readonly imobziContactsRepository: ImobziContactsRepository,
+    private readonly imobziBuildingsRepository: ImobziBuildingsRepository,
+    private readonly imobziPropertiesRepository: ImobziPropertiesRepository,
+    private readonly imobziLeasesRepository: ImobziLeasesRepository,
+    private readonly imobziInvoicesRepository: ImobziInvoicesRepository,
+    private readonly invoicesRepository: InvoicesRepository,
   ) {}
 
   async produceContacts() {
     try {
-      const allContacts = await this.imobziContactsService.getAllContacts();
+      const allContacts = await this.imobziContactsRepository.getAllContacts();
 
       const people = allContacts.filter((contact) => contact.contact_type === 'person');
       const organiations = allContacts.filter((contact) => contact.contact_type === 'organization');
@@ -49,7 +49,7 @@ export class QueueImobziProducer {
 
   async produceBuildings() {
     try {
-      const allBuildings = await this.imobziBuildingsService.getAllBuildings();
+      const allBuildings = await this.imobziBuildingsRepository.getAllBuildings();
 
       for (const building of allBuildings) {
         await this.imobziQueue.add('updateBuildings', building, {
@@ -65,7 +65,7 @@ export class QueueImobziProducer {
 
   async produceProperties() {
     try {
-      const allProperties = await this.imobziPropertiesService.getAllProperties();
+      const allProperties = await this.imobziPropertiesRepository.getAllProperties();
 
       for (const property of allProperties) {
         await this.imobziQueue.add('updateProperties', property, {
@@ -81,7 +81,7 @@ export class QueueImobziProducer {
 
   async produceLeases() {
     try {
-      const allLeases = await this.imobziLeasesService.getAllLeasesFromImobzi();
+      const allLeases = await this.imobziLeasesRepository.getAllLeasesFromImobzi();
 
       for (const lease of allLeases) {
         await this.imobziQueue.add('updateLeases', lease, {
@@ -97,8 +97,8 @@ export class QueueImobziProducer {
 
   async produceInvoices() {
     try {
-      const allInvoices = await this.imobziInvoicesService.getAllInvoicesFromImobzi();
-      const immutableInvoices = await this.invoicesService.getImmutableInvoices();
+      const allInvoices = await this.imobziInvoicesRepository.getAllInvoicesFromImobzi();
+      const immutableInvoices = await this.invoicesRepository.getImmutableInvoices();
       const immutableInvoicesIds = immutableInvoices.map((invoice) => invoice.invoice_id);
       const invoicesToUpsert = allInvoices.filter((invoice) => {
         return !immutableInvoicesIds.includes(invoice.invoice_id);

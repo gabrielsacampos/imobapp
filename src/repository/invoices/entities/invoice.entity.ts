@@ -1,3 +1,4 @@
+import { CreateInvoiceItemDto } from 'src/repository/invoice_items/dto/create-invoice_item.dto';
 
 export class Invoice {
   id?: number;
@@ -19,4 +20,5 @@ export class Invoice {
   account_credit?: string;
   onlending_value?: number;
   interest_value?: number;
+  invoiceItems?: CreateInvoiceItemDto[];
 }

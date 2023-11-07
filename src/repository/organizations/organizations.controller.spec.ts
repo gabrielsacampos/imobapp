@@ -33,14 +33,15 @@ describe('OrganizationsController', () => {
     expect(organizationsRepository.create).toHaveBeenCalled();
   });
 
-  it('should be defined and call upsert function', async () => {
+  it('should be defined and call update function', async () => {
     //mock
-    const spy = jest.spyOn(organizationsRepository, 'upsert');
+    const spy = jest.spyOn(organizationsRepository, 'update');
     spy.mockResolvedValue(true as any);
 
+    const orgTest = inMemoryOrganizationsRepositoryMock[0];
     //call
-    await controller.upsert(inMemoryOrganizationsRepositoryMock[0]);
-    expect(organizationsRepository.upsert).toHaveBeenCalled();
+    await controller.update(orgTest.id_imobzi, orgTest);
+    expect(organizationsRepository.update).toHaveBeenCalled();
   });
 
   it('should be defined and call function  ', async () => {

@@ -24,9 +24,9 @@ export class LeasesController {
     } catch (error) {}
   }
 
-  async upsert(data: CreateLeaseDTO): Promise<Lease> {
+  async update(data: CreateLeaseDTO): Promise<Lease> {
     try {
-      return await this.leasesRepository.upsert(data);
+      return await this.leasesRepository.update(data);
     } catch (error) {}
   }
 }

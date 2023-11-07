@@ -62,18 +62,18 @@ export class LeasesRepository {
     }
   }
 
-  async upsert(data: CreateLeaseDTO): Promise<Lease> {
+  async update(data: CreateLeaseDTO): Promise<Lease> {
     try {
       const beneficiaries = data.beneficiaries;
       delete data.beneficiaries;
       const leaseItems = data.lease_items;
       delete data.lease_items;
 
-      return await this.prisma.lease.upsert({
+      return await this.prisma.lease.update({
         where: {
           id_imobzi: data.id_imobzi,
         },
-        update: {
+        data: {
           ...data,
           beneficiariesLease: {
             deleteMany: {},
@@ -81,15 +81,6 @@ export class LeasesRepository {
           },
           leasesItems: {
             deleteMany: {},
-            createMany: { data: leaseItems },
-          },
-        },
-        create: {
-          ...data,
-          beneficiariesLease: {
-            createMany: { data: beneficiaries },
-          },
-          leasesItems: {
             createMany: { data: leaseItems },
           },
         },

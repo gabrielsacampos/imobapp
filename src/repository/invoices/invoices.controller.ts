@@ -22,7 +22,7 @@ export class InvoicesController {
   }
 
   @Put(':id')
-  async upsert(@Body() data: CreateInvoiceDTO) {
-    return await this.invoicesRepository.upsert(data);
+  async update(@Param() id_imobzi: string, @Body() data: CreateInvoiceDTO) {
+    return await this.invoicesRepository.update(id_imobzi, data);
   }
 }

@@ -39,12 +39,11 @@ export class InvoiceItemsRepository {
     }
   }
 
-  async upsert(data: CreateInvoiceItemDto): Promise<InvoiceItem> {
+  async update(id_imobzi: string, data: CreateInvoiceItemDto): Promise<InvoiceItem> {
     try {
-      return await this.prisma.invoiceItem.upsert({
-        where: { id_imobzi: data.id_imobzi },
-        update: data,
-        create: data,
+      return await this.prisma.invoiceItem.update({
+        where: { id_imobzi },
+        data,
       });
     } catch (error) {
       throw new Error(error);

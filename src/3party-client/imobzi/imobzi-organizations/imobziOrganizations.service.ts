@@ -8,48 +8,44 @@ export class ImobziOrganizationsService {
   constructor(private readonly imobziOrganizationsRepository: ImobziOrganizationsRepository) {}
 
   async getRequiredOrganizationDataToDb(idOrg: string): Promise<CreateOrganizationDTO> {
-    try {
-      const orgFullData: ImobziOrganizationDTO = await this.imobziOrganizationsRepository.getOrgFullData(idOrg);
-      const id_imobzi = orgFullData.db_id.toString();
-      let address: any;
-      let cnpj: any;
+    const orgFullData: ImobziOrganizationDTO = await this.imobziOrganizationsRepository.getOrgFullData(idOrg);
+    const id_imobzi = orgFullData.db_id.toString();
+    let address: any;
+    let cnpj: any;
 
-      for (const item of orgFullData.fields.group_address) {
-        address = item.find((item: GroupAddress) => {
-          return item.field_id === 'address';
-        });
-        if (address) {
-          address = address.value;
-          break;
-        }
+    for (const item of orgFullData.fields.group_address) {
+      address = item.find((item: GroupAddress) => {
+        return item.field_id === 'address';
+      });
+      if (address) {
+        address = address.value;
+        break;
       }
-      for (const item of orgFullData.fields.group_company_data) {
-        cnpj = item.find((item: GroupCompanyDaum) => {
-          return item.field_id === 'cnpj';
-        });
-        if (cnpj) {
-          cnpj = cnpj.value;
-          break;
-        }
-      }
-
-      const id_person_representative = orgFullData.persons[0]?.person_id.toString(); // third-party-api uses 'persons' instead of 'people'
-      const representative_type = orgFullData.persons[0]?.associate_type;
-      const phone = orgFullData.phone?.number;
-      const { email, name } = orgFullData;
-
-      return {
-        address,
-        cnpj,
-        id_person_representative,
-        representative_type,
-        phone,
-        id_imobzi,
-        email,
-        name,
-      };
-    } catch (error) {
-      throw new Error(error);
     }
+    for (const item of orgFullData.fields.group_company_data) {
+      cnpj = item.find((item: GroupCompanyDaum) => {
+        return item.field_id === 'cnpj';
+      });
+      if (cnpj) {
+        cnpj = cnpj.value;
+        break;
+      }
+    }
+
+    const id_person_representative = orgFullData.persons[0]?.person_id.toString(); // third-party-api uses 'persons' instead of 'people'
+    const representative_type = orgFullData.persons[0]?.associate_type;
+    const phone = orgFullData.phone?.number;
+    const { email, name } = orgFullData;
+
+    return {
+      address,
+      cnpj,
+      id_person_representative,
+      representative_type,
+      phone,
+      id_imobzi,
+      email,
+      name,
+    };
   }
 }

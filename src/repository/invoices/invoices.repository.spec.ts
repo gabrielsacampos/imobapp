@@ -41,9 +41,7 @@ describe('InvoicesRepository', () => {
 
   it('create > existing id_imobzi || cpf should NOT create a invoice', async () => {
     const randomInvoiceToTest = inMemoryInvoicesRepositoryMock[4];
-    const items = [];
-
-    await expect(repository.create({ ...randomInvoiceToTest, items })).rejects.toThrow();
+    await expect(repository.create(randomInvoiceToTest)).rejects.toThrow();
   });
 
   it('create > should create and return the new invoice', async () => {
@@ -55,20 +53,31 @@ describe('InvoicesRepository', () => {
       management_fee: 0,
       invoice_url: '',
       total_value: 0,
-      items: [],
+      invoiceItems: [],
     };
 
     await expect(repository.create(newInvoice)).resolves.not.toThrow();
     expect(inMemoryInvoicesRepository.items).toEqual(expect.arrayContaining([expect.objectContaining(newInvoice)]));
   });
 
-  it('upsert > create invoice or update if not exists', async () => {
+  it('update > update existing invoice if existis', async () => {
     const randomInvoiceToTest = inMemoryInvoicesRepositoryMock[4];
+    const dataToUpdate: CreateInvoiceDTO = randomInvoiceToTest;
+    const id_imobzi = randomInvoiceToTest.id_imobzi;
     randomInvoiceToTest.status = 'xxx';
-    const items = [];
-    await expect(repository.upsert({ ...randomInvoiceToTest, items })).resolves.not.toThrow();
+
+    await expect(repository.update(id_imobzi, dataToUpdate)).resolves.not.toThrow();
     expect(inMemoryInvoicesRepository.items).toEqual(
       expect.arrayContaining([expect.objectContaining(randomInvoiceToTest)]),
     );
+  });
+
+  it('update > NOT existing id_imobzi should NOT update any invoice', async () => {
+    const randomInvoiceToTest = inMemoryInvoicesRepositoryMock[4];
+    const dataToUpdate: CreateInvoiceDTO = randomInvoiceToTest;
+    const id_imobzi = 'not_existing';
+    randomInvoiceToTest.status = 'xxx';
+
+    await expect(repository.update(id_imobzi, dataToUpdate)).rejects.toThrow();
   });
 });

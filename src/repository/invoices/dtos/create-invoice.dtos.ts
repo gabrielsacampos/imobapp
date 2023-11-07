@@ -4,7 +4,8 @@ import { IsNotEmpty, ValidateNested } from 'class-validator';
 import { CreateInvoiceItemDto } from 'src/repository/invoice_items/dto/create-invoice_item.dto';
 import { Invoice } from '../entities/invoice.entity';
 
-export class CreateInvoiceDTO extends Invoice {
+export class CreateInvoiceDTO implements Invoice {
+  id?: number;
   @ApiProperty({
     description: 'invoice id from imobzi',
     example: '12huh8377dbgs81734cgd',
@@ -109,7 +110,7 @@ export class CreateInvoiceDTO extends Invoice {
     message: 'You need to set at least one item to invoice',
   })
   @Type(() => CreateInvoiceItemDto)
-  invoiceItems!: CreateInvoiceItemDto[];
+  invoiceItems?: CreateInvoiceItemDto[];
 
   paid_at?: Date;
   credit_at?: Date;

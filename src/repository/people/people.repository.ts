@@ -63,14 +63,13 @@ export class PeopleRepository {
     }
   }
 
-  async upsert(data: CreatePersonDTO): Promise<Person> {
+  async update(id_imobzi: string, data: CreatePersonDTO): Promise<Person> {
     try {
-      return await this.prisma.person.upsert({
+      return await this.prisma.person.update({
         where: {
-          id_imobzi: data.id_imobzi,
+          id_imobzi,
         },
-        update: data,
-        create: data,
+        data,
       });
     } catch (error) {
       throw new Error(error);

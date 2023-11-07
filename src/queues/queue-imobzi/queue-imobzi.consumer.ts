@@ -2,7 +2,6 @@ import { Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
 import { BuildingDTO } from 'src/3party-client/imobzi/imobzi-buildings/dtos/imobziBuildings.dtos';
 import { ContactDTO } from 'src/3party-client/imobzi/imobzi-contacts/dtos/imobziContacts.dtos';
-import { InvoicesDTO } from 'src/3party-client/imobzi/imobzi-invoices/imobziInvoices.dtos';
 import { LeaseDTO } from 'src/3party-client/imobzi/imobzi-leases/dtos/imobziLeases.dtos';
 import { PropertyDTO } from 'src/3party-client/imobzi/imobzi-properties/dtos/imobziProperties.dtos';
 import { ImobziService } from 'src/3party-client/imobzi/imobzi.service';
@@ -14,12 +13,6 @@ export class QueueImobziConsumer {
     private readonly imobziService: ImobziService,
     private readonly invoicesService: InvoicesService,
   ) {}
-
-  @Process('retry')
-  async retry(job: Job) {
-    const [data] = job.data;
-    await this.imobziService.updateLease(data);
-  }
 
   @Process('updatePeople')
   async updatePerson(job: Job<ContactDTO>) {
@@ -78,11 +71,11 @@ export class QueueImobziConsumer {
   }
 
   @Process('updateInvoices')
-  async updateInvoice(job: Job<InvoicesDTO>) {
+  async updateInvoice(job: Job<>) {
     try {
       const invoice = job.data;
       const invoicesToDb = await this.imobziService.updateInvoices(invoice);
-      await this.invoicesService.upsert(invoicesToDb);
+      await this.invoicesService.update(invoicesToDb);
 
       await new Promise((resolve) => setTimeout(resolve, 5000));
     } catch (error) {

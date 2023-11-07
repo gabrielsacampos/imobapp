@@ -34,15 +34,15 @@ describe('BuildingsController', () => {
     expect(repository.create).toHaveBeenCalled();
   });
 
-  it('should be defined and call upsert function', async () => {
+  it('should be defined and call update function', async () => {
     //mock
-    const spy = jest.spyOn(repository, 'upsert');
+    const spy = jest.spyOn(repository, 'update');
     spy.mockResolvedValue(true as any);
 
     //call
     const building = inMemoryBuildingsRepositoryMock[0];
-    await controller.upsert(building.id_imobzi, building);
-    expect(repository.upsert).toHaveBeenCalled();
+    await controller.update(building.id_imobzi, building);
+    expect(repository.update).toHaveBeenCalled();
   });
 
   it('should be defined and call findAll function  ', async () => {

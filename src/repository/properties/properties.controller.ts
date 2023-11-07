@@ -31,9 +31,9 @@ export class PropertiesController {
     }
   }
 
-  async upsert(data: CreatePropertyDTO): Promise<Property> {
+  async update(id_imobzi: string, data: CreatePropertyDTO): Promise<Property> {
     try {
-      return await this.propertiesRepository.upsert(data);
+      return await this.propertiesRepository.update(id_imobzi, data);
     } catch (error) {
       throw new Error(error);
     }

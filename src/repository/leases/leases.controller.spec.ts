@@ -33,14 +33,14 @@ describe('LeasesController', () => {
     expect(repository.create).toHaveBeenCalled();
   });
 
-  it('should be defined and call upsert function', async () => {
+  it('should be defined and call update function', async () => {
     //mock
-    const spy = jest.spyOn(repository, 'upsert');
+    const spy = jest.spyOn(repository, 'update');
     spy.mockResolvedValue(true as any);
 
     //call
-    await controller.upsert({ ...inMemoryLeasesRepositoryMock[0], beneficiaries: [], lease_items: [] });
-    expect(repository.upsert).toHaveBeenCalled();
+    await controller.update({ ...inMemoryLeasesRepositoryMock[0], beneficiaries: [], lease_items: [] });
+    expect(repository.update).toHaveBeenCalled();
   });
 
   it('should be defined and call function  ', async () => {

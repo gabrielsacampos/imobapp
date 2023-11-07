@@ -75,10 +75,21 @@ describe('OrganizationsRepository', () => {
     await expect(repository.create(randomPersonToTest)).rejects.toThrow();
   });
 
-  it('upsert > create organization or update if not exists', async () => {
+  it('update > should update existing organization', async () => {
+    const randomPersonToTest = inMemoryOrganizationsRepositoryMock[4];
+    const id_imobzi = randomPersonToTest.id_imobzi;
+    randomPersonToTest.email = 'thaisnew@gmail.com';
+    await expect(repository.update(id_imobzi, randomPersonToTest)).resolves.not.toThrow();
+    expect(inMemoryOrganizationsRepository.items).toEqual(
+      expect.arrayContaining([expect.objectContaining(randomPersonToTest)]),
+    );
+  });
+
+  it('update > should NOT update NOT existing organization', async () => {
     const randomPersonToTest = inMemoryOrganizationsRepositoryMock[4];
     randomPersonToTest.email = 'thaisnew@gmail.com';
-    await expect(repository.upsert(randomPersonToTest)).resolves.not.toThrow();
+    const id_imobzi = 'not_existing';
+    await expect(repository.update(id_imobzi, randomPersonToTest)).rejects.toThrow();
     expect(inMemoryOrganizationsRepository.items).toEqual(
       expect.arrayContaining([expect.objectContaining(randomPersonToTest)]),
     );

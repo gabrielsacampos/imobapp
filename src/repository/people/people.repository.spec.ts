@@ -64,10 +64,11 @@ describe('PeopleRepository', () => {
     expect(inMemoryPeopleRepository.items).toEqual(expect.arrayContaining([expect.objectContaining(newPerson)]));
   });
 
-  it('upsert > create person or update if not exists', async () => {
+  it('update > create person or update if not exists', async () => {
     const randomPersonToTest = inMemoryPeopleRepositoryMock[4];
+    const id_imobzi = randomPersonToTest.id_imobzi;
     randomPersonToTest.email = 'thaisnew@gmail.com';
-    await expect(repository.upsert(randomPersonToTest)).resolves.not.toThrow();
+    await expect(repository.update(id_imobzi, randomPersonToTest)).resolves.not.toThrow();
     expect(inMemoryPeopleRepository.items).toEqual(
       expect.arrayContaining([expect.objectContaining(randomPersonToTest)]),
     );

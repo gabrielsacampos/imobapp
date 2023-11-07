@@ -34,9 +34,9 @@ export class BuildingsController {
   }
 
   @Put(':id')
-  async upsert(data: CreateBuildingDTO) {
+  async update(@Param() id: string, data: CreateBuildingDTO) {
     try {
-      return await this.buildingsRepository.upsert(data);
+      return await this.buildingsRepository.update(id, data);
     } catch (error) {
       throw new Error(error);
     }

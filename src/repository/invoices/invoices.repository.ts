@@ -1,7 +1,6 @@
 import { NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { ImmutableInvoice, InvoiceComponents } from 'src/3party-client/granatum/dtos/granatum-service.dtos';
 import { PrismaService } from 'src/prisma-client/prisma.service';
-import { CreateInvoiceItemDto } from '../invoice_items/dto/create-invoice_item.dto';
 import { CreateInvoiceDTO } from './dtos/create-invoice.dtos';
 import { Invoice } from './entities/invoice.entity';
 
@@ -17,16 +16,14 @@ export class InvoicesRepository {
         throw new NotAcceptableException(`Invoice ${data.id_imobzi} already exists`);
       }
 
-      const items: CreateInvoiceItemDto[] = data.items;
-      delete data.items;
-
-      const createdInvoice = await this.prisma.invoice.create({
+      return await this.prisma.invoice.create({
         data: {
           ...data,
-          invoiceItems: { create: items },
+          invoiceItems: {
+            create: data.invoiceItems,
+          },
         },
       });
-      return createdInvoice;
     } catch (error) {
       throw new Error(error);
     }
@@ -34,7 +31,7 @@ export class InvoicesRepository {
 
   async findAll(): Promise<Invoice[]> {
     try {
-      return await this.prisma.invoice.findMany();
+      return await this.prisma.invoice.findMany({ include: { invoiceItems: true } });
     } catch (error) {
       throw new Error(error);
     }
@@ -67,31 +64,24 @@ export class InvoicesRepository {
         throw new NotFoundException(`Invoice ${id_imobzi} does not exist.`);
       }
 
+      //props able to update
+      const { status, paid_at, credit_at, paid_manual, onlending_value, management_fee, account_credit } = data;
+
       const updatedInvoice = await this.prisma.invoice.update({
         where: { id_imobzi },
         data: {
-          ...data,
+          status,
+          paid_at,
+          credit_at,
+          paid_manual,
+          onlending_value,
+          management_fee,
+          account_credit,
         },
         include: { invoiceItems: true },
       });
 
       return updatedInvoice;
-    } catch (error) {
-      throw new Error(error);
-    }
-  }
-
-  async upsert(data: CreateInvoiceDTO): Promise<Invoice> {
-    try {
-      const items = data.items;
-      items.forEach((item) => delete item.id_invoice_imobzi);
-      delete data.items;
-
-      return await this.prisma.invoice.upsert({
-        where: { id_imobzi: data.id_imobzi },
-        update: data,
-        create: { ...data, invoiceItems: { createMany: { data: items } } },
-      });
     } catch (error) {
       throw new Error(error);
     }

@@ -1,6 +1,7 @@
 import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma-client/prisma.service';
 import { CreateOrganizationDTO } from './dtos/create-organization.dtos';
+import { UpdateOrganizationDTO } from './dtos/update-organization.dtos';
 import { Organization } from './entities/organization.entity';
 
 @Injectable()
@@ -53,12 +54,11 @@ export class OrganizationsRepository {
     }
   }
 
-  async upsert(data: CreateOrganizationDTO): Promise<Organization> {
+  async update(id_imobzi: string, data: UpdateOrganizationDTO): Promise<Organization> {
     try {
-      return await this.prisma.organization.upsert({
-        where: { id_imobzi: data.id_imobzi },
-        create: data,
-        update: data,
+      return await this.prisma.organization.update({
+        where: { id_imobzi },
+        data,
       });
     } catch (error) {
       throw new Error(error);

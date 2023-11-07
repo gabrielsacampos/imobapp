@@ -61,11 +61,11 @@ describe('PropertiesRepository', () => {
     await expect(repository.create({ ...randomProperty, owners })).rejects.toThrow();
   });
 
-  it('upsert > create property or update if not exists', async () => {
+  it('update > create property or update if not exists', async () => {
     const randomProperty = inMemoryPropertiesRepositoryMock[4];
-    const owners = [{ id_owner_organization_imobzi: '12443121', id_owner_person_imobzi: null, share: 100 }];
     randomProperty.status = 'suspended';
-    await expect(repository.upsert({ ...randomProperty, owners })).resolves.not.toThrow();
+
+    await expect(repository.update(randomProperty.id_imobzi, randomProperty)).resolves.not.toThrow();
     expect(inMemoryPropertiesRepository.items).toEqual(
       expect.arrayContaining([expect.objectContaining(randomProperty)]),
     );

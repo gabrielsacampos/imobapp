@@ -34,14 +34,15 @@ describe('PeopleController', () => {
     expect(repository.create).toHaveBeenCalled();
   });
 
-  it('should be defined and call upsert function', async () => {
+  it('should be defined and call update function', async () => {
     //mock
-    const spy = jest.spyOn(repository, 'upsert');
+    const spy = jest.spyOn(repository, 'update');
     spy.mockResolvedValue(true as any);
 
+    const personTest = inMemoryPeopleRepositoryMock[0];
     //call
-    await controller.upsert(inMemoryPeopleRepositoryMock[0]);
-    expect(repository.upsert).toHaveBeenCalled();
+    await controller.update(personTest.id_imobzi, personTest);
+    expect(repository.update).toHaveBeenCalled();
   });
 
   it('should be defined and call function  ', async () => {

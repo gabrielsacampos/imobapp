@@ -1,4 +1,4 @@
-import { Controller } from '@nestjs/common';
+import { Body, Controller, Param, Post, Put } from '@nestjs/common';
 import { CreateOrganizationDTO } from './dtos/create-organization.dtos';
 import { Organization } from './entities/organization.entity';
 import { OrganizationsRepository } from './organizations.repository';
@@ -15,9 +15,10 @@ export class OrganizationsController {
     }
   }
 
-  async upsert(data: CreateOrganizationDTO): Promise<Organization> {
+  @Put(':id')
+  async update(@Param() id_imobzi: string, @Body() data: CreateOrganizationDTO): Promise<Organization> {
     try {
-      return this.organizationsRepository.upsert(data);
+      return this.organizationsRepository.update(id_imobzi, data);
     } catch (error) {
       throw new Error(error);
     }

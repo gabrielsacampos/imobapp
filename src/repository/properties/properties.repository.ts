@@ -53,22 +53,22 @@ export class PropertiesRepository {
     }
   }
 
-  async upsert(data: CreatePropertyDTO): Promise<Property> {
+  async update(id_imobzi: string, data: CreatePropertyDTO): Promise<Property> {
     try {
-      return await this.prisma.property.upsert({
+      const found = await this.prisma.property.findFirst({ where: { id_imobzi } });
+      if (!found) {
+        throw new NotFoundException(`ID: ${id_imobzi} not found at properties`);
+      }
+      return await this.prisma.property.update({
         where: {
           id_imobzi: data.id_imobzi,
         },
-        update: {
+        data: {
           ...data,
           owners: {
             deleteMany: {},
             createMany: { data: data.owners },
           },
-        },
-        create: {
-          ...data,
-          owners: { createMany: { data: data.owners } },
         },
       });
     } catch (error) {

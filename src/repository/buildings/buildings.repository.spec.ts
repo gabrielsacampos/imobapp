@@ -58,10 +58,10 @@ describe('BuildingsRepository', () => {
     expect(inMemoryBuildingsRepository.items).toEqual(expect.arrayContaining([expect.objectContaining(newBuilding)]));
   });
 
-  it('upsert > create building or update if not exists', async () => {
+  it('update > create building or update if not exists', async () => {
     const randomBuildigToTest = inMemoryBuildingsRepositoryMock[4];
     randomBuildigToTest.city = 'Caruaru';
-    await expect(repository.upsert(randomBuildigToTest, randomBuildigToTest.id_imobzi)).resolves.not.toThrow();
+    await expect(repository.update(randomBuildigToTest.id_imobzi, randomBuildigToTest)).resolves.not.toThrow();
     expect(inMemoryBuildingsRepository.items).toEqual(
       expect.arrayContaining([expect.objectContaining(randomBuildigToTest)]),
     );
