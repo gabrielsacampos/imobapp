@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { ScheduleModule } from '@nestjs/schedule';
 import { RepositoryModule } from 'src/repository/repository.module';
 import { SharedModule } from 'src/shared.module';
 import { ImobziBuildingsModule } from './imobzi-buildings/imobziBuildings.module';
@@ -22,7 +21,6 @@ import { ImobziService } from './imobzi.service';
   imports: [
     RepositoryModule,
     SharedModule,
-    ScheduleModule.forRoot(),
     ImobziBuildingsModule,
     ImobziContactsModule,
     ImobziPeopleModule,

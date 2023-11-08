@@ -10,9 +10,11 @@ import { ExpressAdapter } from '@bull-board/express';
 import { ImobziModule } from 'src/3party-client/imobzi/imobzi.module';
 import { InvoicesModule } from 'src/repository/invoices/invoices.module';
 import { RepositoryModule } from 'src/repository/repository.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     InvoicesModule,
     ImobziModule,
     RepositoryModule,

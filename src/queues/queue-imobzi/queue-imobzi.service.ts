@@ -8,23 +8,23 @@ export class QueueImobziService {
   async storeDb(data: StoreDb) {
     const { contacts, buildings, properties, leases, invoices } = data;
     if (contacts) {
-      await this.queueImobziProducer.contacts.produce();
+      await this.queueImobziProducer.produceContacts();
     }
 
     if (buildings) {
-      await this.queueImobziProducer.buildings.produce();
+      await this.queueImobziProducer.produceBuildings();
     }
 
     if (properties) {
-      await this.queueImobziProducer.properties.produce();
+      await this.queueImobziProducer.produceProperties();
     }
 
     if (leases) {
-      await this.queueImobziProducer.leases.produce();
+      await this.queueImobziProducer.produceLeases();
     }
 
     if (invoices) {
-      await this.queueImobziProducer.invoices.produce();
+      await this.queueImobziProducer.produceInvoices();
     }
   }
 }
