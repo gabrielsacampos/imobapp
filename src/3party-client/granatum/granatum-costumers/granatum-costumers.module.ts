@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { GranatumClientsService } from './granatum-costumers.service';
 import { SharedModule } from 'src/shared.module';
+import { GranatumCostumersRepository } from './granatum-costumers.repository';
+import { GranatumCostumersService } from './granatum-costumers.service';
 
 @Module({
   imports: [SharedModule],
-  providers: [GranatumClientsService],
-  exports: [GranatumClientsService],
+  providers: [GranatumCostumersService, GranatumCostumersRepository],
+  exports: [GranatumCostumersService, GranatumCostumersRepository],
 })
-export class GranatumClientsModule {}
+export class GranatumCostumersModule {}

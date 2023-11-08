@@ -22,6 +22,6 @@ export class InvoicesService {
 
   paidInvoices = this.invoicesRepository.getPaidInvoices;
   inmutableInvoices = this.invoicesRepository.getImmutableInvoices;
-  predictetOnlendings = this.invoicesRepository.getOnlendings;
+  predictedOnlendings = this.invoicesRepository.getOnlendings;
   predictedRevenues = this.invoicesRepository.getRevenue;
 }

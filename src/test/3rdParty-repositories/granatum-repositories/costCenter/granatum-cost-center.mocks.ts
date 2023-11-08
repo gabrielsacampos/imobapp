@@ -1,3 +1,11 @@
+export class GranatumCostCentersMock {
+  allItems = costCentersMock;
+
+  async getAll() {
+    return this.allItems;
+  }
+}
+
 export const costCentersMock = [
   { id: 244555, descricao: 'Comercial', ativo: true, centros_custo_lucro_filhos: [] },
   {

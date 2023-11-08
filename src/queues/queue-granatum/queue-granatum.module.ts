@@ -37,22 +37,7 @@ import { QueueGranatumService } from './queue-granatum.service';
     }),
   ],
   controllers: [QueueGranatumController],
-  providers: [
-    QueueGranatumService,
-    QueueGranatumProducer,
-    QueueGranatumConsumer,
-    GranatumService,
-    InvoicesController,
-    InvoicesService,
-    RepositoryService,
-  ],
-  exports: [
-    QueueGranatumService,
-    QueueGranatumProducer,
-    QueueGranatumConsumer,
-    GranatumService,
-    InvoicesController,
-    InvoicesService,
-  ],
+  providers: [QueueGranatumService, QueueGranatumProducer, QueueGranatumConsumer, InvoicesService, RepositoryService],
+  exports: [QueueGranatumService, QueueGranatumProducer, QueueGranatumConsumer],
 })
 export class QueueGranatumModule {}

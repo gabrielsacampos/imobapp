@@ -1,20 +1,17 @@
-import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { granatumUrls } from '../granatum-urls-params/granatum.urls';
 import { CostCenterDTO } from './dtos/costCenters.dto';
+import { GranatumCostCenterRepository } from './granatum-cost-center.repository';
 
 @Injectable()
 export class GranatumCostCenterService {
-  constructor(private readonly httpService: HttpService) {}
+  constructor(private readonly granatumCostCentersRepository: GranatumCostCenterRepository) {}
 
-  async getAllCostCenters() {
-    const { data } = await this.httpService.axiosRef.get(granatumUrls.allCostCentersUrl());
-    return data;
-  }
+  allCostCenters = this.granatumCostCentersRepository.getAll();
 
-  findIdByDescription(building_name: string, block: string, costCerters: CostCenterDTO[]) {
+  async findIdByDescription(building_name: string, block: string): Promise<any> {
+    const costCenters = await this.allCostCenters;
     const unknowCostCenter = { id: 254187 };
-    const motherCostCenterFound = this.findMotherCostCenter(building_name, costCerters);
+    const motherCostCenterFound = this.findMotherCostCenter(building_name, costCenters);
 
     if (!motherCostCenterFound) {
       return unknowCostCenter.id;

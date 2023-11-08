@@ -1,58 +1,50 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { isArray } from 'class-validator';
 import { SharedModule } from 'src/shared.module';
-import { HttpService } from '@nestjs/axios';
+import { GranatumCostCentersMock } from '../../../test/3rdParty-repositories/granatum-repositories/costCenter/granatum-cost-center.mocks';
+import { GranatumCostCenterRepository } from './granatum-cost-center.repository';
 import { GranatumCostCenterService } from './granatum-cost-center.service';
-import { costCentersMock } from './granatum-cost-center.mocks';
 
 describe('GranatumCostCenterService', () => {
-  let granatumCostCenterService: GranatumCostCenterService;
-  let httpServiceMock: { axiosRef: { get: jest.Mock } };
+  let service: GranatumCostCenterService;
+  let costCentersMock: GranatumCostCentersMock;
 
   beforeEach(async () => {
-    httpServiceMock = { axiosRef: { get: jest.fn() } };
+    costCentersMock = new GranatumCostCentersMock();
 
     const module: TestingModule = await Test.createTestingModule({
       imports: [SharedModule],
-      providers: [GranatumCostCenterService, { provide: HttpService, useValue: httpServiceMock }],
+      providers: [GranatumCostCenterService, { provide: GranatumCostCenterRepository, useValue: costCentersMock }],
     }).compile();
 
-    granatumCostCenterService = module.get<GranatumCostCenterService>(GranatumCostCenterService);
-    httpServiceMock.axiosRef.get.mockResolvedValue({ data: costCentersMock });
+    service = module.get<GranatumCostCenterService>(GranatumCostCenterService);
   });
 
-  test('should be defined', () => {
-    expect(granatumCostCenterService).toBeDefined();
-  });
-
-  test('gtAllContacts', async () => {
-    const result = await granatumCostCenterService.getAllCostCenters();
-    expect(result).toBeDefined();
-    expect(isArray(result)).toBe(true);
+  test('service should be defined', () => {
+    expect(service).toBeDefined();
   });
 
   test('findMotherCostCenter & findChildCostCenter', () => {
-    const result1 = granatumCostCenterService.findMotherCostCenter('maurício de nassau', costCentersMock);
+    const result1 = service.findMotherCostCenter('maurício de nassau', costCentersMock.allItems);
     expect(result1.id).toBe(244553);
-    const result2 = granatumCostCenterService.findMotherCostCenter('Eko Home Club', costCentersMock);
+    const result2 = service.findMotherCostCenter('Eko Home Club', costCentersMock.allItems);
     expect(result2.id).toBe(244545);
-    const result3 = granatumCostCenterService.findChildCostCenter('Figueiras', result2);
+    const result3 = service.findChildCostCenter('Figueiras', result2);
     expect(result3.id).toBe(244546);
-    const result4 = granatumCostCenterService.findChildCostCenter('Oliveiras', result2);
+    const result4 = service.findChildCostCenter('Oliveiras', result2);
     expect(result4).toBeUndefined();
   });
 
-  test('findIDByDescription', () => {
-    const result = granatumCostCenterService.findIdByDescription('Eko Home Club', 'Figueiras', costCentersMock);
+  test('findIDByDescription', async () => {
+    const result = await service.findIdByDescription('Eko Home Club', 'Figueiras');
     expect(result).toBe(244546);
 
-    const result2 = granatumCostCenterService.findIdByDescription('Eko Home Club', 'Ipê', costCentersMock);
+    const result2 = await service.findIdByDescription('Eko Home Club', 'Ipê');
     expect(result2).toBe(244547);
 
-    const result3 = granatumCostCenterService.findIdByDescription('Eko Home Club', 'Oliveiras', costCentersMock);
+    const result3 = await service.findIdByDescription('Eko Home Club', 'Oliveiras');
     expect(result3).toBe(254187);
 
-    const result4 = granatumCostCenterService.findIdByDescription('Jardins', 'Oliveiras', costCentersMock);
+    const result4 = await service.findIdByDescription('Jardins', 'Oliveiras');
     expect(result4).toBe(254187);
   });
 });

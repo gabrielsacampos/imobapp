@@ -1,10 +1,29 @@
 import { Injectable } from '@nestjs/common';
-import { InvoicesController } from 'src/repository/invoices/invoices.controller';
 import { GroupedInvoiceComponents, InvoiceComponents } from './dtos/granatum-service.dtos';
+import { GranatumAccountsService } from './granatum-accounts/granatum-accounts.service';
+import { GranatumCategoriesService } from './granatum-categories/granatum-categories.service';
+import { GranatumCostCenterService } from './granatum-cost-center/granatum-cost-center.service';
+import { GranatumCostumersService } from './granatum-costumers/granatum-costumers.service';
+import { GranatumSupliersService } from './granatum-supliers/granatum-supliers.service';
+import { GranatumTransactionsService } from './granatum-transactions/granatumTransactions.service';
 
 @Injectable()
 export class GranatumService {
-  constructor(private readonly invoicesService: InvoicesController) {}
+  constructor(
+    private readonly granatumTransactionsService: GranatumTransactionsService,
+    private readonly granatumAccountsService: GranatumAccountsService,
+    private readonly granatumCostCenterService: GranatumCostCenterService,
+    private readonly granatumCategoriesService: GranatumCategoriesService,
+    private readonly granatumSupliersService: GranatumSupliersService,
+    private readonly granatumCostumersService: GranatumCostumersService,
+  ) {}
+
+  transactions = this.granatumTransactionsService;
+  accounts = this.granatumAccountsService;
+  costCenters = this.granatumCostCenterService;
+  categories = this.granatumCategoriesService;
+  supliers = this.granatumSupliersService;
+  constumers = this.granatumCostCenterService;
 
   groupInvoices(items: InvoiceComponents[]): GroupedInvoiceComponents[] {
     const groupedItems = items.reduce((acc, curr) => {
