@@ -13,14 +13,15 @@ export class ImobziInvoicesRepository {
       let page = 1;
       const allInvoices: AllImobziInvoiceDTO[] = [];
 
-      while (page) {
-        const { data } = await this.httpService.axiosRef.get<ImobziInvoicesPageDTO>(
-          imobziUrls.urlAllInvoices(page),
-          imobziParams,
-        );
-        allInvoices.push(...data.invoices);
-        page = data.next_page;
-      }
+      // while (page) {
+      const { data } = await this.httpService.axiosRef.get<ImobziInvoicesPageDTO>(
+        imobziUrls.urlAllInvoices(page),
+        imobziParams,
+      );
+      allInvoices.push(...data.invoices);
+      page = data.next_page;
+      console.log(allInvoices.length, ' / ', data.count);
+      // }
 
       return allInvoices;
     } catch (error) {

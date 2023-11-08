@@ -1,21 +1,19 @@
-import { Module } from '@nestjs/common';
-import { QueueImobziService } from './queue-imobzi.service';
-import { QueueImobziController } from './queue-imobzi.controller';
-import { QueueImobziProducer } from './queue-imobzi.producer';
-import { QueueImobziConsumer } from './queue-imobzi.consumer';
 import { BullAdapter } from '@bull-board/api/bullAdapter';
+import { ExpressAdapter } from '@bull-board/express';
 import { BullBoardModule } from '@bull-board/nestjs';
 import { BullModule } from '@nestjs/bull';
-import { ExpressAdapter } from '@bull-board/express';
-import { ImobziModule } from 'src/3party-client/imobzi/imobzi.module';
-import { InvoicesModule } from 'src/repository/invoices/invoices.module';
-import { RepositoryModule } from 'src/repository/repository.module';
+import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
+import { ImobziModule } from 'src/3party-client/imobzi/imobzi.module';
+import { RepositoryModule } from 'src/repository/repository.module';
+import { QueueImobziConsumer } from './queue-imobzi.consumer';
+import { QueueImobziController } from './queue-imobzi.controller';
+import { QueueImobziProducer } from './queue-imobzi.producer';
+import { QueueImobziService } from './queue-imobzi.service';
 
 @Module({
   imports: [
     ScheduleModule.forRoot(),
-    InvoicesModule,
     ImobziModule,
     RepositoryModule,
     BullModule.forRoot({
