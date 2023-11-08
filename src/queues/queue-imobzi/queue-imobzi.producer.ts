@@ -95,8 +95,7 @@ export class QueueImobziProducer {
   async produceInvoices() {
     try {
       const allInvoices: AllImobziInvoiceDTO[] = await this.imobziRepository.invoice.getAll();
-      const immutableInvoices = await this.repositoryService.invoices.inmutableInvoices();
-      const immutableInvoicesIds = immutableInvoices.map((invoice) => invoice.invoice_id);
+      const immutableInvoicesIds = await this.repositoryService.invoices.inmutableInvoicesIds();
       const invoicesToUpsert = allInvoices.filter((invoice) => {
         return !immutableInvoicesIds.includes(invoice.invoice_id);
       });

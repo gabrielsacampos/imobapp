@@ -21,7 +21,10 @@ export class InvoicesService {
   }
 
   paidInvoices = this.invoicesRepository.getPaidInvoices;
-  inmutableInvoices = this.invoicesRepository.getImmutableInvoices;
+  async inmutableInvoicesIds() {
+    const inmutableInvoices = await this.invoicesRepository.getImmutableInvoices();
+    return inmutableInvoices.map((item) => item.invoice_id);
+  }
   predictedOnlendings = this.invoicesRepository.getOnlendings;
   predictedRevenues = this.invoicesRepository.getRevenue;
 }

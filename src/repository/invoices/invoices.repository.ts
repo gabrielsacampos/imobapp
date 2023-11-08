@@ -209,16 +209,13 @@ FROM
 
   async getImmutableInvoices(): Promise<ImmutableInvoice[]> {
     try {
-      const data: any = await this.prisma.$queryRaw`
+      return await this.prisma.$queryRaw`
     select id_imobzi as invoice_id
     from invoices
     where (
     status like '%paid%'  or status like '%expired%'
     ) and paid_manual is not true;
     `;
-
-      console.log('chegoooooou');
-      return data;
     } catch (error) {
       throw new Error(error);
     }
