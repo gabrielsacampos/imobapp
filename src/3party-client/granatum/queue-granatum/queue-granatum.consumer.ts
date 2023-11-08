@@ -1,7 +1,7 @@
 import { Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
 import { GranatumService } from 'src/3party-client/granatum/granatum.service';
-import { GroupedInvoiceComponents } from '../../3party-client/granatum/dtos/granatum-service.dtos';
+import { GroupedInvoiceComponents } from '../dtos/granatum-service.dtos';
 
 @Processor('GranatumQueue')
 export class QueueGranatumConsumer {
