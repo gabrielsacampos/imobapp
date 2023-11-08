@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { GranatumClientsService } from './granatum-clients.service';
+import { GranatumClientsService } from './granatum-costumers.service';
 import { SharedModule } from 'src/shared.module';
 
 @Module({

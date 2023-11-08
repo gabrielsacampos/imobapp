@@ -1,40 +1,31 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { isArray } from 'class-validator';
 import { SharedModule } from 'src/shared.module';
+import { GranatumAccountsMock } from '../../../../test/3rdParty-repositories/granatum-repositories/accounts/granatumAccounts.mock';
+import { GranatumAccountsRepository } from './granatum-accounts.repository';
 import { GranatumAccountsService } from './granatum-accounts.service';
-import { accountsMocks } from './granatum-accounts.mocks';
-import { HttpService } from '@nestjs/axios';
 
 describe('GranatumAccountsService', () => {
-  let granatumAccountsService: GranatumAccountsService;
-  let httpServiceMock: { axiosRef: { get: jest.Mock } };
+  let service: GranatumAccountsService;
+  let accountMock: GranatumAccountsMock;
 
   beforeEach(async () => {
-    httpServiceMock = { axiosRef: { get: jest.fn() } };
-
+    accountMock = new GranatumAccountsMock();
     const module: TestingModule = await Test.createTestingModule({
       imports: [SharedModule],
-      providers: [GranatumAccountsService, { provide: HttpService, useValue: httpServiceMock }],
+      providers: [GranatumAccountsService, { provide: GranatumAccountsRepository, useValue: accountMock }],
     }).compile();
 
-    granatumAccountsService = module.get<GranatumAccountsService>(GranatumAccountsService);
-    httpServiceMock.axiosRef.get.mockResolvedValue({ data: accountsMocks });
+    service = module.get<GranatumAccountsService>(GranatumAccountsService);
   });
 
   test('should be defined', () => {
-    expect(granatumAccountsService).toBeDefined();
+    expect(service).toBeDefined();
   });
 
-  test('gtAllContacts', async () => {
-    const result = await granatumAccountsService.getAllAccounts();
-    expect(result).toBeDefined();
-    expect(isArray(result)).toBe(true);
-  });
-
-  test('findIdByDescription', () => {
-    const result1 = granatumAccountsService.findIdByDescription('PjBank', accountsMocks);
+  test('findIdByDescription should handle with regex to find the entity ID', async () => {
+    const result1 = await service.findIdByDescription('PjBank');
     expect(result1).toBe(104193);
-    const result2 = granatumAccountsService.findIdByDescription('Inter', accountsMocks);
+    const result2 = await service.findIdByDescription('Inter');
     expect(result2).toBe(103796);
   });
 });

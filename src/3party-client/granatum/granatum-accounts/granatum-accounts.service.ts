@@ -1,18 +1,16 @@
-import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { granatumUrls } from '../granatum-urls-params/granatum.urls';
 import { GranatumAccountDTO } from './dtos/granatum-accounts.dtos';
+import { GranatumAccountsRepository } from './granatum-accounts.repository';
 
 @Injectable()
 export class GranatumAccountsService {
-  constructor(private readonly httpService: HttpService) {}
+  constructor(private readonly granatumAccountsRepository: GranatumAccountsRepository) {}
 
-  async getAllAccounts(): Promise<GranatumAccountDTO[]> {
-    const { data } = await this.httpService.axiosRef.get(granatumUrls.allAccountsUrl());
-    return data;
-  }
+  private readonly allItems: Promise<GranatumAccountDTO[]> = this.granatumAccountsRepository.getAll();
 
-  findIdByDescription(accountName: string, allAccounts: GranatumAccountDTO[]) {
+  async findIdByDescription(accountName: string) {
+    const allAccounts: GranatumAccountDTO[] = await this.allItems;
+
     const cleanedAccountName = accountName
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '') // remove accents

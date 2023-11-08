@@ -2,7 +2,7 @@ import { Process, Processor } from '@nestjs/bull';
 import { Job } from 'bull';
 import { GroupedInvoiceComponents } from '../../3party-client/granatum/dtos/granatum-service.dtos';
 import { GranatumAccountsService } from '../../3party-client/granatum/granatum-accounts/granatum-accounts.service';
-import { GranatumCategoriesService } from '../../3party-client/granatum/granatum-categories/granatumCategories.service';
+import { GranatumCategoriesService } from '../../3party-client/granatum/granatum-categories/granatum-categories.service';
 import { GranatumCostCenterService } from '../../3party-client/granatum/granatum-cost-center/granatum-cost-center.service';
 import { GranatumSupliersService } from '../../3party-client/granatum/granatum-supliers/granatum-supliers.service';
 import { GranatumTransactionsService } from '../../3party-client/granatum/granatum-transactions/granatumTransactions.service';

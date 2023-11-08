@@ -1,4 +1,11 @@
-export const accountsMocks = [
+export class GranatumAccountsMock {
+  allAcounts = accountMocks;
+  async getAll() {
+    return this.allAcounts;
+  }
+}
+
+export const accountMocks = [
   {
     id: 106952,
     descricao: ' Cobrança Imobzi',

@@ -10,11 +10,7 @@ describe('ImobziContactsRepository', () => {
   let contactsMock: ImobziContactsMock;
 
   beforeEach(async () => {
-    httpServiceMock = {
-      axiosRef: {
-        get: jest.fn(),
-      },
-    };
+    httpServiceMock = { axiosRef: { get: jest.fn() } };
     contactsMock = new ImobziContactsMock();
 
     const moduleRef: TestingModule = await Test.createTestingModule({

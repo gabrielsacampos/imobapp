@@ -1,19 +1,22 @@
-import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
-import { granatumUrls } from '../granatum-urls-params/granatum.urls';
 import { GranatumCategoryDTO } from './dtos/granatum-categories.dtos';
+import { GranatumCategoriesRepository } from './granatum-categories.repository';
 
 @Injectable()
 export class GranatumCategoriesService {
-  constructor(private readonly httpService: HttpService) {}
+  constructor(private readonly granatumCategoriesRepository: GranatumCategoriesRepository) {}
 
-  async getSlipCategories(): Promise<GranatumCategoryDTO> {
-    const { data } = await this.httpService.axiosRef.get(granatumUrls.allCategoriesUrl());
-    return data.find((element) => {
+  private readonly allItems = this.granatumCategoriesRepository.getAll();
+
+  async filterSlip(): Promise<GranatumCategoryDTO> {
+    const categories: GranatumCategoryDTO[] = await this.allItems;
+    return categories.find((element) => {
       return element.descricao === 'Recebimentos por Boleto';
     });
   }
-  findIdByDescription(description: string, slipCategories: GranatumCategoryDTO) {
+
+  async findIdByDescription(description: string) {
+    const slipCategories = await this.filterSlip();
     const cleanedDescription = description
       .normalize('NFD')
       .replace(/[\u0300-\u036f]/g, '') // remove accents
