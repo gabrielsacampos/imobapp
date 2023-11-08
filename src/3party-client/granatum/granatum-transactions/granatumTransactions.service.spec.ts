@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SharedModule } from 'src/shared.module';
 import { GranatumTransactionsService } from './granatumTransactions.service';
-import { JobSetGranatumIdsMock } from './granatumTransactions.mocks';
+import { JobSetGranatumIdsMock } from '../../../test/3rdParty-repositories/granatum-repositories/transactions/granatum-transactions.mocks';
 
 describe('GranatumTransactionsService', () => {
   let granatumTransactionsService: GranatumTransactionsService;

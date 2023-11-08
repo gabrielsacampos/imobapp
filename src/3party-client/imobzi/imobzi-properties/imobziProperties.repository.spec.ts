@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { SharedModule } from 'src/shared.module';
 import { ImobziPropertiesRepository } from './imobziProperties.repository';
 import { ImobziPropertyDetailsDTO } from './dtos/imobziPropertyDetails.dtos';
-import { ImobziPropertiesMock } from '../../../../test/3rdParty-repositories/imobzi-repositories/properties/imobziProperties.mocks';
+import { ImobziPropertiesMock } from '../../../test/3rdParty-repositories/imobzi-repositories/properties/imobziProperties.mocks';
 
 describe('ImobziPropertiesRepository', () => {
   let repository: ImobziPropertiesRepository;

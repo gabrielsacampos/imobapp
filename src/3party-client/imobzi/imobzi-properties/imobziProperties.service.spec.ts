@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { CreateOwnerDto } from 'src/repository/owners/dto/create-owner.dto';
 import { CreatePropertyDTO } from 'src/repository/properties/dtos/create-property.dtos';
 import { SharedModule } from 'src/shared.module';
-import { ImobziPropertiesMock } from '../../../../test/3rdParty-repositories/imobzi-repositories/properties/imobziProperties.mocks';
+import { ImobziPropertiesMock } from '../../../test/3rdParty-repositories/imobzi-repositories/properties/imobziProperties.mocks';
 import { ImobziPropertiesRepository } from './imobziProperties.repository';
 import { ImobziPropertiesService } from './imobziProperties.service';
 

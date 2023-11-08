@@ -1,6 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { Test, TestingModule } from '@nestjs/testing';
-import { ImobziInvoicesMock } from '../../../../test/3rdParty-repositories/imobzi-repositories/invoices/imobziInvoices.mock';
+import { ImobziInvoicesMock } from '../../../test/3rdParty-repositories/imobzi-repositories/invoices/imobziInvoices.mock';
 import { ImobziInvoicesRepository } from './imobziInvoices.repository';
 
 describe('ImobziInvoicesRepository', () => {

@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SharedModule } from 'src/shared.module';
 import { HttpService } from '@nestjs/axios';
-import { GranatumCategoriesMock } from '../../../../test/3rdParty-repositories/granatum-repositories/categories/granatumCategories.mocks';
+import { GranatumCategoriesMock } from '../../../test/3rdParty-repositories/granatum-repositories/categories/granatumCategories.mocks';
 import { GranatumCategoriesRepository } from './granatum-categories.repository';
 
 describe('GranatumTransactionsService', () => {

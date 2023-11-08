@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SharedModule } from 'src/shared.module';
-import { GranatumCostumersSupliersMock } from '../../../../test/3rdParty-repositories/granatum-repositories/costumers-supliers/granatum-costumers-supliers.mocks';
+import { GranatumCostumersSupliersMock } from '../../../test/3rdParty-repositories/granatum-repositories/costumers-supliers/granatum-costumers-supliers.mocks';
 import { GranatumSupliersRepository } from './granatum-supliers.repository';
 import { GranatumSupliersService } from './granatum-supliers.service';
 

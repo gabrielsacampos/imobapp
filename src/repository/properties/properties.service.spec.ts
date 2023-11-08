@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { InMemoryPropertiesRepository } from '../../../test/server-repositories/inMemoryPropertiesRepository/inMemoryPropertiesRepository';
-import { inMemoryPropertiesRepositoryMock } from '../../../test/server-repositories/inMemoryPropertiesRepository/inMemoryPropertiesRepository.mock';
+import { InMemoryPropertiesRepository } from '../../test/server-repositories/inMemoryPropertiesRepository/inMemoryPropertiesRepository';
+import { inMemoryPropertiesRepositoryMock } from '../../test/server-repositories/inMemoryPropertiesRepository/inMemoryPropertiesRepository.mock';
 import { CreatePropertyDTO } from './dtos/create-property.dtos';
 import { PropertiesRepository } from './properties.repository';
 import { PropertiesService } from './properties.service';

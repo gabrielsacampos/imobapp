@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { InMemoryOrganizationsRepository } from '../../../test/server-repositories/inMemoryOrganizationsRepository/inMemoryOrganizationsRepository';
-import { inMemoryOrganizationsRepositoryMock } from '../../../test/server-repositories/inMemoryOrganizationsRepository/inMemoryOrganizationsRepository.mock';
+import { InMemoryOrganizationsRepository } from '../../test/server-repositories/inMemoryOrganizationsRepository/inMemoryOrganizationsRepository';
+import { inMemoryOrganizationsRepositoryMock } from '../../test/server-repositories/inMemoryOrganizationsRepository/inMemoryOrganizationsRepository.mock';
 import { CreateOrganizationDTO } from './dtos/create-organization.dtos';
 import { OrganizationsRepository } from './organizations.repository';
 import { OrganizationsService } from './organizations.service';

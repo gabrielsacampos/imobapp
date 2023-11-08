@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { InMemoryPeopleRepository } from '../../../test/server-repositories/inMemoryPeopleRepository/inMemoryPeopleRepository';
-import { inMemoryPeopleRepositoryMock } from '../../../test/server-repositories/inMemoryPeopleRepository/inMemoryPeopleRepository.mocks';
+import { InMemoryPeopleRepository } from '../../test/server-repositories/inMemoryPeopleRepository/inMemoryPeopleRepository';
+import { inMemoryPeopleRepositoryMock } from '../../test/server-repositories/inMemoryPeopleRepository/inMemoryPeopleRepository.mocks';
 import { CreatePersonDTO } from './dtos/create-person.dtos';
 import { PeopleRepository } from './people.repository';
 import { PeopleService } from './people.service';

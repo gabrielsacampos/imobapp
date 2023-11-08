@@ -1,4 +1,4 @@
-import { ImobziPersonDTO } from '../../../../src/3party-client/imobzi/imobzi-people/dtos/imobziPeople.dtos';
+import { ImobziPersonDTO } from '../../../../3party-client/imobzi/imobzi-people/dtos/imobziPeople.dtos';
 
 export class ImobziPeopleMock {
   async getFullData(idPerson: string): Promise<ImobziPersonDTO> {

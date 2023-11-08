@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { Test, TestingModule } from '@nestjs/testing';
 import { SharedModule } from 'src/shared.module';
-import { ImobziLeasesMock } from '../../../../test/3rdParty-repositories/imobzi-repositories/leases/imobziLease.mock';
+import { ImobziLeasesMock } from '../../../test/3rdParty-repositories/imobzi-repositories/leases/imobziLease.mock';
 import { ImobziLeasesRepository } from './imobziLeases.repository';
 
 describe('ImobziLeasesRepository', () => {

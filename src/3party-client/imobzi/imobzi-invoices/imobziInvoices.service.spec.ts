@@ -3,7 +3,7 @@ import { ImobziInvoicesService } from './imobziInvoices.service';
 import { SharedModule } from 'src/shared.module';
 import { ImobziInvoicesRepository } from './imobziInvoices.repository';
 import { CreateInvoiceDTO } from '../../../../src/repository/invoices/dtos/create-invoice.dtos';
-import { ImobziInvoicesMock } from '../../../../test/3rdParty-repositories/imobzi-repositories/invoices/imobziInvoices.mock';
+import { ImobziInvoicesMock } from '../../../test/3rdParty-repositories/imobzi-repositories/invoices/imobziInvoices.mock';
 import { CreateInvoiceItemDto } from 'src/repository/invoice_items/dto/create-invoice_item.dto';
 
 describe('ImobziInvoicesService', () => {

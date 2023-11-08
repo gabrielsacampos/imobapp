@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { InMemoryLeasesRepository } from '../../../test/server-repositories/inMemoryLeasesRepository/inMemoryLeasesRepository';
-import { inMemoryLeasesRepositoryMock } from '../../../test/server-repositories/inMemoryLeasesRepository/inMemoryLeasesRepository.mock';
+import { InMemoryLeasesRepository } from '../../test/server-repositories/inMemoryLeasesRepository/inMemoryLeasesRepository';
+import { inMemoryLeasesRepositoryMock } from '../../test/server-repositories/inMemoryLeasesRepository/inMemoryLeasesRepository.mock';
 import { LeasesController } from './leases.controller';
 import { LeasesRepository } from './leases.repository';
 import { LeasesService } from './leases.service';

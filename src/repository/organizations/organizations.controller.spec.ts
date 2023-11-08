@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaService } from 'src/prisma-client/prisma.service';
-import { InMemoryOrganizationsRepository } from '../../../test/server-repositories/inMemoryOrganizationsRepository/inMemoryOrganizationsRepository';
-import { inMemoryOrganizationsRepositoryMock } from '../../../test/server-repositories/inMemoryOrganizationsRepository/inMemoryOrganizationsRepository.mock';
+import { InMemoryOrganizationsRepository } from '../../test/server-repositories/inMemoryOrganizationsRepository/inMemoryOrganizationsRepository';
+import { inMemoryOrganizationsRepositoryMock } from '../../test/server-repositories/inMemoryOrganizationsRepository/inMemoryOrganizationsRepository.mock';
 import { OrganizationsController } from './organizations.controller';
 import { OrganizationsRepository } from './organizations.repository';
 

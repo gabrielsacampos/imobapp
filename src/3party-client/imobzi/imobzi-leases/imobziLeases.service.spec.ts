@@ -3,7 +3,7 @@ import { CreateBeneficiaryDTO } from 'src/repository/leases/dtos/create-benefici
 import { CreateLeaseDTO } from 'src/repository/leases/dtos/create-lease.dtos';
 import { LeaseItemsCreateDTO } from 'src/repository/leases/lease-items/leaseItemsCreate.dtos';
 import { SharedModule } from 'src/shared.module';
-import { ImobziLeasesMock } from '../../../../test/3rdParty-repositories/imobzi-repositories/leases/imobziLease.mock';
+import { ImobziLeasesMock } from '../../../test/3rdParty-repositories/imobzi-repositories/leases/imobziLease.mock';
 import { ImobziLeasesService } from './imobziLeases.service';
 import { ImobziLeasesRepository } from './imobziLeases.repository';
 

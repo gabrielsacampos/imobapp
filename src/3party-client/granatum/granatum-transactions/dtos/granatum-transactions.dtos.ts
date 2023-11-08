@@ -1,4 +1,5 @@
 export class GranatumTransactionPostDTO {
+  id?: number;
   descricao: string;
   categoria_id: number;
   valor: number;

@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SharedModule } from 'src/shared.module';
-import { GranatumCategoriesMock } from '../../../../test/3rdParty-repositories/granatum-repositories/categories/granatumCategories.mocks';
+import { GranatumCategoriesMock } from '../../../test/3rdParty-repositories/granatum-repositories/categories/granatumCategories.mocks';
 import { GranatumCategoriesRepository } from './granatum-categories.repository';
 import { GranatumCategoriesService } from './granatum-categories.service';
 
