@@ -6,7 +6,7 @@ import { CreateBuildingDTO } from './dtos/create-building.dtos';
 export class BuildingsController {
   constructor(private readonly buildingsRepository: BuildingsRepository) {}
 
-  @Get()
+  @Get('')
   async findAll() {
     try {
       return await this.buildingsRepository.findAll();

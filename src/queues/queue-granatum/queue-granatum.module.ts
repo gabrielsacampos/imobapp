@@ -7,9 +7,9 @@ import { GranatumModule } from 'src/3party-client/granatum/granatum.module';
 import { GranatumService } from 'src/3party-client/granatum/granatum.service';
 import { InvoicesController } from 'src/repository/invoices/invoices.controller';
 import { InvoicesModule } from 'src/repository/invoices/invoices.module';
-import { InvoicesRepository } from 'src/repository/invoices/invoices.repository';
 import { InvoicesService } from 'src/repository/invoices/invoices.service';
 import { RepositoryModule } from 'src/repository/repository.module';
+import { RepositoryService } from 'src/repository/repository.service';
 import { QueueGranatumConsumer } from './queue-granatum.consumer';
 import { QueueGranatumController } from './queue-granatum.controller';
 import { QueueGranatumProducer } from './queue-granatum.producer';
@@ -44,10 +44,10 @@ import { QueueGranatumService } from './queue-granatum.service';
     GranatumService,
     InvoicesController,
     InvoicesService,
-    InvoicesRepository,
+    RepositoryService,
   ],
   exports: [
-    // QueueGranatumService,
+    QueueGranatumService,
     QueueGranatumProducer,
     QueueGranatumConsumer,
     GranatumService,

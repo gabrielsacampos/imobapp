@@ -9,11 +9,11 @@ export class BuildingsService {
 
   async upsert(data: CreateBuildingDTO): Promise<Building> {
     try {
-      const found = this.buildingsRepository.findById(data.id_imobzi);
+      const found = await this.buildingsRepository.findById(data.id_imobzi);
       if (found) {
-        return this.buildingsRepository.update(data.id_imobzi, data);
+        return await this.buildingsRepository.update(data.id_imobzi, data);
       } else {
-        return this.buildingsRepository.create(data);
+        return await this.buildingsRepository.create(data);
       }
     } catch (error) {
       throw new Error(error);

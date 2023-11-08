@@ -34,10 +34,10 @@ describe('GranatumSupliersService', () => {
     expect(result).toBeDefined();
   });
 
-  test('findIdByDocument', async () => {
-    const result1 = await granatumSupliersService.findIdByDocument('123.213.332-00');
+  test('findIdByDocument', () => {
+    const result1 = granatumSupliersService.findIdByDocument('123.213.332-00', supliersMock);
     expect(result1).toBe(supliersMock[0].id);
-    const result2 = await granatumSupliersService.findIdByDocument('111.222.333/0001-11');
+    const result2 = granatumSupliersService.findIdByDocument('111.222.333/0001-11', supliersMock);
     expect(result2).toBe(supliersMock[1].id);
   });
 });

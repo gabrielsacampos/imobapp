@@ -1,8 +1,9 @@
-import { NotAcceptableException, NotFoundException } from '@nestjs/common';
+import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma-client/prisma.service';
 import { CreateBuildingDTO } from './dtos/create-building.dtos';
 import { Building } from './entities/building.entity';
 
+@Injectable()
 export class BuildingsRepository {
   constructor(private prisma: PrismaService) {}
 
@@ -38,24 +39,25 @@ export class BuildingsRepository {
     }
   }
 
-  async findById(id: string): Promise<Building> {
+  async findById(id_imobzi: string): Promise<Building> {
     try {
       const found = await this.prisma.building.findUnique({
-        where: { id: Number(id) },
+        where: { id_imobzi },
       });
 
       if (!found) {
-        throw new NotAcceptableException(`ID: ${id} not found at buildings`);
+        throw new NotAcceptableException(`ID: ${id_imobzi} not found at buildings`);
       }
       return found;
     } catch (error) {
+      console.log(error);
       throw new Error(error);
     }
   }
 
   async update(id_imobzi: string, data: CreateBuildingDTO): Promise<Building> {
     try {
-      const foundBuilding = this.prisma.building.findUnique({ where: { id_imobzi } });
+      const foundBuilding = await this.prisma.building.findUnique({ where: { id_imobzi } });
 
       if (!foundBuilding) {
         throw new NotFoundException(`ID: ${id_imobzi} not found at buildings`);

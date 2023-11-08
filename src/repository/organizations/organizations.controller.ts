@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
 import { CreateOrganizationDTO } from './dtos/create-organization.dtos';
 import { Organization } from './entities/organization.entity';
 import { OrganizationsRepository } from './organizations.repository';
@@ -7,7 +7,8 @@ import { OrganizationsRepository } from './organizations.repository';
 export class OrganizationsController {
   constructor(private readonly organizationsRepository: OrganizationsRepository) {}
 
-  async create(data: CreateOrganizationDTO): Promise<Organization> {
+  @Post('')
+  async create(@Body() data: CreateOrganizationDTO): Promise<Organization> {
     try {
       return await this.organizationsRepository.create(data);
     } catch (error) {
@@ -24,7 +25,8 @@ export class OrganizationsController {
     }
   }
 
-  async findById(id_imobzi: string): Promise<Organization> {
+  @Get(':id')
+  async findById(@Param() id_imobzi: string): Promise<Organization> {
     try {
       return this.organizationsRepository.findById(id_imobzi);
     } catch (error) {
@@ -32,6 +34,7 @@ export class OrganizationsController {
     }
   }
 
+  @Get('')
   async findAll(): Promise<Organization[]> {
     try {
       return this.organizationsRepository.findAll();

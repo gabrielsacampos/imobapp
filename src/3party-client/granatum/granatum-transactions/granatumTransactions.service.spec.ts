@@ -15,7 +15,7 @@ describe('GranatumTransactionsService', () => {
   });
 
   test('formatDataToPostTransaction', async () => {
-    const result = granatumTransactionsService.templateTransactions(JobSetGranatumIdsMock);
+    const result = granatumTransactionsService.templateTransaction(JobSetGranatumIdsMock);
     console.log(JSON.stringify(result, null, 2));
   });
 });
