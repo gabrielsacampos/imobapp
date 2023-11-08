@@ -1,17 +1,12 @@
-import { HttpService } from '@nestjs/axios';
-import { Inject, Injectable, Logger } from '@nestjs/common';
-import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { Injectable } from '@nestjs/common';
 import { dateFunctions } from '../../../my-usefull-functions/date.functions';
 import { GroupedInvoiceComponents, InvoiceComponents } from '../dtos/granatum-service.dtos';
-import { granatumUrls } from '../granatum-urls-params/granatum.urls';
 import { GranatumItemsPostDTO, GranatumTransactionPostDTO } from './dtos/granatum-transactions.dtos';
+import { GranatumTransactionsRepository } from './granatum-transactions.repository';
 
 @Injectable()
 export class GranatumTransactionsService {
-  constructor(
-    private readonly httpService: HttpService,
-    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
-  ) {}
+  constructor(private readonly granatumTransactionsRepository: GranatumTransactionsRepository) {}
 
   templateTransaction(data: GroupedInvoiceComponents): any {
     const today = new Date().toISOString();
@@ -89,19 +84,11 @@ export class GranatumTransactionsService {
     });
   }
 
-  formatRevenueTransactions() {}
-
   async postTransactions(invoiceReadyToPost: GranatumTransactionPostDTO): Promise<any> {
     try {
-      const { status, data } = await this.httpService.axiosRef.post(
-        granatumUrls.posTransaciontsUrl(),
-        invoiceReadyToPost,
-      );
-      return { status, transacation_id: data.id };
+      return await this.granatumTransactionsRepository.post(invoiceReadyToPost);
     } catch (error) {
-      const errorData = JSON.stringify(error.response.data);
-      console.log(invoiceReadyToPost);
-      throw new Error(errorData);
+      throw new Error(error);
     }
   }
 }

@@ -1,21 +1,30 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { SharedModule } from 'src/shared.module';
+import {
+  granatumPostToFailMock,
+  GranatumTransactionsMock,
+} from 'src/test/3rdParty-repositories/granatum-repositories/transactions/granatum-transactions.mock';
+import { GranatumTransactionsRepository } from './granatum-transactions.repository';
 import { GranatumTransactionsService } from './granatumTransactions.service';
-import { JobSetGranatumIdsMock } from '../../../test/3rdParty-repositories/granatum-repositories/transactions/granatum-transactions.mocks';
 
 describe('GranatumTransactionsService', () => {
-  let granatumTransactionsService: GranatumTransactionsService;
+  let service: GranatumTransactionsService;
+  let transactionsMock: GranatumTransactionsMock;
 
   beforeEach(async () => {
+    transactionsMock = new GranatumTransactionsMock();
     const moduleRef: TestingModule = await Test.createTestingModule({
       imports: [SharedModule],
-      providers: [GranatumTransactionsService],
+      providers: [GranatumTransactionsService, { provide: GranatumTransactionsRepository, useValue: transactionsMock }],
     }).compile();
-    granatumTransactionsService = moduleRef.get<GranatumTransactionsService>(GranatumTransactionsService);
+    service = moduleRef.get<GranatumTransactionsService>(GranatumTransactionsService);
   });
 
-  test('formatDataToPostTransaction', async () => {
-    const result = granatumTransactionsService.templateTransaction(JobSetGranatumIdsMock);
-    console.log(JSON.stringify(result, null, 2));
+  it('service should be defined', () => {
+    expect(service).toBeDefined();
+  });
+
+  it('post throw error if post do not follow the format', () => {
+    expect(service.postTransactions(granatumPostToFailMock)).rejects.toThrow();
   });
 });

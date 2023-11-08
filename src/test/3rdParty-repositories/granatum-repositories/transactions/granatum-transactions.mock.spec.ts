@@ -2,6 +2,7 @@ import {
   GranatumItemsPostDTO,
   GranatumTransactionPostDTO,
 } from 'src/3party-client/granatum/granatum-transactions/dtos/granatum-transactions.dtos';
+import { ChildMessageError } from './dtos/message-error.dtos';
 import { GranatumTransactionsMock } from './granatum-transactions.mock';
 
 describe('GranatumTransactionsMock', () => {
@@ -29,6 +30,7 @@ describe('GranatumTransactionsMock', () => {
       itens_adicionais: aditionalItems,
     };
     const expected = {
+      formatHasError: true,
       motherMessageError: {
         conta_id: 'conta_id is not a number or is not defined >> input: undefined',
         data_vencimento: 'data_vencimento must be defined as string >> input: ',
@@ -45,7 +47,7 @@ describe('GranatumTransactionsMock', () => {
       ],
     };
     const result = mock.errorHunter(dataInput);
-    expect(result).toEqual(JSON.stringify(expected, null, 2));
+    expect(result).toEqual(expected);
   });
 
   it('erroItemsHunter should get erros from each aditional item from post data', () => {
@@ -64,7 +66,7 @@ describe('GranatumTransactionsMock', () => {
       },
     ];
 
-    const result = mock.errorItemsHunter(aditionalItems);
+    const result: ChildMessageError[] = mock.errorItemsHunter(aditionalItems);
     expect(result).toEqual([
       {
         itemIndex: 0,
@@ -72,10 +74,27 @@ describe('GranatumTransactionsMock', () => {
         categoria_id: 'categoria_id is not a number or is not defined',
         indexHasError: true,
       },
-      {
-        itemIndex: 1,
-        indexHasError: false,
-      },
     ]);
+  });
+
+  it('should throw an error if post do not follow the required formmat', () => {
+    const aditionalItems: GranatumItemsPostDTO[] = [
+      {
+        tags: [],
+        descricao: '',
+        categoria_id: undefined,
+        valor: 0,
+      },
+    ];
+    const dataInput: GranatumTransactionPostDTO = {
+      descricao: 'oi',
+      categoria_id: undefined,
+      valor: 0,
+      conta_id: undefined,
+      data_vencimento: '',
+      itens_adicionais: aditionalItems,
+    };
+
+    expect(mock.post(dataInput)).rejects.toThrow();
   });
 });
