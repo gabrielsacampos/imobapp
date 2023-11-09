@@ -3,7 +3,6 @@ import { GroupedInvoiceComponents, InvoiceComponents } from './dtos/granatum-ser
 import { GranatumAccountsService } from './granatum-accounts/granatum-accounts.service';
 import { GranatumCategoriesService } from './granatum-categories/granatum-categories.service';
 import { GranatumCostCenterService } from './granatum-cost-center/granatum-cost-center.service';
-import { GranatumCostumersService } from './granatum-costumers/granatum-costumers.service';
 import { GranatumSupliersService } from './granatum-supliers/granatum-supliers.service';
 import { GranatumTransactionsService } from './granatum-transactions/granatumTransactions.service';
 
@@ -15,7 +14,6 @@ export class GranatumService {
     private readonly granatumCostCenterService: GranatumCostCenterService,
     private readonly granatumCategoriesService: GranatumCategoriesService,
     private readonly granatumSupliersService: GranatumSupliersService,
-    private readonly granatumCostumersService: GranatumCostumersService,
   ) {}
 
   transactions = this.granatumTransactionsService;

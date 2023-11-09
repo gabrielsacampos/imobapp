@@ -15,4 +15,8 @@ describe('GranatumTransactionsRepository', () => {
     }).compile();
     repository = moduleRef.get<GranatumTransactionsRepository>(GranatumTransactionsRepository);
   });
+
+  it('repository should be defined', () => {
+    expect(repository).toBeDefined();
+  });
 });
