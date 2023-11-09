@@ -1,5 +1,5 @@
-import { CreatePropertyDTO } from 'src/repository/properties/dtos/create-property.dtos';
-import { Property } from 'src/repository/properties/entities/property.entity';
+import { CreatePropertyDTO } from 'src/modules/properties/dtos/create-property.dtos';
+import { Property } from 'src/modules/properties/entities/property.entity';
 
 export const inMemoryPropertiesRepositoryMock: CreatePropertyDTO[] = [
   {

@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CreateBeneficiaryDTO } from 'src/repository/leases/dtos/create-beneficiary.dtos';
-import { CreateLeaseDTO } from 'src/repository/leases/dtos/create-lease.dtos';
-import { LeaseItemsCreateDTO } from 'src/repository/leases/lease-items/leaseItemsCreate.dtos';
+import { CreateBeneficiaryDTO } from 'src/modules/leases/dtos/create-beneficiary.dtos';
+import { CreateLeaseDTO } from 'src/modules/leases/dtos/create-lease.dtos';
+import { LeaseItemsCreateDTO } from 'src/modules/leases/lease-items/leaseItemsCreate.dtos';
 import { SharedModule } from 'src/shared.module';
 import { ImobziLeasesMock } from '../../../test/3rdParty-repositories/imobzi-repositories/leases/imobziLease.mock';
 import { ImobziLeasesService } from './imobziLeases.service';

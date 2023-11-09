@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreatePersonDTO } from 'src/repository/people/dtos/create-person.dtos';
+import { CreatePersonDTO } from 'src/modules/people/dtos/create-person.dtos';
 import { GroupPersonal } from './dtos/imobziPeople.dtos';
 import { ImobziPeopleRepository } from './imobziPeople.repository';
 

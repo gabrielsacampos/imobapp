@@ -7,14 +7,14 @@ import { AllImobziInvoiceDTO } from 'src/3party-client/imobzi/imobzi-invoices/dt
 import { LeaseDTO } from 'src/3party-client/imobzi/imobzi-leases/dtos/imobziLeases.dtos';
 import { PropertyDTO } from 'src/3party-client/imobzi/imobzi-properties/dtos/imobziProperties.dtos';
 import { ImobziRepository } from 'src/3party-client/imobzi/imobzi.repository';
-import { RepositoryService } from 'src/repository/repository.service';
+import { ModulesServices } from 'src/modules/modules.service';
 
 @Injectable()
 export class QueueImobziProducer {
   constructor(
     @InjectQueue('ImobziQueue') private readonly imobziQueue: Queue,
     private readonly imobziRepository: ImobziRepository,
-    private readonly repositoryService: RepositoryService,
+    private readonly repositoryService: ModulesServices,
   ) {}
 
   async produceContacts() {

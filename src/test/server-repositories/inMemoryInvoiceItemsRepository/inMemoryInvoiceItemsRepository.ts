@@ -1,7 +1,7 @@
 import { NotAcceptableException, NotFoundException } from '@nestjs/common';
-import { CreateInvoiceItemDto } from 'src/repository/invoice_items/dto/create-invoice_item.dto';
-import { InvoiceItem } from 'src/repository/invoice_items/entities/invoice_item.entity';
-import { InvoiceItemsRepository } from 'src/repository/invoice_items/invoice_items.repository';
+import { CreateInvoiceItemDto } from 'src/modules/invoice_items/dto/create-invoice_item.dto';
+import { InvoiceItem } from 'src/modules/invoice_items/entities/invoice_item.entity';
+import { InvoiceItemsRepository } from 'src/modules/invoice_items/invoice_items.repository';
 import { inMemoryInvoiceItemsRepositoryMock } from './inMemoryInvoiceItemsRepository.mocks';
 
 export class InMemoryInvoiceItemsRepository implements Partial<InvoiceItemsRepository> {

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { dateFunctions } from 'src/my-usefull-functions/date.functions';
-import { CreateInvoiceDTO } from 'src/repository/invoices/dtos/create-invoice.dtos';
-import { CreateInvoiceItemDto } from 'src/repository/invoice_items/dto/create-invoice_item.dto';
+import { CreateInvoiceDTO } from 'src/modules/invoices/dtos/create-invoice.dtos';
+import { CreateInvoiceItemDto } from 'src/modules/invoice_items/dto/create-invoice_item.dto';
 import { AnImobziInvoiceDTO, ImobziInvoiceItem } from './dto/an-imobzi-invoice.dtos';
 import { ImobziInvoicesRepository } from './imobziInvoices.repository';
 

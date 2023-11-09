@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateOwnerDto } from 'src/repository/owners/dto/create-owner.dto';
-import { CreatePropertyDTO } from 'src/repository/properties/dtos/create-property.dtos';
+import { CreateOwnerDto } from 'src/modules/owners/dto/create-owner.dto';
+import { CreatePropertyDTO } from 'src/modules/properties/dtos/create-property.dtos';
 import { ImobziPropertyOwnerDTO } from './dtos/imobziPropertyDetails.dtos';
 import { ImobziPropertiesRepository } from './imobziProperties.repository';
 

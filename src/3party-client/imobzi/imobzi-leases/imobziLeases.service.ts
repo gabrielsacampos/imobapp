@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { CreateLeaseDTO } from 'src/repository/leases/dtos/create-lease.dtos';
-import { BeneficiariesCreateDTO } from 'src/repository/leases/lease-beneficiaries/lease-beneficiaries.dtos';
-import { LeaseItemsCreateDTO } from 'src/repository/leases/lease-items/leaseItemsCreate.dtos';
+import { CreateLeaseDTO } from 'src/modules/leases/dtos/create-lease.dtos';
+import { BeneficiariesCreateDTO } from 'src/modules/leases/lease-beneficiaries/lease-beneficiaries.dtos';
+import { LeaseItemsCreateDTO } from 'src/modules/leases/lease-items/leaseItemsCreate.dtos';
 import { ImobziLeaseBeneficiaryDTO, ImobziLeaseDetailsDTO, ImobziLeaseItemDTO } from './dtos/imobziLeasesDetails.dtos';
 import { ImobziLeasesRepository } from './imobziLeases.repository';
 

@@ -1,10 +1,10 @@
-import { CreateOrganizationDTO } from 'src/repository/organizations/dtos/create-organization.dtos';
+import { CreateOrganizationDTO } from 'src/modules/organizations/dtos/create-organization.dtos';
 import * as crypto from 'node:crypto';
 import { NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { inMemoryOrganizationsRepositoryMock } from './inMemoryOrganizationsRepository.mock';
-import { Organization } from 'src/repository/organizations/entities/organization.entity';
-import { OrganizationsRepository } from 'src/repository/organizations/organizations.repository';
-import { UpdateOrganizationDTO } from 'src/repository/organizations/dtos/update-organization.dtos';
+import { Organization } from 'src/modules/organizations/entities/organization.entity';
+import { OrganizationsRepository } from 'src/modules/organizations/organizations.repository';
+import { UpdateOrganizationDTO } from 'src/modules/organizations/dtos/update-organization.dtos';
 
 export class InMemoryOrganizationsRepository implements Partial<OrganizationsRepository> {
   public items: Organization[] = inMemoryOrganizationsRepositoryMock;

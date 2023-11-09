@@ -1,4 +1,4 @@
-import { CreateLeaseDTO } from 'src/repository/leases/dtos/create-lease.dtos';
+import { CreateLeaseDTO } from 'src/modules/leases/dtos/create-lease.dtos';
 import { inMemoryOrganizationsRepositoryMock } from '../inMemoryOrganizationsRepository/inMemoryOrganizationsRepository.mock';
 import { inMemoryPeopleRepositoryMock } from '../inMemoryPeopleRepository/inMemoryPeopleRepository.mocks';
 import { inMemoryPropertiesRepositoryMock } from '../inMemoryPropertiesRepository/inMemoryPropertiesRepository.mock';

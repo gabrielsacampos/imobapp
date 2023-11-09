@@ -1,8 +1,8 @@
 import { NotAcceptableException, NotFoundException } from '@nestjs/common';
 import * as crypto from 'node:crypto';
-import { CreateInvoiceDTO } from 'src/repository/invoices/dtos/create-invoice.dtos';
-import { Invoice } from 'src/repository/invoices/entities/invoice.entity';
-import { InvoicesRepository } from 'src/repository/invoices/invoices.repository';
+import { CreateInvoiceDTO } from 'src/modules/invoices/dtos/create-invoice.dtos';
+import { Invoice } from 'src/modules/invoices/entities/invoice.entity';
+import { InvoicesRepository } from 'src/modules/invoices/invoices.repository';
 import { inMemoryInvoicesRepositoryMock } from './inMemoryRepositoryInvoices.mock';
 
 export class InMemoryInvoicesRepository implements Partial<InvoicesRepository> {

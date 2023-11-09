@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { RepositoryModule } from 'src/repository/repository.module';
+import { RepositoryModule } from 'src/modules/modules.module';
 import { SharedModule } from 'src/shared.module';
 import { ImobziBuildingsModule } from './imobzi-buildings/imobziBuildings.module';
 import { ImobziBuildingsService } from './imobzi-buildings/imobziBuildings.service';

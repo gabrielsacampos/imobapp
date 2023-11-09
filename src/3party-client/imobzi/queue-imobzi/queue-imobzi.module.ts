@@ -5,7 +5,7 @@ import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ImobziModule } from 'src/3party-client/imobzi/imobzi.module';
-import { RepositoryModule } from 'src/repository/repository.module';
+import { RepositoryModule } from 'src/modules/modules.module';
 import { QueueImobziConsumer } from './queue-imobzi.consumer';
 import { QueueImobziController } from './queue-imobzi.controller';
 import { QueueImobziProducer } from './queue-imobzi.producer';

@@ -1,4 +1,4 @@
-import { Organization } from 'src/repository/organizations/entities/organization.entity';
+import { Organization } from 'src/modules/organizations/entities/organization.entity';
 import { inMemoryPeopleRepositoryMock } from '../inMemoryPeopleRepository/inMemoryPeopleRepository.mocks';
 
 export const inMemoryOrganizationsRepositoryMock: Organization[] = [

@@ -1,30 +1,37 @@
 import { Module } from '@nestjs/common';
-import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_GUARD } from '@nestjs/core';
 import { GranatumModule } from './3party-client/granatum/granatum.module';
+import { QueueGranatumModule } from './3party-client/granatum/queue-granatum/queue-granatum.module';
+import { ImobziModule } from './3party-client/imobzi/imobzi.module';
+import { QueueImobziModule } from './3party-client/imobzi/queue-imobzi/queue-imobzi.module';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
-import { ImobziModule } from './3party-client/imobzi/imobzi.module';
-import { QueueGranatumModule } from './3party-client/granatum/queue-granatum/queue-granatum.module';
-import { UsersModule } from './repository/users/users.module';
+import { InvoicesController } from './modules/invoices/invoices.controller';
+import { InvoicesRepository } from './modules/invoices/invoices.repository';
+import { InvoicesService } from './modules/invoices/invoices.service';
+import { RepositoryModule } from './modules/modules.module';
+import { ModulesServices } from './modules/modules.service';
+import { UsersModule } from './modules/users/users.module';
 import { SharedModule } from './shared.module';
-import { InvoiceItemsModule } from './repository/invoice_items/invoice_items.module';
-import { QueueImobziModule } from './3party-client/imobzi/queue-imobzi/queue-imobzi.module';
 
 @Module({
   imports: [
     ImobziModule,
     SharedModule,
     GranatumModule,
+    RepositoryModule,
     AuthModule,
     UsersModule,
     QueueGranatumModule,
     QueueImobziModule,
-    InvoiceItemsModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, InvoicesController],
   providers: [
+    InvoicesService,
+    InvoicesRepository,
+    ModulesServices,
     AppService,
     {
       provide: APP_GUARD,

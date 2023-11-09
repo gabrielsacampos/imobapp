@@ -1,4 +1,4 @@
-import { Invoice } from 'src/repository/invoices/entities/invoice.entity';
+import { Invoice } from 'src/modules/invoices/entities/invoice.entity';
 import { inMemoryLeasesRepositoryMock } from '../inMemoryLeasesRepository/inMemoryLeasesRepository.mock';
 
 export const inMemoryInvoicesRepositoryMock: Invoice[] = [
