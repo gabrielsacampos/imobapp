@@ -21,6 +21,14 @@ import { GranatumService } from './granatum.service';
   ],
   controllers: [GranatumController],
   providers: [GranatumService],
-  exports: [GranatumService],
+  exports: [
+    GranatumService,
+    GranatumTransactionsModule,
+    GranatumCategoriesModule,
+    GranatumAccountsModule,
+    GranatumCostCenterModule,
+    GranatumCostumersModule,
+    GranatumSupliersModule,
+  ],
 })
 export class GranatumModule {}

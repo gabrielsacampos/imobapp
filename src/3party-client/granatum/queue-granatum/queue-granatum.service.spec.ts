@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { GranatumService } from 'src/3party-client/granatum/granatum.service';
-import { RepositoryService } from 'src/modules/modules.service';
+import { ModulesServices } from 'src/modules/modules.service';
+
 import { QueueGranatumProducer } from './queue-granatum.producer';
 import { QueueGranatumService } from './queue-granatum.service';
 
@@ -39,7 +40,7 @@ describe('QueueGranatumService', () => {
         QueueGranatumService,
         { provide: QueueGranatumProducer, useValue: queueGranatumProducerMock },
         { provide: GranatumService, useValue: granatumServiceMock },
-        { provide: RepositoryService, useValue: repositoryServiceMock },
+        { provide: ModulesServices, useValue: repositoryServiceMock },
       ],
     }).compile();
 

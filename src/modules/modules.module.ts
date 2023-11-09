@@ -20,4 +20,4 @@ import { PropertiesModule } from './properties/properties.module';
     InvoicesModule,
   ],
 })
-export class RepositoryModule {}
+export class ModulesModule {}

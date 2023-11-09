@@ -5,7 +5,7 @@ import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
 import { GranatumModule } from 'src/3party-client/granatum/granatum.module';
 import { InvoicesModule } from 'src/modules/invoices/invoices.module';
-import { RepositoryModule } from 'src/modules/modules.module';
+import { ModulesModule } from 'src/modules/modules.module';
 import { QueueGranatumConsumer } from './queue-granatum.consumer';
 import { QueueGranatumController } from './queue-granatum.controller';
 import { QueueGranatumProducer } from './queue-granatum.producer';
@@ -13,7 +13,7 @@ import { QueueGranatumService } from './queue-granatum.service';
 
 @Module({
   imports: [
-    RepositoryModule,
+    ModulesModule,
     InvoicesModule,
     GranatumModule,
     BullModule.forRoot({

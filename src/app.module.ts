@@ -11,7 +11,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { InvoicesController } from './modules/invoices/invoices.controller';
 import { InvoicesRepository } from './modules/invoices/invoices.repository';
 import { InvoicesService } from './modules/invoices/invoices.service';
-import { RepositoryModule } from './modules/modules.module';
+import { ModulesModule } from './modules/modules.module';
 import { ModulesServices } from './modules/modules.service';
 import { UsersModule } from './modules/users/users.module';
 import { SharedModule } from './shared.module';
@@ -21,7 +21,7 @@ import { SharedModule } from './shared.module';
     ImobziModule,
     SharedModule,
     GranatumModule,
-    RepositoryModule,
+    ModulesModule,
     AuthModule,
     UsersModule,
     QueueGranatumModule,

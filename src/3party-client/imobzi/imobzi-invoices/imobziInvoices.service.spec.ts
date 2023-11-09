@@ -27,10 +27,7 @@ describe('ImobziInvoicesService', () => {
   test('getRequiredInvoicesITemsDataToDb should format data from imobzi and return an object with required properties', async () => {
     const invoices = invoicesMock.invoicesFullData;
     const invoiceTest = invoices[0];
-    const result: CreateInvoiceItemDto[] = service.getRequiredInvoiceItemsDataToDb(
-      invoiceTest.items,
-      invoiceTest.invoice_id,
-    );
+    const result: CreateInvoiceItemDto[] = service.getRequiredInvoiceItemsDataToDb(invoiceTest.items);
 
     for (const item in result) {
       expect(result[item]).toBeDefined();
