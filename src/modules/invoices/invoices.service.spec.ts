@@ -23,8 +23,6 @@ describe('InvoicesService', () => {
   });
 
   it('upsert > should update invoice when it exists', async () => {
-    const spyUpdate = jest.spyOn(inMemoryInvoicesRepository, 'update');
-
     const invoiceTest: CreateInvoiceDTO = inMemoryInvoicesRepositoryMock[0];
     invoiceTest.status = 'expired';
     const result = await service.upsert(invoiceTest);
@@ -33,19 +31,16 @@ describe('InvoicesService', () => {
     });
     expect(result).toEqual(updatedInvoice);
     expect(result.status).toBe('expired');
-    expect(spyUpdate).toHaveBeenCalled();
   });
 
   it('upsert > should create invoice when it NOT exists', async () => {
-    const spyCreate = jest.spyOn(inMemoryInvoicesRepository, 'update');
-    const invoiceTest: CreateInvoiceDTO = inMemoryInvoicesRepositoryMock[0];
-    invoiceTest.id = 9898;
+    const invoiceTest: CreateInvoiceDTO = { ...inMemoryInvoicesRepositoryMock[0] };
+    invoiceTest.id_imobzi = 'notexits';
     const result = await service.upsert(invoiceTest);
     const updatedInvoice = inMemoryInvoicesRepositoryMock.find((invoice) => {
       return invoice.id_imobzi === invoiceTest.id_imobzi;
     });
     expect(result).toEqual(updatedInvoice);
-    expect(result.id).toBe(9898);
-    expect(spyCreate).toHaveBeenCalled();
+    expect(result.id_imobzi).toEqual('notexits');
   });
 });

@@ -24,7 +24,10 @@ export class InMemoryInvoicesRepository implements Partial<InvoicesRepository> {
   }
 
   async findById(id_imobzi: string): Promise<Invoice> {
-    const found = this.items.find((invoice) => invoice.id_imobzi === id_imobzi);
+    const found = this.items.find((invoice) => {
+      return invoice.id_imobzi === id_imobzi;
+    });
+
     if (!found) {
       throw new NotFoundException(`ID: ${id_imobzi} not found at leases`);
     }

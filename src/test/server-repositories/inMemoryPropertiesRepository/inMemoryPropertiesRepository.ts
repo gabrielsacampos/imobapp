@@ -26,16 +26,11 @@ export class InMemoryPropertiesRepository implements Partial<PropertiesRepositor
   }
 
   async findById(id_imobzi: string): Promise<Property> {
-    try {
-      const found = this.items.find((prop) => prop.id_imobzi === id_imobzi);
-      if (!found) {
-        throw new NotFoundException(`Person id_imozbi: ${id_imobzi} not found`);
-      }
-
-      return found;
-    } catch (error) {
-      throw new Error(error);
+    const found = this.items.find((prop) => prop.id_imobzi === id_imobzi);
+    if (!found) {
+      throw new NotFoundException(`Person id_imozbi: ${id_imobzi} not found`);
     }
+    return found;
   }
 
   async update(id_imobzi: string, data: CreatePropertyDTO): Promise<Property> {

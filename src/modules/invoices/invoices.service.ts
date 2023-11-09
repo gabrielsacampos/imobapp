@@ -8,23 +8,27 @@ export class InvoicesService {
   constructor(private readonly invoicesRepository: InvoicesRepository) {}
 
   async upsert(data: CreateInvoiceDTO): Promise<Invoice> {
-    try {
-      const found = await this.invoicesRepository.findById(data.id_imobzi);
-      if (found) {
+    return this.invoicesRepository
+      .findById(data.id_imobzi)
+      .then(() => {
         return this.invoicesRepository.update(data.id_imobzi, data);
-      } else {
-        return this.invoicesRepository.create(data);
-      }
-    } catch (error) {
-      throw new Error(error);
-    }
+      })
+      .catch((error) => {
+        console.log(error.status);
+        if (error.status === 404) {
+          return this.invoicesRepository.create(data);
+        } else {
+          throw new Error(error);
+        }
+      });
   }
 
-  paidInvoices = this.invoicesRepository.getPaidInvoices;
   async inmutableInvoicesIds() {
     const inmutableInvoices = await this.invoicesRepository.getImmutableInvoices();
     return inmutableInvoices.map((item) => item.invoice_id);
   }
+
+  paidInvoices = this.invoicesRepository.getPaidInvoices;
   predictedOnlendings = this.invoicesRepository.getOnlendings;
   predictedRevenues = this.invoicesRepository.getRevenue;
 }

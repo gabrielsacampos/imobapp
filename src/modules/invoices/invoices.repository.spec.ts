@@ -27,7 +27,7 @@ describe('InvoicesRepository', () => {
     expect(result).toBe(inMemoryInvoicesRepositoryMock);
   });
 
-  it('findUnique > existing id_imobzi should return a invoice', async () => {
+  it('findById > existing id_imobzi should return a invoice', async () => {
     const randomInvoiceToTest = inMemoryInvoicesRepositoryMock[4];
     const randomPersonId = randomInvoiceToTest.id_imobzi;
     const result = await repository.findById(randomPersonId);
@@ -35,7 +35,7 @@ describe('InvoicesRepository', () => {
     expect(result).toBe(invoice);
   });
 
-  it('findUnique > NOT existing id_imobzi should NOT return a invoice', async () => {
+  it('findById > NOT existing id_imobzi should NOT return a invoice', async () => {
     await expect(repository.findById('10')).rejects.toThrow();
   });
 
