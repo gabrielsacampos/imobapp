@@ -55,7 +55,6 @@ export class ImobziInvoicesService {
     });
 
     const interestItem: CreateInvoiceItemDto = {
-      id_invoice_imobzi: invoiceFullData.invoice_id,
       until_due_date: false,
       item_type: null,
       id_imobzi: idInvoice,
@@ -67,7 +66,6 @@ export class ImobziInvoicesService {
     };
 
     const bankFeeItem: CreateInvoiceItemDto = {
-      id_invoice_imobzi: invoiceFullData.invoice_id,
       until_due_date: false,
       item_type: null,
       id_imobzi: `${idImobzi}-bank-fee`,

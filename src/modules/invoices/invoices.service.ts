@@ -11,9 +11,11 @@ export class InvoicesService {
     return this.invoicesRepository
       .findById(data.id_imobzi)
       .then(() => {
+        console.log('oi');
         return this.invoicesRepository.update(data.id_imobzi, data);
       })
       .catch((error) => {
+        console.log(error);
         if (error.status === 404) {
           return this.invoicesRepository.create(data);
         } else {
