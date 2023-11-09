@@ -14,7 +14,6 @@ export class InvoicesService {
         return this.invoicesRepository.update(data.id_imobzi, data);
       })
       .catch((error) => {
-        console.log(error.status);
         if (error.status === 404) {
           return this.invoicesRepository.create(data);
         } else {

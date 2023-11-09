@@ -18,13 +18,4 @@ export class InMemoryInvoiceItemsRepository implements Partial<InvoiceItemsRepos
     }
     return found;
   }
-
-  async create(data: CreateInvoiceItemDto): Promise<InvoiceItem> {
-    const found = this.items.find((item) => item.id_imobzi === data.id_imobzi);
-    if (found) {
-      throw new NotAcceptableException(`invoice item already exists`);
-    }
-    this.items.push(data);
-    return found;
-  }
 }

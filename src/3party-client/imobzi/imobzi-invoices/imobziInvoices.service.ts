@@ -8,7 +8,7 @@ import { ImobziInvoicesRepository } from './imobziInvoices.repository';
 @Injectable()
 export class ImobziInvoicesService {
   constructor(private readonly imobziInvoicesRepository: ImobziInvoicesRepository) {}
-  getRequiredInvoiceItemsDataToDb(invoiceItems: ImobziInvoiceItem[], idImobzi: string): CreateInvoiceItemDto[] {
+  getRequiredInvoiceItemsDataToDb(invoiceItems: ImobziInvoiceItem[]): CreateInvoiceItemDto[] {
     return invoiceItems.map((item) => {
       const {
         until_due_date,
@@ -21,8 +21,6 @@ export class ImobziInvoicesService {
         value,
       } = item;
 
-      const id_invoice_imobzi = idImobzi;
-
       return {
         until_due_date,
         item_type,
@@ -32,7 +30,6 @@ export class ImobziInvoicesService {
         include_in_dimob,
         charge_management_fee,
         value,
-        id_invoice_imobzi,
       };
     });
   }
@@ -84,7 +81,7 @@ export class ImobziInvoicesService {
     delete invoiceFullData.interest_value;
     delete invoiceFullData.charge_fee_value;
 
-    invoiceMainData.invoiceItems = this.getRequiredInvoiceItemsDataToDb(itemsWithInvoicesIds, idImobzi);
+    invoiceMainData.invoiceItems = this.getRequiredInvoiceItemsDataToDb(itemsWithInvoicesIds);
     if (interestItem.value !== 0) {
       invoiceMainData.invoiceItems.push(interestItem);
     }
