@@ -8,15 +8,17 @@ export class LeasesService {
   constructor(private readonly leasesRepository: LeasesRepository) {}
 
   async upsert(data: CreateLeaseDTO): Promise<Lease> {
-    try {
-      const found = this.leasesRepository.findById(data.id_imobzi);
-      if (found) {
+    return this.leasesRepository
+      .findById(data.id_imobzi)
+      .then(() => {
         return this.leasesRepository.update(data.id_imobzi, data);
-      } else {
-        return this.leasesRepository.create(data);
-      }
-    } catch (error) {
-      throw new Error(error);
-    }
+      })
+      .catch((error) => {
+        if (error.status === 404) {
+          return this.leasesRepository.create(data);
+        } else {
+          throw new Error(error);
+        }
+      });
   }
 }

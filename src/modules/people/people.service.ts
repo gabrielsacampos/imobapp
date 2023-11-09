@@ -8,15 +8,17 @@ export class PeopleService {
   constructor(private readonly peopleRepository: PeopleRepository) {}
 
   async upsert(data: CreatePersonDTO): Promise<Person> {
-    try {
-      const found = this.peopleRepository.findById(data.id_imobzi);
-      if (found) {
+    return this.peopleRepository
+      .findById(data.id_imobzi)
+      .then(() => {
         return this.peopleRepository.update(data.id_imobzi, data);
-      } else {
-        return this.peopleRepository.create(data);
-      }
-    } catch (error) {
-      throw new Error(error);
-    }
+      })
+      .catch((error) => {
+        if (error.status === 404) {
+          return this.peopleRepository.create(data);
+        } else {
+          throw new Error(error);
+        }
+      });
   }
 }

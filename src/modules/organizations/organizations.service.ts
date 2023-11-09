@@ -8,15 +8,17 @@ export class OrganizationsService {
   constructor(private readonly organizationsRepository: OrganizationsRepository) {}
 
   async upsert(data: CreateOrganizationDTO): Promise<Organization> {
-    try {
-      const found = this.organizationsRepository.findById(data.id_imobzi);
-      if (found) {
+    return this.organizationsRepository
+      .findById(data.id_imobzi)
+      .then(() => {
         return this.organizationsRepository.update(data.id_imobzi, data);
-      } else {
-        return this.organizationsRepository.create(data);
-      }
-    } catch (error) {
-      throw new Error(error);
-    }
+      })
+      .catch((error) => {
+        if (error.status === 404) {
+          return this.organizationsRepository.create(data);
+        } else {
+          throw new Error(error);
+        }
+      });
   }
 }

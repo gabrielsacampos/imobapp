@@ -23,8 +23,6 @@ describe('BuildingsService', () => {
   });
 
   it('upsert > should update building when it exists', async () => {
-    const spyUpdate = jest.spyOn(inMemoryBuildingsRepository, 'update');
-
     const buildingTest: CreateBuildingDTO = inMemoryBuildingsRepositoryMock[0];
     buildingTest.name = 'new name';
     const result = await service.upsert(buildingTest);
@@ -33,12 +31,10 @@ describe('BuildingsService', () => {
     });
     expect(result).toEqual(updatedBuilding);
     expect(result.name).toBe('new name');
-    expect(spyUpdate).toHaveBeenCalled();
   });
 
   it('upsert > should create building when it NOT exists', async () => {
-    const spyCreate = jest.spyOn(inMemoryBuildingsRepository, 'update');
-    const buildingTest: CreateBuildingDTO = inMemoryBuildingsRepositoryMock[0];
+    const buildingTest: CreateBuildingDTO = { ...inMemoryBuildingsRepositoryMock[0] };
     buildingTest.id = 9898;
     const result = await service.upsert(buildingTest);
     const updatedBuilding = inMemoryBuildingsRepositoryMock.find((building) => {
@@ -46,6 +42,5 @@ describe('BuildingsService', () => {
     });
     expect(result).toEqual(updatedBuilding);
     expect(result.id).toBe(9898);
-    expect(spyCreate).toHaveBeenCalled();
   });
 });

@@ -8,15 +8,17 @@ export class PropertiesService {
   constructor(private readonly propertiesRepository: PropertiesRepository) {}
 
   async upsert(data: CreatePropertyDTO): Promise<Property> {
-    try {
-      const found = this.propertiesRepository.findById(data.id_imobzi);
-      if (found) {
+    return this.propertiesRepository
+      .findById(data.id_imobzi)
+      .then(() => {
         return this.propertiesRepository.update(data.id_imobzi, data);
-      } else {
-        return this.propertiesRepository.create(data);
-      }
-    } catch (error) {
-      throw new Error(error);
-    }
+      })
+      .catch((error) => {
+        if (error.status === 404) {
+          return this.propertiesRepository.create(data);
+        } else {
+          throw new Error(error);
+        }
+      });
   }
 }

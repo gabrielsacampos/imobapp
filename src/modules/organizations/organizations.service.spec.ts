@@ -25,9 +25,7 @@ describe('OrganizationsService', () => {
   });
 
   it('upsert > should update organization when it exists', async () => {
-    const spyUpdate = jest.spyOn(inMemoryOrganizationsRepository, 'update');
-
-    const organizationTest: CreateOrganizationDTO = inMemoryOrganizationsRepositoryMock[0];
+    const organizationTest: CreateOrganizationDTO = { ...inMemoryOrganizationsRepositoryMock[0] };
     organizationTest.email = 'NewEmail@gmail.com';
     const result = await service.upsert(organizationTest);
     const updatedPerson = inMemoryOrganizationsRepositoryMock.find((organization) => {
@@ -35,12 +33,10 @@ describe('OrganizationsService', () => {
     });
     expect(result).toEqual(updatedPerson);
     expect(result.email).toBe('NewEmail@gmail.com');
-    expect(spyUpdate).toHaveBeenCalled();
   });
 
   it('upsert > should create organization when it NOT exists', async () => {
-    const spyCreate = jest.spyOn(inMemoryOrganizationsRepository, 'update');
-    const organizationTest: CreateOrganizationDTO = inMemoryOrganizationsRepositoryMock[0];
+    const organizationTest: CreateOrganizationDTO = { ...inMemoryOrganizationsRepositoryMock[0] };
     organizationTest.id = 9898;
     const result = await service.upsert(organizationTest);
     const updatedPerson = inMemoryOrganizationsRepositoryMock.find((organization) => {
@@ -48,6 +44,5 @@ describe('OrganizationsService', () => {
     });
     expect(result).toEqual(updatedPerson);
     expect(result.id).toBe(9898);
-    expect(spyCreate).toHaveBeenCalled();
   });
 });

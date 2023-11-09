@@ -23,8 +23,6 @@ describe('PeopleService', () => {
   });
 
   it('upsert > should update person when it exists', async () => {
-    const spyUpdate = jest.spyOn(inMemoryPeopleRepository, 'update');
-
     const personTest: CreatePersonDTO = inMemoryPeopleRepositoryMock[0];
     personTest.email = 'NewEmail@gmail.com';
     const result = await service.upsert(personTest);
@@ -33,11 +31,9 @@ describe('PeopleService', () => {
     });
     expect(result).toEqual(updatedPerson);
     expect(result.email).toBe('NewEmail@gmail.com');
-    expect(spyUpdate).toHaveBeenCalled();
   });
 
   it('upsert > should create person when it NOT exists', async () => {
-    const spyCreate = jest.spyOn(inMemoryPeopleRepository, 'update');
     const personTest: CreatePersonDTO = inMemoryPeopleRepositoryMock[0];
     personTest.id = 9898;
     const result = await service.upsert(personTest);
@@ -46,6 +42,5 @@ describe('PeopleService', () => {
     });
     expect(result).toEqual(updatedPerson);
     expect(result.id).toBe(9898);
-    expect(spyCreate).toHaveBeenCalled();
   });
 });

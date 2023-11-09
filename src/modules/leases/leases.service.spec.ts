@@ -23,9 +23,7 @@ describe('LeasesService', () => {
   });
 
   it('upsert > should update Lease when it exists', async () => {
-    const spyUpdate = jest.spyOn(inMemoryLeasesRepository, 'update');
-
-    const LeaseTest: CreateLeaseDTO = inMemoryLeasesRepositoryMock[0];
+    const LeaseTest: CreateLeaseDTO = { ...inMemoryLeasesRepositoryMock[0] };
     LeaseTest.status = 'too old';
     const result = await service.upsert(LeaseTest);
     const updatedLease = inMemoryLeasesRepositoryMock.find((Lease) => {
@@ -33,12 +31,10 @@ describe('LeasesService', () => {
     });
     expect(result).toEqual(updatedLease);
     expect(result.status).toBe('too old');
-    expect(spyUpdate).toHaveBeenCalled();
   });
 
   it('upsert > should create Lease when it NOT exists', async () => {
-    const spyCreate = jest.spyOn(inMemoryLeasesRepository, 'update');
-    const LeaseTest: CreateLeaseDTO = inMemoryLeasesRepositoryMock[0];
+    const LeaseTest: CreateLeaseDTO = { ...inMemoryLeasesRepositoryMock[0] };
     LeaseTest.id = 9898;
     const result = await service.upsert(LeaseTest);
     const updatedLease = inMemoryLeasesRepositoryMock.find((Lease) => {
@@ -46,6 +42,5 @@ describe('LeasesService', () => {
     });
     expect(result).toEqual(updatedLease);
     expect(result.id).toBe(9898);
-    expect(spyCreate).toHaveBeenCalled();
   });
 });

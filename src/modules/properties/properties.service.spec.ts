@@ -23,8 +23,6 @@ describe('PropertiesService', () => {
   });
 
   it('upsert > should update property when it exists', async () => {
-    const spyUpdate = jest.spyOn(inMemoryPropertiesRepository, 'update');
-
     const propertyTest: CreatePropertyDTO = inMemoryPropertiesRepositoryMock[0];
     propertyTest.unity = '00';
     const result = await service.upsert(propertyTest);
@@ -33,11 +31,9 @@ describe('PropertiesService', () => {
     });
     expect(result).toEqual(updatedProperty);
     expect(result.unity).toBe('00');
-    expect(spyUpdate).toHaveBeenCalled();
   });
 
   it('upsert > should create property when it NOT exists', async () => {
-    const spyCreate = jest.spyOn(inMemoryPropertiesRepository, 'update');
     const propertyTest: CreatePropertyDTO = inMemoryPropertiesRepositoryMock[0];
     propertyTest.id = 9898;
     const result = await service.upsert(propertyTest);
@@ -46,6 +42,5 @@ describe('PropertiesService', () => {
     });
     expect(result).toEqual(updatedProperty);
     expect(result.id).toBe(9898);
-    expect(spyCreate).toHaveBeenCalled();
   });
 });

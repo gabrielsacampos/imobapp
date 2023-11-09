@@ -1,5 +1,4 @@
-import { NotAcceptableException, NotFoundException } from '@nestjs/common';
-import { CreateInvoiceItemDto } from 'src/modules/invoice_items/dto/create-invoice_item.dto';
+import { NotFoundException } from '@nestjs/common';
 import { InvoiceItem } from 'src/modules/invoice_items/entities/invoice_item.entity';
 import { InvoiceItemsRepository } from 'src/modules/invoice_items/invoice_items.repository';
 import { inMemoryInvoiceItemsRepositoryMock } from './inMemoryInvoiceItemsRepository.mocks';

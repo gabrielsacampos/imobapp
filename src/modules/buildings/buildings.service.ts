@@ -8,15 +8,17 @@ export class BuildingsService {
   constructor(private readonly buildingsRepository: BuildingsRepository) {}
 
   async upsert(data: CreateBuildingDTO): Promise<Building> {
-    try {
-      const found = await this.buildingsRepository.findById(data.id_imobzi);
-      if (found) {
-        return await this.buildingsRepository.update(data.id_imobzi, data);
-      } else {
-        return await this.buildingsRepository.create(data);
-      }
-    } catch (error) {
-      throw new Error(error);
-    }
+    return this.buildingsRepository
+      .findById(data.id_imobzi)
+      .then(() => {
+        return this.buildingsRepository.update(data.id_imobzi, data);
+      })
+      .catch((error) => {
+        if (error.status === 404) {
+          return this.buildingsRepository.create(data);
+        } else {
+          throw new Error(error);
+        }
+      });
   }
 }
