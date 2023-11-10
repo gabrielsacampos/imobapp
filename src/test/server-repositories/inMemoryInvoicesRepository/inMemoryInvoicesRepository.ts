@@ -1,12 +1,21 @@
 import { NotAcceptableException, NotFoundException } from '@nestjs/common';
 import * as crypto from 'node:crypto';
+import { InvoiceComponents } from 'src/3party-client/granatum/dtos/granatum-service.dtos';
 import { CreateInvoiceDTO } from 'src/modules/invoices/dtos/create-invoice.dtos';
 import { Invoice } from 'src/modules/invoices/entities/invoice.entity';
 import { InvoicesRepository } from 'src/modules/invoices/invoices.repository';
-import { inMemoryInvoicesRepositoryMock } from './inMemoryRepositoryInvoices.mock';
+import {
+  getOnlendingsMock,
+  getPaidInvoicesMock,
+  inMemoryInvoicesRepositoryMock,
+  revenuesMock,
+} from './inMemoryRepositoryInvoices.mock';
 
 export class InMemoryInvoicesRepository implements Partial<InvoicesRepository> {
   items: Invoice[] = inMemoryInvoicesRepositoryMock;
+  paidInvoicesItems: InvoiceComponents[] = getPaidInvoicesMock;
+  onlendings: InvoiceComponents[] = getOnlendingsMock;
+  revenues: InvoiceComponents[] = revenuesMock;
 
   async create(data: CreateInvoiceDTO): Promise<Invoice> {
     const existingLease = this.items.find((invoice) => invoice.id_imobzi === data.id_imobzi);
@@ -44,5 +53,38 @@ export class InMemoryInvoicesRepository implements Partial<InvoicesRepository> {
 
     this.items[foundIndex] = { id: foundInvoice.id, ...data };
     return data;
+  }
+
+  async getPaidInvoices(start_at: string, end_at: string): Promise<any> {
+    const start_date = new Date(start_at);
+    const end_date = new Date(end_at);
+    const paidInvoices = this.paidInvoicesItems;
+
+    return paidInvoices.filter((item) => {
+      const paid_date = new Date(item.paid_at);
+      return paid_date >= start_date && paid_date <= end_date;
+    });
+  }
+
+  async getOnlendings(start_at: string, end_at: string): Promise<any> {
+    const start_date = new Date(start_at);
+    const end_date = new Date(end_at);
+    const onlendings = this.onlendings;
+
+    return onlendings.filter((item) => {
+      const paid_date = new Date(item.paid_at);
+      return paid_date >= start_date && paid_date <= end_date;
+    });
+  }
+
+  async getRevenue(start_at: string, end_at: string): Promise<InvoiceComponents[]> {
+    const start_date = new Date(start_at);
+    const end_date = new Date(end_at);
+    const revenues = this.revenues;
+
+    return revenues.filter((item) => {
+      const paid_date = new Date(item.paid_at);
+      return paid_date >= start_date && paid_date <= end_date;
+    });
   }
 }

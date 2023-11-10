@@ -5,7 +5,7 @@ import {
   GranatumTransactionsMock,
 } from 'src/test/3rdParty-repositories/granatum-repositories/transactions/granatum-transactions.mock';
 import { GranatumTransactionsRepository } from './granatum-transactions.repository';
-import { GranatumTransactionsService } from './granatumTransactions.service';
+import { GranatumTransactionsService } from './granatum-transactions.service';
 
 describe('GranatumTransactionsService', () => {
   let service: GranatumTransactionsService;

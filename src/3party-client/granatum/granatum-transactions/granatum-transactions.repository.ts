@@ -15,7 +15,11 @@ export class GranatumTransactionsRepository {
       );
       return { status, ...data.id };
     } catch (error) {
-      throw new Error(error);
+      const errorResponse: any = {};
+      errorResponse.code = error.code;
+      errorResponse.status = error.status;
+      errorResponse.errorFormat = error.response.data.errors;
+      throw new Error(JSON.stringify(errorResponse, null, 1));
     }
   }
 }

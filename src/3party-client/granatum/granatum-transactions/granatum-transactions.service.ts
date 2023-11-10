@@ -8,25 +8,27 @@ import { GranatumTransactionsRepository } from './granatum-transactions.reposito
 export class GranatumTransactionsService {
   constructor(private readonly granatumTransactionsRepository: GranatumTransactionsRepository) {}
 
-  templateTransaction(data: GroupedInvoiceComponents): any {
+  templateTransaction(data: GroupedInvoiceComponents): GranatumTransactionPostDTO {
     const today = new Date().toISOString();
+    const dataType = data.type;
     let templateMainDescription: string;
     let templateObservation: string;
     let templateDueDate: string;
     let templatePaymentDate: string;
-    const items = this.formatTemplateItems(data.items);
+    const items = this.formatTemplateItems(data.items, dataType);
+    console.log(items[0]);
 
-    if (data.type === 'onlending') {
+    if (dataType === 'onlending') {
       templateMainDescription = `Repasse referente a faturas pagas`;
       templateObservation = '';
       templateDueDate = dateFunctions.formatToUS(today);
       templatePaymentDate = null;
-    } else if (data.type === 'items') {
+    } else if (dataType === 'items') {
       templateMainDescription = `Faturas creditadas`;
       templateObservation = '';
       templateDueDate = dateFunctions.formatToUS(data.credit_at);
       templatePaymentDate = dateFunctions.formatToUS(data.credit_at);
-    } else if (data.type === 'revenue') {
+    } else if (dataType === 'revenue') {
       templateMainDescription = `Comissão de Aluguel (Transferência entre Contas)`;
       templateObservation = '';
       templateDueDate = dateFunctions.formatToUS(today);
@@ -47,7 +49,7 @@ export class GranatumTransactionsService {
     return template;
   }
 
-  formatTemplateItems(items: InvoiceComponents[]): GranatumItemsPostDTO[] {
+  private formatTemplateItems(items: InvoiceComponents[], dataType: string): GranatumItemsPostDTO[] {
     return items.map((item) => {
       const templateSubDescription =
         ' > Fatura: ' +
@@ -61,13 +63,13 @@ export class GranatumTransactionsService {
 
       let descricao: string;
       let valor: number;
-      if (item.type === 'onlending') {
+      if (dataType === 'onlending') {
         descricao = 'Repasse ref: ' + templateSubDescription;
         valor = 0 - item.value;
-      } else if (item.type === 'revenue') {
+      } else if (dataType === 'revenue') {
         descricao = 'Comissão ref: ' + templateSubDescription;
         valor = 0 - item.value;
-      } else if (item.type === 'items') {
+      } else if (dataType === 'items') {
         descricao = item.description + templateSubDescription;
         valor = item.value;
       }

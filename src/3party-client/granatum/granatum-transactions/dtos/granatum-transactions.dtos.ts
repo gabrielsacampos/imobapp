@@ -12,7 +12,7 @@ export class GranatumTransactionPostDTO {
   pessoa_id?: number;
   tipo_custo_nivel_producao_id?: number;
   tipo_custo_apropriacao_produto_id?: number;
-  tags?: [{ id: number }];
+  tags?: { id: number }[];
   itens_adicionais: GranatumItemsPostDTO[];
 }
 

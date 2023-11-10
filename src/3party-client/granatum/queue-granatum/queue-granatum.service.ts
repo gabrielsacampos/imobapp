@@ -14,19 +14,27 @@ export class QueueGranatumService {
 
   async fetchDb(data: FetchDb): Promise<void> {
     try {
-      const { payment_start_at, payment_end_at } = data;
-      const items = await this.modulesServices.invoices.paidInvoices(payment_start_at, payment_end_at);
-      const onlendings = await this.modulesServices.invoices.predictedOnlendings(payment_start_at, payment_end_at);
-      const revenues = await this.modulesServices.invoices.predictedRevenues(payment_start_at, payment_end_at);
+      const { payment_start_at, payment_end_at, invoice, onlending, revenue } = data;
 
-      const groupedItems = this.granatumService.groupInvoices(items);
-      const groupedOnlendings = this.granatumService.groupOnlendings(onlendings);
-      const groupedRevenues = this.granatumService.groupRevenues(revenues);
+      let items: any[];
+      let onlendings: any[];
+      let revenues: any[];
 
-      await this.queueGranatumProducer.produce({ groupedItems, groupedOnlendings, groupedRevenues });
+      if (onlending) {
+        onlendings = await this.modulesServices.invoices.predictedOnlendings(payment_start_at, payment_end_at);
+      }
+
+      if (invoice) {
+        items = await this.modulesServices.invoices.paidInvoices(payment_start_at, payment_end_at);
+      }
+
+      if (revenue) {
+        revenues = await this.modulesServices.invoices.predictedRevenues(payment_start_at, payment_end_at);
+      }
+
+      await this.queueGranatumProducer.produce({ items, onlendings, revenues });
     } catch (error) {
       console.log(error);
-      throw new Error(error);
     }
   }
 }

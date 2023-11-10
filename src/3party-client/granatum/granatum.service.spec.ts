@@ -4,7 +4,7 @@ import { GranatumCategoriesModule } from './granatum-categories/granatum-categor
 import { GranatumCostCenterModule } from './granatum-cost-center/granatum-cost-center.module';
 import { GranatumCostumersModule } from './granatum-costumers/granatum-costumers.module';
 import { GranatumSupliersModule } from './granatum-supliers/granatum-supliers.module';
-import { GranatumTransactionsModule } from './granatum-transactions/granatumTransactions.module';
+import { GranatumTransactionsModule } from './granatum-transactions/granatum-transactions.module';
 import { GranatumService } from './granatum.service';
 
 describe('GranatumService', () => {

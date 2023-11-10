@@ -24,7 +24,7 @@ export class QueueGranatumConsumer {
       let client_suplier_document: string;
       let id_suplier_client: number;
 
-      const id_account_granatum = this.granatumServices.accounts.findIdByDescription(data.account_credit);
+      const id_account_granatum = await this.granatumServices.accounts.findIdByDescription(data.account_credit);
 
       const itemsWithIds = [];
       for (const item of data.items) {
@@ -50,7 +50,7 @@ export class QueueGranatumConsumer {
       }
 
       data.items = itemsWithIds;
-      data.id_account_granatum = data.id_account_granatum;
+      data.id_account_granatum = id_account_granatum;
       return data;
     } catch (error) {
       throw new Error(error);

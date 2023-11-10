@@ -13,19 +13,25 @@ export class QueueGranatumProducer {
 
   async produce(data: any) {
     try {
-      const { groupedItems, groupedOnlendings, groupedRevenues } = data;
+      const { items, onlendings, revenues } = data;
 
-      groupedItems.forEach((group) => {
-        this.granatumQueue.add('sync', group, this.queueDefaultOpts);
-      });
+      if (items) {
+        items.forEach((group) => {
+          this.granatumQueue.add('sync', group, this.queueDefaultOpts);
+        });
+      }
 
-      groupedOnlendings.forEach((group) => {
-        this.granatumQueue.add('sync', group, this.queueDefaultOpts);
-      });
+      if (onlendings) {
+        onlendings.forEach((group) => {
+          this.granatumQueue.add('sync', group, this.queueDefaultOpts);
+        });
+      }
 
-      groupedRevenues.forEach((group) => {
-        this.granatumQueue.add('sync', group, this.queueDefaultOpts);
-      });
+      if (revenues) {
+        revenues.forEach((group) => {
+          this.granatumQueue.add('sync', group, this.queueDefaultOpts);
+        });
+      }
     } catch (error) {
       throw new Error(error);
     }
