@@ -1,11 +1,12 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { imobziParams, imobziUrls } from '../imobzi-urls-params/imobzi.urls';
 import { AllImobziInvoiceDTO, ImobziInvoicesPageDTO } from './dto/all-imobzi-invoice.dtos';
 import { AnImobziInvoiceDTO } from './dto/an-imobzi-invoice.dtos';
 
 @Injectable()
 export class ImobziInvoicesRepository {
+  private logger = new Logger('ImobziInvoicesRepository');
   constructor(private readonly httpService: HttpService) {}
 
   async getAll(): Promise<AllImobziInvoiceDTO[]> {
@@ -20,7 +21,7 @@ export class ImobziInvoicesRepository {
         );
         allInvoices.push(...data.invoices);
         page = data.next_page;
-        console.log(allInvoices.length, ' / ', data.count);
+        this.logger.verbose(`got ${allInvoices.length}/${data.count} INVOICES`);
       }
 
       return allInvoices;

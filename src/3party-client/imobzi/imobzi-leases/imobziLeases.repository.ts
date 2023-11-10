@@ -1,11 +1,12 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { imobziParams, imobziUrls } from '../imobzi-urls-params/imobzi.urls';
 import { ImobziLeasesDTO, LeaseDTO } from './dtos/imobziLeases.dtos';
 import { ImobziLeaseDetailsDTO } from './dtos/imobziLeasesDetails.dtos';
 
 @Injectable()
 export class ImobziLeasesRepository {
+  private logger = new Logger('ImobziLeasesRepository');
   constructor(private readonly httpService: HttpService) {}
 
   async getAll(): Promise<LeaseDTO[]> {
@@ -20,6 +21,7 @@ export class ImobziLeasesRepository {
         );
         allLeases.push(...data.leases);
         cursor = data.cursor;
+        this.logger.verbose(`got ${allLeases.length}/${data.count} LEASES`);
       } while (cursor);
 
       return allLeases;

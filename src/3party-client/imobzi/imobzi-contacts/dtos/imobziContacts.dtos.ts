@@ -5,7 +5,7 @@ export interface ImobziContactsDTO {
   contacts: ContactDTO[];
 }
 
-export interface ContactDTO {
+export class ContactDTO {
   created_at?: string;
   code?: string;
   name?: string;

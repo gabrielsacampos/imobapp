@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ImobziBuildingsRepository } from './imobzi-buildings/imobziBuildings.repository';
+import { ImobziBuildingsRepository } from './imobzi-buildings/imobzi-buildings.repository';
 import { ImobziContactsRepository } from './imobzi-contacts/imobziContacts.repository';
 import { ImobziInvoicesRepository } from './imobzi-invoices/imobziInvoices.repository';
 import { ImobziLeasesRepository } from './imobzi-leases/imobziLeases.repository';

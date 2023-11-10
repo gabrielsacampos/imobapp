@@ -1,10 +1,11 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ContactDTO, ImobziContactsDTO } from './dtos/imobziContacts.dtos';
 import { imobziUrls, imobziParams } from '../imobzi-urls-params/imobzi.urls';
 
 @Injectable()
 export class ImobziContactsRepository {
+  private logger = new Logger('ImobziContactsRepository');
   constructor(private readonly httpService: HttpService) {}
 
   async getAll(): Promise<ContactDTO[]> {
@@ -18,6 +19,7 @@ export class ImobziContactsRepository {
         );
         newCursor = data.cursor;
         allContacts.push(...data.contacts);
+        this.logger.verbose(`got ${allContacts.length}/${data.count} CONTACTS`);
       } while (newCursor);
 
       return allContacts;

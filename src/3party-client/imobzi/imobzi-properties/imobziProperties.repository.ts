@@ -1,11 +1,12 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { imobziParams, imobziUrls } from '../imobzi-urls-params/imobzi.urls';
 import { ImobziPropertiesDTO } from './dtos/imobziProperties.dtos';
 import { ImobziPropertyDetailsDTO } from './dtos/imobziPropertyDetails.dtos';
 
 @Injectable()
 export class ImobziPropertiesRepository {
+  private logger = new Logger('ImobziPropertiesRepository');
   constructor(private readonly httpService: HttpService) {}
 
   async getAll(): Promise<any> {
@@ -20,6 +21,7 @@ export class ImobziPropertiesRepository {
         );
         allProperties.push(...data.properties);
         cursor = data.cursor;
+        this.logger.verbose(`got ${allProperties.length}/${data.count} PROPERTIES (available)`);
       } while (cursor);
 
       cursor = '';
@@ -30,6 +32,7 @@ export class ImobziPropertiesRepository {
         );
         allProperties.push(...data.properties);
         cursor = data.cursor;
+        this.logger.verbose(`got ${allProperties.length}/${data.count} PROPERTIES (unavailable)`);
       } while (cursor);
 
       return allProperties;

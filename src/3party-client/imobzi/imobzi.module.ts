@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ModulesModule } from 'src/modules/modules.module';
 import { SharedModule } from 'src/shared.module';
-import { ImobziBuildingsModule } from './imobzi-buildings/imobziBuildings.module';
-import { ImobziBuildingsService } from './imobzi-buildings/imobziBuildings.service';
+import { ImobziBuildingsModule } from './imobzi-buildings/imobzi-buildings.module';
+import { ImobziBuildingsService } from './imobzi-buildings/imobzi-buildings.service';
 import { ImobziContactsModule } from './imobzi-contacts/imobziContacts.module';
 import { ImobziContactsRepository } from './imobzi-contacts/imobziContacts.repository';
 import { ImobziInvoicesModule } from './imobzi-invoices/imobziInvoices.module';

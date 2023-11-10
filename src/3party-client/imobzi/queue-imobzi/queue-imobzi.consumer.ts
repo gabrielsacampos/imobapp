@@ -1,5 +1,5 @@
-import { Process, Processor } from '@nestjs/bull';
-import { Job } from 'bull';
+import { InjectQueue, Process, Processor } from '@nestjs/bull';
+import { Job, Queue } from 'bull';
 import { BuildingDTO } from 'src/3party-client/imobzi/imobzi-buildings/dtos/imobziBuildings.dtos';
 import { ContactDTO } from 'src/3party-client/imobzi/imobzi-contacts/dtos/imobziContacts.dtos';
 import { AnImobziInvoiceDTO } from 'src/3party-client/imobzi/imobzi-invoices/dto/an-imobzi-invoice.dtos';
@@ -13,16 +13,21 @@ import { CreateOrganizationDTO } from 'src/modules/organizations/dtos/create-org
 import { CreatePersonDTO } from 'src/modules/people/dtos/create-person.dtos';
 import { CreatePropertyDTO } from 'src/modules/properties/dtos/create-property.dtos';
 import { ModulesServices } from 'src/modules/modules.service';
+import { Logger } from '@nestjs/common';
+import { ContactsJobDTO } from './interfaces/imobziQueue.interface';
 
 @Processor('ImobziQueue')
 export class QueueImobziConsumer {
+  private logger = new Logger('QueueImobziProducer');
+
   constructor(
+    @InjectQueue('ImobziQueue') private readonly imobziQueue: Queue,
     private readonly modulesServices: ModulesServices,
     private readonly imobziService: ImobziService,
   ) {}
 
   @Process('updatePeople')
-  async updatePerson(job: Job<ContactDTO>) {
+  async updatePerson(job: Job<ContactsJobDTO>) {
     try {
       const contact = job.data;
       const formatedPerson: CreatePersonDTO = await this.imobziService.person.getRequiredData(contact.contact_id);
@@ -30,6 +35,7 @@ export class QueueImobziConsumer {
 
       await new Promise((resolve) => setTimeout(resolve, 5000));
     } catch (error) {
+      this.logger.error(error.message, error.stack, job.name);
       throw new Error(error);
     }
   }
@@ -45,6 +51,7 @@ export class QueueImobziConsumer {
 
       await new Promise((resolve) => setTimeout(resolve, 5000));
     } catch (error) {
+      this.logger.error(job.name, error.message, error.stack);
       throw new Error(error);
     }
   }
@@ -58,6 +65,7 @@ export class QueueImobziConsumer {
 
       await new Promise((resolve) => setTimeout(resolve, 5000));
     } catch (error) {
+      this.logger.error(job.name, error.message, error.stack);
       throw new Error(error);
     }
   }
@@ -68,9 +76,9 @@ export class QueueImobziConsumer {
       const property = job.data;
       const formatedProperty: CreatePropertyDTO = await this.imobziService.property.getRequiredData(property.db_id);
       await this.modulesServices.properties.upsert(formatedProperty);
-
       await new Promise((resolve) => setTimeout(resolve, 5000));
     } catch (error) {
+      this.logger.error(job.name, error.message, error.stack);
       throw new Error(error);
     }
   }
@@ -84,6 +92,7 @@ export class QueueImobziConsumer {
 
       await new Promise((resolve) => setTimeout(resolve, 5000));
     } catch (error) {
+      this.logger.error(job.name, error.message, error.stack);
       throw new Error(error);
     }
   }
@@ -97,6 +106,7 @@ export class QueueImobziConsumer {
 
       await new Promise((resolve) => setTimeout(resolve, 5000));
     } catch (error) {
+      this.logger.error(job.name, error.message, error.stack);
       throw new Error(error);
     }
   }
