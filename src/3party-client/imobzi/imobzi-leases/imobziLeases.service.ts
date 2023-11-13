@@ -53,61 +53,54 @@ export class ImobziLeasesService {
   }
 
   async getRequiredData(idLease: string): Promise<CreateLeaseDTO> {
-    try {
-      const leaseFullData: ImobziLeaseDetailsDTO = await this.imobziLeasesRepository.getFullData(idLease);
-      const id_imobzi = leaseFullData.db_id.toString();
-      const id_annual_readjustment_imobzi = leaseFullData.annual_readjustment?.db_id.toString();
-      const id_property_imobzi = leaseFullData.property.db_id.toString();
-      const guarantee_type = leaseFullData.guarantee?.guarantee_type;
-      const guarantee_value = leaseFullData.guarantee?.details?.value;
-      const id_main_guarantor_imobzi =
-        leaseFullData.guarantee?.guarantee_type === 'guarantor'
-          ? leaseFullData.guarantee.sponsor.db_id.toString()
-          : null;
-      const id_tenant_organization_imobzi =
-        leaseFullData.tenants[0].type === 'organization' ? leaseFullData.tenants[0].db_id.toString() : null;
-      const id_tenant_person_imobzi =
-        leaseFullData.tenants[0].type === 'person' ? leaseFullData.tenants[0].db_id.toString() : null;
-      const fee = leaseFullData.management_fee.percent;
-      const updated_at = new Date(leaseFullData.updated_at);
-      const start_at = new Date(leaseFullData.start_at);
-      const {
-        status,
-        value: lease_value,
-        duration,
-        irrf,
-        indeterminate,
-        code: code_imobzi,
-        include_in_dimob,
-      } = leaseFullData;
+    const leaseFullData: ImobziLeaseDetailsDTO = await this.imobziLeasesRepository.getFullData(idLease);
+    const id_imobzi = leaseFullData.db_id.toString();
+    const id_annual_readjustment_imobzi = leaseFullData.annual_readjustment?.db_id.toString();
+    const id_property_imobzi = leaseFullData.property.db_id.toString();
+    const guarantee_type = leaseFullData.guarantee?.guarantee_type;
+    const guarantee_value = leaseFullData.guarantee?.details?.value;
+    const id_main_guarantor_imobzi =
+      leaseFullData.guarantee?.guarantee_type === 'guarantor' ? leaseFullData.guarantee.sponsor.db_id.toString() : null;
+    const id_tenant_organization_imobzi =
+      leaseFullData.tenants[0].type === 'organization' ? leaseFullData.tenants[0].db_id.toString() : null;
+    const id_tenant_person_imobzi =
+      leaseFullData.tenants[0].type === 'person' ? leaseFullData.tenants[0].db_id.toString() : null;
+    const fee = leaseFullData.management_fee.percent;
+    const updated_at = new Date(leaseFullData.updated_at);
+    const start_at = new Date(leaseFullData.start_at);
+    const {
+      status,
+      value: lease_value,
+      duration,
+      irrf,
+      indeterminate,
+      code: code_imobzi,
+      include_in_dimob,
+    } = leaseFullData;
 
-      const beneficiaries = this.getRequiredLeaseBeneficiariesDataToDb(leaseFullData.beneficiaries);
-      const lease_items = this.getRequiredLeaseItemsDataToDb(leaseFullData.items);
-      return {
-        beneficiaries,
-        updated_at,
-        id_annual_readjustment_imobzi,
-        code_imobzi,
-        duration,
-        fee,
-        guarantee_type,
-        guarantee_value,
-        id_imobzi,
-        id_tenant_organization_imobzi,
-        id_main_guarantor_imobzi,
-        id_tenant_person_imobzi,
-        include_in_dimob,
-        indeterminate,
-        irrf,
-        lease_value,
-        id_property_imobzi,
-        start_at,
-        status,
-        lease_items,
-      };
-    } catch (error) {
-      console.log(error);
-      throw new Error(error);
-    }
+    const beneficiaries = this.getRequiredLeaseBeneficiariesDataToDb(leaseFullData.beneficiaries);
+    const lease_items = this.getRequiredLeaseItemsDataToDb(leaseFullData.items);
+    return {
+      beneficiaries,
+      updated_at,
+      id_annual_readjustment_imobzi,
+      code_imobzi,
+      duration,
+      fee,
+      guarantee_type,
+      guarantee_value,
+      id_imobzi,
+      id_tenant_organization_imobzi,
+      id_main_guarantor_imobzi,
+      id_tenant_person_imobzi,
+      include_in_dimob,
+      indeterminate,
+      irrf,
+      lease_value,
+      id_property_imobzi,
+      start_at,
+      status,
+      lease_items,
+    };
   }
 }

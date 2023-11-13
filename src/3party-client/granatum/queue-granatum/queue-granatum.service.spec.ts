@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { GranatumService } from 'src/3party-client/granatum/granatum.service';
 import { ModulesServices } from 'src/modules/modules.service';
+import { FetchDb } from './interfaces/imobziQueue.interface';
 
 import { QueueGranatumProducer } from './queue-granatum.producer';
 import { QueueGranatumService } from './queue-granatum.service';
@@ -9,9 +10,7 @@ describe('QueueGranatumService', () => {
   let queueGranatumService: QueueGranatumService;
   let queueGranatumProducerMock: { produce: jest.Mock };
   let granatumServiceMock: {
-    groupInvoices: jest.Mock;
-    groupOnlendings: jest.Mock;
-    groupRevenues: jest.Mock;
+    invoices: { paidInvoices: jest.Mock; predictedOnlendings: jest.Mock; predictedRevenues: jest.Mock };
   };
   let repositoryServiceMock: {
     invoices: {
@@ -24,9 +23,11 @@ describe('QueueGranatumService', () => {
   beforeEach(async () => {
     queueGranatumProducerMock = { produce: jest.fn() };
     granatumServiceMock = {
-      groupInvoices: jest.fn(),
-      groupOnlendings: jest.fn(),
-      groupRevenues: jest.fn(),
+      invoices: {
+        paidInvoices: jest.fn(),
+        predictedOnlendings: jest.fn(),
+        predictedRevenues: jest.fn(),
+      },
     };
     repositoryServiceMock = {
       invoices: {
@@ -52,14 +53,17 @@ describe('QueueGranatumService', () => {
   });
 
   it('all methods inside are called', async () => {
-    const dataInput = { payment_start_at: '2023-01-01', payment_end_at: '2023-01-31' };
+    const dataInput: FetchDb = {
+      payment_start_at: '2023-01-01',
+      payment_end_at: '2023-01-31',
+      invoice: true,
+      onlending: true,
+      revenue: true,
+    };
     await queueGranatumService.fetchDb(dataInput);
-    expect(granatumServiceMock.groupInvoices).toHaveBeenCalled();
-    expect(granatumServiceMock.groupOnlendings).toHaveBeenCalled();
-    expect(granatumServiceMock.groupRevenues).toHaveBeenCalled();
-    expect(queueGranatumProducerMock.produce).toHaveBeenCalled();
     expect(repositoryServiceMock.invoices.paidInvoices).toHaveBeenCalled();
     expect(repositoryServiceMock.invoices.predictedOnlendings).toHaveBeenCalled();
     expect(repositoryServiceMock.invoices.predictedRevenues).toHaveBeenCalled();
+    expect(queueGranatumProducerMock.produce).toHaveBeenCalled();
   });
 });

@@ -34,7 +34,7 @@ export class QueueGranatumService {
 
       await this.queueGranatumProducer.produce({ items, onlendings, revenues });
     } catch (error) {
-      console.log(error);
+      throw new Error(error);
     }
   }
 }

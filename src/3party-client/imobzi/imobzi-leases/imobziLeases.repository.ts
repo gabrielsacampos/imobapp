@@ -10,35 +10,27 @@ export class ImobziLeasesRepository {
   constructor(private readonly httpService: HttpService) {}
 
   async getAll(): Promise<LeaseDTO[]> {
-    try {
-      const allLeases = [];
-      let cursor = '';
+    const allLeases = [];
+    let cursor = '';
 
-      do {
-        const { data } = await this.httpService.axiosRef.get<ImobziLeasesDTO>(
-          imobziUrls.urlAllLeases(cursor),
-          imobziParams,
-        );
-        allLeases.push(...data.leases);
-        cursor = data.cursor;
-        this.logger.verbose(`got ${allLeases.length}/${data.count} LEASES`);
-      } while (cursor);
+    do {
+      const { data } = await this.httpService.axiosRef.get<ImobziLeasesDTO>(
+        imobziUrls.urlAllLeases(cursor),
+        imobziParams,
+      );
+      allLeases.push(...data.leases);
+      cursor = data.cursor;
+      this.logger.verbose(`got ${allLeases.length}/${data.count} LEASES`);
+    } while (cursor);
 
-      return allLeases;
-    } catch (error) {
-      throw new Error(error);
-    }
+    return allLeases;
   }
 
   async getFullData(id_imobzi: string): Promise<ImobziLeaseDetailsDTO> {
-    try {
-      const { data } = await this.httpService.axiosRef.get<ImobziLeaseDetailsDTO>(
-        imobziUrls.urlLeaseDetails(id_imobzi),
-        imobziParams,
-      );
-      return data;
-    } catch (error) {
-      throw new Error(error);
-    }
+    const { data } = await this.httpService.axiosRef.get<ImobziLeaseDetailsDTO>(
+      imobziUrls.urlLeaseDetails(id_imobzi),
+      imobziParams,
+    );
+    return data;
   }
 }

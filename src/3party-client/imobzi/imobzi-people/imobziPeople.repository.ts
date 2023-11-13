@@ -8,12 +8,8 @@ export class ImobziPeopleRepository {
   constructor(private readonly httpService: HttpService) {}
 
   async getFullData(id_imobzi: string): Promise<ImobziPersonDTO> {
-    try {
-      const { data } = await this.httpService.axiosRef.get(imobziUrls.urlPersonDetails(id_imobzi), imobziParams);
+    const { data } = await this.httpService.axiosRef.get(imobziUrls.urlPersonDetails(id_imobzi), imobziParams);
 
-      return data;
-    } catch (error) {
-      throw new Error(error);
-    }
+    return data;
   }
 }

@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, UseFilters } from '@nestjs/common';
+import { HttpExceptionFilter } from 'src/shared/http-excepetion.filter';
 import { CreateInvoiceDTO } from './dtos/create-invoice.dtos';
 import { InvoicesRepository } from './invoices.repository';
 
@@ -17,6 +18,7 @@ export class InvoicesController {
   }
 
   @Get(':id')
+  @UseFilters(new HttpExceptionFilter())
   async findById(@Param('id') id: string) {
     return await this.invoicesRepository.findById(id);
   }

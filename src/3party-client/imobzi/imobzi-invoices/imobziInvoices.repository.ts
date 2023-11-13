@@ -10,36 +10,28 @@ export class ImobziInvoicesRepository {
   constructor(private readonly httpService: HttpService) {}
 
   async getAll(): Promise<AllImobziInvoiceDTO[]> {
-    try {
-      let page = 1;
-      const allInvoices: AllImobziInvoiceDTO[] = [];
+    let page = 1;
+    const allInvoices: AllImobziInvoiceDTO[] = [];
 
-      while (page) {
-        const { data } = await this.httpService.axiosRef.get<ImobziInvoicesPageDTO>(
-          imobziUrls.urlAllInvoices(page),
-          imobziParams,
-        );
-        allInvoices.push(...data.invoices);
-        page = data.next_page;
-        this.logger.verbose(`got ${allInvoices.length}/${data.count} INVOICES`);
-      }
-
-      return allInvoices;
-    } catch (error) {
-      throw new Error(error);
+    while (page) {
+      const { data } = await this.httpService.axiosRef.get<ImobziInvoicesPageDTO>(
+        imobziUrls.urlAllInvoices(page),
+        imobziParams,
+      );
+      allInvoices.push(...data.invoices);
+      page = data.next_page;
+      this.logger.verbose(`got ${allInvoices.length}/${data.count} INVOICES`);
     }
+
+    return allInvoices;
   }
 
   async getFullData(idImobzi: string): Promise<AnImobziInvoiceDTO> {
-    try {
-      const { data } = await this.httpService.axiosRef.get<AnImobziInvoiceDTO>(
-        imobziUrls.urlInvoiceDetail(idImobzi),
-        imobziParams,
-      );
+    const { data } = await this.httpService.axiosRef.get<AnImobziInvoiceDTO>(
+      imobziUrls.urlInvoiceDetail(idImobzi),
+      imobziParams,
+    );
 
-      return data;
-    } catch (error) {
-      throw new Error(error);
-    }
+    return data;
   }
 }
