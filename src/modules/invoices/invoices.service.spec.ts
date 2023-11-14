@@ -154,6 +154,7 @@ describe('InvoicesService', () => {
         total_revenue: 200,
         account_credit: 'Inter',
         description: 'Repasse de Aluguéis',
+        reference: 'janeiro/2023',
         items: [
           {
             invoice_id: 'asc',
@@ -168,6 +169,7 @@ describe('InvoicesService', () => {
         ],
       },
       {
+        reference: 'janeiro/2023',
         owner_cpf: '123.123.231-20',
         owner_cnpj: null,
         type: 'revenue',
@@ -188,6 +190,7 @@ describe('InvoicesService', () => {
         ],
       },
       {
+        reference: 'janeiro/2023',
         owner_cpf: '123.123.231-20',
         owner_cnpj: null,
         type: 'revenue',
@@ -208,6 +211,7 @@ describe('InvoicesService', () => {
         ],
       },
       {
+        reference: 'janeiro/2023',
         owner_cpf: '123.123.231-20',
         owner_cnpj: null,
         type: 'revenue',

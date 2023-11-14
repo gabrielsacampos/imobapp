@@ -134,7 +134,7 @@ model Lease {
   updated_at                    DateTime      @updatedAt
   beneficiariesLease            Beneficiary[] @relation("leaseToBeneficiary")
   invoicesLease                 Invoice[]     @relation("leaseToInvoice")
-  leasesItems                   LeaseItem[]   @relation("leaseToLeaseItem")
+  leaseItems                   LeaseItem[]   @relation("leaseToLeaseItem")
   guarantor                     Person?       @relation("personGrarantorToLease", fields: [id_main_guarantor_imobzi], references: [id_imobzi], onDelete: Cascade)
   property                      Property      @relation("propertyToLease", fields: [id_property_imobzi], references: [id_imobzi], onDelete: Cascade)
   tenant_org                    Organization? @relation("organizationTenant", fields: [id_tenant_organization_imobzi], references: [id_imobzi], onDelete: Cascade)
@@ -165,30 +165,27 @@ model LeaseItem {
 }
 
 model Invoice {
-  id_imobzi          String   @id @unique
+  id_imobzi          String        @id @unique
   status             String
   reference_start_at String?
   reference_end_at   String?
   due_date           DateTime
-
-  id_lease_imobzi String
-  lease           Lease  @relation("leaseToInvoice", fields: [id_lease_imobzi], references: [id_imobzi], onDelete: Cascade)
-
-  management_fee  Float
-  invoice_url     String
-  barcode         String?
-  bank_slip_url   String?
-  bank_slip_id    String?
-  total_value     Float
-  paid_at         DateTime?
-  credit_at       DateTime?
-  paid_manual     Boolean?
-  account_credit  String?
-  onlending_value Float?
-  created_at      DateTime  @default(now())
-  updated_at      DateTime  @updatedAt
-
-  invoiceItems InvoiceItem[]
+  id_lease_imobzi    String
+  management_fee     Float
+  invoice_url        String
+  barcode            String?
+  bank_slip_url      String?
+  bank_slip_id       String?
+  total_value        Float
+  paid_at            DateTime?
+  credit_at          DateTime?
+  paid_manual        Boolean?
+  account_credit     String?
+  onlending_value    Float?
+  created_at         DateTime      @default(now())
+  updated_at         DateTime      @updatedAt
+  lease              Lease         @relation("leaseToInvoice", fields: [id_lease_imobzi], references: [id_imobzi], onDelete: Cascade)
+  invoiceItems       InvoiceItem[]
 
   @@map("invoices")
 }
@@ -233,17 +230,6 @@ model Readjustment_index {
   @@map("readjustment_indexes")
 }
 
-model Webhook {
-  id               Int      @id @default(autoincrement())
-  event            String
-  created_at       DateTime @default(now())
-  updated_at       DateTime @updatedAt
-  done             Boolean  @default(false)
-  id_entity_imobzi String
-
-  @@map("webhooks")
-}
-
 model User {
   id          Int       @id @default(autoincrement())
   name        String
@@ -256,17 +242,12 @@ model User {
   @@map("users")
 }
 
-model FailedQueueJob {
-  id            Int      @id @default(autoincrement())
-  queue         String?
-  job_name      String?
-  error_message String
-  error_stack   String?
-  redis_key     String?
-  job           Json
-  status        String   @default("failed")
-  created_at    DateTime @default(now())
-  updated_at    DateTime @updatedAt
+model Update {
+  id         Int      @id @default(autoincrement())
+  id_imobzi  String
+  entities   String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
 
-  @@map("failed_queue_jobs")
+  @@map("updates")
 }

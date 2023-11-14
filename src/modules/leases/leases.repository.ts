@@ -1,6 +1,7 @@
 import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma-client/prisma.service';
 import { CreateLeaseDTO } from './dtos/create-lease.dtos';
+import { UpdateLeaseDTO } from './dtos/update-lease.dtos';
 import { Lease } from './entities/lease.entity';
 
 @Injectable()
@@ -16,8 +17,8 @@ export class LeasesRepository {
       throw new NotAcceptableException(`ID: ${existsIdLease.id} already registered at leases.`);
     }
 
-    const beneficiaries = data.beneficiaries;
-    delete data.beneficiaries;
+    const beneficiaries = data.beneficiariesLease;
+    delete data.beneficiariesLease;
 
     return await this.prisma.lease.create({
       data: {
@@ -25,8 +26,8 @@ export class LeasesRepository {
         beneficiariesLease: {
           create: beneficiaries,
         },
-        leasesItems: {
-          create: data.lease_items,
+        leaseItems: {
+          create: data.leaseItems,
         },
       },
     });
@@ -50,11 +51,9 @@ export class LeasesRepository {
     return found;
   }
 
-  async update(id_imobzi: string, data: CreateLeaseDTO): Promise<Lease> {
-    const beneficiaries = data.beneficiaries;
-    delete data.beneficiaries;
-    const leaseItems = data.lease_items;
-    delete data.lease_items;
+  async update(id_imobzi: string, data: UpdateLeaseDTO): Promise<Lease> {
+    const beneficiaries = data.beneficiariesLease;
+    delete data.beneficiariesLease;
 
     return await this.prisma.lease.update({
       where: {
@@ -66,9 +65,9 @@ export class LeasesRepository {
           deleteMany: {},
           createMany: { data: beneficiaries },
         },
-        leasesItems: {
+        leaseItems: {
           deleteMany: {},
-          createMany: { data: leaseItems },
+          createMany: { data: data.leaseItems },
         },
       },
     });

@@ -21,7 +21,11 @@ export class OrganizationsRepository {
   }
 
   async create(data: CreateOrganizationDTO): Promise<Organization> {
-    const findExistingCNPJ = await this.findExistingCNPJ(data.cnpj);
+    const findExistingCNPJ = await this.prisma.organization.findFirst({
+      where: {
+        cnpj: data.cnpj,
+      },
+    });
     if (findExistingCNPJ) {
       throw new NotAcceptableException(`CNPJ ${data.cnpj} already exisits at company: ${findExistingCNPJ.name}`);
     }
@@ -29,9 +33,13 @@ export class OrganizationsRepository {
   }
 
   async findById(id_imobzi: string): Promise<Organization> {
-    return await this.prisma.organization.findUnique({
+    const found = await this.prisma.organization.findUnique({
       where: { id_imobzi },
     });
+
+    if (!found) throw new NotFoundException(`id_imobzi ${id_imobzi} does not existis on database`);
+
+    return found;
   }
 
   async findAll(): Promise<Organization[]> {

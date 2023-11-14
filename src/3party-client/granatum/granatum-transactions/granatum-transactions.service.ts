@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { dateFunctions } from '../../../my-usefull-functions/date.functions';
+import { dateFunctions } from '../../../modules/invoices/utilities/date.functions';
 import { GroupedInvoiceComponents, InvoiceComponents } from '../dtos/granatum-service.dtos';
 import { GranatumItemsPostDTO, GranatumTransactionPostDTO } from './dtos/granatum-transactions.dtos';
 import { GranatumTransactionsRepository } from './granatum-transactions.repository';
@@ -16,7 +16,6 @@ export class GranatumTransactionsService {
     let templateDueDate: string;
     let templatePaymentDate: string;
     const items = this.formatTemplateItems(data.items, dataType);
-    console.log(items[0]);
 
     if (dataType === 'onlending') {
       templateMainDescription = `Repasse referente a faturas pagas`;
@@ -30,7 +29,7 @@ export class GranatumTransactionsService {
       templatePaymentDate = dateFunctions.formatToUS(data.credit_at);
     } else if (dataType === 'revenue') {
       templateMainDescription = `Comissão de Aluguel (Transferência entre Contas)`;
-      templateObservation = '';
+      templateObservation = `SERVIÇO DE CORRETAGEM NO ALUGUEL DE IMÓVEIS NO MÊS DE ${data.reference}`;
       templateDueDate = dateFunctions.formatToUS(today);
       templatePaymentDate = null;
     }
@@ -87,10 +86,6 @@ export class GranatumTransactionsService {
   }
 
   async postTransactions(invoiceReadyToPost: GranatumTransactionPostDTO): Promise<any> {
-    try {
-      return await this.granatumTransactionsRepository.post(invoiceReadyToPost);
-    } catch (error) {
-      throw new Error(error);
-    }
+    return await this.granatumTransactionsRepository.post(invoiceReadyToPost);
   }
 }

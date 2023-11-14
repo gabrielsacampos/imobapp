@@ -22,17 +22,18 @@ describe('ImobziInvoicesRepository', () => {
   test('getAllInvoicesFromImobzi should paginate and return array of invoices', async () => {
     const pagination = invoicesMock.pagination;
     httpServiceMock.axiosRef.get.mockImplementation((url) => {
+      console.log(url);
       switch (url) {
-        case 'https://api.imobzi.app/v1/invoices?page=1&status=all&start_at=2000-01-01&end_at=2100-01-01&contract_type=all&order_by=desc':
+        case 'https://api.imobzi.app/v1/invoices?page=1&status=all&start_at=2023-01-01&end_at=2100-01-01&contract_type=all&order_by=date':
           return Promise.resolve({ data: pagination.page1 });
-        case 'https://api.imobzi.app/v1/invoices?page=2&status=all&start_at=2000-01-01&end_at=2100-01-01&contract_type=all&order_by=desc':
+        case ' https://api.imobzi.app/v1/invoices?page=2&status=all&start_at=2023-01-01&end_at=2100-01-01&contract_type=all&order_by=date':
           return Promise.resolve({ data: pagination.page2 });
 
         default:
           throw new Error(`verify the url: ${url} and try again`);
       }
     });
-    const result = await repository.getAll();
+    const result = await repository.getAll('2023-01-01');
     expect(result).toEqual([...pagination.page1.invoices, ...pagination.page2.invoices]);
   });
 

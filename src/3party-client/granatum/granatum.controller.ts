@@ -1,6 +1,15 @@
-import { Controller } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
+import { FetchDb } from './interfaces/granatum.queue.interface';
+import { QueueGranatumProducer } from './queue-granatum.producer';
 
 @Controller('granatum')
 export class GranatumController {
-  constructor() {}
+  constructor(private readonly queueGranatumProducer: QueueGranatumProducer) {}
+
+  @Post('sync')
+  async syncDb(@Body() data: FetchDb) {
+    console.log(data);
+    this.queueGranatumProducer.syncDb(data);
+    return { message: 'running GranatumQueue' };
+  }
 }

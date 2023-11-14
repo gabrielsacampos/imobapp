@@ -6,9 +6,18 @@ import { ModulesServices } from './modules.service';
 import { OrganizationsModule } from './organizations/organizations.module';
 import { PeopleModule } from './people/people.module';
 import { PropertiesModule } from './properties/properties.module';
+import { UpdatesModule } from './updates/updates.module';
 
 @Module({
-  imports: [PeopleModule, OrganizationsModule, PropertiesModule, BuildingsModule, LeasesModule, InvoicesModule],
+  imports: [
+    PeopleModule,
+    OrganizationsModule,
+    PropertiesModule,
+    BuildingsModule,
+    LeasesModule,
+    InvoicesModule,
+    UpdatesModule,
+  ],
   providers: [ModulesServices],
   exports: [
     ModulesServices,
@@ -18,6 +27,7 @@ import { PropertiesModule } from './properties/properties.module';
     BuildingsModule,
     LeasesModule,
     InvoicesModule,
+    UpdatesModule,
   ],
 })
 export class ModulesModule {}

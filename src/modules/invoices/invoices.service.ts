@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateInvoiceDTO } from './dtos/create-invoice.dtos';
 import { Invoice } from './entities/invoice.entity';
 import { InvoicesRepository } from './invoices.repository';
+import { dateFunctions } from './utilities/date.functions';
 
 @Injectable()
 export class InvoicesService {
@@ -85,8 +86,11 @@ export class InvoicesService {
       const key = curr.cnpj + ' | ' + curr.cpf + ' | ' + curr.account_credit + ' | ' + curr.IRRF;
       const { invoice_id, description, value, unity, building, block, paid_at, credit_at } = curr;
       const requiredItemsInfo = { invoice_id, description, value, unity, building, block, paid_at, credit_at };
+      const reference = dateFunctions.monthStringFormatBR(curr.paid_at);
+
       if (!acc[key]) {
         acc[key] = {
+          reference,
           owner_cpf: curr.cpf,
           owner_cnpj: curr.cnpj,
           type: curr.type,

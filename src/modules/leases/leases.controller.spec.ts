@@ -29,7 +29,7 @@ describe('LeasesController', () => {
     spy.mockResolvedValue(true as any);
 
     //call
-    await controller.create({ ...inMemoryLeasesRepositoryMock[0], beneficiaries: [], lease_items: [] });
+    await controller.create({ ...inMemoryLeasesRepositoryMock[0], beneficiariesLease: [], leaseItems: [] });
     expect(repository.create).toHaveBeenCalled();
   });
 

@@ -9,13 +9,13 @@ export class ImobziInvoicesRepository {
   private logger = new Logger('ImobziInvoicesRepository');
   constructor(private readonly httpService: HttpService) {}
 
-  async getAll(): Promise<AllImobziInvoiceDTO[]> {
+  async getAll(start_due_date: string): Promise<AllImobziInvoiceDTO[]> {
     let page = 1;
     const allInvoices: AllImobziInvoiceDTO[] = [];
 
     while (page) {
       const { data } = await this.httpService.axiosRef.get<ImobziInvoicesPageDTO>(
-        imobziUrls.urlAllInvoices(page),
+        imobziUrls.urlAllInvoices(page, start_due_date),
         imobziParams,
       );
       allInvoices.push(...data.invoices);

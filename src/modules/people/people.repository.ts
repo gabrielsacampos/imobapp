@@ -27,15 +27,19 @@ export class PeopleRepository {
     });
 
     if (!found) {
-      throw new NotFoundException(`Person id_imozbi: ${id_imobzi} not found`);
+      throw new NotFoundException(`Person id_imobzi: ${id_imobzi} not found`);
     }
 
     return found;
   }
 
   async create(data: CreatePersonDTO): Promise<Person> {
-    const existingPerson = await this.findById(data.id_imobzi);
-    const existingCPF = await this.findExistingCPF(data.cpf);
+    const existingPerson = await this.prisma.person.findUnique({ where: { id_imobzi: data.id_imobzi } });
+    const existingCPF = await this.prisma.person.findFirst({
+      where: {
+        cpf: data.cpf,
+      },
+    });
 
     if (existingPerson) throw new NotAcceptableException(`Person id_imobzi: ${data.id_imobzi} already exists`);
     if (existingCPF) throw new NotAcceptableException(`Person cpf: ${data.cpf} already exists`);

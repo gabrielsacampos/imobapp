@@ -6,8 +6,8 @@ export const imobziUrls = {
     return `https://api.imobzi.app/v1/invoices?page=${page}&status=paid&start_at=2000-01-01&end_at=2100-01-01&contract_type=all&order_by=desc`;
   },
 
-  urlAllInvoices(page: number = 1): string {
-    return `https://api.imobzi.app/v1/invoices?page=${page}&status=all&start_at=2000-01-01&end_at=2100-01-01&contract_type=all&order_by=desc`;
+  urlAllInvoices(page: number = 1, start_due_date: string): string {
+    return `https://api.imobzi.app/v1/invoices?page=${page}&status=all&start_at=${start_due_date}&end_at=2100-01-01&contract_type=all&order_by=date`;
   },
 
   urlAllBuildings(cursor: string): string {

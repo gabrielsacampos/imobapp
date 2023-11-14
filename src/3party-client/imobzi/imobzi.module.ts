@@ -1,4 +1,9 @@
+import { BullAdapter } from '@bull-board/api/bullAdapter';
+import { ExpressAdapter } from '@bull-board/express';
+import { BullBoardModule } from '@bull-board/nestjs';
+import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
+import { ScheduleModule } from '@nestjs/schedule';
 import { ModulesModule } from 'src/modules/modules.module';
 import { SharedModule } from 'src/shared.module';
 import { ImobziBuildingsModule } from './imobzi-buildings/imobzi-buildings.module';
@@ -16,9 +21,27 @@ import { ImobziPropertiesService } from './imobzi-properties/imobziProperties.se
 import { ImobziController } from './imobzi.controllers';
 import { ImobziRepository } from './imobzi.repository';
 import { ImobziService } from './imobzi.service';
+import { QueueImobziConsumer } from './queue-imobzi.consumer';
+import { QueueImobziProducer } from './queue-imobzi.producer';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
+    ModulesModule,
+    BullModule.forRoot({
+      url: process.env.redis_url,
+    }),
+    BullModule.registerQueue({
+      name: 'ImobziQueue',
+    }),
+    BullBoardModule.forFeature({
+      name: 'ImobziQueue',
+      adapter: BullAdapter,
+    }),
+    BullBoardModule.forRoot({
+      route: '/queues',
+      adapter: ExpressAdapter,
+    }),
     ModulesModule,
     SharedModule,
     ImobziBuildingsModule,
@@ -31,6 +54,8 @@ import { ImobziService } from './imobzi.service';
   ],
   controllers: [ImobziController],
   providers: [
+    QueueImobziProducer,
+    QueueImobziConsumer,
     ImobziService,
     ImobziContactsRepository,
     ImobziBuildingsService,
@@ -40,6 +65,8 @@ import { ImobziService } from './imobzi.service';
     ImobziRepository,
   ],
   exports: [
+    QueueImobziProducer,
+    QueueImobziConsumer,
     ImobziService,
     ImobziContactsRepository,
     ImobziBuildingsService,

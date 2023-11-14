@@ -59,13 +59,13 @@ export class CreateLeaseDTO extends Lease {
     message: 'You need to set at least one beneficiary to lease',
   })
   @Type(() => CreateBeneficiaryDTO)
-  beneficiaries!: CreateBeneficiaryDTO[];
+  beneficiariesLease!: CreateBeneficiaryDTO[];
 
   @ValidateNested({
     message: 'You need to set at least one beneficiary to lease',
   })
   @Type(() => LeaseItemsCreateDTO)
-  lease_items!: LeaseItemsCreateDTO[];
+  leaseItems!: LeaseItemsCreateDTO[];
 
   id_main_guarantor_imobzi?: string;
   updated_at?: Date;

@@ -41,10 +41,10 @@ describe('LeasesRepository', () => {
 
   it('create > existing id_imobzi || cpf should NOT create a lease', async () => {
     const randomLeaseToTest = inMemoryLeasesRepositoryMock[4];
-    const beneficiaries = [];
-    const lease_items = [];
+    const beneficiariesLease = [];
+    const leaseItems = [];
 
-    await expect(repository.create({ ...randomLeaseToTest, beneficiaries, lease_items })).rejects.toThrow();
+    await expect(repository.create({ ...randomLeaseToTest, beneficiariesLease, leaseItems })).rejects.toThrow();
   });
 
   it('create > should create and return the new lease', async () => {
@@ -63,8 +63,8 @@ describe('LeasesRepository', () => {
       id_annual_readjustment_imobzi: '',
       code_imobzi: '',
       guarantee_value: 0,
-      beneficiaries: [],
-      lease_items: [],
+      beneficiariesLease: [],
+      leaseItems: [],
     };
 
     await expect(repository.create(newLease)).resolves.not.toThrow();

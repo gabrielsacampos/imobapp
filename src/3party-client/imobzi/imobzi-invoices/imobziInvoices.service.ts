@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { dateFunctions } from 'src/my-usefull-functions/date.functions';
+import { dateFunctions } from 'src/modules/invoices/utilities/date.functions';
 import { CreateInvoiceDTO } from 'src/modules/invoices/dtos/create-invoice.dtos';
 import { CreateInvoiceItemDto } from 'src/modules/invoice_items/dto/create-invoice_item.dto';
 import { AnImobziInvoiceDTO, ImobziInvoiceItem } from './dto/an-imobzi-invoice.dtos';

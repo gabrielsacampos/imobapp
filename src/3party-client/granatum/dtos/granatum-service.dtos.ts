@@ -20,6 +20,9 @@ export type InvoiceComponents = {
 };
 
 export type GroupedInvoiceComponents = {
+  reference?: string;
+  owner_cpf?: string;
+  owner_cnpj?: string;
   type: string;
   paid_at: string;
   credit_at: string;

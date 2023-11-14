@@ -78,10 +78,10 @@ export class ImobziLeasesService {
       include_in_dimob,
     } = leaseFullData;
 
-    const beneficiaries = this.getRequiredLeaseBeneficiariesDataToDb(leaseFullData.beneficiaries);
-    const lease_items = this.getRequiredLeaseItemsDataToDb(leaseFullData.items);
+    const beneficiariesLease = this.getRequiredLeaseBeneficiariesDataToDb(leaseFullData.beneficiaries);
+    const leaseItems = this.getRequiredLeaseItemsDataToDb(leaseFullData.items);
     return {
-      beneficiaries,
+      beneficiariesLease,
       updated_at,
       id_annual_readjustment_imobzi,
       code_imobzi,
@@ -100,7 +100,7 @@ export class ImobziLeasesService {
       id_property_imobzi,
       start_at,
       status,
-      lease_items,
+      leaseItems,
     };
   }
 }

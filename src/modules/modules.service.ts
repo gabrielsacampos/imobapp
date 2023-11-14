@@ -5,10 +5,12 @@ import { LeasesService } from './leases/leases.service';
 import { OrganizationsService } from './organizations/organizations.service';
 import { PeopleService } from './people/people.service';
 import { PropertiesService } from './properties/properties.service';
+import { UpdatesService } from './updates/updates.service';
 
 @Injectable()
 export class ModulesServices {
   constructor(
+    private readonly updatesService: UpdatesService,
     private readonly peopleService: PeopleService,
     private readonly organizationsService: OrganizationsService,
     private readonly buildingsService: BuildingsService,
@@ -17,6 +19,7 @@ export class ModulesServices {
     private readonly invoicesService: InvoicesService,
   ) {}
 
+  updates = this.updatesService;
   people = this.peopleService;
   organizations = this.organizationsService;
   buildings = this.buildingsService;
