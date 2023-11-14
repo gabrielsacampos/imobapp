@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "vercel-build": "npx prisma generate && npx prisma migrate deploy --output public",
+    "vercel-build": "npx prisma migrate deploy && nest build --output public",
     "build": "nest build && npx prisma generate && npx prisma migrate deploy",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
