@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "vercel-build": "npx prisma migrate deploy && npm install -g @nestjs/cli && nest build",
+    "vercel-build": "npm install -g @nestjs/cli",
     "build": "nest build && npx prisma generate && npx prisma migrate deploy",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
