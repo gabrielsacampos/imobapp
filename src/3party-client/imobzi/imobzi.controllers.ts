@@ -13,23 +13,23 @@ export class ImobziController {
       const { contacts, buildings, properties, leases, invoices } = data;
 
       if (contacts) {
-        this.queueImobziProducer.produceContacts();
+        await this.queueImobziProducer.produceContacts();
       }
 
       if (buildings) {
-        this.queueImobziProducer.produceBuildings();
+        await this.queueImobziProducer.produceBuildings();
       }
 
       if (properties) {
-        this.queueImobziProducer.produceProperties();
+        await this.queueImobziProducer.produceProperties();
       }
 
       if (leases) {
-        this.queueImobziProducer.produceLeases();
+        await this.queueImobziProducer.produceLeases();
       }
 
       if (invoices) {
-        this.queueImobziProducer.produceInvoices(invoices.start_due_date);
+        await this.queueImobziProducer.produceInvoices(invoices.start_due_date);
       }
 
       return { message: 'running imobziQueue' };

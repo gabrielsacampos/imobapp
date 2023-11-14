@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
-import { LoginRequestBody } from '../models/LoginRequestBody';
+import { LoginRequestBody } from '../models/loginRequestBody';
 import { validate } from 'class-validator';
 
 @Injectable()
