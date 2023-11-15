@@ -38,3 +38,6 @@ lerna-debug.log*
 .env
 .eslintrc.json.prettierrc
 .vercel
+
+# Sentry Config File
+.sentryclirc
