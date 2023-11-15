@@ -14,22 +14,9 @@ import { ModulesServices } from './modules/modules.service';
 import { PeopleController } from './modules/people/people.controller';
 import { UsersModule } from './modules/users/users.module';
 import { SharedModule } from './shared.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import { join } from 'path';
 
 @Module({
-  imports: [
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'dist'),
-      //exclude: ['api/*'],
-    }),
-    ImobziModule,
-    SharedModule,
-    GranatumModule,
-    ModulesModule,
-    AuthModule,
-    UsersModule,
-  ],
+  imports: [ImobziModule, SharedModule, GranatumModule, ModulesModule, AuthModule, UsersModule],
   controllers: [AppController, InvoicesController, PeopleController],
   providers: [
     InvoicesService,
