@@ -1,14 +1,31 @@
-import { ContactDTO } from '../imobzi-contacts/dtos/imobziContacts.dtos';
+import { IsBoolean, IsEnum, IsNotEmpty } from 'class-validator';
 
-export interface StoreDb {
-  contacts: boolean | true;
-  buildings: boolean | true;
-  properties: boolean | true;
-  leases: boolean | true;
-  invoices: { start_due_date: string };
+export enum StoreDbType {
+  backup = 'backup',
+  update = 'update',
 }
 
-export class ContactsJobDTO extends ContactDTO {
-  index: number;
-  total: number;
+export class StoreDb {
+  @IsNotEmpty()
+  @IsEnum(StoreDbType)
+  type: StoreDbType;
+
+  @IsNotEmpty()
+  @IsBoolean()
+  contacts: boolean | true;
+
+  @IsNotEmpty()
+  @IsBoolean()
+  buildings: boolean | true;
+
+  @IsNotEmpty()
+  @IsBoolean()
+  properties: boolean | true;
+
+  @IsNotEmpty()
+  @IsBoolean()
+  leases: boolean | true;
+
+  @IsNotEmpty()
+  invoices: { start_due_date: string };
 }

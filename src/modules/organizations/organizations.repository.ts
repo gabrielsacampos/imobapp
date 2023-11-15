@@ -26,6 +26,7 @@ export class OrganizationsRepository {
         cnpj: data.cnpj,
       },
     });
+
     if (findExistingCNPJ) {
       throw new NotAcceptableException(`CNPJ ${data.cnpj} already exisits at company: ${findExistingCNPJ.name}`);
     }

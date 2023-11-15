@@ -8,7 +8,6 @@ export class GranatumController {
 
   @Post('sync')
   async syncDb(@Body() data: FetchDb) {
-    console.log(data);
     this.queueGranatumProducer.syncDb(data);
     return { message: 'running GranatumQueue' };
   }

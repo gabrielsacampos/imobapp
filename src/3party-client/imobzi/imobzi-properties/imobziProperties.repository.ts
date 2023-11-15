@@ -13,6 +13,7 @@ export class ImobziPropertiesRepository {
     try {
       const allProperties = [];
 
+      let totalProperties = 0;
       let cursor = '';
       do {
         const { data } = await this.httpService.axiosRef.get<ImobziPropertiesDTO>(
@@ -21,7 +22,8 @@ export class ImobziPropertiesRepository {
         );
         allProperties.push(...data.properties);
         cursor = data.cursor;
-        this.logger.verbose(`got ${allProperties.length}/${data.count} PROPERTIES (available)`);
+        totalProperties += data.count;
+        this.logger.verbose(`got ${allProperties.length}/${totalProperties} PROPERTIES (available)`);
       } while (cursor);
 
       cursor = '';
@@ -32,7 +34,8 @@ export class ImobziPropertiesRepository {
         );
         allProperties.push(...data.properties);
         cursor = data.cursor;
-        this.logger.verbose(`got ${allProperties.length}/${data.count} PROPERTIES (unavailable)`);
+        totalProperties += data.count;
+        this.logger.verbose(`got ${allProperties.length}/${totalProperties} PROPERTIES (unavailable)`);
       } while (cursor);
 
       return allProperties;

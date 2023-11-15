@@ -1,6 +1,6 @@
-import { Body, Controller, InternalServerErrorException, Logger, Post } from '@nestjs/common';
-import { QueueImobziProducer } from './queue-imobzi.producer';
+import { Body, Controller, Logger, Post } from '@nestjs/common';
 import { StoreDb } from './interfaces/imobziQueue.interface';
+import { QueueImobziProducer } from './queue-imobzi.producer';
 
 @Controller('imobzi')
 export class ImobziController {
@@ -9,33 +9,7 @@ export class ImobziController {
 
   @Post('backup')
   async backupImobzi(@Body() data: StoreDb) {
-    try {
-      const { contacts, buildings, properties, leases, invoices } = data;
-
-      if (contacts) {
-        await this.queueImobziProducer.produceContacts();
-      }
-
-      if (buildings) {
-        await this.queueImobziProducer.produceBuildings();
-      }
-
-      if (properties) {
-        await this.queueImobziProducer.produceProperties();
-      }
-
-      if (leases) {
-        await this.queueImobziProducer.produceLeases();
-      }
-
-      if (invoices) {
-        await this.queueImobziProducer.produceInvoices(invoices.start_due_date);
-      }
-
-      return { message: 'running imobziQueue' };
-    } catch (error) {
-      this.logger.error(error.message, error.stack);
-      throw new InternalServerErrorException();
-    }
+    this.queueImobziProducer.produce(data);
+    return { message: 'running imobziQueue' };
   }
 }

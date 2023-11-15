@@ -1,5 +1,5 @@
 import { InjectQueue } from '@nestjs/bull';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
 import { Queue } from 'bull';
 import { BuildingDTO } from 'src/3party-client/imobzi/imobzi-buildings/dtos/imobziBuildings.dtos';
 import { ContactDTO } from 'src/3party-client/imobzi/imobzi-contacts/dtos/imobziContacts.dtos';
@@ -8,6 +8,7 @@ import { LeaseDTO } from 'src/3party-client/imobzi/imobzi-leases/dtos/imobziLeas
 import { PropertyDTO } from 'src/3party-client/imobzi/imobzi-properties/dtos/imobziProperties.dtos';
 import { ImobziRepository } from 'src/3party-client/imobzi/imobzi.repository';
 import { ModulesServices } from 'src/modules/modules.service';
+import { StoreDb, StoreDbType } from './interfaces/imobziQueue.interface';
 
 @Injectable()
 export class QueueImobziProducer {
@@ -18,23 +19,54 @@ export class QueueImobziProducer {
     private readonly modulesService: ModulesServices,
   ) {}
 
-  async produceContacts() {
+  async produce(data: StoreDb){
+    try {
+      const { type, contacts, buildings, properties, leases, invoices } = data;
+
+      if (contacts) {
+        await this.produceContacts(type);
+      }
+
+      if (buildings) {
+        await this.produceBuildings();
+      }
+
+      if (properties) {
+        await this.produceProperties();
+      }
+
+      if (leases) {
+        await this.produceLeases();
+      }
+
+      if (invoices) {
+        await this.produceInvoices(invoices.start_due_date);
+      }
+
+      return { message: 'running imobziQueue' };
+    } catch (error) {
+      this.logger.error(error.message, error.stack);
+      throw new InternalServerErrorException();
+    }
+  }
+
+  async produceContacts(type: StoreDbType): Promise<void> {
+   try{ 
     this.logger.verbose('.produceContacts() running');
     const allContacts: ContactDTO[] = await this.imobziRepository.contact.getAll();
     const lastPeopleUpdate = await this.modulesService.updates.entitylastUpdate('people');
 
     let peopleToUpdate: any;
-    if (lastPeopleUpdate) {
-      peopleToUpdate = allContacts.filter((contact) => {
-        if (contact.contact_type === 'person') {
-          return new Date(contact.updated_at) > lastPeopleUpdate.updated_at;
-        }
-      });
-    } else {
+    if(type === 'backup'){
       peopleToUpdate = allContacts.filter((contact) => contact.contact_type === 'person');
-    }
-
-    this.logger.verbose(`${peopleToUpdate.length} people with updates catched from Imobzi`);
+    }else{
+      peopleToUpdate = allContacts.filter((contact) => {
+        if (contact.contact_type === 'person' ) {
+          return new Date(contact.updated_at) > lastPeopleUpdate.updated_at;
+    }})
+  }
+    
+    this.logger.verbose(`${peopleToUpdate.length} people to ${type} catched from Imobzi`);
 
     if (peopleToUpdate.length > 0) {
       for (const person of peopleToUpdate) {
@@ -51,17 +83,17 @@ export class QueueImobziProducer {
     const lastOrgsUpdated = await this.modulesService.updates.entitylastUpdate('organizations');
 
     let orgsToUpdate: any;
-    if (lastOrgsUpdated) {
+    if (type === 'backup') {
+      orgsToUpdate = allContacts.filter((contact) => contact.contact_type === 'organization');
+    } else {
       orgsToUpdate = allContacts.filter((contact) => {
         if (contact.contact_type === 'organization') {
-          return new Date(contact.updated_at) > lastPeopleUpdate.updated_at;
+          return new Date(contact.updated_at) > lastOrgsUpdated.updated_at;
         }
       });
-    } else {
-      orgsToUpdate = allContacts.filter((contact) => contact.contact_type === 'person');
     }
 
-    this.logger.verbose(`${orgsToUpdate.length} orgs with updates catched from Imobzi`);
+    this.logger.verbose(`${orgsToUpdate.length} orgs to ${type} catched from Imobzi`);
 
     if (orgsToUpdate.length > 0) {
       for (const org of orgsToUpdate) {
@@ -74,10 +106,14 @@ export class QueueImobziProducer {
     } else {
       this.logger.verbose(`organizations already up to date`);
     }
+  }catch(error){
+    this.logger.error(error.message, error.stack)
+  }
   }
 
-  async produceBuildings() {
-    this.logger.verbose('.produceBuildings() running');
+  async produceBuildings(): Promise<void> {
+    try{
+      this.logger.verbose('.produceBuildings() running');
     const allBuildings: BuildingDTO[] = await this.imobziRepository.building.getAll();
     const lastBuildingUpdate = await this.modulesService.updates.entitylastUpdate('buildings');
 
@@ -101,10 +137,13 @@ export class QueueImobziProducer {
     } else {
       this.logger.verbose(`buildings already up to date`);
     }
+  }catch(error){
+    this.logger.error(error.message, error.stack)
+  }
   }
 
-  async produceProperties() {
-    this.logger.verbose('.produceProperties() running');
+  async produceProperties(): Promise<void> {
+    try{this.logger.verbose('.produceProperties() running');
     const allProperties: PropertyDTO[] = await this.imobziRepository.property.getAll();
 
     const lastpropertiesToUpdate = await this.modulesService.updates.entitylastUpdate('properties');
@@ -123,11 +162,13 @@ export class QueueImobziProducer {
       }
     } else {
       this.logger.verbose(`properties already up to date`);
+    }}catch(error){
+      this.logger.error(error.message, error.stack)
     }
   }
 
   async produceLeases() {
-    this.logger.verbose('.produceLeases() running');
+    try{this.logger.verbose('.produceLeases() running');
     const allLeases: LeaseDTO[] = await this.imobziRepository.lease.getAll();
 
     for (const lease of allLeases) {
@@ -136,11 +177,13 @@ export class QueueImobziProducer {
         delay: 3000,
         backoff: { delay: 10000, type: 'exponential' },
       });
+    }}catch(error){
+       this.logger.error(error.message, error.stack)
     }
   }
 
-  async produceInvoices(start_due_date: string) {
-    this.logger.verbose('.produceInvoices() running');
+  async produceInvoices(start_due_date: string): Promise<void> {
+   try{ this.logger.verbose('.produceInvoices() running');
     const allInvoices: AllImobziInvoiceDTO[] = await this.imobziRepository.invoice.getAll(start_due_date);
     const immutableInvoicesIds = await this.modulesService.invoices.inmutableInvoicesIds();
     const invoicesToUpsert = allInvoices.filter((invoice) => {
@@ -155,5 +198,8 @@ export class QueueImobziProducer {
         backoff: { delay: 10000, type: 'exponential' },
       });
     }
+  }catch(error){
+    this.logger.error(error.message, error.stack)
   }
+}
 }

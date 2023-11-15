@@ -1,4 +1,5 @@
 import { InjectQueue, Process, Processor } from '@nestjs/bull';
+import { Logger } from '@nestjs/common';
 import { Job, Queue } from 'bull';
 import { BuildingDTO } from 'src/3party-client/imobzi/imobzi-buildings/dtos/imobziBuildings.dtos';
 import { ContactDTO } from 'src/3party-client/imobzi/imobzi-contacts/dtos/imobziContacts.dtos';
@@ -9,12 +10,10 @@ import { ImobziService } from 'src/3party-client/imobzi/imobzi.service';
 import { CreateBuildingDTO } from 'src/modules/buildings/dtos/create-building.dtos';
 import { CreateInvoiceDTO } from 'src/modules/invoices/dtos/create-invoice.dtos';
 import { CreateLeaseDTO } from 'src/modules/leases/dtos/create-lease.dtos';
+import { ModulesServices } from 'src/modules/modules.service';
 import { CreateOrganizationDTO } from 'src/modules/organizations/dtos/create-organization.dtos';
 import { CreatePersonDTO } from 'src/modules/people/dtos/create-person.dtos';
 import { CreatePropertyDTO } from 'src/modules/properties/dtos/create-property.dtos';
-import { ModulesServices } from 'src/modules/modules.service';
-import { Logger } from '@nestjs/common';
-import { ContactsJobDTO } from './interfaces/imobziQueue.interface';
 import { CreateUpdateDto } from 'src/modules/updates/dto/create-update.dto';
 
 @Processor('ImobziQueue')
@@ -28,7 +27,7 @@ export class QueueImobziConsumer {
   ) {}
 
   @Process('updatePeople')
-  async updatePerson(job: Job<ContactsJobDTO>) {
+  async updatePerson(job: Job<ContactDTO>) {
     try {
       const contact = job.data;
       const formatedPerson: CreatePersonDTO = await this.imobziService.person.getRequiredData(contact.contact_id);
