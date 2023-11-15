@@ -28,11 +28,11 @@ export class QueueImobziProducer {
       }
 
       if (buildings) {
-        await this.produceBuildings();
+        await this.produceBuildings(type);
       }
 
       if (properties) {
-        await this.produceProperties();
+        await this.produceProperties(type);
       }
 
       if (leases) {
@@ -111,19 +111,19 @@ export class QueueImobziProducer {
   }
   }
 
-  async produceBuildings(): Promise<void> {
+  async produceBuildings(type: StoreDbType): Promise<void> {
     try{
       this.logger.verbose('.produceBuildings() running');
     const allBuildings: BuildingDTO[] = await this.imobziRepository.building.getAll();
     const lastBuildingUpdate = await this.modulesService.updates.entitylastUpdate('buildings');
 
     let buildingsToUpdate: BuildingDTO[];
-    if (!lastBuildingUpdate) {
-      buildingsToUpdate = allBuildings.filter((building) => {
-        return new Date(building.updated_at) > lastBuildingUpdate?.updated_at;
-      });
-    } else {
+    if (type === 'backup') {
       buildingsToUpdate = allBuildings;
+    } else {
+      buildingsToUpdate = allBuildings.filter((building) => {
+        return new Date(building.updated_at) > lastBuildingUpdate.updated_at;
+      });
     }
 
     if (buildingsToUpdate.length > 0) {
@@ -142,15 +142,20 @@ export class QueueImobziProducer {
   }
   }
 
-  async produceProperties(): Promise<void> {
+  async produceProperties(type: StoreDbType): Promise<void> {
     try{this.logger.verbose('.produceProperties() running');
     const allProperties: PropertyDTO[] = await this.imobziRepository.property.getAll();
 
     const lastpropertiesToUpdate = await this.modulesService.updates.entitylastUpdate('properties');
 
-    const propertiesToUpdate = allProperties.filter((property) => {
-      return new Date(property.updated_at) > lastpropertiesToUpdate.updated_at;
-    });
+    let propertiesToUpdate: any[];
+    if(type === 'backup'){
+      propertiesToUpdate = allProperties;
+    }else{
+      propertiesToUpdate = allProperties.filter((property) => {
+        return new Date(property.updated_at) > lastpropertiesToUpdate.updated_at;
+      });
+    }
 
     if (propertiesToUpdate.length > 0) {
       for (const property of propertiesToUpdate) {
@@ -168,7 +173,8 @@ export class QueueImobziProducer {
   }
 
   async produceLeases() {
-    try{this.logger.verbose('.produceLeases() running');
+    try{
+    this.logger.verbose('.produceLeases() running');
     const allLeases: LeaseDTO[] = await this.imobziRepository.lease.getAll();
 
     for (const lease of allLeases) {
@@ -177,6 +183,9 @@ export class QueueImobziProducer {
         delay: 3000,
         backoff: { delay: 10000, type: 'exponential' },
       });
+
+      this.logger.verbose(` ${allLeases.length} leases to check updates`);
+      
     }}catch(error){
        this.logger.error(error.message, error.stack)
     }

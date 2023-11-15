@@ -22,7 +22,7 @@ export class ImobziPropertiesRepository {
         );
         allProperties.push(...data.properties);
         cursor = data.cursor;
-        totalProperties += data.count;
+        totalProperties = data.count;
         this.logger.verbose(`got ${allProperties.length}/${totalProperties} PROPERTIES (available)`);
       } while (cursor);
 
@@ -34,8 +34,7 @@ export class ImobziPropertiesRepository {
         );
         allProperties.push(...data.properties);
         cursor = data.cursor;
-        totalProperties += data.count;
-        this.logger.verbose(`got ${allProperties.length}/${totalProperties} PROPERTIES (unavailable)`);
+        this.logger.verbose(`got ${allProperties.length}/${totalProperties + data.count} PROPERTIES (unavailable)`);
       } while (cursor);
 
       return allProperties;
