@@ -11,12 +11,26 @@ import { InvoicesRepository } from './modules/invoices/invoices.repository';
 import { InvoicesService } from './modules/invoices/invoices.service';
 import { ModulesModule } from './modules/modules.module';
 import { ModulesServices } from './modules/modules.service';
+import { PeopleController } from './modules/people/people.controller';
 import { UsersModule } from './modules/users/users.module';
 import { SharedModule } from './shared.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
-  imports: [ImobziModule, SharedModule, GranatumModule, ModulesModule, AuthModule, UsersModule],
-  controllers: [AppController, InvoicesController],
+  imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'client'),
+      //exclude: ['api/*'],
+    }),
+    ImobziModule,
+    SharedModule,
+    GranatumModule,
+    ModulesModule,
+    AuthModule,
+    UsersModule,
+  ],
+  controllers: [AppController, InvoicesController, PeopleController],
   providers: [
     InvoicesService,
     InvoicesRepository,
