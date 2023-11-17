@@ -6,7 +6,7 @@ import * as crypto from 'node:crypto';
 import { inMemoryLeasesRepositoryMock } from './inMemoryLeasesRepository.mock';
 
 export class InMemoryLeasesRepository implements Partial<LeasesRepository> {
-  items: Lease[] = inMemoryLeasesRepositoryMock;
+  items: CreateLeaseDTO[] = inMemoryLeasesRepositoryMock;
 
   async create(data: CreateLeaseDTO): Promise<Lease> {
     const existingLease = this.items.find((lease) => lease.id_imobzi === data.id_imobzi);

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateLeaseDTO } from 'src/modules/leases/dtos/create-lease.dtos';
 import { BeneficiariesCreateDTO } from 'src/modules/leases/lease-beneficiaries/lease-beneficiaries.dtos';
-import { LeaseItemsCreateDTO } from 'src/modules/leases/lease-items/leaseItemsCreate.dtos';
+import { CreateLeaseItemsDTO } from 'src/modules/lease-items/dtos/create-leaseItems.dtos';
 import { ImobziLeaseBeneficiaryDTO, ImobziLeaseDetailsDTO, ImobziLeaseItemDTO } from './dtos/imobziLeasesDetails.dtos';
 import { ImobziLeasesRepository } from './imobziLeases.repository';
 
@@ -19,7 +19,7 @@ export class ImobziLeasesService {
     });
   }
 
-  getRequiredLeaseItemsDataToDb(leaseItems: ImobziLeaseItemDTO[]): LeaseItemsCreateDTO[] {
+  getRequiredLeaseItemsDataToDb(leaseItems: ImobziLeaseItemDTO[]): CreateLeaseItemsDTO[] {
     return leaseItems.map((item) => {
       const validStartDate = item.start_date === '' ? null : new Date(item.start_date);
       const start_date = validStartDate;

@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { InMemoryLeasesRepository } from '../../test/server-repositories/inMemoryLeasesRepository/inMemoryLeasesRepository';
 import { inMemoryLeasesRepositoryMock } from '../../test/server-repositories/inMemoryLeasesRepository/inMemoryLeasesRepository.mock';
+import { LeaseItemsModule } from '../lease-items/lease-items.module';
 import { LeasesController } from './leases.controller';
 import { LeasesRepository } from './leases.repository';
 import { LeasesService } from './leases.service';
@@ -12,6 +13,7 @@ describe('LeasesController', () => {
   beforeEach(async () => {
     repository = new InMemoryLeasesRepository();
     const module: TestingModule = await Test.createTestingModule({
+      imports: [LeaseItemsModule],
       controllers: [LeasesController],
       providers: [LeasesService, { provide: LeasesRepository, useValue: repository }],
     }).compile();
