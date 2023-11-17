@@ -1,6 +1,8 @@
 import { IsBoolean, IsNotEmpty } from 'class-validator';
 
 export class LeaseItemsCreateDTO {
+  id_lease_imobzi?: string;
+
   @IsNotEmpty()
   due_date: Date;
 

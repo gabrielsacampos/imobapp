@@ -66,7 +66,6 @@ export class LeasesRepository {
           createMany: { data: beneficiaries },
         },
         leaseItems: {
-          deleteMany: {},
           createMany: { data: data.leaseItems },
         },
       },
