@@ -20,36 +20,40 @@ export class ImobziLeasesService {
   }
 
   getRequiredLeaseItemsDataToDb(leaseItems: ImobziLeaseItemDTO[]): CreateLeaseItemsDTO[] {
-    return leaseItems.map((item) => {
-      const validStartDate = item.start_date === '' ? null : new Date(item.start_date);
-      const start_date = validStartDate;
-      const due_date = new Date(item.due_date);
-      const {
-        repeat_total,
-        repeat_index,
-        description,
-        charge_management_fee: management_fee,
-        recurrent,
-        value,
-        until_due_date,
-        behavior,
-        include_in_dimob,
-      } = item;
+    try {
+      return leaseItems.map((item) => {
+        const validStartDate = item.start_date === '' ? null : new Date(item.start_date);
+        const start_date = validStartDate;
+        const due_date = new Date(item.due_date);
+        const {
+          repeat_total,
+          repeat_index,
+          description,
+          charge_management_fee: management_fee,
+          recurrent,
+          value,
+          until_due_date,
+          behavior,
+          include_in_dimob,
+        } = item;
 
-      return {
-        due_date,
-        repeat_total,
-        repeat_index,
-        description,
-        management_fee,
-        recurrent,
-        value,
-        until_due_date,
-        behavior,
-        include_in_dimob,
-        start_date,
-      };
-    });
+        return {
+          due_date,
+          repeat_total,
+          repeat_index,
+          description,
+          management_fee,
+          recurrent,
+          value,
+          until_due_date,
+          behavior,
+          include_in_dimob,
+          start_date,
+        };
+      });
+    } catch (error) {
+      console.log(error.stack);
+    }
   }
 
   async getRequiredData(idLease: string): Promise<CreateLeaseDTO> {
