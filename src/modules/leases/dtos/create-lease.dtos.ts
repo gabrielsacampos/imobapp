@@ -2,7 +2,7 @@ import { NotAcceptableException } from '@nestjs/common';
 import { Type } from 'class-transformer';
 import { IsNotEmpty, ValidateIf, ValidateNested } from 'class-validator';
 import { Lease } from '../entities/lease.entity';
-import { LeaseItemsCreateDTO } from '../lease-items/leaseItemsCreate.dtos';
+import { CreateLeaseItemsDTO } from '../../lease-items/dtos/create-leaseItems.dtos';
 import { CreateBeneficiaryDTO } from './create-beneficiary.dtos';
 
 export class CreateLeaseDTO extends Lease {
@@ -64,8 +64,8 @@ export class CreateLeaseDTO extends Lease {
   @ValidateNested({
     message: 'You need to set at least one beneficiary to lease',
   })
-  @Type(() => LeaseItemsCreateDTO)
-  leaseItems!: LeaseItemsCreateDTO[];
+  @Type(() => CreateLeaseItemsDTO)
+  leaseItems!: CreateLeaseItemsDTO[];
 
   id_main_guarantor_imobzi?: string;
   updated_at?: Date;
