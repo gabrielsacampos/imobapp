@@ -26,7 +26,7 @@ describe('ImobziInvoicesRepository', () => {
       switch (url) {
         case 'https://api.imobzi.app/v1/invoices?page=1&status=all&start_at=2023-01-01&end_at=2100-01-01&contract_type=all&order_by=date':
           return Promise.resolve({ data: pagination.page1 });
-        case ' https://api.imobzi.app/v1/invoices?page=2&status=all&start_at=2023-01-01&end_at=2100-01-01&contract_type=all&order_by=date':
+        case 'https://api.imobzi.app/v1/invoices?page=2&status=all&start_at=2023-01-01&end_at=2100-01-01&contract_type=all&order_by=date':
           return Promise.resolve({ data: pagination.page2 });
 
         default:
