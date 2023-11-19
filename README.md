@@ -76,3 +76,4 @@ Our Entities:
 
 
 ### Workflow: 
+![api-workflow](/images/basic-flux-api.png)
