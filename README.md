@@ -19,25 +19,25 @@ BackEnd infra:
   - Jwt Auth
   
 Our Entities: 
-  - People (Module)
-  - Organizations (Module)
-  - Buildings (Module)
-  - Properties (Module)
-    - Owners 
-  - Leases (Module)
-    - Leases_items 
-  - Invoices (Module)
-    - Invoices_items
+  - People 
+  - Organizations
+  - Buildings
+  - Properties
+  - Owners 
+  - Leases
+  - Leases_items 
+  - Invoices
+  - Invoices_items
    
 
-## Firts step
-### __ImobziService__ is responsable for consume all data from Imobzi API, handle the data and store our own DATABASE. 
+## 3-party APIs:
+### __ImobziService__ is responsable for consume all data from Imobzi API, processing and formatting this data, and storing it in our database.
   - Imobzi
-    - ImobziContacts
-    - ImobziPeople
-    - ImobziOrganizations
-    - ImobziBuildings
+    - ImobziContacts *('__/contacts__' is the endpoit to get info about contacts and organizations on Imobzi)
+      - ImobziPeople
+      - ImobziOrganizations
     - ImobziProperties
+      - ImobziBuildings * (To get buildings, we need to get on __'/properties'__ endpoint)
     - ImobziLeases
     - ImobziInvoices
 
@@ -62,7 +62,7 @@ Our Entities:
 	"buildings": true,
 	"properties": true,
 	"leases": true,
-	"invoices": true
+	"invoices": {start_due_date: 'yyyy/MM/dd'}
 }
   ```
 
@@ -73,3 +73,6 @@ Our Entities:
 
 	{ "start_at": "2023-08-30", "end_at": "2023-09-29" }
   ```
+
+
+### Workflow: 
