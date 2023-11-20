@@ -38,6 +38,7 @@ describe('LeaseItemsService', () => {
 
     const itensWithSomeIndexesNotOnDb = [...itensInputWithDataOnDb, newItem];
     const result = await service.catchUpdates(itensWithSomeIndexesNotOnDb);
+    console.log(result);
     expect(result).toEqual([newItem]);
   });
 });

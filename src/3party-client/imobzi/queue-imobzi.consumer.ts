@@ -24,7 +24,7 @@ export class QueueImobziConsumer {
     @InjectQueue('ImobziQueue') private readonly imobziQueue: Queue,
     private readonly modulesServices: ModulesServices,
     private readonly imobziService: ImobziService,
-  ) {}
+  ) { }
 
   @Process('updatePeople')
   async updatePerson(job: Job<ContactDTO>) {

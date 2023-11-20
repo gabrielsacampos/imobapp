@@ -19,7 +19,6 @@ export class QueueGranatumProducer {
 
   async syncDb(data: FetchDb): Promise<void> {
     try {
-      console.log(data);
       const { payment_start_at, payment_end_at, invoice, onlending, revenue } = data;
 
       let items: any[];

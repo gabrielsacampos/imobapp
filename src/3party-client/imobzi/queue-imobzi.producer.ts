@@ -1,6 +1,6 @@
 import { InjectQueue } from '@nestjs/bull';
 import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
-import { Queue } from 'bull';
+import { Job, Queue } from 'bull';
 import { BuildingDTO } from 'src/3party-client/imobzi/imobzi-buildings/dtos/imobziBuildings.dtos';
 import { ContactDTO } from 'src/3party-client/imobzi/imobzi-contacts/dtos/imobziContacts.dtos';
 import { AllImobziInvoiceDTO } from 'src/3party-client/imobzi/imobzi-invoices/dto/all-imobzi-invoice.dtos';

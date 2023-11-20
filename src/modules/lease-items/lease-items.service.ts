@@ -10,6 +10,7 @@ export class LeaseItemsService {
     const newItemsUpdates: CreateLeaseItemsDTO[] = [];
     for (const item of leaseItems) {
       const found = await this.leaseItemsRepsository.findStrictEqual(item);
+
       if (!found) {
         newItemsUpdates.push(item);
       }

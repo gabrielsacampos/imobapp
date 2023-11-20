@@ -137,7 +137,6 @@ export async function getImmutableInvoices(): Promise<ImmutableInvoice[]> {
     ) and paid_manual is not true;
     `;
   } catch (error) {
-    console.log(prisma.$queryRaw);
     throw new Error(error);
   }
 }

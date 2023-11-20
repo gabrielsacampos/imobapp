@@ -1,12 +1,16 @@
 import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma-client/prisma.service';
+import { LeaseItemsService } from '../lease-items/lease-items.service';
 import { CreateLeaseDTO } from './dtos/create-lease.dtos';
 import { UpdateLeaseDTO } from './dtos/update-lease.dtos';
 import { Lease } from './entities/lease.entity';
 
 @Injectable()
 export class LeasesRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly leaseItemsService: LeaseItemsService,
+  ) { }
 
   async create(data: CreateLeaseDTO): Promise<Lease> {
     const existsIdLease = await this.prisma.lease.findFirst({
@@ -55,6 +59,8 @@ export class LeasesRepository {
     const beneficiaries = data.beneficiariesLease;
     delete data.beneficiariesLease;
 
+    const newItems = await this.leaseItemsService.catchUpdates(data.leaseItems);
+
     return await this.prisma.lease.update({
       where: {
         id_imobzi,
@@ -66,7 +72,7 @@ export class LeasesRepository {
           createMany: { data: beneficiaries },
         },
         leaseItems: {
-          createMany: { data: data.leaseItems },
+          createMany: { data: newItems },
         },
       },
     });

@@ -24,7 +24,6 @@ export class QueueGranatumConsumer {
 
   async setGranatumIds(data: GroupedInvoiceComponents): Promise<GroupedInvoiceComponents> {
     try {
-      console.log(data);
       let client_suplier_document: string;
       let id_suplier_client: number;
 
