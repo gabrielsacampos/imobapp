@@ -4,7 +4,7 @@ import { CreateLeaseItemsDTO } from './dtos/create-leaseItems.dtos';
 
 @Injectable()
 export class LeaseItemsService {
-  constructor(private readonly leaseItemsRepsository: LeaseItemsRepository) {}
+  constructor(private readonly leaseItemsRepsository: LeaseItemsRepository) { }
 
   async catchUpdates(leaseItems: CreateLeaseItemsDTO[]): Promise<CreateLeaseItemsDTO[]> {
     const newItemsUpdates: CreateLeaseItemsDTO[] = [];
@@ -15,11 +15,6 @@ export class LeaseItemsService {
         newItemsUpdates.push(item);
       }
     }
-
-    if (newItemsUpdates.length > 0) {
-      return newItemsUpdates;
-    }
-
-    return undefined;
+    return newItemsUpdates;
   }
 }

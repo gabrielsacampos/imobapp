@@ -28,7 +28,7 @@ describe('LeaseItemsService', () => {
     const itensInputWithDataOnDb: CreateLeaseItemsDTO[] = leaseItemsMock;
 
     const result = await service.catchUpdates(itensInputWithDataOnDb);
-    expect(result).toBeUndefined();
+    expect(result).toEqual([]);
   });
 
   it('catchUpdates should return items from imobzi if it is NOT already on DB', async () => {
@@ -38,7 +38,6 @@ describe('LeaseItemsService', () => {
 
     const itensWithSomeIndexesNotOnDb = [...itensInputWithDataOnDb, newItem];
     const result = await service.catchUpdates(itensWithSomeIndexesNotOnDb);
-    console.log(result);
     expect(result).toEqual([newItem]);
   });
 });

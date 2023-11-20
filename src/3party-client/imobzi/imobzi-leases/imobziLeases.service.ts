@@ -84,6 +84,7 @@ export class ImobziLeasesService {
 
     const beneficiariesLease = this.getRequiredLeaseBeneficiariesDataToDb(leaseFullData.beneficiaries);
     const leaseItems = this.getRequiredLeaseItemsDataToDb(leaseFullData.items);
+
     return {
       beneficiariesLease,
       updated_at,

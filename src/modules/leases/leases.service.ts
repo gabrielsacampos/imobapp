@@ -10,7 +10,7 @@ export class LeasesService {
   constructor(
     private readonly leasesRepository: LeasesRepository,
     private readonly leaseItemsService: LeaseItemsService,
-  ) {}
+  ) { }
 
   async upsert(data: CreateLeaseDTO): Promise<Lease> {
     return this.leasesRepository
@@ -24,7 +24,6 @@ export class LeasesService {
         if (error.status === 404) {
           return this.leasesRepository.create(data);
         } else {
-          console.log(error.stack);
           throw new Error(error);
         }
       });
