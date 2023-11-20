@@ -7,7 +7,7 @@ import { ImobziLeasesRepository } from './imobziLeases.repository';
 
 @Injectable()
 export class ImobziLeasesService {
-  constructor(private readonly imobziLeasesRepository: ImobziLeasesRepository) {}
+  constructor(private readonly imobziLeasesRepository: ImobziLeasesRepository) { }
 
   getRequiredLeaseBeneficiariesDataToDb(leaseBeneficiaries: ImobziLeaseBeneficiaryDTO[]): BeneficiariesCreateDTO[] {
     return leaseBeneficiaries.map((beneficiary) => {

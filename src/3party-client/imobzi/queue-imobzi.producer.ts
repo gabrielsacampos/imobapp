@@ -17,7 +17,7 @@ export class QueueImobziProducer {
     @InjectQueue('ImobziQueue') private readonly imobziQueue: Queue,
     private readonly imobziRepository: ImobziRepository,
     private readonly modulesService: ModulesServices,
-  ) {}
+  ) { }
 
   async produce(data: StoreDb) {
     try {
@@ -186,8 +186,9 @@ export class QueueImobziProducer {
           delay: 3000,
           backoff: { delay: 10000, type: 'exponential' },
         });
-        this.logger.verbose(` ${allLeases.length} leases to check updates`);
       }
+
+      this.logger.verbose(` ${allLeases.length} leases to check updates`);
     } catch (error) {
       this.logger.error(error.message, error.stack);
     }
