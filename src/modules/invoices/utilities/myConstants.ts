@@ -23,6 +23,8 @@ export const myConstants = {
     '2023-11-02',
     //proclamacaoDaRepublicaHoliday =
     '2023-11-15',
+    //Black Consciousness =
+    '2023-11-20',
     //natalHoliday =
     '2023-12-25',
   ],

@@ -6,7 +6,7 @@ import { inMemoryPropertiesRepositoryMock } from '../inMemoryPropertiesRepositor
 export const inMemoryLeasesRepositoryMock: CreateLeaseDTO[] = [
   {
     id: 1,
-    id_imobzi: 'ABC123',
+    id_imobzi: 'txt',
     status: 'Active',
     code_imobzi: 'XYZ789',
     start_at: new Date('2023-01-15'),

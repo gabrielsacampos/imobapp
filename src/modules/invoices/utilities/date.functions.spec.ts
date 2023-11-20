@@ -10,6 +10,6 @@ describe('date.functions', () => {
     const dateReference = '2023-01-01';
 
     const result = dateFunctions.monthStringFormatBR(dateReference);
-    console.log(result);
+    expect(result).toEqual('janeiro/2023');
   });
 });
