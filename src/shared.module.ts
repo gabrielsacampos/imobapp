@@ -1,8 +1,6 @@
 import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { WinstonModule } from 'nest-winston';
-import { winstonConfig } from 'src/config/winston.config';
 import { PrismaService } from 'src/prisma-client/prisma.service';
 
 @Module({
@@ -14,7 +12,6 @@ import { PrismaService } from 'src/prisma-client/prisma.service';
       timeout: 10000,
       maxRedirects: 5,
     }),
-    WinstonModule.forRoot(winstonConfig),
   ],
   providers: [PrismaService],
   exports: [HttpModule, PrismaService],

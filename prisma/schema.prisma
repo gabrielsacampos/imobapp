@@ -251,3 +251,15 @@ model Update {
 
   @@map("updates")
 }
+
+model Logger_queue {
+  id String      @id @unique()
+  name String
+  data Json
+  queue String
+  error String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("logger_queue")
+}

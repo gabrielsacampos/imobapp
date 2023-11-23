@@ -5,7 +5,7 @@ import { PeopleRepository } from './people.repository';
 
 @Injectable()
 export class PeopleService {
-  constructor(private readonly peopleRepository: PeopleRepository) {}
+  constructor(private readonly peopleRepository: PeopleRepository) { }
 
   async upsert(data: CreatePersonDTO): Promise<Person> {
     return this.peopleRepository

@@ -1,4 +1,4 @@
-import { InjectQueue, Process, Processor } from '@nestjs/bull';
+import { InjectQueue, OnQueueFailed, Process, Processor } from '@nestjs/bull';
 import { Logger } from '@nestjs/common';
 import { Job, Queue } from 'bull';
 import { BuildingDTO } from 'src/3party-client/imobzi/imobzi-buildings/dtos/imobziBuildings.dtos';
@@ -10,6 +10,8 @@ import { ImobziService } from 'src/3party-client/imobzi/imobzi.service';
 import { CreateBuildingDTO } from 'src/modules/buildings/dtos/create-building.dtos';
 import { CreateInvoiceDTO } from 'src/modules/invoices/dtos/create-invoice.dtos';
 import { CreateLeaseDTO } from 'src/modules/leases/dtos/create-lease.dtos';
+import { LoggerQueueRepository } from 'src/modules/logger/logger-queue.repository';
+import { LoggerQueueService } from 'src/modules/logger/logger.queue-service';
 import { ModulesServices } from 'src/modules/modules.service';
 import { CreateOrganizationDTO } from 'src/modules/organizations/dtos/create-organization.dtos';
 import { CreatePersonDTO } from 'src/modules/people/dtos/create-person.dtos';
@@ -24,6 +26,7 @@ export class QueueImobziConsumer {
     @InjectQueue('ImobziQueue') private readonly imobziQueue: Queue,
     private readonly modulesServices: ModulesServices,
     private readonly imobziService: ImobziService,
+    private readonly LoggerQueueService: LoggerQueueService,
   ) { }
 
   @Process('updatePeople')
@@ -38,6 +41,7 @@ export class QueueImobziConsumer {
       await this.modulesServices.updates.create(update);
     } catch (error) {
       this.logger.error(error.message, error.stack);
+      this.LoggerQueueService.handle(error, job);
       throw new Error(error);
     }
   }
@@ -124,4 +128,7 @@ export class QueueImobziConsumer {
       throw new Error(error);
     }
   }
+
+  @OnQueueFailed()
+  onFailed(job: Job<any>, error: Error) { }
 }

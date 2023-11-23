@@ -4,6 +4,7 @@ import { BullBoardModule } from '@bull-board/nestjs';
 import { BullModule } from '@nestjs/bull';
 import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
+import { LoggerQueueModule } from 'src/modules/logger/logger-queue.module';
 import { ModulesModule } from 'src/modules/modules.module';
 import { SharedModule } from 'src/shared.module';
 import { ImobziBuildingsModule } from './imobzi-buildings/imobzi-buildings.module';
@@ -26,6 +27,7 @@ import { QueueImobziProducer } from './queue-imobzi.producer';
 
 @Module({
   imports: [
+    LoggerQueueModule,
     ScheduleModule.forRoot(),
     ModulesModule,
     BullModule.forRoot({
@@ -76,4 +78,4 @@ import { QueueImobziProducer } from './queue-imobzi.producer';
     ImobziRepository,
   ],
 })
-export class ImobziModule {}
+export class ImobziModule { }
