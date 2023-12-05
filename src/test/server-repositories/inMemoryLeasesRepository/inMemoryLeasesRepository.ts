@@ -1,7 +1,7 @@
 import { NotAcceptableException, NotFoundException } from '@nestjs/common';
-import { CreateLeaseDTO } from 'src/modules/leases/dtos/create-lease.dtos';
-import { Lease } from 'src/modules/leases/entities/lease.entity';
-import { LeasesRepository } from 'src/modules/leases/leases.repository';
+import { CreateLeaseDTO } from 'src/modules/entities/leases/dtos/create-lease.dtos';
+import { Lease } from 'src/modules/entities/leases/entities/lease.entity';
+import { LeasesRepository } from 'src/modules/entities/leases/leases.repository';
 import * as crypto from 'node:crypto';
 import { inMemoryLeasesRepositoryMock } from './inMemoryLeasesRepository.mock';
 

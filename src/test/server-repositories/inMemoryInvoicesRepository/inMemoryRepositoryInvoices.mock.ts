@@ -1,5 +1,5 @@
 import { InvoiceComponents } from 'src/3party-client/granatum/dtos/granatum-service.dtos';
-import { Invoice } from 'src/modules/invoices/entities/invoice.entity';
+import { Invoice } from 'src/modules/entities/invoices/entities/invoice.entity';
 import { inMemoryLeasesRepositoryMock } from '../inMemoryLeasesRepository/inMemoryLeasesRepository.mock';
 
 export const inMemoryInvoicesRepositoryMock: Invoice[] = [

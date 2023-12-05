@@ -1,4 +1,4 @@
-import { Person } from 'src/modules/people/entities/person.entity';
+import { Person } from 'src/modules/entities/people/entities/person.entity';
 
 export const inMemoryPeopleRepositoryMock: Person[] = [
   {

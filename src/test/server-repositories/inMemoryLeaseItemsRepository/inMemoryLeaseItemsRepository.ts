@@ -1,6 +1,6 @@
-import { CreateLeaseItemsDTO } from 'src/modules/lease-items/dtos/create-leaseItems.dtos';
-import { LeaseItems } from 'src/modules/lease-items/entities/leaseItems.entity';
-import { LeaseItemsRepository } from 'src/modules/lease-items/lease-items.repository';
+import { CreateLeaseItemsDTO } from 'src/modules/entities/lease-items/dtos/create-leaseItems.dtos';
+import { LeaseItems } from 'src/modules/entities/lease-items/entities/leaseItems.entity';
+import { LeaseItemsRepository } from 'src/modules/entities/lease-items/lease-items.repository';
 
 export class InMemoryLeasesItemsRepository implements Partial<LeaseItemsRepository> {
   items: LeaseItems[] = leaseItemsMock;

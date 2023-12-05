@@ -3,7 +3,7 @@ import { GranatumSupliersRepository } from './granatum-supliers.repository';
 
 @Injectable()
 export class GranatumSupliersService {
-  constructor(private readonly granatumSupliersRepository: GranatumSupliersRepository) {}
+  constructor(private readonly granatumSupliersRepository: GranatumSupliersRepository) { }
 
   private readonly allItems = this.granatumSupliersRepository.getAll();
 

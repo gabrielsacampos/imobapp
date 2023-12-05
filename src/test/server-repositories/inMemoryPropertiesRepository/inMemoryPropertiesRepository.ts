@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import * as crypto from 'node:crypto';
-import { CreatePropertyDTO } from 'src/modules/properties/dtos/create-property.dtos';
-import { Property } from 'src/modules/properties/entities/property.entity';
-import { PropertiesRepository } from 'src/modules/properties/properties.repository';
+import { CreatePropertyDTO } from 'src/modules/entities/properties/dtos/create-property.dtos';
+import { Property } from 'src/modules/entities/properties/entities/property.entity';
+import { PropertiesRepository } from 'src/modules/entities/properties/properties.repository';
 import { inMemoryPropertiesRepositoryMock } from './inMemoryPropertiesRepository.mock';
 
 @Injectable()

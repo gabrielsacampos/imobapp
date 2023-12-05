@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { CreatePersonDTO } from 'src/modules/people/dtos/create-person.dtos';
+import { CreatePersonDTO } from 'src/modules/entities/people/dtos/create-person.dtos';
 import { GroupPersonal } from './dtos/imobziPeople.dtos';
 import { ImobziPeopleRepository } from './imobziPeople.repository';
 

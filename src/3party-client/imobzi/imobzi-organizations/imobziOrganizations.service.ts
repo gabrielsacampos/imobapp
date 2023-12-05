@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateOrganizationDTO } from 'src/modules/organizations/dtos/create-organization.dtos';
+import { CreateOrganizationDTO } from 'src/modules/entities/organizations/dtos/create-organization.dtos';
 import { GroupAddress, GroupCompanyDaum, ImobziOrganizationDTO } from './dtos/imobziOrganizations.dtos';
 import { ImobziOrganizationsRepository } from './imobziOrganizations.reposiotry';
 

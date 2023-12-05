@@ -7,7 +7,7 @@ import { AllImobziInvoiceDTO } from 'src/3party-client/imobzi/imobzi-invoices/dt
 import { LeaseDTO } from 'src/3party-client/imobzi/imobzi-leases/dtos/imobziLeases.dtos';
 import { PropertyDTO } from 'src/3party-client/imobzi/imobzi-properties/dtos/imobziProperties.dtos';
 import { ImobziRepository } from 'src/3party-client/imobzi/imobzi.repository';
-import { ModulesServices } from 'src/modules/modules.service';
+import { ModulesServices } from 'src/modules/entities/modules.service';
 import { StoreDb, StoreDbType } from './interfaces/imobziQueue.interface';
 
 @Injectable()

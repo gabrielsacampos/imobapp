@@ -1,4 +1,4 @@
-import { Building } from 'src/modules/buildings/entities/building.entity';
+import { Building } from 'src/modules/entities/buildings/entities/building.entity';
 
 export const inMemoryBuildingsRepositoryMock: Building[] = [
   {

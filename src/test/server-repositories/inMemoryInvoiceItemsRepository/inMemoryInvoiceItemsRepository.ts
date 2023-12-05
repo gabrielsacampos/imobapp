@@ -1,6 +1,6 @@
 import { NotFoundException } from '@nestjs/common';
-import { InvoiceItem } from 'src/modules/invoice_items/entities/invoice_item.entity';
-import { InvoiceItemsRepository } from 'src/modules/invoice_items/invoice_items.repository';
+import { InvoiceItem } from 'src/modules/entities/invoice_items/entities/invoice_item.entity';
+import { InvoiceItemsRepository } from 'src/modules/entities/invoice_items/invoice_items.repository';
 import { inMemoryInvoiceItemsRepositoryMock } from './inMemoryInvoiceItemsRepository.mocks';
 
 export class InMemoryInvoiceItemsRepository implements Partial<InvoiceItemsRepository> {

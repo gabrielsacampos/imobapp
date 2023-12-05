@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CreatePersonDTO } from 'src/modules/people/dtos/create-person.dtos';
+import { CreatePersonDTO } from 'src/modules/entities/people/dtos/create-person.dtos';
 import { SharedModule } from 'src/shared.module';
 import { ImobziPeopleMock } from '../../../test/3rdParty-repositories/imobzi-repositories/people/imobziPeople.mocks';
 import { ImobziPeopleRepository } from './imobziPeople.repository';

@@ -7,16 +7,16 @@ import { AnImobziInvoiceDTO } from 'src/3party-client/imobzi/imobzi-invoices/dto
 import { LeaseDTO } from 'src/3party-client/imobzi/imobzi-leases/dtos/imobziLeases.dtos';
 import { PropertyDTO } from 'src/3party-client/imobzi/imobzi-properties/dtos/imobziProperties.dtos';
 import { ImobziService } from 'src/3party-client/imobzi/imobzi.service';
-import { CreateBuildingDTO } from 'src/modules/buildings/dtos/create-building.dtos';
-import { CreateInvoiceDTO } from 'src/modules/invoices/dtos/create-invoice.dtos';
-import { CreateLeaseDTO } from 'src/modules/leases/dtos/create-lease.dtos';
-import { LoggerQueueRepository } from 'src/modules/logger/logger-queue.repository';
-import { LoggerQueueService } from 'src/modules/logger/logger.queue-service';
-import { ModulesServices } from 'src/modules/modules.service';
-import { CreateOrganizationDTO } from 'src/modules/organizations/dtos/create-organization.dtos';
-import { CreatePersonDTO } from 'src/modules/people/dtos/create-person.dtos';
-import { CreatePropertyDTO } from 'src/modules/properties/dtos/create-property.dtos';
-import { CreateUpdateDto } from 'src/modules/updates/dto/create-update.dto';
+import { CreateBuildingDTO } from 'src/modules/entities/buildings/dtos/create-building.dtos';
+import { CreateInvoiceDTO } from 'src/modules/entities/invoices/dtos/create-invoice.dtos';
+import { CreateLeaseDTO } from 'src/modules/entities/leases/dtos/create-lease.dtos';
+import { LoggerQueueRepository } from 'src/modules/entities/logger/logger-queue.repository';
+import { LoggerQueueService } from 'src/modules/entities/logger/logger.queue-service';
+import { ModulesServices } from 'src/modules/entities/modules.service';
+import { CreateOrganizationDTO } from 'src/modules/entities/organizations/dtos/create-organization.dtos';
+import { CreatePersonDTO } from 'src/modules/entities/people/dtos/create-person.dtos';
+import { CreatePropertyDTO } from 'src/modules/entities/properties/dtos/create-property.dtos';
+import { CreateUpdateDto } from 'src/modules/entities/updates/dto/create-update.dto';
 
 @Processor('ImobziQueue')
 export class QueueImobziConsumer {

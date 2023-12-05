@@ -1,7 +1,7 @@
 import { InjectQueue } from '@nestjs/bull';
 import { Injectable, Logger } from '@nestjs/common';
 import { Queue } from 'bull';
-import { ModulesServices } from 'src/modules/modules.service';
+import { ModulesServices } from 'src/modules/entities/modules.service';
 import { FetchDb } from './interfaces/granatum.queue.interface';
 
 @Injectable()

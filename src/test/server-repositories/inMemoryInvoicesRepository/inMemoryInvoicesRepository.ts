@@ -1,9 +1,9 @@
 import { NotAcceptableException, NotFoundException } from '@nestjs/common';
 import * as crypto from 'node:crypto';
 import { InvoiceComponents } from 'src/3party-client/granatum/dtos/granatum-service.dtos';
-import { CreateInvoiceDTO } from 'src/modules/invoices/dtos/create-invoice.dtos';
-import { Invoice } from 'src/modules/invoices/entities/invoice.entity';
-import { InvoicesRepository } from 'src/modules/invoices/invoices.repository';
+import { CreateInvoiceDTO } from 'src/modules/entities/invoices/dtos/create-invoice.dtos';
+import { Invoice } from 'src/modules/entities/invoices/entities/invoice.entity';
+import { InvoicesRepository } from 'src/modules/entities/invoices/invoices.repository';
 import {
   getOnlendingsMock,
   getPaidInvoicesMock,

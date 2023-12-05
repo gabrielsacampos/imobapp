@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CreateOwnerDto } from 'src/modules/owners/dto/create-owner.dto';
-import { CreatePropertyDTO } from 'src/modules/properties/dtos/create-property.dtos';
+import { CreateOwnerDto } from 'src/modules/entities/owners/dto/create-owner.dto';
+import { CreatePropertyDTO } from 'src/modules/entities/properties/dtos/create-property.dtos';
 import { SharedModule } from 'src/shared.module';
 import { ImobziPropertiesMock } from '../../../test/3rdParty-repositories/imobzi-repositories/properties/imobziProperties.mocks';
 import { ImobziPropertiesRepository } from './imobziProperties.repository';

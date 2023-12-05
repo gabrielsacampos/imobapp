@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CreateOrganizationDTO } from 'src/modules/organizations/dtos/create-organization.dtos';
+import { CreateOrganizationDTO } from 'src/modules/entities/organizations/dtos/create-organization.dtos';
 import { SharedModule } from 'src/shared.module';
 import { ImobziOrganizationsMock } from '../../../test/3rdParty-repositories/imobzi-repositories/organizations/imobziOrganizations.mock';
 import { ImobziOrganizationsRepository } from './imobziOrganizations.reposiotry';

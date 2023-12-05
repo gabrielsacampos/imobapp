@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CreateBuildingDTO } from 'src/modules/buildings/dtos/create-building.dtos';
+import { CreateBuildingDTO } from 'src/modules/entities/buildings/dtos/create-building.dtos';
 import { SharedModule } from 'src/shared.module';
 import { ImobziBuildingsMock } from '../../../test/3rdParty-repositories/imobzi-repositories/buildings/imobziBuildings.mock';
 import { ImobziBuildingsService } from './imobzi-buildings.service';

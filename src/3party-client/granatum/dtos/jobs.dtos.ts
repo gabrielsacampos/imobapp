@@ -1,5 +1,5 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { GetPaidInvoicesDTO } from 'src/modules/invoices/dtos/return-invoice.queries.dtos';
+import { GetPaidInvoicesDTO } from 'src/modules/entities/invoices/dtos/return-invoice.queries.dtos';
 
 export class SetGranatumIdsDTO extends PartialType(GetPaidInvoicesDTO) {
   onlending_value?: number;

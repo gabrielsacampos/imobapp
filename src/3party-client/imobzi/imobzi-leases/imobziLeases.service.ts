@@ -1,7 +1,8 @@
+import { add, getMonth } from 'date-fns';
 import { Injectable } from '@nestjs/common';
-import { CreateLeaseDTO } from 'src/modules/leases/dtos/create-lease.dtos';
-import { BeneficiariesCreateDTO } from 'src/modules/leases/lease-beneficiaries/lease-beneficiaries.dtos';
-import { CreateLeaseItemsDTO } from 'src/modules/lease-items/dtos/create-leaseItems.dtos';
+import { CreateLeaseDTO } from 'src/modules/entities/leases/dtos/create-lease.dtos';
+import { BeneficiariesCreateDTO } from 'src/modules/entities/leases/lease-beneficiaries/lease-beneficiaries.dtos';
+import { CreateLeaseItemsDTO } from 'src/modules/entities/lease-items/dtos/create-leaseItems.dtos';
 import { ImobziLeaseBeneficiaryDTO, ImobziLeaseDetailsDTO, ImobziLeaseItemDTO } from './dtos/imobziLeasesDetails.dtos';
 import { ImobziLeasesRepository } from './imobziLeases.repository';
 
@@ -22,9 +23,9 @@ export class ImobziLeasesService {
   getRequiredLeaseItemsDataToDb(leaseItems: ImobziLeaseItemDTO[]): CreateLeaseItemsDTO[] {
     try {
       return leaseItems.map((item) => {
-        const validStartDate = item.start_date === '' ? null : new Date(item.start_date);
+        const validStartDate = item.start_date === '' ? null : add(new Date(item.start_date), { hours: 3 });
         const start_date = validStartDate;
-        const due_date = new Date(item.due_date);
+        const due_date = add(new Date(item.due_date), { hours: 3 });
         const {
           repeat_total,
           repeat_index,
@@ -70,8 +71,10 @@ export class ImobziLeasesService {
     const id_tenant_person_imobzi =
       leaseFullData.tenants[0].type === 'person' ? leaseFullData.tenants[0].db_id.toString() : null;
     const fee = leaseFullData.management_fee.percent;
-    const updated_at = new Date(leaseFullData.updated_at);
-    const start_at = new Date(leaseFullData.start_at);
+    const updated_at = add(new Date(leaseFullData.updated_at), { hours: 3 });
+    const start_at = add(new Date(leaseFullData.start_at), { hours: 3 });
+    const readjustment_month = getMonth(start_at);
+
     const {
       status,
       value: lease_value,
@@ -82,10 +85,14 @@ export class ImobziLeasesService {
       include_in_dimob,
     } = leaseFullData;
 
+    const end_at = add(add(start_at, { months: duration }), { days: -1 });
+
     const beneficiariesLease = this.getRequiredLeaseBeneficiariesDataToDb(leaseFullData.beneficiaries);
     const leaseItems = this.getRequiredLeaseItemsDataToDb(leaseFullData.items);
 
     return {
+      readjustment_month,
+      end_at,
       beneficiariesLease,
       updated_at,
       id_annual_readjustment_imobzi,

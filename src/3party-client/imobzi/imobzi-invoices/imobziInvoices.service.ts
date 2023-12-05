@@ -1,13 +1,14 @@
+import { add } from 'date-fns';
 import { Injectable } from '@nestjs/common';
-import { dateFunctions } from 'src/modules/invoices/utilities/date.functions';
-import { CreateInvoiceDTO } from 'src/modules/invoices/dtos/create-invoice.dtos';
-import { CreateInvoiceItemDto } from 'src/modules/invoice_items/dto/create-invoice_item.dto';
+import { dateFunctions } from 'src/modules/entities/invoices/utilities/date.functions';
+import { CreateInvoiceDTO } from 'src/modules/entities/invoices/dtos/create-invoice.dtos';
+import { CreateInvoiceItemDto } from 'src/modules/entities/invoice_items/dto/create-invoice_item.dto';
 import { AnImobziInvoiceDTO, ImobziInvoiceItem } from './dto/an-imobzi-invoice.dtos';
 import { ImobziInvoicesRepository } from './imobziInvoices.repository';
 
 @Injectable()
 export class ImobziInvoicesService {
-  constructor(private readonly imobziInvoicesRepository: ImobziInvoicesRepository) {}
+  constructor(private readonly imobziInvoicesRepository: ImobziInvoicesRepository) { }
   getRequiredInvoiceItemsDataToDb(invoiceItems: ImobziInvoiceItem[]): CreateInvoiceItemDto[] {
     return invoiceItems.map((item) => {
       const {
@@ -47,9 +48,9 @@ export class ImobziInvoicesService {
     const creditAtString = paidAtString ? dateFunctions.defineCreditDate(paidAtString) : null; //function handle and returns date as string
 
     // Requireds as Date ISO
-    const due_date = new Date(invoiceFullData.due_date);
-    const paid_at = paidAtString ? new Date(paidAtString) : null; // db requires as Date format
-    const credit_at = creditAtString ? new Date(creditAtString) : null;
+    const due_date = add(new Date(invoiceFullData.due_date), { hours: 3 });
+    const paid_at = paidAtString ? add(new Date(paidAtString), { hours: 3 }) : null; // db requires as Date format
+    const credit_at = creditAtString ? add(new Date(creditAtString), { hours: 3 }) : null;
     const itemsWithInvoicesIds = invoiceFullData.items.map((item) => {
       return { ...item, id_invoice_imobzi: idImobzi };
     });

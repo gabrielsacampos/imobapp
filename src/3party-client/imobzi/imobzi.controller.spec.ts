@@ -1,6 +1,6 @@
 import { BullModule, getQueueToken } from '@nestjs/bull';
 import { Test, TestingModule } from '@nestjs/testing';
-import { ModulesModule } from 'src/modules/modules.module';
+import { ModulesModule } from 'src/modules/entities/modules.module';
 import { ImobziController } from './imobzi.controllers';
 import { ImobziModule } from './imobzi.module';
 import { QueueImobziProducer } from './queue-imobzi.producer';

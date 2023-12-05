@@ -1,5 +1,5 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { CreateInvoiceDTO } from 'src/modules/invoices/dtos/create-invoice.dtos';
+import { CreateInvoiceDTO } from 'src/modules/entities/invoices/dtos/create-invoice.dtos';
 
 export class RequiredPropsImobziInvoice extends PartialType(CreateInvoiceDTO) {
   status: string;

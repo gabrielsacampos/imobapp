@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { dateFunctions } from '../../../modules/invoices/utilities/date.functions';
+import { dateFunctions } from '../../../modules/entities/invoices/utilities/date.functions';
 import { GroupedInvoiceComponents, InvoiceComponents } from '../dtos/granatum-service.dtos';
 import { GranatumItemsPostDTO, GranatumTransactionPostDTO } from './dtos/granatum-transactions.dtos';
 import { GranatumTransactionsRepository } from './granatum-transactions.repository';

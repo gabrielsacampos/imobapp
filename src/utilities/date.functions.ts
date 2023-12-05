@@ -1,5 +1,5 @@
 import { add, format, isWeekend } from 'date-fns';
-import { myConstants } from 'src/modules/invoices/utilities/myConstants';
+import { myConstants } from 'src/modules/entities/invoices/utilities/myConstants';
 
 export const dateFunctions = {
   defineCreditDate(stringDate: string) {

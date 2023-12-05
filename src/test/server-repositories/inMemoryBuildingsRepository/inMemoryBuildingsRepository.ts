@@ -1,10 +1,10 @@
 import { NotAcceptableException, NotFoundException } from '@nestjs/common';
-import { BuildingsRepository } from 'src/modules/buildings/buildings.repository';
-import { CreateBuildingDTO } from 'src/modules/buildings/dtos/create-building.dtos';
-import { Building } from 'src/modules/buildings/entities/building.entity';
+import { BuildingsRepository } from 'src/modules/entities/buildings/buildings.repository';
+import { CreateBuildingDTO } from 'src/modules/entities/buildings/dtos/create-building.dtos';
+import { Building } from 'src/modules/entities/buildings/entities/building.entity';
 import { inMemoryBuildingsRepositoryMock } from './inMemoryBuildingsRepository.mock';
 import * as crypto from 'node:crypto';
-import { UpdateBuildingDTO } from 'src/modules/buildings/dtos/update-building.dtos';
+import { UpdateBuildingDTO } from 'src/modules/entities/buildings/dtos/update-building.dtos';
 
 export class InMemoryBuildingsRepository implements Partial<BuildingsRepository> {
   items: Building[] = inMemoryBuildingsRepositoryMock;

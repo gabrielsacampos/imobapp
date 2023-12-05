@@ -1,9 +1,9 @@
-import { CreatePersonDTO } from 'src/modules/people/dtos/create-person.dtos';
+import { CreatePersonDTO } from 'src/modules/entities/people/dtos/create-person.dtos';
 import * as crypto from 'node:crypto';
-import { Person } from 'src/modules/people/entities/person.entity';
+import { Person } from 'src/modules/entities/people/entities/person.entity';
 import { inMemoryPeopleRepositoryMock } from './inMemoryPeopleRepository.mocks';
 import { NotAcceptableException, NotFoundException } from '@nestjs/common';
-import { PeopleRepository } from 'src/modules/people/people.repository';
+import { PeopleRepository } from 'src/modules/entities/people/people.repository';
 
 export class InMemoryPeopleRepository implements Partial<PeopleRepository> {
   public items: Person[] = inMemoryPeopleRepositoryMock;

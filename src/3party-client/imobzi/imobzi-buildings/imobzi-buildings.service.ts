@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateBuildingDTO } from 'src/modules/buildings/dtos/create-building.dtos';
+import { CreateBuildingDTO } from 'src/modules/entities/buildings/dtos/create-building.dtos';
 import { BuildingDTO } from './dtos/imobziBuildings.dtos';
 
 @Injectable()

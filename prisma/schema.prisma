@@ -118,6 +118,7 @@ model Lease {
   code_imobzi                   String?
   start_at                      DateTime
   duration                      Int
+  end_at                        DateTime      @default(now()) 
   id_property_imobzi            String
   id_tenant_person_imobzi       String?
   id_tenant_organization_imobzi String?
@@ -126,6 +127,7 @@ model Lease {
   guarantee_type                String?
   guarantee_value               Float?
   id_annual_readjustment_imobzi String?
+  readjustment_month  Int @default(13)
   irrf                          Boolean
   include_in_dimob              Boolean
   indeterminate                 Boolean

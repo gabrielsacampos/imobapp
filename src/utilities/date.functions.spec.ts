@@ -1,4 +1,4 @@
-import { dateFunctions } from 'src/modules/invoices/utilities/date.functions';
+import { dateFunctions } from 'src/modules/entities/invoices/utilities/date.functions';
 
 describe('date.functions', () => {
   test('defineCreditDate', () => {
