@@ -197,8 +197,9 @@ export class QueueImobziProducer {
   async produceInvoices(start_due_date: string): Promise<void> {
     try {
       this.logger.verbose('.produceInvoices() running');
-      const allInvoices: AllImobziInvoiceDTO[] = await this.imobziRepository.invoice.getAll(start_due_date);
-      const immutableInvoicesIds = await this.modulesService.invoices.inmutableInvoicesIds();
+      let allInvoices: AllImobziInvoiceDTO[] = await this.imobziRepository.invoice.getAll(start_due_date);
+      allInvoices = allInvoices.filter((invoice) => invoice.invoice_id === '61dbd28c87dc11ee8ef52d26f54c16d6');
+      const immutableInvoicesIds = [];
       const invoicesToUpsert = allInvoices.filter((invoice) => {
         return !immutableInvoicesIds.includes(invoice.invoice_id);
       });

@@ -53,6 +53,7 @@ export class InvoicesRepository {
       throw new NotFoundException(`Invoice ${id_imobzi} does not exist.`);
     }
 
+
     //props able to update
     const { status, paid_at, credit_at, paid_manual, onlending_value, management_fee, account_credit } = data;
 
@@ -66,16 +67,19 @@ export class InvoicesRepository {
         onlending_value,
         management_fee,
         account_credit,
+        invoiceItems: {
+          deleteMany: {},
+          create: data.invoiceItems,
+        },
       },
-      include: { invoiceItems: true },
     });
 
     return updatedInvoice;
   }
 
   async getPaidInvoices(start_at: string, end_at: string): Promise<InvoiceComponents[]> {
-    const start_date = add(new Date(start_at), { hours: 3 });
-    const end_date = add(new Date(end_at), { hours: 3 });
+    const start_date = new Date(start_at);
+    const end_date = add(new Date(end_at), { hours: 23 });
 
     return await this.prisma.$queryRaw`
     select 
@@ -101,8 +105,8 @@ export class InvoicesRepository {
   }
 
   async getOnlendings(start_at: string, end_at: string): Promise<InvoiceComponents[]> {
-    const start_date = add(new Date(start_at), { hours: 3 });
-    const end_date = add(new Date(end_at), { hours: 3 });
+    const start_date = new Date(start_at);
+    const end_date = add(new Date(end_at), { hours: 23 });
 
     return await this.prisma.$queryRaw`
     SELECT

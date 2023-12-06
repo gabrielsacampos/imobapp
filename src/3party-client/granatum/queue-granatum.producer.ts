@@ -10,7 +10,7 @@ export class QueueGranatumProducer {
   constructor(
     @InjectQueue('GranatumQueue') private readonly granatumQueue: Queue,
     private readonly modulesServices: ModulesServices,
-  ) {}
+  ) { }
 
   queueDefaultOpts = {
     attempts: 3,

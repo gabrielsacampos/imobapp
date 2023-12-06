@@ -1,68 +1,47 @@
-export class DashboardRequiredDataDTO {
-  invoice_id: string;
-  invoice_value_shared: number;
-  invoice_total_value: number;
+export class ActiveLeasesDTO {
   building: string;
   unity: string;
   block: string;
-  invoice_status: string;
-  invoice_due_date: Date;
   lease_start: Date;
   lease_end: Date;
   lease_duration: number;
-  lease_value_shared: number;
   lease_value: number;
   lease_code: string;
   lease_status: string;
   readjusment_month: number;
-  owner_type: string;
-  id_owner_imobzi: string;
-  owner_name: string;
   tenant_type: string;
   id_tenant_imobzi: string;
   tenant_name: string;
 }
 
-export class DistinctsInvoicesDTO {
+export class InvoicesDTO {
   invoice_id: string;
-  invoice_value_shared: number;
   invoice_total_value: number;
-  building: string;
-  unity: string;
-  block: string;
   invoice_status: string;
   invoice_due_date: Date;
+  invoice_paid_at: Date;
+  invoice_credit_at: Date;
   tenant_type: string;
   id_tenant_imobzi: string;
   tenant_name: string;
-}
-
-export class DistinctLeasesDTO {
-  lease_code: string;
-  lease_value: number;
-  lease_start: Date;
-  lease_end: Date;
-  lease_duration: number;
-  readjusment_month: number;
-  id_owner_imobzi: string;
-  owner_name: string;
-  owner_type: string;
-  id_tenant_imobzi: string;
-  tenant_name: string;
-  tenant_type: string;
   building: string;
   unity: string;
   block: string;
-  lease_status: string;
+}
+
+export class BuildingsRevenueDTO {
+  building: string;
+  payment_period: string;
+  total_value: number;
 }
 
 export class TopCardsDTO {
-  leases_active_count: number;
-  leases_active_total_value: string;
-  leases_active_ticket: number;
-  leases_count_renew: number;
-  leases_count_readjust: number;
-  invoices_pending_total_value: string;
+  leasesActiveCount: number;
+  leasesTotalValueString: string;
+  leasesTicketString: string;
+  leasesRenewCount: number;
+  leasesReadjustmentCount: number;
+  invoicesTotalPendingString: string;
 }
 
 export class ChartRevenueDTO {

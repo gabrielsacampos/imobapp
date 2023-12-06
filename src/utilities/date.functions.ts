@@ -21,10 +21,10 @@ export const dateFunctions = {
       const isWeekendDay = isWeekend(next);
 
       /*
-	if next day counts (not holiday and not weekend), its a valid day past
-	if it does not, we dont count so we join the loop again adding to next (checking one day more)
-	if we get inside "if" for the second time it means we are were we want (second valid day) so we dont join the loop again and return
-	*/
+  if next day counts (not holiday and not weekend), its a valid day past
+  if it does not, we dont count so we join the loop again adding to next (checking one day more)
+  if we get inside "if" for the second time it means we are were we want (second valid day) so we dont join the loop again and return
+  */
       if (!isHoliday && !isWeekendDay) {
         validDaysPast++;
       }
@@ -52,7 +52,7 @@ export const dateFunctions = {
     return brDate;
   },
 
-  monthStringFormatBR(date: string): string {
+  monthStringFormatBR(date: string | Date): string {
     let dateReference = new Date(date);
     dateReference = add(dateReference, { hours: 3 });
 

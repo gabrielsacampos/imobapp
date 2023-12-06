@@ -52,7 +52,7 @@ export const dateFunctions = {
     return brDate;
   },
 
-  monthStringFormatBR(date: string): string {
+  monthStringFormatBR(date: string | Date): string {
     let dateReference = new Date(date);
     dateReference = add(dateReference, { hours: 3 });
 
