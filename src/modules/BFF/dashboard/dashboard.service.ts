@@ -26,14 +26,14 @@ export class DashboardService {
   }
 
   async getChartsData() {
-    const buildingsRevenue = this.dashboardRepository.getBuildingsRevenue();
+    const buildingsRevenue = await this.dashboardRepository.getBuildingsRevenue();
 
     return { buildingsRevenue };
   }
 
   async getTablesData() {
-    const leasesToEnd = this.dashboardRepository.getLeasesToEnd();
-    const availableProperties = this.dashboardRepository.getAvailableProperties();
+    const leasesToEnd = await this.dashboardRepository.getLeasesToEnd();
+    const availableProperties = await this.dashboardRepository.getAvailableProperties();
 
     return { leasesToEnd, availableProperties };
   }
