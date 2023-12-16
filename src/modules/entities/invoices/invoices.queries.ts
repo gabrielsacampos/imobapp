@@ -1,9 +1,6 @@
 import { add } from 'date-fns';
 import { PrismaClient } from '@prisma/client';
-import { ImmutableInvoice, InvoiceComponents } from 'src/3party-client/granatum/dtos/granatum-service.dtos';
-
-// Crie uma instância do PrismaClient
-const prisma = new PrismaClient();
+import { InvoiceComponents } from 'src/3party-client/granatum/dtos/granatum-service.dtos';
 
 export async function getPaidInvoices(start_at: string, end_at: string): Promise<InvoiceComponents[]> {
   try {
@@ -123,20 +120,6 @@ FROM
  		(select id_lease_imobzi , value, description from lease_items where description like '%IRRF%') lease_irrf
  	ON revenue.lease_id = lease_irrf.id_lease_imobzi;
 `;
-  } catch (error) {
-    throw new Error(error);
-  }
-}
-
-export async function getImmutableInvoices(): Promise<ImmutableInvoice[]> {
-  try {
-    return await prisma.$queryRaw`
-    select id_imobzi as invoice_id
-    from invoices
-    where (
-    status like '%paid%'  or status like '%expired%'
-    ) and paid_manual is not true;
-    `;
   } catch (error) {
     throw new Error(error);
   }

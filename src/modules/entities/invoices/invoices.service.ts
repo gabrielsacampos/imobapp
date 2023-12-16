@@ -6,7 +6,7 @@ import { dateFunctions } from './utilities/date.functions';
 
 @Injectable()
 export class InvoicesService {
-  constructor(private readonly invoicesRepository: InvoicesRepository) {}
+  constructor(private readonly invoicesRepository: InvoicesRepository) { }
 
   async upsert(data: CreateInvoiceDTO): Promise<Invoice> {
     return this.invoicesRepository
@@ -23,15 +23,10 @@ export class InvoicesService {
       });
   }
 
-  async inmutableInvoicesIds() {
-    const inmutableInvoices = await this.invoicesRepository.getImmutableInvoices();
-    return inmutableInvoices.map((item) => item.invoice_id);
-  }
-
   async paidInvoices(start_at: string, end_at: string): Promise<any[]> {
     const items = await this.invoicesRepository.getPaidInvoices(start_at, end_at);
     const grouped = items.reduce((acc, curr) => {
-      const key = curr.paid_at + '-' + curr.paid_manual + '-' + curr.account_credit;
+      const key = curr.credit_at + '-' + curr.paid_manual + '-' + curr.account_credit;
       const { description, behavior, block, building, invoice_id, value, unity } = curr;
       const requiredItemsInfo = { description, behavior, block, building, invoice_id, value, unity };
       if (!acc[key]) {

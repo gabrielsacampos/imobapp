@@ -1,6 +1,6 @@
 import { add } from 'date-fns';
 import { Injectable, NotAcceptableException, NotFoundException } from '@nestjs/common';
-import { ImmutableInvoice, InvoiceComponents } from 'src/3party-client/granatum/dtos/granatum-service.dtos';
+import { InvoiceComponents } from 'src/3party-client/granatum/dtos/granatum-service.dtos';
 import { PrismaService } from 'src/prisma-client/prisma.service';
 import { CreateInvoiceDTO } from './dtos/create-invoice.dtos';
 import { Invoice } from './entities/invoice.entity';
@@ -182,15 +182,5 @@ FROM
  		(select id_lease_imobzi , value, description from lease_items where description like '%IRRF%') lease_irrf
  	ON revenue.lease_id = lease_irrf.id_lease_imobzi;
 `;
-  }
-
-  async getImmutableInvoices(): Promise<ImmutableInvoice[]> {
-    return await this.prisma.$queryRaw`
-    select id_imobzi as invoice_id
-    from invoices
-    where (
-    status like '%paid%'  or status like '%expired%'
-    ) and paid_manual is not true;
-    `;
   }
 }

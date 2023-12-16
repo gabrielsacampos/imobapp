@@ -1,6 +1,6 @@
 import { InjectQueue } from '@nestjs/bull';
 import { Injectable, InternalServerErrorException, Logger } from '@nestjs/common';
-import { Job, Queue } from 'bull';
+import { Queue } from 'bull';
 import { BuildingDTO } from 'src/3party-client/imobzi/imobzi-buildings/dtos/imobziBuildings.dtos';
 import { ContactDTO } from 'src/3party-client/imobzi/imobzi-contacts/dtos/imobziContacts.dtos';
 import { AllImobziInvoiceDTO } from 'src/3party-client/imobzi/imobzi-invoices/dto/all-imobzi-invoice.dtos';
@@ -197,15 +197,11 @@ export class QueueImobziProducer {
   async produceInvoices(start_due_date: string): Promise<void> {
     try {
       this.logger.verbose('.produceInvoices() running');
-      let allInvoices: AllImobziInvoiceDTO[] = await this.imobziRepository.invoice.getAll(start_due_date);
-      allInvoices = allInvoices.filter((invoice) => invoice.invoice_id === '61dbd28c87dc11ee8ef52d26f54c16d6');
-      const immutableInvoicesIds = [];
-      const invoicesToUpsert = allInvoices.filter((invoice) => {
-        return !immutableInvoicesIds.includes(invoice.invoice_id);
-      });
-      this.logger.verbose(` ${invoicesToUpsert.length} invoices to check updates`);
+      const allInvoices: AllImobziInvoiceDTO[] = await this.imobziRepository.invoice.getAll(start_due_date);
 
-      for (const invoice of invoicesToUpsert) {
+      this.logger.verbose(` ${allInvoices.length} invoices to check updates`);
+
+      for (const invoice of allInvoices) {
         await this.imobziQueue.add('updateInvoices', invoice, {
           attempts: 3,
           delay: 3000,
