@@ -45,9 +45,11 @@ export class DashboardRepository {
   }
 
   async getPendingInvoices() {
-    return await this.prisma.$queryRaw`
-
+    const result: any[] = await this.prisma.$queryRaw`
+      select sum(total_value) from invoices WHERE (status = 'pending' OR status = 'expired') AND EXTRACT(DAY FROM (current_date - due_date)) > 45;
     `;
+
+    return result[0].sum;
   }
 
   // charts
