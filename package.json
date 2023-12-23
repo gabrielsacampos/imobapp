@@ -28,6 +28,7 @@
   "dependencies": {
     "@bull-board/api": "^5.8.4",
     "@bull-board/nestjs": "^5.8.4",
+    "@clerk/clerk-sdk-node": "^4.13.4",
     "@nestjs/axios": "^3.0.0",
     "@nestjs/bull": "^10.0.1",
     "@nestjs/cli": "^10.0.0",

@@ -75,7 +75,7 @@ GROUP BY
   async getLeasesToEnd() {
     return await this.prisma.$queryRaw`select 
     l.code_imobzi as code,
-     b."name" , 
+     b."name" as building, 
      prop.bedroom as rooms, 
      prop.unity , 
      prop.block , 
@@ -99,6 +99,6 @@ GROUP BY
 
   async getAvailableProperties() {
     return await this.prisma
-      .$queryRaw`select name, unity, p.block, bedroom, rental_value from properties p inner join buildings b on b.id_imobzi = p.id_building_imobzi where status = 'available';`;
+      .$queryRaw`select name as building, unity, p.block, bedroom as rooms, rental_value from properties p inner join buildings b on b.id_imobzi = p.id_building_imobzi where status = 'available';`;
   }
 }
