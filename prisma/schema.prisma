@@ -232,11 +232,19 @@ model Readjustment_index {
   @@map("readjustment_indexes")
 }
 
+
+enum UserRole {
+  ADMIN
+  USER
+  UNDEFINED
+}
+
 model User {
   id          Int       @id @default(autoincrement())
+  clerk_id     String @unique
+  role        UserRole   @default(USER) 
   name        String
   email       String
-  password    String
   last_access DateTime?
   created_at  DateTime  @default(now())
   updated_at  DateTime  @updatedAt

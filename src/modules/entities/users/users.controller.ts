@@ -1,13 +1,17 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import { CreateUserDTO } from './dtos/create-user.dtos';
+import { Body, Controller, Headers, HttpException, HttpStatus, Post } from '@nestjs/common';
+import { ClerkCreateUserDTO } from './dtos/clerk.dtos';
 import { UsersService } from './users.service';
 
 @Controller('user')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
+
 
   @Post()
-  create(@Body() userData: CreateUserDTO) {
-    return this.usersService.create(userData);
+  create(@Body() data: ClerkCreateUserDTO, @Headers() headers: { imobapp_secret: string }) {
+    if (headers.imobapp_secret !== process.env.ADMIN_SECRET) {
+      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+    }
+    return this.usersService.create(data);
   }
 }
