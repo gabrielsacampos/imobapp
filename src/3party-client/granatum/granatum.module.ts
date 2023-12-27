@@ -22,7 +22,7 @@ import { QueueGranatumProducer } from './queue-granatum.producer';
     ModulesModule,
     InvoicesModule,
     BullModule.forRoot({
-      url: process.env.redis_url,
+      url: process.env.REDIS_URL,
     }),
     BullModule.registerQueue({
       name: 'GranatumQueue',

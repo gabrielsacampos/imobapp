@@ -17,7 +17,7 @@ export class QueueImobziProducer {
     @InjectQueue('ImobziQueue') private readonly imobziQueue: Queue,
     private readonly imobziRepository: ImobziRepository,
     private readonly modulesService: ModulesServices,
-  ) { }
+  ) {}
 
   async produce(data: StoreDb) {
     try {
@@ -212,4 +212,6 @@ export class QueueImobziProducer {
       this.logger.error(error.message, error.stack);
     }
   }
+
+  
 }

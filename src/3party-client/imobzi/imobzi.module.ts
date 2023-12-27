@@ -31,7 +31,7 @@ import { QueueImobziProducer } from './queue-imobzi.producer';
     ScheduleModule.forRoot(),
     ModulesModule,
     BullModule.forRoot({
-      url: process.env.redis_url,
+      url: process.env.REDIS_UR,
     }),
     BullModule.registerQueue({
       name: 'ImobziQueue',

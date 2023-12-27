@@ -53,6 +53,6 @@ export const appUrls = {
 
 export const appParams = {
   headers: {
-    Authorization: `Bearer ${process.env.imobapp_secret}`,
+    Authorization: `Bearer ${process.env.IMOBAPP_SECRET}`,
   },
 };
