@@ -26,6 +26,6 @@ export class BuildingsRevenueDataDTO {
 }
 
 export class TablesDataDTO {
-  leasesToEnd: any[];
+  expiringLeases: any[];
   availableProperties: any[];
 }

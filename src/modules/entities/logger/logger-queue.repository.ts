@@ -8,6 +8,6 @@ export class LoggerQueueRepository {
   constructor(private readonly prisma: PrismaService) { }
 
   async storeQueueError(error: Logger) {
-    await this.prisma.logger_queue.create({ data: error });
+    return;
   }
 }

@@ -1,7 +1,7 @@
 import { getMonth, getYear } from 'date-fns';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma-client/prisma.service';
-import { } from './entities/entities';
+
 
 @Injectable()
 export class DashboardRepository {
@@ -26,8 +26,7 @@ export class DashboardRepository {
 
   async getLeasesToReadjustmentCount() {
     const currentMonth = getMonth(new Date());
-    const leasesToReadjust: [] = await this.prisma
-      .$queryRaw`select * from leases where readjustment_month = ${currentMonth} and status = 'active';`;
+    const leasesToReadjust: [] = await this.prisma.$queryRaw`select * from leases where readjustment_month = ${currentMonth} and status = 'active';`;
 
     return leasesToReadjust.length;
   }

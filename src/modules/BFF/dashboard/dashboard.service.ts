@@ -13,28 +13,28 @@ export class DashboardService {
     const countReadjustmentLeases = await this.dashboardRepository.getLeasesToReadjustmentCount();
     const pendingInvoices = await this.dashboardRepository.getPendingInvoices();
 
-    const invoices = { totalPending: pendingInvoices };
+    const invoices = { total_pending: pendingInvoices };
     const leases = {
       total: totalLeasesValue,
       count: countActiveLeases,
       ticket: leasesTicket,
-      countRenew: countRenewLeases,
-      countReadjustment: countReadjustmentLeases,
+      count_renew: countRenewLeases,
+      count_readjustment: countReadjustmentLeases,
     };
 
     return { invoices, leases };
   }
 
   async getChartsData() {
-    const buildingsRevenue = await this.dashboardRepository.getBuildingsRevenue();
+    const buildings_revenue = await this.dashboardRepository.getBuildingsRevenue();
 
-    return { buildingsRevenue };
+    return { buildings_revenue };
   }
 
   async getTablesData() {
-    const leasesToEnd = await this.dashboardRepository.getLeasesToEnd();
-    const availableProperties = await this.dashboardRepository.getAvailableProperties();
+    const expiring_leases = await this.dashboardRepository.getLeasesToEnd();
+    const available_properties = await this.dashboardRepository.getAvailableProperties();
 
-    return { leasesToEnd, availableProperties };
+    return { expiring_leases, available_properties };
   }
 }
