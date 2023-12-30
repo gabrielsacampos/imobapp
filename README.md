@@ -1,81 +1,72 @@
-# ImobManager
+The Imobapp FullStack is an application designed for a Real Estate company management. At its core, the backend engine efficiently handles data sourced from a third-party API, currently overseeing property rental payments for the enterprise. The application's primary mission is to extract detailed data from the API, carefully store it in our database, and empower many company sectors with real-time insights through the creation of complex queries and detailed reports. Looking ahead, Imobapp is set to evolve into a FullStack Application, unlocking the potential to explore and optimize all facets of the firm's data while introducing cutting-edge functionalities and industry best practices.
 
-This application has the function of storing data provided by a third-party API, which currently manages property rental payments for a property management company. After the complete integration between this application and the third-party API, we will create new features based on the data persisted in our own database.
+Frontend corresponding project available at: 'https://github.com/gabrielsacampos/imobapp-front-next'
 
-## Workflow
 
-![workflow-image](images/basic-flux-api.png)
+# Summary of third-party APIs
 
-### Third-party APIs
 
-- **Imobzi**: Real State Software, manages payments and contracts/leases
-- **Granatum**: Financial software. Here we handle with cash flow, revenues and expenses.
+## Imobzi:
+### Functionalities: 
+It works as a detailed ERP for Real Estate, efficiently managing contacts, buildings, and leases. 
+- Cons:
+  - Limited reporting: The reporting feature is lacking, especially in      consolidating information related to leases, invoices, and buildings.
+  - Bulk information management: Managing and editing building information on a large scale is not user-friendly.
+  - Inefficient API structure: Lacks individual endpoints for each organization, and occasional data redundancy in simple entity endpoints adds unnecessary complexity.
 
-BackEnd infra:
+## Granatum:
+### Functionalities: 
+Given the limitations in Imobzi ERP's reporting capabilities, we've incorporated Granatum software into our workflow to handle detailed financial reports.
+- Cons:
+  - While it excels in managing financial reports and data comprehensively, Granatum isn't ideally suited for broader company management. Currently, it works as a supplementary tool in our project.
 
-- NestJs
-- Prisma ORM
-- Postgres
-- Docker
-- BullMQ (Redis)
-- Jwt Auth
 
-Our Entities:
+# Infra:
+The server runs smoothly on NestJS, offering a user-friendly framework for seamlessly integrating services and features as our application evolves in complexity. Furthermore, it offers extremely well-defined and clear MVC (Model-View-Controller) patterns.
+Within the common NestJS pattern, we employ Services, Controllers, and Modules for each module in the application. In this case, we introduce a novel file type known as Repository. This file takes charge of processing logic from service files, ensuring efficient data handling, and calling on the repository when a database query needs execution. This approach enhances organization in our development workflow.
 
-- People
-- Organizations
-- Buildings
-- Properties
-- Owners
-- Leases
-- Leases_items
-- Invoices
-- Invoices_items
+Our application employs **BullMQ** for listening to POST requests, backed by a **Redis** server. With a user-friendly interface, real-time queue and job statuses are easily monitored. After accurate data processing, **Prisma ORM** seamlessly connects our application to a **PostgreSQL** database for robust data management.
 
-## 3-party APIs
+All services in the application are equipped with Jest unit tests, incorporating the "In-Memory Repository" concept by Martin Fowler (https://martinfowler.com/bliki/InMemoryTestDatabase.html). This approach involves using mocks to simulate database connections during testing.
 
-### **ImobziService**: Responsable for consume all data from Imobzi API, processing and formatting this data, and storing it in our database
+## Infra and database abstraction:
+###Requirements and concepts.
+####Entities:
+#####People
+#####Organizations (FK - People as sponsors)
+#####Properties (FK - People & Organizations as owner)
+- In certain scenarios, properties may have multiple owners, where each owner can be an organization or an individual. To manage this, we introduce a subtable called **Owners** (FK - People / Organizations as owners) to avoid multivalued columns and store the percentage of each property sharing.
 
-- Imobzi
-  - ImobziContacts \*('**/contacts**' is the endpoit to get info about contacts and organizations on Imobzi)
-    - ImobziPeople
-    - ImobziOrganizations
-  - ImobziProperties
-    - ImobziBuildings \* (To get buildings, we need to get on **'/properties'** endpoint)
-  - ImobziLeases
-  - ImobziInvoices
+#####Buildings (FK - Properties)
+ - In this context, buildings are treated as an independent entity. This is crucial as many properties are grouped by a few buildings, necessitating specific queries grouped by this table.
 
-### **GranatumService** : This service get paid invoices and divide by catgory each item from invoices to store at cash flow
 
-- Granatum
-  - GranatumTransactions
-  - GranatumAccounts
-  - GranatumCategories
-  - GranatumCostCenters
-  - GranatumClients
-  - GranatumSupliers
+##### Leases - (FK - Properties - FK - Organizations/People as tenant)
+##### Invoices - (FK - Leases)
+##### Items - (FK - Invoices)*
+* *Items are indispensable in our application, especially within invoices. They represent individual line items or products, offering a detailed breakdown of charges or services, including quantity, unit price, and total amount. This information is crucial for accurate billing and financial analysis. Items can include additional attributes like descriptions, codes, or categories, enhancing invoice clarity.
+To address real estate industry needs, we've introduced a highly requested feature that separates items from invoices. This facilitates specific functionalities like lending, retained fees, and charges on items. It also enables distinct treatment of items for factors such as segment revenues or refunds, bolstering our accountability efforts.*
 
-### How does each service work?
 
-In Application, we have queues:
+##Controllers:
+In our system, each entity boasts its own controller, ensuring seamless communication between curl and the server, facilitating efficient data retrieval from the database.
+What sets this apart is the integration of queues into two specific controllers and services, enhancing overall functionality and responsiveness.
 
-**QueueImobzi**: Listening POST method at the endpoint '/imobzi/backup' with the body bellow:
 
-```json
-// we can choose wich entity we want to update on db.
-{
-  "contacts": true,
-  "buildings": true,
-  "properties": true,
-  "leases": true,
-  "invoices": { "start_due_date": "yyyy/MM/dd" }
-}
-```
+## Queues - BullMQ
+**queueImobzi**: Utilizing the limited database access provided by the Imobzi API, we extract essential properties from each entity, storing them in our database. A POST on ```'/imobzi/backup'`````` triggers the backup logic in the controller. Despite Imobzi's webhooks, incomplete data returns necessitate scrolling through all records for updates.
 
-**QueueGranatum**: Listening POST method at the endpoint '/granatum/sync' with the body bellow:
+Type: Currently, limited to "backup," with potential for additional process types in the future.
 
-```json
-// here we need to send the payment date from invoices to process queue and sync with Granatum's API.
+**Entities (contacts, buildings, properties, leases, and invoices)**: Each entity allows queue workers to handle logic cases for database storage. Queues are strategically sequenced to ensure the completion of related jobs without interference in a cascade.
 
-{ "start_at": "2023-08-30", "end_at": "2023-09-29" }
-```
+When a POST on ```'/granatum/sync'``` is received by the controller with properties **payment_start_at** and **payment_end_at**:
+  1 - Retrieve paid invoices within the specified range.
+ 2 - Once invoices are retrieved, the queue determines whether to calculate values and apply rules for storing data in the Granatum service.
+3 - Onlending: Manages items with behaviors to transfer amounts to owners.
+4 -Revenue: Handles fees charged by the company for managing buildings and deducts from onlending.
+5 - Invoice: Manages the most intricate logic of queue jobs by segregating items from invoices. This is crucial as the primary API (Imobzi) does not separate them correctly. Workers use logic to identify descriptions in invoices and categorize them by consuming the Granatum API ('/categories') for matching.
+
+
+## BFF - Backend for Frontend
+This folder is designed to architect specific queries, guaranteeing the perfect delivery of essential data to the frontend application and the accurate composition of components. Explore the frontend project, developed in NextJs, here: 'https://github.com/gabrielsacampos/imobapp-front-next.'
